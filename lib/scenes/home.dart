@@ -10,9 +10,10 @@ class HomeScene extends StatelessWidget {
       ),
       body: Center(
         child: RaisedButton(
-          child: Text('click me to back'),
+          child: Text('Go TO Login'),
           onPressed: () {
             print('clicked on home');
+            Navigator.pushNamed(context, '/login');
           },
         )
       )
