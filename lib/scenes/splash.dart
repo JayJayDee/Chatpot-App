@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import './home.dart';
 
 class SplashScene extends StatelessWidget {
 
@@ -10,10 +9,7 @@ class SplashScene extends StatelessWidget {
         child: RaisedButton(
           child: Text('Click me'),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => HomeScene()));
-            print('clicked');
+            Navigator.pushReplacementNamed(context, '/home');
           },
         )
       )
