@@ -13,7 +13,6 @@ class HomeScene extends StatelessWidget {
           child: Text('click me to back'),
           onPressed: () {
             print('clicked on home');
-            Navigator.pop(context);
           },
         )
       )
