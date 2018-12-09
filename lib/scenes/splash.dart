@@ -1,18 +1,63 @@
 import 'package:flutter/material.dart';
 
-class SplashScene extends StatelessWidget {
+class SplashScene extends StatefulWidget {
+  @override 
+  _SplashState createState() => _SplashState(); 
+}
 
-  @override
+class _SplashState extends State<SplashScene> 
+  with WidgetsBindingObserver {
+  
+  @override 
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: RaisedButton(
-          child: Text('Click me'),
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, '/home');
-          },
+        child: Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                child: FlutterLogo(
+                  size: 60.0
+                ),
+                margin: EdgeInsets.all(15.0),
+              ),
+              Text(
+                'Chatpot',
+                style: TextStyle(
+                  fontSize: 25.0
+                )
+              ),
+              Container(
+                child: CircularProgressIndicator(),
+                margin: EdgeInsets.all(25.0),
+              )
+            ],
+          )
         )
       )
     );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      print('app resumed!');
+    } else if (state == AppLifecycleState.paused) {
+      print('app paused');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override 
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 }
