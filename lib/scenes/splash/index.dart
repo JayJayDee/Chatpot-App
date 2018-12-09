@@ -7,20 +7,18 @@ class SplashScene extends StatefulWidget {
   _SplashState createState() => _SplashState(); 
 }
 
-class _SplashState extends State<SplashScene> 
-  with WidgetsBindingObserver {
-  
+class _SplashState extends State<SplashScene> {
+  MemberModel _memberModel;
+
   @override 
   Widget build(BuildContext context) {
-    MemberModel memberModel = MemberModel();
-
     return ScopedModel<MemberModel>(
-      model: memberModel,
+      model: _memberModel,
       child: Scaffold(
         body: Center(
           child: Container(
             child: Column(
-              mainAxisSize: MainAxisSize.max,
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
@@ -36,9 +34,9 @@ class _SplashState extends State<SplashScene>
                   )
                 ),
                 Container(
-                  margin: EdgeInsets.all(25.0),
-                  child: Visibility(
-                    visible: memberModel.loading,
+                  margin: EdgeInsets.all(30.0),
+                  child: Opacity(
+                    opacity: _memberModel.loading ? 1.0 : 0.0,
                     child: CircularProgressIndicator()
                   )
                 )
@@ -51,24 +49,11 @@ class _SplashState extends State<SplashScene>
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      print('app resumed!');
-    } else if (state == AppLifecycleState.paused) {
-      print('app paused');
-    }
-  }
-
-  @override
   void initState() {
     super.initState();
-    print('splash-scene started');
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override 
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
+    if (_memberModel == null) _memberModel = MemberModel();
+    _memberModel.initialize().then((value) {
+      print('authenticate cllabck fired');
+    });
   }
 }

@@ -26,13 +26,16 @@ class MemberModel extends Model {
   Auth get auth => _auth;
   Member get member => _member;
 
-  Future authenticate() async {
+  Future initialize() async {
     _loading = true;
     notifyListeners();
 
     Auth localAuth = await fetchAuthFromLocal();
     if (localAuth.authToken == null) {
-      print('auth-token null');
+      _loggedIn = false;
+      _loading = false;
+      notifyListeners();
+      return;
     }
   }
 }
