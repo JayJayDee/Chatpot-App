@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:chatpot_app/models/member-model.dart';
 
 class SplashScene extends StatefulWidget {
   @override 
@@ -10,6 +11,8 @@ class _SplashState extends State<SplashScene>
   
   @override 
   Widget build(BuildContext context) {
+    final member = MemberModel.of(context);
+
     return Scaffold(
       body: Center(
         child: Container(
@@ -29,10 +32,10 @@ class _SplashState extends State<SplashScene>
                   fontSize: 25.0
                 )
               ),
-              Container(
+              member.loading ? Container(
                 child: CircularProgressIndicator(),
                 margin: EdgeInsets.all(25.0),
-              )
+              ) : null
             ],
           )
         )
