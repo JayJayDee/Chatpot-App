@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/utils/auth-util.dart';
 
@@ -13,6 +12,7 @@ class Auth {
 
 class MemberModel extends Model {
   bool _loading;
+  bool _loggedIn;
   Auth _auth;
   Member _member;
 
@@ -21,6 +21,8 @@ class MemberModel extends Model {
   }
 
   bool get loading => _loading;
+  bool get loggedIn => _loggedIn;
+
   Auth get auth => _auth;
   Member get member => _member;
 
@@ -32,9 +34,5 @@ class MemberModel extends Model {
     if (localAuth.authToken == null) {
       print('auth-token null');
     }
-  }
-
-  static MemberModel of(BuildContext context) {
-    return ScopedModel.of<MemberModel>(context);
   }
 }
