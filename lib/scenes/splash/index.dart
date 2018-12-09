@@ -33,6 +33,7 @@ class _SplashState extends State<SplashScene> {
     super.initState();
     print('initState()');
     _memberModel = MemberModel();
+
     _memberModel.initialize()
     .then((value) {
       print('init callback');
