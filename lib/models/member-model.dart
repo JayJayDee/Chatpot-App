@@ -12,16 +12,17 @@ class Auth {
 
 class MemberModel extends Model {
   bool _loading;
-  bool _loggedIn;
+  bool _loginToolsShow;
   Auth _auth;
   Member _member;
 
   MemberModel() {
     _loading = false;
+    _loginToolsShow = false;
   }
 
   bool get loading => _loading;
-  bool get loggedIn => _loggedIn;
+  bool get loginToolsShow => _loginToolsShow;
 
   Auth get auth => _auth;
   Member get member => _member;
@@ -32,7 +33,7 @@ class MemberModel extends Model {
 
     Auth localAuth = await fetchAuthFromLocal();
     if (localAuth.authToken == null) {
-      _loggedIn = false;
+      _loginToolsShow = true;
       _loading = false;
       notifyListeners();
       return;

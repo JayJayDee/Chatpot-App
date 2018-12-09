@@ -12,38 +12,18 @@ class _SplashState extends State<SplashScene> {
 
   @override 
   Widget build(BuildContext context) {
+    print('build()');
     return ScopedModel<MemberModel>(
       model: _memberModel,
       child: Scaffold(
         body: Center(
-          child: Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  child: FlutterLogo(
-                    size: 60.0
-                  ),
-                  margin: EdgeInsets.all(15.0),
-                ),
-                Text(
-                  'Chatpot',
-                  style: TextStyle(
-                    fontSize: 25.0
-                  )
-                ),
-                Container(
-                  margin: EdgeInsets.all(30.0),
-                  child: Opacity(
-                    opacity: _memberModel.loading ? 1.0 : 0.0,
-                    child: CircularProgressIndicator()
-                  )
-                )
-              ],
-            )
+          child: Column(
+            children: <Widget>[
+              _SplashProgress(),
+              _SplashBottomTools()
+            ]
           )
-        )
+        ),
       )
     );
   }
@@ -51,9 +31,44 @@ class _SplashState extends State<SplashScene> {
   @override
   void initState() {
     super.initState();
-    if (_memberModel == null) _memberModel = MemberModel();
-    _memberModel.initialize().then((value) {
-      print('authenticate cllabck fired');
+    print('initState()');
+    _memberModel = MemberModel();
+    _memberModel.initialize()
+    .then((value) {
+      print('init callback');
     });
+  }
+}
+
+class _SplashProgress extends StatelessWidget {
+  @override
+  Widget build (BuildContext conext) {
+    return ScopedModelDescendant<MemberModel>(
+      builder: (context, child, model) {
+        return Opacity(
+          opacity: model.loading == true ? 1.0 : 0.0,
+          child: Container(
+            margin: EdgeInsets.all(25.0),
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _SplashBottomTools extends StatelessWidget {
+  @override 
+  Widget build (BuildContext context) {
+    return ScopedModelDescendant<MemberModel>(
+      builder: (context, child, model) {
+        return Opacity(
+          opacity: model.loginToolsShow == true ? 1.0 : 0.0,
+          child: Container(
+            child: Text('Login-Tools')
+          )
+        );
+      }
+    );
   }
 }
