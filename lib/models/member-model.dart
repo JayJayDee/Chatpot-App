@@ -31,7 +31,7 @@ class MemberModel extends Model {
     _loading = true;
     notifyListeners();
 
-    Future delay = new Future.delayed(const Duration(seconds: 5), () {});
+    Future delay = new Future.delayed(const Duration(seconds: 3), () {});
     await delay;
 
     Auth localAuth = await fetchAuthFromLocal();

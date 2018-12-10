@@ -17,13 +17,29 @@ class _SplashState extends State<SplashScene> {
       model: _memberModel,
       child: Scaffold(
         body: Center(
-          child: Column(
-            children: <Widget>[
-              _SplashProgress(),
-              _SplashBottomTools()
-            ]
+          child: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: FlutterLogo(
+                    size: 60.0
+                  ),
+                  margin: EdgeInsets.all(15.0)
+                ),
+                Text(
+                  'Chatpot',
+                  style: TextStyle(
+                    fontSize: 25.0
+                  )
+                ),
+                _SplashProgress(),
+                _SplashBottomTools()
+              ],
+            )
           )
-        ),
+        )
       )
     );
   }
@@ -67,7 +83,7 @@ class _SplashBottomTools extends StatelessWidget {
           opacity: model.loginToolsShow == true ? 1.0 : 0.0,
           child: Container(
             child: RaisedButton(
-              child: Text('click to go home'),
+              child: Text('HOME'),
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/home');
               },
