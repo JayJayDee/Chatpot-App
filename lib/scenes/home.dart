@@ -16,7 +16,24 @@ class HomeScene extends StatelessWidget {
             Navigator.pushNamed(context, '/login');
           },
         )
-      )
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        items: [
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.home),
+            title: new Text('Home')
+          ),
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.chat),
+            title: new Text('Chats')
+          ),
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.person),
+            title: new Text('Profile')
+          )
+        ],
+      ),
     );
   }
 }

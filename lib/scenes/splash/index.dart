@@ -66,7 +66,12 @@ class _SplashBottomTools extends StatelessWidget {
         return Opacity(
           opacity: model.loginToolsShow == true ? 1.0 : 0.0,
           child: Container(
-            child: Text('Login-Tools')
+            child: RaisedButton(
+              child: Text('click to go home'),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/home');
+              },
+            )
           )
         );
       }
