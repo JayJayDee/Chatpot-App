@@ -51,8 +51,10 @@ class _SplashState extends State<SplashScene> {
     _memberModel = MemberModel();
 
     _memberModel.initialize()
-    .then((value) {
-      print('init callback');
+    .then((status) {
+      if (status == AuthStatus.AuthCompleted) {
+        Navigator.pushReplacementNamed(context, '/home');
+      }
     });
   }
 }
@@ -82,11 +84,22 @@ class _SplashBottomTools extends StatelessWidget {
         return Opacity(
           opacity: model.loginToolsShow == true ? 1.0 : 0.0,
           child: Container(
-            child: RaisedButton(
-              child: Text('HOME'),
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/home');
-              },
+            margin: EdgeInsets.only(top: 30),
+            child: Column(
+              children: [
+                RaisedButton(
+                  child: Text('Start Chatpot without Sign-up'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/home');
+                  }
+                ),
+                RaisedButton(
+                  child: Text('Sign in'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/login');
+                  }
+                )
+              ],
             )
           )
         );

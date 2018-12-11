@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import './scenes/splash/index.dart';
 import './scenes/home-tabs.dart';
-import './scenes/login.dart';
+import './scenes/login/index.dart';
 
 void main() => runApp(MyApp());
 

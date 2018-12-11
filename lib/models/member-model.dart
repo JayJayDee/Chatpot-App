@@ -10,6 +10,11 @@ class Auth {
   String authToken;
 }
 
+enum AuthStatus {
+  AuthCompleted,
+  LoginRequired
+}
+
 class MemberModel extends Model {
   bool _loading;
   bool _loginToolsShow;
@@ -27,11 +32,11 @@ class MemberModel extends Model {
   Auth get auth => _auth;
   Member get member => _member;
 
-  Future initialize() async {
+  Future<AuthStatus> initialize() async {
     _loading = true;
     notifyListeners();
 
-    Future delay = new Future.delayed(const Duration(seconds: 3), () {});
+    Future delay = new Future.delayed(const Duration(seconds: 2), () {});
     await delay;
 
     Auth localAuth = await fetchAuthFromLocal();
@@ -39,7 +44,11 @@ class MemberModel extends Model {
       _loginToolsShow = true;
       _loading = false;
       notifyListeners();
-      return;
+      return AuthStatus.LoginRequired;
     }
+    
+    delay = new Future.delayed(const Duration(seconds: 3), () {});
+    await delay;    
+    return AuthStatus.AuthCompleted;
   }
 }
