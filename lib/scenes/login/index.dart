@@ -8,7 +8,25 @@ class LoginScene extends StatelessWidget {
         title: Text('Sign in to Chatpot')
       ),
       body: Center(
-        child: Text('sign-in screeen')
+        child: Container(
+          margin: EdgeInsets.all(10.0),
+          child: Column(
+            children: <Widget>[
+              TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'your email'
+                ),
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'password'
+                )
+              )
+            ],
+          ),
+        )
       )
     );
   }
