@@ -12,17 +12,42 @@ class LoginScene extends StatelessWidget {
           margin: EdgeInsets.all(10.0),
           child: Column(
             children: <Widget>[
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'your email'
+              Container(
+                margin: EdgeInsets.all(10.0),
+                child: Text('Please sign in to chatpot, or you can use without sign-in', textAlign: TextAlign.left)
+              ),
+              Container(
+                margin: EdgeInsets.all(5.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(12.0),
+                    border: OutlineInputBorder(),
+                    hintText: 'your email',
+                  ),
+                )
+              ),
+              Container(
+                margin: EdgeInsets.all(5.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(12.0),
+                    border: OutlineInputBorder(),
+                    hintText: 'password'
+                  ),
+                  obscureText: true,
                 ),
               ),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'password'
-                )
+              Container(
+                margin: EdgeInsets.all(5),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: RaisedButton(
+                    child: Text('Sign in'),
+                    onPressed: () {
+
+                    }
+                  )
+                ) 
               )
             ],
           ),
