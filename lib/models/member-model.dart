@@ -1,8 +1,14 @@
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/utils/auth-util.dart';
 
+class Nick {
+  String en;
+  String ko;
+  String ja;
+}
+
 class Member {
-  String nick;
+  Nick nick;
   String region;
 }
 
@@ -24,6 +30,13 @@ class MemberModel extends Model {
   MemberModel() {
     _loading = false;
     _loginToolsShow = false;
+
+    _member = Member();
+    Nick nick = Nick();
+    nick.ko = '냄새나는 배꼽';
+
+    _member.nick = nick;
+    _member.region = 'KR';
   }
 
   bool get loading => _loading;

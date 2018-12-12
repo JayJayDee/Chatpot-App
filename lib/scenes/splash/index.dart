@@ -84,20 +84,26 @@ class _SplashBottomTools extends StatelessWidget {
         return Opacity(
           opacity: model.loginToolsShow == true ? 1.0 : 0.0,
           child: Container(
-            margin: EdgeInsets.only(top: 30),
+            margin: EdgeInsets.fromLTRB(20, 5, 20, 0),
             child: Column(
               children: [
-                RaisedButton(
-                  child: Text('Start Chatpot without Sign-up'),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/home');
-                  }
+                SizedBox(
+                  width: double.infinity,
+                  child: RaisedButton(
+                    child: Text('Start without sign up'),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/home');
+                    }
+                  )
                 ),
-                RaisedButton(
-                  child: Text('Sign in'),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/login');
-                  }
+                SizedBox(
+                  width: double.infinity,
+                  child: RaisedButton(
+                    child: Text('Sign in'),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login');
+                    }
+                  )
                 )
               ],
             )

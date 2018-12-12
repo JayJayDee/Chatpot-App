@@ -20,7 +20,7 @@ class _MyNickState extends State<MyNickView> {
       model: _model,
       child: Container(
         margin: EdgeInsets.all(5.0),
-        child: Text(_model.member.nick),
+        child: Text(_model.member.nick.ko),
       )
     );
   }
