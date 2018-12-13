@@ -55,6 +55,10 @@ class _SplashState extends State<SplashScene> {
       if (status == AuthStatus.AuthCompleted) {
         Navigator.pushReplacementNamed(context, '/home');
       }
+    })
+    .catchError((error) {
+      print('error occured!');
+      print(error);
     });
   }
 }
@@ -92,7 +96,13 @@ class _SplashBottomTools extends StatelessWidget {
                   child: RaisedButton(
                     child: Text('Start without sign up'),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/home');
+                      model.doSimpleLogin()
+                      .then((value) {
+                        Navigator.pushNamed(context, '/home');  
+                      })
+                      .catchError((err) {
+                        print('error occured');
+                      });
                     }
                   )
                 ),

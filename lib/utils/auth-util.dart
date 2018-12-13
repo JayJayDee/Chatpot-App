@@ -9,3 +9,8 @@ Future<Auth> fetchAuthFromLocal() async {
   auth.authToken = token;
   return auth;
 }
+
+Future<void> storeAuthToLocal(Auth auth) async {
+  SharedPreferences preps = await SharedPreferences.getInstance();
+  preps.setString('token', auth.authToken);
+}

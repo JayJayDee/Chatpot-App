@@ -30,13 +30,6 @@ class MemberModel extends Model {
   MemberModel() {
     _loading = false;
     _loginToolsShow = false;
-
-    _member = Member();
-    Nick nick = Nick();
-    nick.ko = '냄새나는 배꼽';
-
-    _member.nick = nick;
-    _member.region = 'KR';
   }
 
   bool get loading => _loading;
@@ -59,9 +52,47 @@ class MemberModel extends Model {
       notifyListeners();
       return AuthStatus.LoginRequired;
     }
+
+    _auth = localAuth;
+    // TODO: to be replaced with real-api-call
+    Member member = Member();
+    Nick nick = Nick();
+    nick.en = 'Dirty Toe';
+    nick.ko = '더러운 발가락';
+    nick.ja = 'JA_DIRTY_TOE';
+    member.nick = nick;
+    member.region = 'KR';
+    _member = member;
     
-    delay = new Future.delayed(const Duration(seconds: 3), () {});
-    await delay;    
     return AuthStatus.AuthCompleted;
+  }
+
+  Future<void> doSimpleLogin() async {
+    _loading = true;
+    _loginToolsShow = false;
+
+    // TODO: to be removed
+    Future delay = new Future.delayed(const Duration(seconds: 3), () {});
+    await delay;
+
+    // TODO: to be replaced with real-api call
+    Auth auth = Auth();
+    auth.authToken = 'test-auth-token';
+
+    await storeAuthToLocal(auth);
+
+    // TODO: to be replaced with real-api-call
+    Member member = Member();
+    Nick nick = Nick();
+    nick.en = 'Dirty Toe';
+    nick.ko = '더러운 발가락';
+    nick.ja = 'JA_DIRTY_TOE';
+    member.nick = nick;
+    member.region = 'KR';
+
+    _auth = auth;
+    _member = member;
+    _loading = false;
+    _loginToolsShow = false;
   }
 }
