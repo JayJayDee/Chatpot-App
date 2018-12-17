@@ -26,6 +26,14 @@ class MemberModel extends Model {
   bool _loginToolsShow;
   Auth _auth;
   Member _member;
+  static MemberModel _inst;
+
+  static MemberModel getInstance() {
+    if (_inst == null) {
+      _inst = new MemberModel();
+    }
+    return _inst;
+  }
 
   MemberModel() {
     _loading = false;

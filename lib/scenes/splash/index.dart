@@ -48,7 +48,7 @@ class _SplashState extends State<SplashScene> {
   void initState() {
     super.initState();
     print('initState()');
-    _memberModel = MemberModel();
+    _memberModel = MemberModel.getInstance();
 
     _memberModel.initialize()
     .then((status) {

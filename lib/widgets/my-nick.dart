@@ -3,15 +3,16 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/models/member-model.dart';
 
 class MyNickView extends StatefulWidget {
+
   @override
-  _MyNickState createState() => _MyNickState(new MemberModel());
+  _MyNickState createState() => _MyNickState();
 }
 
 class _MyNickState extends State<MyNickView> {
   MemberModel _model;
 
-  _MyNickState(MemberModel model) {
-    _model = model;
+  _MyNickState() {
+    _model = MemberModel.getInstance();
   }
 
   @override
