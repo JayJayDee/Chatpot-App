@@ -1,20 +1,7 @@
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/utils/auth-util.dart';
-
-class Nick {
-  String en;
-  String ko;
-  String ja;
-}
-
-class Member {
-  Nick nick;
-  String region;
-}
-
-class Auth {
-  String authToken;
-}
+import 'package:chatpot_app/entities/member.dart';
+import 'package:chatpot_app/apis/request.dart';
 
 enum AuthStatus {
   AuthCompleted,
@@ -60,18 +47,14 @@ class MemberModel extends Model {
       notifyListeners();
       return AuthStatus.LoginRequired;
     }
-
-    _auth = localAuth;
-    // TODO: to be replaced with real-api-call
-    Member member = Member();
-    Nick nick = Nick();
-    nick.en = 'Dirty Toe';
-    nick.ko = '더러운 발가락';
-    nick.ja = 'JA_DIRTY_TOE';
-    member.nick = nick;
-    member.region = 'KR';
-    _member = member;
     
+    _auth = localAuth;
+    Member member = Member(
+      nick: Nick(en: 'Dirty Toe', ko: '더러운 발가락', ja: 'DT'),
+      gender: 'M',
+      region: 'KR',
+    );
+    _member = member;
     return AuthStatus.AuthCompleted;
   }
 
@@ -87,17 +70,20 @@ class MemberModel extends Model {
     Auth auth = Auth();
     auth.authToken = 'test-auth-token';
 
-    await storeAuthToLocal(auth);
+    print('!');
 
-    // TODO: to be replaced with real-api-call
-    Member member = Member();
-    Nick nick = Nick();
-    nick.en = 'Dirty Toe';
-    nick.ko = '더러운 발가락';
-    nick.ja = 'JA_DIRTY_TOE';
-    member.nick = nick;
-    member.region = 'KR';
+    await memberCreate(
+      region: 'KR',
+      language: 'ko',
+      gender: 'M'
+    );
 
+    Member member = Member(
+      nick: Nick(en: 'Dirty Toe', ko: '더러운 발가락', ja: 'DT'),
+      gender: 'M',
+      region: 'KR',
+    );
+    
     _auth = auth;
     _member = member;
     _loading = false;

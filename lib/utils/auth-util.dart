@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/member-model.dart';
+import '../entities/member.dart';
 
 Future<Auth> fetchAuthFromLocal() async {
   Auth auth = new Auth();
