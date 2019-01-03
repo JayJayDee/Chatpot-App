@@ -61,6 +61,7 @@ class MemberModel extends Model {
   Future<void> doSimpleLogin() async {
     _loading = true;
     _loginToolsShow = false;
+    notifyListeners();
 
     // TODO: to be removed
     Future delay = new Future.delayed(const Duration(seconds: 3), () {});
@@ -69,8 +70,6 @@ class MemberModel extends Model {
     // TODO: to be replaced with real-api call
     Auth auth = Auth();
     auth.authToken = 'test-auth-token';
-
-    print('!');
 
     await memberCreate(
       region: 'KR',
@@ -88,5 +87,6 @@ class MemberModel extends Model {
     _member = member;
     _loading = false;
     _loginToolsShow = false;
+    notifyListeners();
   }
 }
