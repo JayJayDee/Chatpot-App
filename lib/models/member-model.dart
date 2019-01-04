@@ -71,16 +71,20 @@ class MemberModel extends Model {
     Auth auth = Auth();
     auth.authToken = 'test-auth-token';
 
-    await memberCreate(
-      region: 'KR',
-      language: 'ko',
-      gender: 'M'
+    const gender = 'M';
+    const region = 'KR';
+    const language = 'ko';
+
+    ResCreateMember createRes = await memberCreate(
+      region: region,
+      language: language,
+      gender: gender
     );
 
     Member member = Member(
-      nick: Nick(en: 'Dirty Toe', ko: '더러운 발가락', ja: 'DT'),
-      gender: 'M',
-      region: 'KR',
+      nick: createRes.nick,
+      gender: gender,
+      region: region,
     );
     
     _auth = auth;

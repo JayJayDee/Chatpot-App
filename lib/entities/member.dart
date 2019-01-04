@@ -34,4 +34,5 @@ class Member {
 
 class Auth {
   String authToken;
+  String secret;
 }
