@@ -41,7 +41,7 @@ class MemberModel extends Model {
     await delay;
 
     Auth localAuth = await fetchAuthFromLocal();
-    if (localAuth.authToken == null) {
+    if (localAuth == null) {
       _loginToolsShow = true;
       _loading = false;
       notifyListeners();

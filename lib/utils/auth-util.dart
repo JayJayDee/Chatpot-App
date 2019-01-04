@@ -3,7 +3,6 @@ import '../entities/member.dart';
 
 Future<Auth> fetchAuthFromLocal() async {
   Auth auth = new Auth();
-  
   SharedPreferences preps = await SharedPreferences.getInstance();
   String token = preps.getString('token');
   String secret = preps.getString('secret');
