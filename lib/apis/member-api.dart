@@ -41,23 +41,9 @@ Future<ResCreateMember> memberCreate({ String region, String language, String ge
   return res;
 }
 
-Future<ResMemberLogin> memberLogin({ String loginId, String password }) async {
-  const url = '/auth';
-  var resp = await request(url, RequestMethod.Post, body: {
-    "login_id": loginId,
-    "password": password
-  });
-  ResMemberLogin res = ResMemberLogin(
-    sessionId: resp['session_id']
-  );
-  return res;
-}
-
-Future<ResGetMember> memberGet({ String token, String sessionKey }) async {
+Future<ResGetMember> memberGet(Auth auth, { String token }) async {
   String url = "/member/$token";
-  var resp = await request(url, RequestMethod.Get, query: {
-    'session_key': sessionKey
-  });
+  var resp = await requestWithAuth(auth, url, RequestMethod.Get);
   ResGetMember res = ResGetMember(
     nick: Nick.fromJson(resp['nick']),
     region: resp['region'],

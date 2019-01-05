@@ -49,10 +49,12 @@ class MemberModel extends Model {
     }
     
     _auth = localAuth;
+    ResGetMember memberRes = await memberGet(auth, token: _auth.authToken);
+
     Member member = Member(
-      nick: Nick(en: 'Dirty Toe', ko: '더러운 발가락', ja: 'DT'),
-      gender: 'M',
-      region: 'KR',
+      nick: memberRes.nick,
+      gender: memberRes.gender,
+      region: memberRes.region,
     );
     _member = member;
     return AuthStatus.AuthCompleted;
