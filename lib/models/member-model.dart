@@ -37,7 +37,7 @@ class MemberModel extends Model {
     _loading = true;
     notifyListeners();
 
-    Future delay = new Future.delayed(const Duration(seconds: 2), () {});
+    Future delay = new Future.delayed(const Duration(seconds: 1), () {});
     await delay;
 
     Auth localAuth = await fetchAuthFromLocal();
@@ -65,8 +65,7 @@ class MemberModel extends Model {
     _loginToolsShow = false;
     notifyListeners();
 
-    // TODO: to be removed
-    Future delay = new Future.delayed(const Duration(seconds: 3), () {});
+    Future delay = new Future.delayed(const Duration(seconds: 1), () {});
     await delay;
 
     const gender = 'M';
