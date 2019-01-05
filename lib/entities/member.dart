@@ -33,6 +33,8 @@ class Member {
 }
 
 class Auth {
-  String authToken;
-  String secret;
+  final String authToken;
+  final String secret;
+
+  Auth({ this.authToken, this.secret });
 }

@@ -1,7 +1,7 @@
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/utils/auth-util.dart';
 import 'package:chatpot_app/entities/member.dart';
-import 'package:chatpot_app/apis/request.dart';
+import 'package:chatpot_app/apis/member-api.dart';
 
 enum AuthStatus {
   AuthCompleted,
@@ -67,10 +67,6 @@ class MemberModel extends Model {
     Future delay = new Future.delayed(const Duration(seconds: 3), () {});
     await delay;
 
-    // TODO: to be replaced with real-api call
-    Auth auth = Auth();
-    auth.authToken = 'test-auth-token';
-
     const gender = 'M';
     const region = 'KR';
     const language = 'ko';
@@ -81,13 +77,15 @@ class MemberModel extends Model {
       gender: gender
     );
 
+    await storeAuthToLocal(createRes.token, createRes.passphrase);
+    _auth = Auth(authToken: createRes.token, secret: createRes.passphrase);
+
     Member member = Member(
       nick: createRes.nick,
       gender: gender,
       region: region,
     );
     
-    _auth = auth;
     _member = member;
     _loading = false;
     _loginToolsShow = false;

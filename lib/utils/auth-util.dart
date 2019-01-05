@@ -2,7 +2,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../entities/member.dart';
 
 Future<Auth> fetchAuthFromLocal() async {
-  Auth auth = new Auth();
   SharedPreferences preps = await SharedPreferences.getInstance();
   String token = preps.getString('token');
   String secret = preps.getString('secret');
@@ -10,14 +9,12 @@ Future<Auth> fetchAuthFromLocal() async {
   if (token == null || secret == null) {
     return null;
   }
-
-  auth.authToken = token;
-  auth.secret = secret;
+  Auth auth = Auth(authToken: token, secret: secret);
   return auth;
 }
 
-Future<void> storeAuthToLocal(Auth auth) async {
+Future<void> storeAuthToLocal(String authToken, String secret) async {
   SharedPreferences preps = await SharedPreferences.getInstance();
-  await preps.setString('token', auth.authToken);
-  await preps.setString('secret', auth.secret);
+  await preps.setString('token', authToken);
+  await preps.setString('secret', secret);
 }
