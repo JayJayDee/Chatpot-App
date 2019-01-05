@@ -22,6 +22,7 @@ dependencies:
   http: ^0.12.0
   scoped_model: ^1.0.1
   shared_preferences: ^0.4.3
+  query_params: ^0.6.1
 
 dev_dependencies:
   flutter_test:
