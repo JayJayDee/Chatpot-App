@@ -36,5 +36,9 @@ class Auth {
   final String authToken;
   final String secret;
 
+  toString() {
+    return "token:$authToken secret:$secret";
+  }
+
   Auth({ this.authToken, this.secret });
 }

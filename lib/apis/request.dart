@@ -10,12 +10,13 @@ const _base = 'http://dev-api.chatpot.chat';
 String _sessionKey;
 
 Future<Map<String, dynamic>> requestWithAuth(Auth auth, String uri, RequestMethod method, {Map<String, dynamic> query, Map<String, dynamic> body }) async  {
-  Map<String, dynamic> resp;
+  Map<String, dynamic> resp = new Map();
   if (_sessionKey == null) {
     _sessionKey = await _accquireSessionKey(auth);
   }
 
   try {
+    if (query == null) query = new Map<String, dynamic>();
     query['session_key'] = _sessionKey;
     resp = await request(uri, method, query: query, body: body);
   } catch (err) {
@@ -34,11 +35,12 @@ enum RequestMethod {
   Get, Post
 }
 Future<Map<String, dynamic>> request(String url, RequestMethod method, {Map<String, dynamic> query, Map<String, dynamic> body }) async {
+  String convertedUrl = _buildUrlWithQuery(url, query);
   http.Response resp;
   if (method == RequestMethod.Get) {
-    resp = await http.get(_buildUrlWithQuery(url, query));
+    resp = await http.get(convertedUrl);
   } else if (method == RequestMethod.Post) {
-    resp = await http.post(_buildUrlWithQuery(url, query), body: body);
+    resp = await http.post(convertedUrl, body: body);
   }
 
   Map<String, dynamic> responseMap;
@@ -55,15 +57,17 @@ Future<Map<String, dynamic>> request(String url, RequestMethod method, {Map<Stri
 }
 
 String _buildUrlWithQuery(String url, Map<String, dynamic> query) {
-  if (query == null || query.keys.toList().length > 0) {
-    return "$_base$url";
-  }
+  if (query == null) return "$_base$url";  
+  List<String> keys = query.keys.toList();
+  if (keys.length == 0) return "$_base$url";
+
   URLQueryParams qs = URLQueryParams();
-  query.keys.toList().map((String key) {
+  for (var i = 0; i < keys.length; i++) {
+    String key = keys[i];
     qs.append(key, query[key]);
-  });
+  }
   String qsExpr = qs.toString();
-  return "$_base$url&$qsExpr";
+  return "$_base$url?$qsExpr";
 }
 
 Future<String> _accquireSessionKey(Auth auth) async {
