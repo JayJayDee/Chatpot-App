@@ -42,7 +42,7 @@ Future<ResCreateMember> memberCreate({ String region, String language, String ge
 }
 
 Future<ResMemberLogin> memberLogin({ String loginId, String password }) async {
-  const url = "$base/auth";
+  const url = '/auth';
   var resp = await request(url, RequestMethod.Post, body: {
     "login_id": loginId,
     "password": password
@@ -54,7 +54,7 @@ Future<ResMemberLogin> memberLogin({ String loginId, String password }) async {
 }
 
 Future<ResGetMember> memberGet({ String token, String sessionKey }) async {
-  String url = "$base/member/$token";
+  String url = "/member/$token";
   var resp = await request(url, RequestMethod.Get, query: {
     'session_key': sessionKey
   });

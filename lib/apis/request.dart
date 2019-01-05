@@ -5,7 +5,7 @@ import 'package:query_params/query_params.dart';
 
 import 'package:chatpot_app/apis/errors.dart';
 
-const base = 'http://dev-api.chatpot.chat';
+const _base = 'http://dev-api.chatpot.chat';
 
 enum RequestMethod {
   Get, Post
@@ -33,12 +33,12 @@ Future<Map<String, dynamic>> request(String url, RequestMethod method, {Map<Stri
 
 String _buildUrlWithQuery(String url, Map<String, dynamic> query) {
   if (query == null || query.keys.toList().length > 0) {
-    return "$base$url";
+    return "$_base$url";
   }
   URLQueryParams qs = URLQueryParams();
   query.keys.toList().map((String key) {
     qs.append(key, query[key]);
   });
   String qsExpr = qs.toString();
-  return "$base$url&$qsExpr";
+  return "$_base$url&$qsExpr";
 }
