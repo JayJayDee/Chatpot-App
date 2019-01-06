@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 import './scenes/splash/index.dart';
 import './scenes/home-tabs.dart';
 import './scenes/login/index.dart';
@@ -19,7 +21,16 @@ class MyApp extends StatelessWidget {
         '/': (context) => SplashScene(),
         '/home': (context) => HomeTabsScene(),
         '/login': (conext) => LoginScene()
-      }
+      },
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      supportedLocales: [
+        const Locale('en', 'US'),
+        const Locale('ko', 'KR'),
+        const Locale('ja', 'JP')
+      ],
     );
   }
 }
