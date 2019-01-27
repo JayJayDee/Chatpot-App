@@ -27,9 +27,11 @@ class ResMemberLogin {
   ResMemberLogin({ this.sessionId });
 }
 
+Function req = request('http://dev-auth.chatpot.chat');
+
 Future<ResCreateMember> memberCreate({ String region, String language, String gender }) async {
   const url = '/member';
-  var resp = await request(url, RequestMethod.Post, body: {
+  var resp = await req(url, RequestMethod.Post, body: {
     "region": region,
     "language": language,
     "gender": gender
@@ -43,7 +45,7 @@ Future<ResCreateMember> memberCreate({ String region, String language, String ge
 
 Future<ResGetMember> memberGet(Auth auth, { String token }) async {
   String url = "/member/$token";
-  var resp = await requestWithAuth(auth, url, RequestMethod.Get);
+  var resp = await req(auth, url, RequestMethod.Get);
   ResGetMember res = ResGetMember(
     nick: Nick.fromJson(resp['nick']),
     region: resp['region'],
