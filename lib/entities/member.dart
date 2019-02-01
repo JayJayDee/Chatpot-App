@@ -22,6 +22,11 @@ class Member {
 
   Member({this.nick, this.token, this.region, this.gender});
 
+  @override
+  toString() {
+    return "region:$region,nick:$nick.ko,token:$token";
+  }
+
   factory Member.fromJson(Map<String, dynamic> json) {
     return Member(
       nick: Nick.fromJson(json['nick']),
@@ -35,9 +40,11 @@ class Member {
 class Auth {
   final String authToken;
   final String secret;
+  String sessionKey;
 
+  @override
   toString() {
-    return "token:$authToken secret:$secret";
+    return "token:$authToken,secret:$secret";
   }
 
   Auth({ this.authToken, this.secret });
