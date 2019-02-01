@@ -34,6 +34,18 @@ Function request(String baseUrl) =>
       throw new HttpRequestError(responseMap['code'], resp.statusCode);
     };
 
+Function requestWithAuth(String baseUrl, {
+  String sessionKey,
+  String memberToken,
+  String memberSecret
+}) =>
+  (String url, RequestMethod method,
+    { Map<String, dynamic> query, 
+      Map<String, dynamic> body }) async {
+      Function req = request(baseUrl);
+      
+    };
+
 String _buildUrlWithQuery(String base, String url, Map<String, dynamic> query) {
   if (query == null) return "$_base$url";  
   List<String> keys = query.keys.toList();

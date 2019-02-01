@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import './scenes/splash/index.dart';
-import './scenes/home-tabs.dart';
-import './scenes/login/index.dart';
+import 'package:chatpot_app/scenes/splash-scene.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,9 +16,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => SplashScene(),
-        '/home': (context) => HomeTabsScene(),
-        '/login': (conext) => LoginScene()
+        '/': (context) => SplashScene()
       },
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
