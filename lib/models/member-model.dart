@@ -7,9 +7,18 @@ enum AutoLoginResult {
   FirstTime, Completed
 }
 
+MemberModel _inst;
+
 class MemberModel extends Model {
   
   bool _isLoading = false;
+
+  bool get loading => _isLoading;
+
+  static MemberModel getInstance() {
+    if (_inst == null) _inst = new MemberModel();
+    return _inst;
+  }
 
   Future<AutoLoginResult> tryAutoLogin(Locale locale) async {
     _isLoading = true;
