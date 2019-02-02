@@ -14,9 +14,16 @@ class MemberModel extends Model {
   Future<AutoLoginResult> tryAutoLogin(Locale locale) async {
     _isLoading = true;
     notifyListeners();
-    
+
     Auth auth = await fetchAuthFromLocal();
-    if (auth == null) return AutoLoginResult.FirstTime;
+    if (auth == null) {
+      _isLoading = false;
+      notifyListeners();
+      return AutoLoginResult.FirstTime;
+    }
+
+    _isLoading = false;
+    notifyListeners();
     return AutoLoginResult.Completed;
   }
 }
