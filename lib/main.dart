@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:chatpot_app/scenes/splash-scene.dart';
+import 'package:chatpot_app/scenes/signup/simple-gender-scene.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,7 +17,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => SplashScene()
+        '/': (context) => SplashScene(),
+        '/signup/simple-gender': (context) => SimpleGenderScene()
       },
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,

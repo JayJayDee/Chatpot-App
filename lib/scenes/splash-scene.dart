@@ -10,8 +10,18 @@ class _SplashSceneState extends State<SplashScene> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('호옹!'),
+        child: RaisedButton(
+          onPressed: () {
+            _test();
+          },
+          child: Text('test')
+        )
       ),
     );
+  }
+
+  _test() async {
+    final result = await Navigator.pushNamed(context, '/signup/simple-gender');
+    print(result);
   }
 }
