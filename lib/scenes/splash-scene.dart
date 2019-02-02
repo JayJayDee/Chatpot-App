@@ -1,17 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:chatpot_app/models/member-model.dart';
 
-class SplashScene extends StatefulWidget {
-  @override
-  _SplashSceneState createState() => _SplashSceneState();
-}
+class SplashScene extends StatelessWidget {
 
-class _SplashSceneState extends State<SplashScene> {
   @override
-  Widget build(BuildContext context) {
+  build(BuildContext context) {
+    initScene(context);
     return Scaffold(
       body: Center(
-        child: Text('호옹!'),
-      ),
+        child: ScopedModel<MemberModel>(
+          model: MemberModel.getInstance(),
+          child: ScopedModelDescendant<MemberModel>(
+            builder: (context, child, model) {
+              if (model.loading == true) {
+                return CircularProgressIndicator(
+                  value: 50.0
+                );
+              }
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  RaisedButton(
+                    child: Text('Sign in'),
+                    onPressed: () {} 
+                  ),
+                  RaisedButton(
+                    child: Text('Start without sign-up'),
+                    onPressed: () {}
+                  )
+                ],
+              );
+            }
+          ),
+        )
+      )
     );
+  }
+
+  void initScene (BuildContext context) async {
+    Locale locale = Localizations.localeOf(context);
+    await MemberModel.getInstance().tryAutoLogin(locale);
   }
 }

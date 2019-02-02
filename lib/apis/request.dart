@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:query_params/query_params.dart';
@@ -32,18 +31,6 @@ Function request(String baseUrl) =>
         return responseMap;
       }
       throw new HttpRequestError(responseMap['code'], resp.statusCode);
-    };
-
-Function requestWithAuth(String baseUrl, {
-  String sessionKey,
-  String memberToken,
-  String memberSecret
-}) =>
-  (String url, RequestMethod method,
-    { Map<String, dynamic> query, 
-      Map<String, dynamic> body }) async {
-      Function req = request(baseUrl);
-      
     };
 
 String _buildUrlWithQuery(String base, String url, Map<String, dynamic> query) {
