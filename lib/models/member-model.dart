@@ -9,6 +9,9 @@ enum AutoLoginResult {
 
 MemberModel _inst;
 
+delayLittle(double sec) async =>
+  Future.delayed(Duration(milliseconds: (sec * 1000).round()));
+
 class MemberModel extends Model {
   
   bool _isLoading = false;
@@ -24,6 +27,8 @@ class MemberModel extends Model {
     _isLoading = true;
     notifyListeners();
 
+    await delayLittle(2);
+
     Auth auth = await fetchAuthFromLocal();
     if (auth == null) {
       _isLoading = false;
@@ -34,5 +39,11 @@ class MemberModel extends Model {
     _isLoading = false;
     notifyListeners();
     return AutoLoginResult.Completed;
+  }
+
+  Future<Auth> createSimpleAccount(Locale locale) async {
+    _isLoading = true;
+    notifyListeners();
+    return null;
   }
 }
