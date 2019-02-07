@@ -44,6 +44,11 @@ class MemberModel extends Model {
   Future<Auth> createSimpleAccount(Locale locale) async {
     _isLoading = true;
     notifyListeners();
+
+    return null;
+  }
+
+  Future<Member> fetchMember() async {
     return null;
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:chatpot_app/scenes/splash-scene.dart';
+import 'package:chatpot_app/scenes/signup-scene.dart';
 import 'package:chatpot_app/scenes/home-container-scene.dart';
 import 'package:chatpot_app/scenes/signup/simple-gender-scene.dart';
 
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/splash',
       routes: {
+        '/signup': (context) => SignupScene(),
         '/splash': (context) => SplashScene(),
         '/': (context) => HomeContainerScene(),
         '/signup/simple-gender': (context) => SimpleGenderScene()

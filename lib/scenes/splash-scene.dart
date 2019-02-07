@@ -35,14 +35,14 @@ class SplashSceneState extends State<SplashScene> {
             body: Center(
               child: Stack(
                 children: <Widget>[
-                  Opacity(                    
-                    child: Row(
+                  Opacity(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         RaisedButton(
                           child: Text('createAccount'),
                           onPressed: () {
-                            model.createSimpleAccount(_locale);
+                            Navigator.pushNamed(context, '/signup');
                           },
                         ),
                         RaisedButton(
@@ -51,12 +51,23 @@ class SplashSceneState extends State<SplashScene> {
                             Navigator.pushNamed(context, '/');
                           },
                         ),
+                        RaisedButton(
+                          child: Text('api request test'),
+                          onPressed: () {
+                            onApiTest();
+                          },
+                        ),
                       ],
                     ),
                     opacity: controlOpacity
                   ),
                   Opacity(
-                    child: CircularProgressIndicator(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        CircularProgressIndicator()
+                      ],
+                    ),
                     opacity: progressOpacity
                   )
                 ],
@@ -66,5 +77,9 @@ class SplashSceneState extends State<SplashScene> {
         }
       )
     );
+  }
+
+  void onApiTest() async {
+
   }
 }
