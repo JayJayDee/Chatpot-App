@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:chatpot_app/scenes/splash-scene.dart';
+import 'package:chatpot_app/scenes/home-container-scene.dart';
 import 'package:chatpot_app/scenes/signup/simple-gender-scene.dart';
 
 void main() => runApp(MyApp());
@@ -15,9 +16,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/',
+      initialRoute: '/splash',
       routes: {
-        '/': (context) => SplashScene(),
+        '/splash': (context) => SplashScene(),
+        '/': (context) => HomeContainerScene(),
         '/signup/simple-gender': (context) => SimpleGenderScene()
       },
       localizationsDelegates: [
