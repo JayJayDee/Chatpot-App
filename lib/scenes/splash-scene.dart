@@ -35,12 +35,23 @@ class SplashSceneState extends State<SplashScene> {
             body: Center(
               child: Stack(
                 children: <Widget>[
-                  Opacity(
-                    child: RaisedButton(
-                      child: Text('click me'),
-                      onPressed: () {
-                        model.createSimpleAccount(_locale);
-                      },
+                  Opacity(                    
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        RaisedButton(
+                          child: Text('createAccount'),
+                          onPressed: () {
+                            model.createSimpleAccount(_locale);
+                          },
+                        ),
+                        RaisedButton(
+                          child: Text('go to main'),
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/');
+                          },
+                        ),
+                      ],
                     ),
                     opacity: controlOpacity
                   ),
