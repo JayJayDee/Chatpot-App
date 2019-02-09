@@ -29,6 +29,11 @@
           :disabled="loading"
           @onTap="onLogin">
         </Button>
+
+        <Button
+          text="Start without Logging in"
+          class="btn btn-primary">
+        </Button>
       </StackLayout>
 
       <Label class="login-label sign-up-label">
