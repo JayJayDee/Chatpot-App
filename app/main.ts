@@ -1,10 +1,8 @@
 import Vue from 'nativescript-vue';
 import VueDevtools from 'nativescript-vue-devtools';
-import Vuex from 'vuex';
 
-import App from './components/App.vue';
-import Splash from './pages/Splash.vue';
-
+import SplashScene from './pages/SplashScene.vue';
+import store from './stores';
 import './app.css';
 
 if (TNS_ENV !== 'production') {
@@ -14,5 +12,6 @@ if (TNS_ENV !== 'production') {
 Vue.config.silent = (TNS_ENV === 'production');
 
 new Vue({
-  render: h => h('frame', [h(Splash)])
+  render: h => h('frame', [h(SplashScene)]),
+  store
 }).$start();

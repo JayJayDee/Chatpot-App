@@ -11,32 +11,41 @@
 </template>
 
 <script lang="ts">
+const VUE_NAME = 'SplashScene';
+
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { memberApi } from '../apis';
+import { State, Action } from 'vuex-class';
+
+import log from '../logger';
+import { SplashState, InitializeState } from '../stores/types';
+import LoginScene from './LoginScene.vue';
 
 @Component({
-  name: 'Splash'
+  name: VUE_NAME
 })
-export default class Splash extends Vue {
+export default class SplashScene extends Vue {
+
+  @State(state => state.scenes.splash.loading)
   private loading: boolean;
+
+  @State(state => state.scenes.splash.state)
+  private state: InitializeState;
+
+  @Action('initialize')
+  private initialize: () => Promise<void>;
 
   constructor() {
     super();
-    this.loading = true;
   }
 
   public mounted() {
-    memberApi.requestSimpleJoin('JP', 'ja', 'M')
-    .then((resp) => {
-      console.log('AXIOS_OK');
-      console.log(resp);
-    })
-    .catch((err) => {
-      console.log('AXIOS_ERR');
-      console.log(`AXIOS_ERR_MESSAGE: ${JSON.stringify(err)}`);
+    this.initialize().then(() => {
+      if (this.state == InitializeState.NOT_LOGGED_IN) {
+        this.$navigateTo(LoginScene);
+        this.$close();
+      }
     });
-    console.log('mounted!');
   }
 }
 </script>
