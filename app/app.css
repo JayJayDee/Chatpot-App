@@ -1,0 +1,12 @@
+@import 'nativescript-theme-core/css/core.light.css';
+
+.btn-primary {
+  height: 50;
+  background-color: #D51A1A;
+  border-radius: 5;
+  font-size: 20;
+  font-weight: 600;
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+}
