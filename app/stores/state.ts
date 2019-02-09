@@ -1,4 +1,4 @@
-import { RootState } from "./types";
+import { RootState } from './types';
 
 const rootState: RootState = {
   member: null,
