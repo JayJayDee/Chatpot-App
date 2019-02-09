@@ -42,8 +42,9 @@ export default class SplashScene extends Vue {
   public mounted() {
     this.initialize().then(() => {
       if (this.state == InitializeState.NOT_LOGGED_IN) {
-        this.$navigateTo(LoginScene);
-        this.$close();
+        this.$navigateTo(LoginScene, {
+          clearHistory: true
+        });
       }
     });
   }
