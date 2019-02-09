@@ -24,6 +24,10 @@ export default class Splash extends Vue {
     super();
     this.loading = true;
   }
+
+  public mounted() {
+    console.log('mounted!');
+  }
 }
 </script>
 
