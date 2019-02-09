@@ -18,15 +18,19 @@ import Component from 'vue-class-component';
 import { State, Action } from 'vuex-class';
 
 import log from '../logger';
-import { SplashState } from '../stores/types';
+import { SplashState, InitializeState } from '../stores/types';
+import LoginScene from './LoginScene.vue';
 
 @Component({
   name: VUE_NAME
 })
 export default class SplashScene extends Vue {
 
-  @State('scenes.splash')
-  private splashState: SplashState;
+  @State(state => state.scenes.splash.loading)
+  private loading: boolean;
+
+  @State(state => state.scenes.splash.state)
+  private state: InitializeState;
 
   @Action('initialize')
   private initialize: () => Promise<void>;
@@ -36,9 +40,11 @@ export default class SplashScene extends Vue {
   }
 
   public mounted() {
-    log(`VUE_MOUNTED: ${VUE_NAME}`);
-    this.initialize().then((resp) => {
-      console.log('!!!!!', this.splashState);
+    this.initialize().then(() => {
+      if (this.state == InitializeState.NOT_LOGGED_IN) {
+        this.$navigateTo(LoginScene);
+        this.$close();
+      }
     });
   }
 }
