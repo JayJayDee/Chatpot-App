@@ -1,6 +1,7 @@
-# chatpot app
+# Chatpot App
+chatpot app for chatpot services.
 
-> chatpot app for chatpot services
+written with nativescript-vue
 
 ## Usage
 
