@@ -38,6 +38,7 @@ export const authorizedRequestBuilder =
 
     try {
       resp = await request(opts);
+      return resp.data;
     } catch (err) {
       if (err instanceof ApiSessionExpired) {
         const token = credAccessor.getToken();

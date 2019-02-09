@@ -13,6 +13,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import { memberApi } from '../apis';
 
 @Component({
   name: 'Splash'
@@ -26,6 +27,8 @@ export default class Splash extends Vue {
   }
 
   public mounted() {
+    memberApi.requestSimpleJoin('JP', 'ja', 'M')
+    .then(console.log).catch(console.error);
     console.log('mounted!');
   }
 }
