@@ -9,6 +9,8 @@ export const requestBuilder = (baseUrl: string): RequestFunction =>
     const mergedUrl = `${baseUrl}${opts.url}`;
     let resp: AxiosResponse = null;
 
+    console.log(`[REQ]: ${mergedUrl}`);
+
     try {
       resp = await axios({
         method: opts.method,
