@@ -11,32 +11,35 @@
 </template>
 
 <script lang="ts">
+const VUE_NAME = 'SplashScene';
+
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { memberApi } from '../apis';
+import { State, Action } from 'vuex-class';
+
+import log from '../logger';
+import { SplashState } from '../stores/types';
 
 @Component({
-  name: 'Splash'
+  name: VUE_NAME
 })
-export default class Splash extends Vue {
-  private loading: boolean;
+export default class SplashScene extends Vue {
+
+  @State('scenes.splash')
+  private splashState: SplashState;
+
+  @Action('initialize')
+  private initialize: () => Promise<void>;
 
   constructor() {
     super();
-    this.loading = true;
   }
 
   public mounted() {
-    memberApi.requestSimpleJoin('JP', 'ja', 'M')
-    .then((resp) => {
-      console.log('AXIOS_OK');
-      console.log(resp);
-    })
-    .catch((err) => {
-      console.log('AXIOS_ERR');
-      console.log(`AXIOS_ERR_MESSAGE: ${JSON.stringify(err)}`);
+    log(`VUE_MOUNTED: ${VUE_NAME}`);
+    this.initialize().then((resp) => {
+      console.log('!!!!!', this.splashState);
     });
-    console.log('mounted!');
   }
 }
 </script>
