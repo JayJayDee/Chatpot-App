@@ -23,22 +23,26 @@
           <ActivityIndicator rowSpan="2" :busy="loading"></ActivityIndicator>
         </GridLayout>
 
-        <Button
-          text="Sign in"
-          class="btn btn-primary m-t-20"
-          :disabled="loading"
-          @onTap="onLogin">
-        </Button>
+        <StackLayout>
+          <Button
+            text="Sign in"
+            class="btn btn-primary m-t-20"
+            :disabled="loading"
+            @onTap="onLogin">
+          </Button>
 
-        <Button
-          text="Start without sign-up"
-          class="btn btn-primary">
-        </Button>
+          <Button
+            text="Start without sign-up"
+            class="btn btn-primary"
+            @onTap="onSimpleJoinClicked">
+          </Button>
+        </StackLayout>
+        
       </StackLayout>
 
       <Label class="login-label sign-up-label">
         <FormattedString>
-          <Span text="Don’t have an account?"></Span>
+          <Span text="Don’t have an account? "></Span>
           <Span text="Sign up" class="bold"></Span>
         </FormattedString>
       </Label>
@@ -50,13 +54,21 @@
 const VUE_NAME = 'LoginScene';
 
 import Vue from 'vue';
+import './ext-vue';
 import Component from 'vue-class-component';
+
 import log from '../logger';
+import { memberApi } from '../apis';
+import SimpleJoinScene from './SimpleJoinScene.vue';
+import { State } from 'vuex-class';
 
 @Component({
   name: VUE_NAME
 })
 export default class LoginScene extends Vue {
+
+  @State(state => state.loading)
+  private loading: boolean;
 
   constructor() {
     super();
@@ -64,6 +76,10 @@ export default class LoginScene extends Vue {
 
   public mounted() {
     log(`VUE_INIT: ${VUE_NAME}`);
+  }
+
+  public onSimpleJoinClicked() {
+    this.$navigateTo(SimpleJoinScene);
   }
 }
 </script>

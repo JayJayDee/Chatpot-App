@@ -1,7 +1,13 @@
 export type RootState = {
+  error: null | ErrorPayload;
   member: null | Member;
   auth: null | Auth;
   scenes: ScenesState;
+  loading: boolean;
+};
+
+export type ErrorPayload = {
+  code: string;
 };
 
 export type Member = {

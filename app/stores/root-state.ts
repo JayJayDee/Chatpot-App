@@ -8,6 +8,10 @@ const rootState: RootState = {
       loading: false,
       state: null
     }
+  },
+  loading: false,
+  error: {
+    code: null
   }
 };
 export default rootState;
