@@ -1,3 +1,8 @@
+export type MemberCreateReq = {
+  region: string;
+  language: string;
+  gender: 'M' | 'F';
+};
 export type MemberCreateResp = {
   nick: Nick;
   token: string;

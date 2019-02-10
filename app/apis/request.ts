@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { stringify } from 'qs';
 
 import { LocalCredentialAccessor } from '../credential-accessor';
 import { RequestFunction } from './types';
@@ -16,7 +17,7 @@ export const requestBuilder = (baseUrl: string): RequestFunction =>
         method: opts.method,
         url: mergedUrl,
         params: opts.qs,
-        data: opts.body
+        data: stringify(opts.body)
       });
       if (!resp.data) throw new ApiRequestError('error when api request');
       return resp.data;

@@ -22,6 +22,7 @@
     "nativescript-toast": "^1.4.6",
     "nativescript-vue": "^2.0.0",
     "nativescript-vue-devtools": "^1.0.0",
+    "qs": "^6.6.0",
     "tns-core-modules": "^5.0.2",
     "vue-class-component": "^6.3.2",
     "vuex": "^3.1.0",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
+    "@types/qs": "^6.5.1",
     "@types/vue": "^2.0.0",
     "babel-loader": "^8.0.2",
     "babel-traverse": "6.26.0",

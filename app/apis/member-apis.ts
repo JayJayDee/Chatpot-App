@@ -1,17 +1,17 @@
 import { RequestFunction, HttpMethod } from './types';
-import { MemberCreateResp } from './member-api-types';
+import { MemberCreateResp, MemberCreateReq } from './member-api-types';
 
 const memberApisBuilder = (request: RequestFunction) => ({
 
   requestSimpleJoin:
-    async (region: string, language: string, gender: string): Promise<MemberCreateResp> => {
+    async (req: MemberCreateReq): Promise<MemberCreateResp> => {
       const raw = await request({
         url: '/member',
         method: HttpMethod.POST,
         body: {
-          region,
-          language,
-          gender
+          region: req.region,
+          language: req.language,
+          gender: req.gender
         }
       });
       return {
