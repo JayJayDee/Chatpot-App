@@ -1,5 +1,7 @@
 import { RequestFunction, HttpMethod } from './types';
 import { MemberCreateResp, MemberCreateReq, MemberAuthReq, MemberAuthRes } from './member-api-types';
+import { Auth } from '@/stores';
+import { generateRefreshKey } from '@/utils';
 
 const memberApisBuilder = (request: RequestFunction) => ({
 
@@ -29,6 +31,25 @@ const memberApisBuilder = (request: RequestFunction) => ({
         body: {
           login_id: req.token,
           passphrase: req.password
+        }
+      });
+      return {
+        session_key: raw.session_key
+      };
+    },
+
+  requestReauth:
+    async (auth: Auth): Promise<MemberAuthRes> => {
+      const refreshKey = generateRefreshKey(auth);
+      const raw = await request({
+        url: '/auth/reauth',
+        method: HttpMethod.POST,
+        body: {
+          token: auth.token
+        },
+        qs: {
+          session_key: auth.sessionKey,
+          refresh_key: refreshKey
         }
       });
       return {

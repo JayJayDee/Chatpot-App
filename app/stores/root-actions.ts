@@ -1,6 +1,6 @@
 import { ActionContext } from 'vuex';
 
-import { RootState, InitializeState } from './types';
+import { RootState, InitializeState, Auth } from './types';
 import accessor from '../credential-accessor';
 import { JoinSimpleParam } from './root-action-types';
 import { memberApi } from '@/apis';
@@ -20,6 +20,19 @@ const actions = {
       store.commit('loading', false);
       return;
     }
+
+    const auth: Auth = {
+      token,
+      password: accessor.getSecret(),
+      sessionKey: accessor.getSessionKey()
+    };
+    store.commit('updateAuth', auth);
+
+    // TODO: call session-key referesh api.
+    // TODO: call member-fetching api.
+
+    store.commit('loading', false);
+    store.commit('splashInitState', InitializeState.AUTH_COMPLETE);
   },
 
   async joinSimple(store: ActionContext<RootState, any>, param: JoinSimpleParam): Promise<void> {
@@ -38,6 +51,8 @@ const actions = {
     });
     accessor.setSessionKey(authResp.session_key);
     store.commit('loading', false);
+
+    // STEP3. call member-fetching api.
   }
 };
 export default actions;
