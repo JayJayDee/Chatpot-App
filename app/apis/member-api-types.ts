@@ -9,3 +9,11 @@ export type MemberCreateResp = {
   passphrase: string;
 };
 type Nick = {[key: string]: string};
+
+export type MemberAuthReq = {
+  token: string;
+  password: string;
+};
+export type MemberAuthRes = {
+  session_key: string;
+};

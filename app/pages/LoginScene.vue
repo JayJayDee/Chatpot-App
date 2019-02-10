@@ -60,17 +60,18 @@ import Component from 'vue-class-component';
 import log from '../logger';
 import { memberApi } from '../apis';
 import SimpleJoinScene from './SimpleJoinScene.vue';
+import { State } from 'vuex-class';
 
 @Component({
   name: VUE_NAME
 })
 export default class LoginScene extends Vue {
 
+  @State(state => state.loading)
   private loading: boolean;
 
   constructor() {
     super();
-    this.loading = false;
   }
 
   public mounted() {

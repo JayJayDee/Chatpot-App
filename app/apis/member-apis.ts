@@ -1,5 +1,5 @@
 import { RequestFunction, HttpMethod } from './types';
-import { MemberCreateResp, MemberCreateReq } from './member-api-types';
+import { MemberCreateResp, MemberCreateReq, MemberAuthReq, MemberAuthRes } from './member-api-types';
 
 const memberApisBuilder = (request: RequestFunction) => ({
 
@@ -18,6 +18,21 @@ const memberApisBuilder = (request: RequestFunction) => ({
         nick: raw.nick,
         token: raw.token,
         passphrase: raw.passphrase
+      };
+    },
+
+  requestAuth:
+    async (req: MemberAuthReq): Promise<MemberAuthRes> => {
+      const raw = await request({
+        url: '/auth',
+        method: HttpMethod.POST,
+        body: {
+          login_id: req.token,
+          passphrase: req.password
+        }
+      });
+      return {
+        session_key: raw.session_key
       };
     }
 });

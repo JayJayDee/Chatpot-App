@@ -28,7 +28,7 @@ import LoginScene from './LoginScene.vue';
 })
 export default class SplashScene extends Vue {
 
-  @State(state => state.scenes.splash.loading)
+  @State(state => state.loading)
   private loading: boolean;
 
   @State(state => state.scenes.splash.state)
