@@ -2,6 +2,7 @@ import { ActionContext } from 'vuex';
 
 import { RootState, InitializeState } from './types';
 import accessor from '../credential-accessor';
+import { JoinSimpleParam } from './root-action-types';
 
 const delayLittle = (sec: number) =>
   new Promise((resolve, reject) =>
@@ -18,6 +19,10 @@ const actions = {
       store.commit('splashLoading', false);
       return;
     }
+  },
+
+  async joinSimple(store: ActionContext<RootState, any>, param: JoinSimpleParam): Promise<void> {
+    // TODO: simple-join actions.
   }
 };
 export default actions;

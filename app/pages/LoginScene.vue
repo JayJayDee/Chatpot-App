@@ -33,7 +33,8 @@
 
           <Button
             text="Start without sign-up"
-            class="btn btn-primary">
+            class="btn btn-primary"
+            @onTap="onSimpleJoinClicked">
           </Button>
         </StackLayout>
         
@@ -53,10 +54,12 @@
 const VUE_NAME = 'LoginScene';
 
 import Vue from 'vue';
+import './ext-vue';
 import Component from 'vue-class-component';
 
 import log from '../logger';
 import { memberApi } from '../apis';
+import SimpleJoinScene from './SimpleJoinScene.vue';
 
 @Component({
   name: VUE_NAME
@@ -67,24 +70,15 @@ export default class LoginScene extends Vue {
 
   constructor() {
     super();
-    this.loading = true;
+    this.loading = false;
   }
 
   public mounted() {
     log(`VUE_INIT: ${VUE_NAME}`);
-    memberApi.requestSimpleJoin({
-      region: 'KR',
-      language: 'ko',
-      gender: 'F'
-    })
-    .then((resp) => {
-      log('***SUCCESS');
-      log(resp);
-    })
-    .catch((err) => {
-      log('***ERROR');
-      log(err);
-    });
+  }
+
+  public onSimpleJoinClicked() {
+    this.$navigateTo(SimpleJoinScene);
   }
 }
 </script>

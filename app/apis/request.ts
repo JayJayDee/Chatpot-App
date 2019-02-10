@@ -9,15 +9,13 @@ export const requestBuilder = (baseUrl: string): RequestFunction =>
   async (opts) => {
     const mergedUrl = `${baseUrl}${opts.url}`;
     let resp: AxiosResponse = null;
-
-    console.log(`[REQ]: ${mergedUrl}`);
-
     try {
       resp = await axios({
         method: opts.method,
         url: mergedUrl,
         params: opts.qs,
-        data: stringify(opts.body)
+        data: stringify(opts.body),
+        responseType: 'json'
       });
       if (!resp.data) throw new ApiRequestError('error when api request');
       return resp.data;
@@ -41,7 +39,7 @@ export const authorizedRequestBuilder =
 
     try {
       resp = await request(opts);
-      return resp.data;
+      return resp;
     } catch (err) {
       if (err instanceof ApiSessionExpired) {
         const token = credAccessor.getToken();

@@ -1,7 +1,12 @@
 <template>
-  <Page title="Simple join">
+  <Page>
+    <ActionBar title="Start without sign-up" class="action-bar" />
     <FlexboxLayout class="page">
-    
+      <Label text="호옹이" />
+      <Button
+        text="Click to back"
+        class="btn btn-primary"
+        @onTap="$navigateBack" />
     </FlexboxLayout>
   </Page>
 </template>
