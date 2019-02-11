@@ -13,9 +13,6 @@ const mutations = {
     state.error = null;
   },
 
-  splashInitState(state: RootState, ins: InitializeState) {
-    state.scenes.splash.state = ins;
-  },
   updateAuth(state: RootState, auth: Auth) {
     state.auth = auth;
   },

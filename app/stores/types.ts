@@ -2,7 +2,6 @@ export type RootState = {
   error: null | ErrorPayload;
   member: null | Member;
   auth: null | Auth;
-  scenes: ScenesState;
   loading: boolean;
 };
 
