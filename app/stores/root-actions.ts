@@ -4,7 +4,7 @@ import { RootState, InitializeState, Auth } from './types';
 import accessor from '../credential-accessor';
 import log from '../logger';
 import { JoinSimpleParam } from './root-action-types';
-import { memberApi } from '@/apis';
+import { authApi } from '@/apis';
 
 const delayLittle = (sec: number) =>
   new Promise((resolve, reject) =>
@@ -30,7 +30,7 @@ const actions = {
     };
     store.commit('updateAuth', auth);
 
-    const refreshResp = await memberApi.requestReauth(auth);
+    const refreshResp = await authApi.requestReauth(auth);
     log(refreshResp);
 
     // TODO: call member-fetching api.
@@ -44,12 +44,12 @@ const actions = {
     store.commit('loading', true);
 
     // STEP1. call simple-join api.
-    const resp = await memberApi.requestSimpleJoin(param);
+    const resp = await authApi.requestSimpleJoin(param);
     accessor.setToken(resp.token);
     accessor.setSecret(resp.passphrase);
 
     // STEP2. call auth-api.
-    const authResp = await memberApi.requestAuth({
+    const authResp = await authApi.requestAuth({
       token: resp.token,
       password: resp.passphrase
     });
