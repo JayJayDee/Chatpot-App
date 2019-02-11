@@ -2,8 +2,10 @@ import axios, { AxiosResponse } from 'axios';
 import { stringify } from 'qs';
 
 import { LocalCredentialAccessor } from '../credential-accessor';
-import { RequestFunction } from './types';
+import { RequestFunction, HttpMethod } from './types';
 import { ApiRequestError, ApiServerDenied, ApiSessionExpired } from './errors';
+import { Auth } from '@/stores';
+import { generateRefreshKey } from '@/utils';
 
 export const requestBuilder = (baseUrl: string): RequestFunction =>
   async (opts) => {
@@ -32,7 +34,7 @@ export const requestBuilder = (baseUrl: string): RequestFunction =>
   };
 
 export const authorizedRequestBuilder =
-  (baseUrl: string, credAccessor: LocalCredentialAccessor): RequestFunction =>
+  (baseUrl: string, authBaseUrl: string, credAccessor: LocalCredentialAccessor): RequestFunction =>
   async (opts) => {
     const request = requestBuilder(baseUrl);
     let resp: AxiosResponse = null;
@@ -43,9 +45,25 @@ export const authorizedRequestBuilder =
     } catch (err) {
       if (err instanceof ApiSessionExpired) {
         const token = credAccessor.getToken();
-        const secret = credAccessor.getSecret();
+        const password = credAccessor.getSecret();
         const sessionKey = credAccessor.getSessionKey();
-        // TODO: make revalidate token & request again.
+
+        const auth: Auth = { token, password, sessionKey };
+        const refreshKey = generateRefreshKey(auth);
+
+        const reauthResp = await request({
+          url: `${authBaseUrl}/auth/reauth`,
+          method: HttpMethod.POST,
+          qs: {
+            session_key: auth.sessionKey,
+            refresh_key: refreshKey
+          },
+          body: {
+            token: auth.token
+          }
+        });
+        console.log(reauthResp);
+
       } else {
         throw err;
       }

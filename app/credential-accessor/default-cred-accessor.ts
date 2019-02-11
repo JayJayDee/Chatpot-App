@@ -1,4 +1,4 @@
-import { Preferences } from 'nativescript-preferences';
+import { getItem, setItem } from 'nativescript-localstorage';
 import { LocalCredentialAccessor } from './types';
 
 const TOKEN_KEY = 'CP_TOKEN';
@@ -6,14 +6,14 @@ const SECRET_KEY = 'CP_SECRET';
 const SESSION_KEY = 'CP_SESSION';
 
 const defaultCredentialAccessor =
-  (prep: Preferences): LocalCredentialAccessor => ({
-    getToken: () => prep.get(TOKEN_KEY),
-    setToken: (token) => prep.set(TOKEN_KEY, token),
+  (): LocalCredentialAccessor => ({
+    getToken: () => getItem(TOKEN_KEY),
+    setToken: (token) => setItem(TOKEN_KEY, token),
 
-    getSecret: () => prep.get(SECRET_KEY),
-    setSecret: (secret) => prep.set(SECRET_KEY, secret),
+    getSecret: () => getItem(SECRET_KEY),
+    setSecret: (secret) => setItem(SECRET_KEY, secret),
 
-    getSessionKey: () => prep.get(SESSION_KEY),
-    setSessionKey: (session) => prep.set(SESSION_KEY, session)
+    getSessionKey: () => getItem(SESSION_KEY),
+    setSessionKey: (session) => setItem(SESSION_KEY, session)
   });
 export default defaultCredentialAccessor;

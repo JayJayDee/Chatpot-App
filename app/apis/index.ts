@@ -7,8 +7,8 @@ import roomApiBuilder from './room-apis';
 const AUTH_SERVER_BASE = 'http://dev-auth.chatpot.chat';
 const ROOM_SERVER_BASE = 'http://dev-room.chatpot.chat';
 
-const memberReq = authorizedRequestBuilder(AUTH_SERVER_BASE, accessor);
-const roomReq = authorizedRequestBuilder(ROOM_SERVER_BASE, accessor);
+const memberReq = authorizedRequestBuilder(AUTH_SERVER_BASE, AUTH_SERVER_BASE, accessor);
+const roomReq = authorizedRequestBuilder(ROOM_SERVER_BASE, AUTH_SERVER_BASE, accessor);
 const authReq = requestBuilder(AUTH_SERVER_BASE);
 
 export const memberApi = memberApiBuilder(memberReq);
