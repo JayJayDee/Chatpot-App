@@ -2,6 +2,7 @@ import { ActionContext } from 'vuex';
 
 import { RootState, InitializeState, Auth } from './types';
 import accessor from '../credential-accessor';
+import log from '../logger';
 import { JoinSimpleParam } from './root-action-types';
 import { memberApi } from '@/apis';
 
@@ -10,15 +11,16 @@ const delayLittle = (sec: number) =>
     setTimeout(() => resolve(), sec * 1000));
 
 const actions = {
-  async initialize(store: ActionContext<RootState, any>): Promise<void> {
+  async initialize(store: ActionContext<RootState, any>): Promise<InitializeState> {
     store.commit('loading', true);
     const token = accessor.getToken();
     await delayLittle(1);
 
+    log(`STORED_TOKEN = ${token}`);
+
     if (!token) {
-      store.commit('splashInitState', InitializeState.NOT_LOGGED_IN);
       store.commit('loading', false);
-      return;
+      return InitializeState.NOT_LOGGED_IN;
     }
 
     const auth: Auth = {
@@ -28,11 +30,13 @@ const actions = {
     };
     store.commit('updateAuth', auth);
 
-    // TODO: call session-key referesh api.
+    const refreshResp = await memberApi.requestReauth(auth);
+    log(refreshResp);
+
     // TODO: call member-fetching api.
 
     store.commit('loading', false);
-    store.commit('splashInitState', InitializeState.AUTH_COMPLETE);
+    return InitializeState.AUTH_COMPLETE;
   },
 
   async joinSimple(store: ActionContext<RootState, any>, param: JoinSimpleParam): Promise<void> {
