@@ -30,7 +30,7 @@ const authApisBuilder = (request: RequestFunction) => ({
         method: HttpMethod.POST,
         body: {
           login_id: req.token,
-          passphrase: req.password
+          password: req.password
         }
       });
       return {

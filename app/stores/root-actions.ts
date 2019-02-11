@@ -5,6 +5,7 @@ import accessor from '../credential-accessor';
 import log from '../logger';
 import { JoinSimpleParam } from './root-action-types';
 import { authApi } from '@/apis';
+import { Preferences } from 'nativescript-preferences';
 
 const delayLittle = (sec: number) =>
   new Promise((resolve, reject) =>
@@ -17,6 +18,8 @@ const actions = {
     await delayLittle(1);
 
     log(`STORED_TOKEN = ${token}`);
+    const t = new Preferences().get('CP_TOKEN');
+    log(`STORED_TOKEN2 = ${token}`);
 
     if (!token) {
       store.commit('loading', false);
@@ -47,6 +50,10 @@ const actions = {
     const resp = await authApi.requestSimpleJoin(param);
     accessor.setToken(resp.token);
     accessor.setSecret(resp.passphrase);
+
+    new Preferences().set('CP_TOKEN', resp.token);
+    log(`GOT TOKEN = ${resp.token}`);
+    log(`GOT PASS = ${resp.passphrase}`);
 
     // STEP2. call auth-api.
     const authResp = await authApi.requestAuth({
