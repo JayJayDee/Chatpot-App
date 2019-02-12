@@ -33,8 +33,14 @@ const actions = {
     };
     store.commit('updateAuth', auth);
 
-    const refreshResp = await authApi.requestReauth(auth);
-    log(refreshResp);
+    try {
+      const refreshResp = await authApi.requestReauth(auth);
+      log('*** SUCCESS');
+      log(refreshResp);
+    } catch (err) {
+      log('*** FAIL');
+      log(err.message);
+    }
 
     // TODO: call member-fetching api.
 
@@ -60,6 +66,10 @@ const actions = {
       token: resp.token,
       password: resp.passphrase
     });
+
+    log('*** REAUTH RESPONSE');
+    log(authResp);
+
     accessor.setSessionKey(authResp.session_key);
     store.commit('loading', false);
 

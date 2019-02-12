@@ -10,6 +10,7 @@ import { generateRefreshKey } from '@/utils';
 export const requestBuilder = (baseUrl: string): RequestFunction =>
   async (opts) => {
     const mergedUrl = `${baseUrl}${opts.url}`;
+
     let resp: AxiosResponse = null;
     try {
       resp = await axios({
@@ -23,13 +24,14 @@ export const requestBuilder = (baseUrl: string): RequestFunction =>
       return resp.data;
     } catch (err) {
       if (err.response.status && err.response.status === 400) {
-        throw new ApiServerDenied(err.response.code);
+        throw new ApiServerDenied(err.response.data.code);
       }
 
       if (err.response.status && err.response.status === 401 &&
-            err.response.code === 'SESSION_EXPIRED') {
-        throw new ApiSessionExpired(err.response.code);
+            err.response.data.code === 'SESSION_EXPIRED') {
+        throw new ApiSessionExpired(err.response.data.code);
       }
+      throw new ApiServerDenied(err.response.data.message);
     }
   };
 
