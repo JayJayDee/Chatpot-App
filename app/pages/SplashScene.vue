@@ -21,7 +21,9 @@ import { State, Action } from 'vuex-class';
 
 import log from '../logger';
 import { SplashState, InitializeState } from '../stores/types';
+
 import LoginScene from './LoginScene.vue';
+import MainContainerScene from './MainContainerScene.vue';
 
 @Component({
   name: VUE_NAME
@@ -46,6 +48,10 @@ export default class SplashScene extends Vue {
       log(`APP STATE = ${state}`);
       if (state === InitializeState.NOT_LOGGED_IN) {
         this.$navigateTo(LoginScene, {
+          clearHistory: true
+        });
+      } else if (state === InitializeState.AUTH_COMPLETE) {
+        this.$navigateTo(MainContainerScene, {
           clearHistory: true
         });
       }

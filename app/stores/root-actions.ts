@@ -17,14 +17,14 @@ const actions = {
     const token = accessor.getToken();
     await delayLittle(1);
 
-    log(`STORED_TOKEN = ${token}`);
-    const t = new Preferences().get('CP_TOKEN');
-    log(`STORED_TOKEN2 = ${token}`);
-
     if (!token) {
       store.commit('loading', false);
       return InitializeState.NOT_LOGGED_IN;
     }
+
+    log(`STORED_TOKEN = ${accessor.getToken()}`);
+    log(`STORED_SECRET = ${accessor.getSecret()}`);
+    log(`STORED_SESSION = ${accessor.getSessionKey()}`);
 
     const auth: Auth = {
       token,
@@ -32,6 +32,9 @@ const actions = {
       sessionKey: accessor.getSessionKey()
     };
     store.commit('updateAuth', auth);
+
+    log('AUTH-PARAM');
+    log(JSON.stringify(auth));
 
     try {
       const refreshResp = await authApi.requestReauth(auth);
@@ -54,10 +57,13 @@ const actions = {
 
     // STEP1. call simple-join api.
     const resp = await authApi.requestSimpleJoin(param);
+
+    log('RECEIVED FROM JOIN-API');
+    log(JSON.stringify(resp));
+
     accessor.setToken(resp.token);
     accessor.setSecret(resp.passphrase);
 
-    new Preferences().set('CP_TOKEN', resp.token);
     log(`GOT TOKEN = ${resp.token}`);
     log(`GOT PASS = ${resp.passphrase}`);
 
@@ -66,9 +72,7 @@ const actions = {
       token: resp.token,
       password: resp.passphrase
     });
-
-    log('*** REAUTH RESPONSE');
-    log(authResp);
+    log(`GOT SESSION_KEY = ${authResp.session_key}`);
 
     accessor.setSessionKey(authResp.session_key);
     store.commit('loading', false);
