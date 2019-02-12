@@ -1,6 +1,9 @@
 <template>
   <Page>
-    <ActionBar title="Chatpot" class="action-bar" />
+    <ActionBar title="메인" class="action-bar" />
+    <FlexBoxLayout class="page">
+      <Label text="호옹이" />
+    </FlexBoxLayout>
   </Page>
 </template>
 
@@ -15,14 +18,15 @@ import log from '../logger';
 import { memberApi } from '../apis';
 import SimpleJoinScene from './SimpleJoinScene.vue';
 import { State } from 'vuex-class';
+import { Member } from '@/stores';
 
 @Component({
   name: VUE_NAME
 })
 export default class MainCotainerScene extends Vue {
 
-  @State(state => state.loading)
-  private loading: boolean;
+  @State(state => state.member)
+  private member: Member;
 
   constructor() {
     super();
@@ -30,6 +34,7 @@ export default class MainCotainerScene extends Vue {
 
   public mounted() {
     log(`VUE_INIT: ${VUE_NAME}`);
+    log(`${this.member.nick.en}`);
   }
 }
 </script>

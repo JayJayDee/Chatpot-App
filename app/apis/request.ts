@@ -23,6 +23,10 @@ export const requestBuilder = (baseUrl: string): RequestFunction =>
       if (!resp.data) throw new ApiRequestError('error when api request');
       return resp.data;
     } catch (err) {
+      const code = err.response.data.code;
+      log('API_REQUEST_ERROR_OCCURED');
+      log(`${code}`);
+
       if (err.response.status && err.response.status === 400) {
         throw new ApiServerDenied(err.response.data.code);
       }
@@ -39,9 +43,13 @@ export const authorizedRequestBuilder =
   (baseUrl: string, authBaseUrl: string, credAccessor: LocalCredentialAccessor): RequestFunction =>
   async (opts) => {
     const request = requestBuilder(baseUrl);
-    let resp: AxiosResponse = null;
+    const sessionKey = credAccessor.getSessionKey();
+    let resp: any = null;
 
     try {
+      if (!opts.qs) opts.qs = {};
+      opts.qs.session_key = sessionKey;
+
       resp = await request(opts);
       return resp;
     } catch (err) {
@@ -64,7 +72,12 @@ export const authorizedRequestBuilder =
             token: auth.token
           }
         });
-        console.log(reauthResp);
+        const newSessionKey = reauthResp.session_key;
+        credAccessor.setSessionKey(newSessionKey);
+
+        opts.qs.session_key = newSessionKey;
+        resp = await request(opts);
+        return resp;
 
       } else {
         throw err;
