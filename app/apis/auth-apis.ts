@@ -2,6 +2,7 @@ import { RequestFunction, HttpMethod } from './types';
 import { MemberCreateResp, MemberCreateReq, MemberAuthReq, MemberAuthRes } from './auth-api-types';
 import { Auth } from '@/stores';
 import { generateRefreshKey } from '@/utils';
+import log from '@/logger';
 
 const authApisBuilder = (request: RequestFunction) => ({
 
@@ -41,7 +42,7 @@ const authApisBuilder = (request: RequestFunction) => ({
   requestReauth:
     async (auth: Auth): Promise<MemberAuthRes> => {
       const refreshKey = generateRefreshKey(auth);
-      const raw = await request({
+      const requestOpts = {
         url: '/auth/reauth',
         method: HttpMethod.POST,
         body: {
@@ -51,7 +52,10 @@ const authApisBuilder = (request: RequestFunction) => ({
           session_key: auth.sessionKey,
           refresh_key: refreshKey
         }
-      });
+      };
+      log('REAUTH PARAMS');
+      log(requestOpts);
+      const raw = await request(requestOpts);
       return {
         session_key: raw.session_key
       };
