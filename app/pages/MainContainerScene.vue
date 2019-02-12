@@ -1,6 +1,9 @@
 <template>
   <Page>
-    <ActionBar title="Chatpot" class="action-bar" />
+    <ActionBar title="메인" class="action-bar" />
+    <FlexBoxLayout class="page">
+      <Label text="호옹이" />
+    </FlexBoxLayout>
   </Page>
 </template>
 
