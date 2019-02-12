@@ -4,7 +4,7 @@ import { RootState, InitializeState, Auth } from './types';
 import accessor from '../credential-accessor';
 import log from '../logger';
 import { JoinSimpleParam } from './root-action-types';
-import { authApi } from '@/apis';
+import { authApi, memberApi } from '@/apis';
 import { Preferences } from 'nativescript-preferences';
 
 const delayLittle = (sec: number) =>
@@ -33,19 +33,22 @@ const actions = {
     };
     store.commit('updateAuth', auth);
 
-    log('AUTH-PARAM');
-    log(JSON.stringify(auth));
-
     try {
       const refreshResp = await authApi.requestReauth(auth);
-      log('*** SUCCESS');
-      log(refreshResp);
+      auth.sessionKey = refreshResp.session_key;
+      accessor.setSessionKey(refreshResp.session_key);
+
+      const member = await memberApi.requestMember(token);
+
+      store.commit('updateAuth', auth);
+      store.commit('updateMember', member);
     } catch (err) {
+      // TODO: error handling required.
       log('*** FAIL');
       log(err.message);
     }
 
-    // TODO: call member-fetching api.
+    // TODO: when error occured, must fixed not to be returns COMPLETE.
 
     store.commit('loading', false);
     return InitializeState.AUTH_COMPLETE;
