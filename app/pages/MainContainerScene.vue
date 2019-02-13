@@ -1,9 +1,7 @@
 <template>
   <Page>
     <ActionBar title="메인" class="action-bar" />
-    <FlexBoxLayout class="page">
       <Label :text="memberName" />
-    </FlexBoxLayout>
   </Page>
 </template>
 
@@ -20,6 +18,7 @@ import log from '../logger';
 import { memberApi } from '../apis';
 import SimpleJoinScene from './SimpleJoinScene.vue';
 import { Member } from '@/stores';
+import DefaultButton from '@/components/DefaultButton.vue';
 
 @Component({
   name: VUE_NAME
@@ -40,7 +39,7 @@ export default class MainCotainerScene extends Vue {
 
   public mounted() {
     log(`VUE_INIT: ${VUE_NAME}`);
-    log(`${this.member.nick.en}`);
+    log(this.member.nick.en);
   }
 }
 </script>

@@ -61,9 +61,6 @@ const actions = {
     // STEP1. call simple-join api.
     const resp = await authApi.requestSimpleJoin(param);
 
-    log('RECEIVED FROM JOIN-API');
-    log(JSON.stringify(resp));
-
     accessor.setToken(resp.token);
     accessor.setSecret(resp.passphrase);
 
@@ -81,6 +78,10 @@ const actions = {
     store.commit('loading', false);
 
     // STEP3. call member-fetching api.
+  },
+
+  async roomList(store: ActionContext<RootState, any>): Promise<void> {
+    store.commit('loading', true);
   }
 };
 export default actions;
