@@ -14,7 +14,7 @@
 const VUE_NAME = 'SplashScene';
 
 import Vue from 'vue';
-import './ext-vue';
+import '@/ext-vue';
 
 import Component from 'vue-class-component';
 import { State, Action } from 'vuex-class';

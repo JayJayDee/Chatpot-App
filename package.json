@@ -17,6 +17,7 @@
     "@vue/devtools": "5.0.0-beta.3",
     "axios": "^0.18.0",
     "js-sha256": "^0.9.0",
+    "nativescript-bottom-navigation": "^1.4.4",
     "nativescript-localstorage": "^2.0.0",
     "nativescript-preferences": "^1.1.1",
     "nativescript-socket.io": "^0.9.0",
