@@ -4,12 +4,22 @@
       <StackLayout>
         <Label :text="memberName" />
       </StackLayout>
-      <BottomBar row="1">
+      <BottomBar row="1"
+        v-on:tabSelected="tabSelected">
         <BottomBarItem
-          title="Home">
+          icon="res://ic_home_outline" 
+          title="Home 1"
+          checkedIcon="res://ic_home_filled">
         </BottomBarItem>
         <BottomBarItem
-          title="Home2">
+          icon="res://ic_home_outline" 
+          title="Home 2"
+          checkedIcon="res://ic_home_filled">
+        </BottomBarItem>
+        <BottomBarItem
+          icon="res://ic_home_outline" 
+          title="Home 3"
+          checkedIcon="res://ic_home_filled">
         </BottomBarItem>
       </BottomBar>
     </GridLayout>
@@ -52,6 +62,10 @@ export default class MainContainerScene extends Vue {
   public get memberName(): string {
     if (!this.member) return '';
     return this.member.nick.ko;
+  }
+
+  public tabSelected(event) {
+    console.log(event);
   }
 
   public mounted() {
