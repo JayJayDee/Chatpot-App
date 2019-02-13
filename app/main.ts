@@ -1,11 +1,14 @@
 import Vue from 'nativescript-vue';
 import './ext-vue';
 import VueDevtools from 'nativescript-vue-devtools';
+
 import SplashScene from './pages/SplashScene.vue';
 import store from './stores';
 
 import 'nativescript-theme-core/css/core.light.css';
 import './app.css';
+
+require('nativescript-bottombar/vue').register(Vue);
 
 if (TNS_ENV !== 'production') {
   Vue.use(VueDevtools);
