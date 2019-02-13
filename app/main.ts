@@ -3,6 +3,8 @@ import VueDevtools from 'nativescript-vue-devtools';
 
 import SplashScene from './pages/SplashScene.vue';
 import store from './stores';
+
+import 'nativescript-theme-core/css/core.light.css';
 import './app.css';
 
 if (TNS_ENV !== 'production') {
