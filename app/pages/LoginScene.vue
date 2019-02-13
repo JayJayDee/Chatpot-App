@@ -54,7 +54,7 @@
 const VUE_NAME = 'LoginScene';
 
 import Vue from 'vue';
-import './ext-vue';
+import '@/ext-vue';
 import Component from 'vue-class-component';
 
 import log from '../logger';

@@ -1,6 +1,6 @@
 import Vue from 'nativescript-vue';
+import './ext-vue';
 import VueDevtools from 'nativescript-vue-devtools';
-
 import SplashScene from './pages/SplashScene.vue';
 import store from './stores';
 

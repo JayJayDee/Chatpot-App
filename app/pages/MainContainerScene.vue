@@ -2,7 +2,7 @@
   <Page>
     <ActionBar title="메인" class="action-bar" />
     <FlexBoxLayout class="page">
-      <Label text="호옹이" />
+      <Label :text="memberName" />
     </FlexBoxLayout>
   </Page>
 </template>
@@ -11,13 +11,14 @@
 const VUE_NAME = 'MainCotainerScene';
 
 import Vue from 'vue';
-import './ext-vue';
+import '@/ext-vue';
 import Component from 'vue-class-component';
+import { State } from 'vuex-class';
+import { BottomNavigation, BottomNavigationTab } from 'nativescript-bottom-navigation';
 
 import log from '../logger';
 import { memberApi } from '../apis';
 import SimpleJoinScene from './SimpleJoinScene.vue';
-import { State } from 'vuex-class';
 import { Member } from '@/stores';
 
 @Component({
@@ -30,6 +31,11 @@ export default class MainCotainerScene extends Vue {
 
   constructor() {
     super();
+  }
+
+  public get memberName(): string {
+    if (!this.member) return '';
+    return this.member.nick.ko;
   }
 
   public mounted() {
