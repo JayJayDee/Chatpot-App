@@ -1,7 +1,18 @@
 <template>
   <Page>
-    <ActionBar title="메인" class="action-bar" />
-      <Label :text="memberName" />
+    <GridLayout columns="*" rows="*, auto">
+      <StackLayout>
+        <Label :text="memberName" />
+      </StackLayout>
+      <BottomBar row="1">
+        <BottomBarItem
+          title="Home">
+        </BottomBarItem>
+        <BottomBarItem
+          title="Home2">
+        </BottomBarItem>
+      </BottomBar>
+    </GridLayout>
   </Page>
 </template>
 
@@ -12,7 +23,7 @@ import Vue from 'vue';
 import '@/ext-vue';
 import Component from 'vue-class-component';
 import { State, Action } from 'vuex-class';
-import { BottomNavigation, BottomNavigationTab } from 'nativescript-bottom-navigation';
+import { BottomBar, BottomBarItem } from 'nativescript-bottombar/vue';
 
 import log from '../logger';
 import { memberApi } from '../apis';
@@ -21,7 +32,10 @@ import { Member } from '@/stores';
 import DefaultButton from '@/components/DefaultButton.vue';
 
 @Component({
-  name: VUE_NAME
+  name: VUE_NAME,
+  components: {
+    BottomBar, BottomBarItem
+  }
 })
 export default class MainContainerScene extends Vue {
 
