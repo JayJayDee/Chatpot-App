@@ -4,6 +4,7 @@ const rootState: RootState = {
   member: null,
   auth: null,
   loading: false,
+  rooms: [],
   error: {
     code: null
   }
