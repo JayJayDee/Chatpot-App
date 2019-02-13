@@ -4,7 +4,7 @@ import { RootState, InitializeState, Auth } from './types';
 import accessor from '../credential-accessor';
 import log from '../logger';
 import { JoinSimpleParam } from './root-action-types';
-import { authApi, memberApi } from '@/apis';
+import { authApi, memberApi, roomApi } from '@/apis';
 import { Preferences } from 'nativescript-preferences';
 
 const delayLittle = (sec: number) =>
@@ -80,8 +80,12 @@ const actions = {
     // STEP3. call member-fetching api.
   },
 
-  async roomList(store: ActionContext<RootState, any>): Promise<void> {
+  async refreshRooms(store: ActionContext<RootState, any>): Promise<void> {
     store.commit('loading', true);
+    store.commit('clearRooms');
+    const roomsResp = await roomApi.requestRoomList();
+    store.commit('addRooms', roomsResp.list);
+    store.commit('loading', false);
   }
 };
 export default actions;

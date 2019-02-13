@@ -3,3 +3,7 @@ export type JoinSimpleParam = {
   region: string;
   gender: 'M' | 'F';
 };
+export type RoomsQueryParam = {
+  offset?: number;
+  size?: number;
+};

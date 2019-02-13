@@ -6,12 +6,12 @@
 </template>
 
 <script lang="ts">
-const VUE_NAME = 'MainCotainerScene';
+const VUE_NAME = 'MainContainerScene';
 
 import Vue from 'vue';
 import '@/ext-vue';
 import Component from 'vue-class-component';
-import { State } from 'vuex-class';
+import { State, Action } from 'vuex-class';
 import { BottomNavigation, BottomNavigationTab } from 'nativescript-bottom-navigation';
 
 import log from '../logger';
@@ -23,10 +23,13 @@ import DefaultButton from '@/components/DefaultButton.vue';
 @Component({
   name: VUE_NAME
 })
-export default class MainCotainerScene extends Vue {
+export default class MainContainerScene extends Vue {
 
   @State(state => state.member)
   private member: Member;
+
+  @Action('refreshRooms')
+  private refreshRooms: () => Promise<void>;
 
   constructor() {
     super();
@@ -40,6 +43,13 @@ export default class MainCotainerScene extends Vue {
   public mounted() {
     log(`VUE_INIT: ${VUE_NAME}`);
     log(this.member.nick.en);
+
+    this.refreshRooms().then(() => {
+      log('ROOMS OK!');
+    })
+    .catch((err) => {
+      log(`err.message`);
+    });
   }
 }
 </script>

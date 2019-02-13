@@ -2,6 +2,7 @@ export type RootState = {
   error: null | ErrorPayload;
   member: null | Member;
   auth: null | Auth;
+  rooms: Room[];
   loading: boolean;
 };
 
@@ -25,8 +26,13 @@ export type Auth = {
   sessionKey: string;
 };
 
-export type ScenesState = {
-  splash: SplashState;
+export type Room = {
+  room_token: string;
+  owner: Member;
+  title: string;
+  num_attendee: number;
+  max_attendee: number;
+  reg_date: string;
 };
 
 export enum InitializeState {

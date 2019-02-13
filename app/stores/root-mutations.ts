@@ -1,4 +1,5 @@
 import { RootState, InitializeState, Auth, Member } from './types';
+import { Room } from '@/stores/types';
 
 const mutations = {
   loading(state: RootState, loading: boolean) {
@@ -18,6 +19,12 @@ const mutations = {
   },
   updateMember(state: RootState, member: Member) {
     state.member = member;
+  },
+  addRooms(state: RootState, rooms: Room[]) {
+    state.rooms = state.rooms.concat(rooms);
+  },
+  clearRooms(state: RootState) {
+    state.rooms = [];
   }
 };
 export default mutations;
