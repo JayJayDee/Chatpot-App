@@ -14,11 +14,18 @@ import { State, Action } from 'vuex-class';
 import { BottomBar, BottomBarItem } from 'nativescript-bottombar/vue';
 
 import log from '../logger';
+import { setTimeout } from 'timers';
+
+import LoadingDialog from '@/components/LoadingDialog.vue';
 
 @Component({
   name: VUE_NAME
 })
 export default class MyScene extends Vue {
+  public mounted() {
+    log(`VIEW INIT: ${VUE_NAME}`);
+    this.$showModal(LoadingDialog);
+  }
 }
 </script>
 

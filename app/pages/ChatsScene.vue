@@ -19,6 +19,10 @@ import log from '../logger';
   name: VUE_NAME
 })
 export default class ChatsScene extends Vue {
+
+  public mounted() {
+    log(`VIEW INIT: ${VUE_NAME}`);
+  }
 }
 </script>
 

@@ -19,6 +19,9 @@ import log from '../logger';
   name: VUE_NAME
 })
 export default class HomeScene extends Vue {
+  public mounted() {
+    log(`VIEW INIT: ${VUE_NAME}`);
+  }
 }
 </script>
 
