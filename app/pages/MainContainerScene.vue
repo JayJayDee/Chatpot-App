@@ -1,8 +1,10 @@
 <template>
-  <Page>
+  <Page actionBarHidden="true">
     <GridLayout columns="*" rows="*, auto">
-      <StackLayout>
-        <Label :text="memberName" />
+      <StackLayout row="0">
+        <HomeScene v-if="tabIndex === 0"></HomeScene>
+        <ChatsScene v-if="tabIndex === 1"></ChatsScene>
+        <MyScene v-if="tabIndex === 2"></MyScene>
       </StackLayout>
       <BottomBar row="1"
         v-on:tabSelected="tabSelected">
@@ -38,13 +40,18 @@ import { BottomBar, BottomBarItem } from 'nativescript-bottombar/vue';
 import log from '../logger';
 import { memberApi } from '../apis';
 import SimpleJoinScene from './SimpleJoinScene.vue';
+import HomeScene from './HomeScene.vue';
+import ChatsScene from './ChatsScene.vue';
+import MyScene from './MyScene.vue';
+
 import { Member } from '@/stores';
 import DefaultButton from '@/components/DefaultButton.vue';
 
 @Component({
   name: VUE_NAME,
   components: {
-    BottomBar, BottomBarItem
+    BottomBar, BottomBarItem,
+    HomeScene, ChatsScene, MyScene
   }
 })
 export default class MainContainerScene extends Vue {
@@ -54,8 +61,6 @@ export default class MainContainerScene extends Vue {
 
   @Action('changeTab')
   private changeTab: (tabIdx: number) => Promise<void>;
-
-  private subPages: Vue[];
 
   constructor() {
     super();

@@ -1,11 +1,10 @@
 import { ActionContext } from 'vuex';
 
+import { authApi, memberApi, roomApi } from '@/apis';
+import { JoinSimpleParam } from './root-action-types';
 import { RootState, InitializeState, Auth } from './types';
 import accessor from '../credential-accessor';
 import log from '../logger';
-import { JoinSimpleParam } from './root-action-types';
-import { authApi, memberApi, roomApi } from '@/apis';
-import { Preferences } from 'nativescript-preferences';
 
 const delayLittle = (sec: number) =>
   new Promise((resolve, reject) =>
