@@ -1,4 +1,5 @@
 export type RootState = {
+  tabIndex: number;
   error: null | ErrorPayload;
   member: null | Member;
   auth: null | Auth;

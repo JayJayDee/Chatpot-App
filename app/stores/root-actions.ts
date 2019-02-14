@@ -12,6 +12,10 @@ const delayLittle = (sec: number) =>
     setTimeout(() => resolve(), sec * 1000));
 
 const actions = {
+  async changeTab(store: ActionContext<RootState, any>, tabIdx: number) {
+    store.commit('tabIndex', tabIdx);
+  },
+
   async initialize(store: ActionContext<RootState, any>): Promise<InitializeState> {
     store.commit('loading', true);
     const token = accessor.getToken();
