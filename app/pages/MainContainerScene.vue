@@ -65,7 +65,7 @@ export default class MainContainerScene extends Vue {
   }
 
   public tabSelected(event) {
-    console.log(event);
+    console.log(event.object.selectedIndex);
   }
 
   public mounted() {
@@ -83,4 +83,7 @@ export default class MainContainerScene extends Vue {
 </script>
 
 <style scoped>
+.tab-container-parent {
+  background-color: brown;
+}
 </style>
