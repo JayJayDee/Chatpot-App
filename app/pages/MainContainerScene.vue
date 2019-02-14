@@ -57,7 +57,10 @@ import DefaultButton from '@/components/DefaultButton.vue';
 export default class MainContainerScene extends Vue {
 
   @State('tabIndex')
-  private tabIndex;
+  private tabIndex: number;
+
+  @State('loading')
+  private loading: boolean;
 
   @Action('changeTab')
   private changeTab: (tabIdx: number) => Promise<void>;
