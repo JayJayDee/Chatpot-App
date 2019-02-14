@@ -49,41 +49,24 @@ import DefaultButton from '@/components/DefaultButton.vue';
 })
 export default class MainContainerScene extends Vue {
 
-  @State(state => state.member)
-  private member: Member;
+  @State('tabIndex')
+  private tabIndex;
 
-  @Action('refreshRooms')
-  private refreshRooms: () => Promise<void>;
+  @Action('changeTab')
+  private changeTab: (tabIdx: number) => Promise<void>;
+
+  private subPages: Vue[];
 
   constructor() {
     super();
   }
 
-  public get memberName(): string {
-    if (!this.member) return '';
-    return this.member.nick.ko;
-  }
-
   public tabSelected(event) {
-    console.log(event.object.selectedIndex);
-  }
-
-  public mounted() {
-    log(`VUE_INIT: ${VUE_NAME}`);
-    log(this.member.nick.en);
-
-    this.refreshRooms().then(() => {
-      log('ROOMS OK!');
-    })
-    .catch((err) => {
-      log(`err.message`);
-    });
+    const selectedIdx = event.object.selectedIndex;
+    this.changeTab(selectedIdx);
   }
 }
 </script>
 
 <style scoped>
-.tab-container-parent {
-  background-color: brown;
-}
 </style>

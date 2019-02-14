@@ -2,6 +2,9 @@ import { RootState, InitializeState, Auth, Member } from './types';
 import { Room } from '@/stores/types';
 
 const mutations = {
+  tabIndex(state: RootState, tabIdx: number) {
+    state.tabIndex = tabIdx;
+  },
   loading(state: RootState, loading: boolean) {
     state.loading = loading;
   },
