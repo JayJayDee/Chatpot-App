@@ -1,7 +1,7 @@
 <template>
-  <Page>
+  <Page actionBarHidden="true">
     <GridLayout columns="*" rows="*, auto">
-      <StackLayout>
+      <StackLayout row="0">
         <HomeScene v-if="tabIndex === 0"></HomeScene>
         <ChatsScene v-if="tabIndex === 1"></ChatsScene>
         <MyScene v-if="tabIndex === 2"></MyScene>

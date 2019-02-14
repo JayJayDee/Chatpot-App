@@ -1,7 +1,7 @@
 <template>
-  <Page>
+  <GridLayout columns="*" rows="*, auto" class="scene-background">
     <label text="chats-scene" />
-  </Page>
+  </GridLayout>
 </template>
 
 <script lang="ts">
@@ -23,4 +23,7 @@ export default class ChatsScene extends Vue {
 </script>
 
 <style scoped>
+.scene-background {
+  background-color: burlywood;
+}
 </style>
