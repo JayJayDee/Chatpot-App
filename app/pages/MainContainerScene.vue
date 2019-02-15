@@ -1,5 +1,5 @@
 <template>
-  <Page actionBarHidden="true">
+  <Page actionBarHidden="true" class="page">
     <GridLayout columns="*" rows="*, auto">
       <StackLayout row="0">
         <HomeScene v-if="tabIndex === 0"></HomeScene>
@@ -46,6 +46,10 @@ import MyScene from './MyScene.vue';
 
 import { Member } from '@/stores';
 import DefaultButton from '@/components/DefaultButton.vue';
+
+type TabContent = {
+  title: string;
+};
 
 @Component({
   name: VUE_NAME,

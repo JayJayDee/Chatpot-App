@@ -24,7 +24,9 @@ import LoadingDialog from '@/components/LoadingDialog.vue';
 export default class MyScene extends Vue {
   public mounted() {
     log(`VIEW INIT: ${VUE_NAME}`);
-    this.$showModal(LoadingDialog);
+    this.$showModal(LoadingDialog, {
+      fullscreen: false
+    });
   }
 }
 </script>
