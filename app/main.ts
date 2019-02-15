@@ -1,4 +1,4 @@
-import Vue from 'nativescript-vue';
+import Vue, { registerElement } from 'nativescript-vue';
 import './ext-vue';
 import VueDevtools from 'nativescript-vue-devtools';
 
@@ -9,6 +9,7 @@ import 'nativescript-theme-core/css/core.light.css';
 import './app.css';
 
 require('nativescript-bottombar/vue').register(Vue);
+registerElement('CardView', () => require('nativescript-cardview').CardView);
 
 if (TNS_ENV !== 'production') {
   Vue.use(VueDevtools);
