@@ -1,9 +1,24 @@
 import 'package:flutter/cupertino.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/styles.dart';
 
+bool _init = false;
+
 class SplashScene extends StatelessWidget {
+
+  void sceneCreated(BuildContext context) {
+    if (_init) return;
+    _init = true;
+    final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
+    model.tryAutoLogin().then((var res) {
+      print(res);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    sceneCreated(context);
     return CupertinoPageScaffold(
       backgroundColor: Styles.appBackground,
       child: Column(
@@ -32,7 +47,7 @@ class SplashScene extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     margin: EdgeInsets.only(top: 50),
-                    child: CupertinoActivityIndicator(),
+                    child: _buildProgress(context),
                   )
                 ],
               )
@@ -40,6 +55,17 @@ class SplashScene extends StatelessWidget {
           )
         ],
       )
+    );
+  }
+
+  Widget _buildProgress(BuildContext context) {
+    final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
+    if (model.loading == true) {
+      return CupertinoActivityIndicator();
+    }
+    return Opacity(
+      child: CupertinoActivityIndicator(),
+      opacity: 0.0
     );
   }
 }
