@@ -1,14 +1,17 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:chatpot_app/models/app_state.dart';
+import 'package:chatpot_app/styles.dart';
+import 'package:chatpot_app/scenes/container_scene.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoApp(
-      title: 'Chatpot'
-    );
-  }
+void main() {
+  runApp(
+    ScopedModel<AppState>(
+      model: AppState(),
+      child: CupertinoApp(
+        color: Styles.appBackground,
+        home: ContainerScene()
+      )
+    )
+  );
 }
