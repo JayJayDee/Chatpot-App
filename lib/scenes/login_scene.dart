@@ -1,13 +1,23 @@
 import 'package:flutter/cupertino.dart';
+import 'package:toast/toast.dart';
 
-String _email;
-String _password;
+String _email = '';
+String _password = '';
 
 class LoginScene extends StatelessWidget {
 
-  void _onLoginSubmit() {
-    print(_email);
-    print(_password);
+  void _showErrorToast(BuildContext context, String msg) =>
+    Toast.show(msg, context);
+
+  void _onLoginSubmit(BuildContext context) {
+    if (_email.trim().length == 0) {
+      _showErrorToast(context, 'Email requied');
+      return;
+    }
+    if (_password.trim().length == 0) {
+      _showErrorToast(context, 'Password required');
+      return;
+    }
   }
 
   void _onSimpleSignUp(BuildContext context) async {
@@ -43,7 +53,7 @@ class LoginScene extends StatelessWidget {
                       padding: EdgeInsets.only(top: 20),
                       child: CupertinoButton(
                         child: Text('Sign in'),
-                        onPressed: _onLoginSubmit
+                        onPressed: () => _onLoginSubmit(context)
                       )
                     ),
                     Container(
