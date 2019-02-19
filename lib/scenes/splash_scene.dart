@@ -12,7 +12,9 @@ class SplashScene extends StatelessWidget {
     _init = true;
     final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
     model.tryAutoLogin().then((var res) {
-      print(res);
+      if (res == AppInitState.NEWCOMER) {
+        print('newcomer action');
+      }
     });
   }
 
@@ -36,7 +38,7 @@ class SplashScene extends StatelessWidget {
                     child: Text('Chatpot', textScaleFactor: 1.5)
                   ),
                   Image(
-                    image:AssetImage('assets/test_logo.png'),
+                    image: AssetImage('assets/test_logo.png'),
                     width: 150,
                     height: 150,
                   )
