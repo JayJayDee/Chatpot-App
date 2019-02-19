@@ -1,6 +1,21 @@
 import 'package:flutter/cupertino.dart';
 
+String _email;
+String _password;
+
 class LoginScene extends StatelessWidget {
+
+  void _onLoginSubmit() {
+    print(_email);
+    print(_password);
+  }
+
+  void _onSimpleSignUp(BuildContext context) async {
+    var resp = await Navigator.pushNamed(context, '/signup/simple');
+    print(resp);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -22,19 +37,19 @@ class LoginScene extends StatelessWidget {
                 child: ListView(
                   padding: EdgeInsets.only(top: 20, left: 20, right: 20),
                   children: <Widget>[
-                    _buildLoginField(context),
-                    _buildPasswordField(context),
+                    _buildLoginField(context, (String value) => _email = value),
+                    _buildPasswordField(context, (String value) => _password = value),
                     Container(
                       padding: EdgeInsets.only(top: 20),
                       child: CupertinoButton(
                         child: Text('Sign in'),
-                        onPressed: null
+                        onPressed: _onLoginSubmit
                       )
                     ),
                     Container(
                       child: CupertinoButton(
                         child: Text('Start without Sign-up'),
-                        onPressed: null
+                        onPressed: () => _onSimpleSignUp(context)
                       )
                     ),
                     Container(
@@ -54,7 +69,7 @@ class LoginScene extends StatelessWidget {
   }
 }
 
-Widget _buildLoginField(BuildContext context) => CupertinoTextField(
+Widget _buildLoginField(BuildContext context, ValueChanged<String> valueChange) => CupertinoTextField(
   prefix: Icon(
     CupertinoIcons.mail_solid,
     color: CupertinoColors.lightBackgroundGray,
@@ -65,10 +80,11 @@ Widget _buildLoginField(BuildContext context) => CupertinoTextField(
   keyboardType: TextInputType.emailAddress,
   decoration: BoxDecoration(
     border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
-  )
+  ),
+  onChanged: valueChange,
 );
 
-Widget _buildPasswordField(BuildContext context) => CupertinoTextField(
+Widget _buildPasswordField(BuildContext context, ValueChanged<String> valueChange) => CupertinoTextField(
   prefix: Icon(
     CupertinoIcons.person_solid,
     color: CupertinoColors.lightBackgroundGray,
@@ -80,5 +96,6 @@ Widget _buildPasswordField(BuildContext context) => CupertinoTextField(
   obscureText: true,
   decoration: BoxDecoration(
     border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
-  )
+  ),
+  onChanged: valueChange
 );
