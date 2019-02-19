@@ -10,16 +10,12 @@ class ContainerScene extends StatelessWidget {
           title: Text('Home'),
         ),
         BottomNavigationBarItem(
-          icon: Icon(CupertinoIcons.book),
-          title: Text('My Garden'),
+          icon: Icon(CupertinoIcons.mail),
+          title: Text('Chats'),
         ),
         BottomNavigationBarItem(
-          icon: Icon(CupertinoIcons.search),
-          title: Text('Search'),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(CupertinoIcons.settings),
-          title: Text('Settings'),
+          icon: Icon(CupertinoIcons.person),
+          title: Text('Profile'),
         ),
       ]),
       tabBuilder: (context, index) {

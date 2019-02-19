@@ -7,13 +7,9 @@ class AppState extends Model {
 
   AppState() {
     _member = null;
+    _loading = false;
   }
 
-  Member get member {
-    return _member;
-  }
-
-  bool get loading {
-    return _loading;
-  }
+  Member get member => _member;
+  bool get loading => _loading;
 }
