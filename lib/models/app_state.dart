@@ -26,7 +26,8 @@ class AppState extends Model {
     await delaySec(2);
 
     var accesor = authAccessor();
-    if (accesor.getToken() == null) {
+    var token = await accesor.getToken();
+    if (token == null) {
       _loading = false;
       notifyListeners();
       return AppInitState.NEWCOMER;

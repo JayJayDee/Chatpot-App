@@ -13,7 +13,7 @@ class SplashScene extends StatelessWidget {
     final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
     model.tryAutoLogin().then((var res) {
       if (res == AppInitState.NEWCOMER) {
-        print('newcomer action');
+        Navigator.pushNamed(context, '/login');
       }
     });
   }
