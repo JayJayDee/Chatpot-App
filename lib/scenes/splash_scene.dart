@@ -7,20 +7,22 @@ bool _init = false;
 
 class SplashScene extends StatelessWidget {
 
-  void sceneCreated(BuildContext context) {
-    if (_init) return;
-    _init = true;
+  void onCreate(BuildContext context) async {
     final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
-    model.tryAutoLogin().then((var res) {
-      if (res == AppInitState.NEWCOMER) {
-        Navigator.pushNamed(context, '/login');
-      }
-    });
+    AppInitState state = await model.tryAutoLogin();
+    
+    if (state == AppInitState.NEWCOMER) {
+      var resp = await Navigator.pushNamed(context, '/login');
+      print(resp);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    sceneCreated(context);
+    if (_init == false) {
+      onCreate(context);
+      _init = true;
+    }
     return CupertinoPageScaffold(
       backgroundColor: Styles.appBackground,
       child: Column(
@@ -59,15 +61,15 @@ class SplashScene extends StatelessWidget {
       )
     );
   }
+}
 
-  Widget _buildProgress(BuildContext context) {
-    final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
-    if (model.loading == true) {
-      return CupertinoActivityIndicator();
-    }
-    return Opacity(
-      child: CupertinoActivityIndicator(),
-      opacity: 0.0
-    );
+Widget _buildProgress(BuildContext context) {
+  final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
+  if (model.loading == true) {
+    return CupertinoActivityIndicator();
   }
+  return Opacity(
+    child: CupertinoActivityIndicator(),
+    opacity: 0.0
+  );
 }
