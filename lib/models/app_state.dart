@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/factory.dart';
@@ -38,8 +39,30 @@ class AppState extends Model {
     return AppInitState.LOGGED_IN;
   }
 
-  Future<void> simpleSignup() async {
+  Future<void> simpleSignup({
+    @required String gender,
+    @required String region,
+    @required String language
+  }) async {
     _loading = true;
+    notifyListeners();
+
+    var joinResp = await authApi().requestSimpleJoin(
+      gender: gender,
+      region: region,
+      language: language
+    );
+
+    var authResp = await authApi().requestAuth(
+      loginId: joinResp.token,
+      password: joinResp.passphrase
+    );
+
+    await authAccessor().setToken(joinResp.token);
+    await authAccessor().setPassword(joinResp.passphrase);
+    await authAccessor().setSessionKey(authResp.sessionKey);
+
+    _loading = false;
     notifyListeners();
   }
 }
