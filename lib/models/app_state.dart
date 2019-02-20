@@ -37,4 +37,9 @@ class AppState extends Model {
     notifyListeners();
     return AppInitState.LOGGED_IN;
   }
+
+  Future<void> simpleSignup() async {
+    _loading = true;
+    notifyListeners();
+  }
 }
