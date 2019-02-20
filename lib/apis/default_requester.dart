@@ -1,4 +1,6 @@
 import 'package:meta/meta.dart';
+import 'package:http/http.dart' as http;
+import 'package:query_params/query_params.dart';
 import 'package:chatpot_app/apis/requester.dart';
 import 'package:chatpot_app/storage/auth_accessor.dart';
 
@@ -20,6 +22,9 @@ class DefaultRequester implements Requester {
     Map<String, dynamic> qs,
     Map<String, dynamic> body
   }) async {
+    String wholeUrl = _buildWholeUrl(url, qs: qs);
+    print(wholeUrl);
+    // TODO: request with url & params.
     return null;
   }
 
@@ -34,8 +39,20 @@ class DefaultRequester implements Requester {
       resp = await this.request(url: url, 
         method: method, qs: qs, body: body);
     } catch (err) {
-      
+      // TODO: to be implemented
     }
     return null;
+  }
+
+  String _buildWholeUrl(String url, { Map<String, dynamic> qs }) {
+    String qsExpr = '';
+    if (qs != null) {
+      URLQueryParams builder = URLQueryParams();
+      qs.forEach((String k, dynamic v) {
+        builder.append(k, v);
+      });
+      qsExpr = '?${qs.toString()}';
+    }
+    return "$_baseUrl$url$qsExpr";
   }
 }

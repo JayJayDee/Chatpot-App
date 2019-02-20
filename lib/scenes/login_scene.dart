@@ -53,19 +53,25 @@ class LoginScene extends StatelessWidget {
                       padding: EdgeInsets.only(top: 20),
                       child: CupertinoButton(
                         child: Text('Sign in'),
+                        color: CupertinoColors.activeBlue,
                         onPressed: () => _onLoginSubmit(context)
                       )
                     ),
                     Container(
+                      padding: EdgeInsets.only(top: 10),
                       child: CupertinoButton(
                         child: Text('Start without Sign-up'),
+                        color: CupertinoColors.activeGreen,
                         onPressed: () => _onSimpleSignUp(context)
                       )
                     ),
                     Container(
+                      padding: EdgeInsets.only(top: 10),
                       child: CupertinoButton(
                         child: Text('Sign up'),
-                        onPressed: null
+                        onPressed: () {
+
+                        }
                       )
                     )
                   ],
