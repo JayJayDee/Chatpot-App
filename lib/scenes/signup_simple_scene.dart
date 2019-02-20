@@ -1,25 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/models/app_state.dart';
-import 'package:chatpot_app/factory.dart';
 
 class SimpleSignupScene extends StatelessWidget {
 
   void _onSimpleSignUpClicked(BuildContext context) async {
-    // final model = ScopedModel.of<AppState>(context);
-    // await model.simpleSignup();
+    String gender = await _showGenderDialog(context);
+    Locale locale = Localizations.localeOf(context);
+    if (gender == null) return;
 
-    var res = await authApi().requestSimpleJoin(
-      region: 'KR',
-      language: 'ko',
-      gender: 'M');
-    print(res);
-    
-    var authRes = await authApi().requestAuth(
-      loginId: res.token,
-      password: res.passphrase
+    final model = ScopedModel.of<AppState>(context);
+    await model.simpleSignup(
+      gender: gender,
+      region: locale.countryCode,
+      language: locale.languageCode
     );
-    print(authRes);
   }
 
   @override
@@ -81,3 +76,26 @@ Widget _buildProgress(BuildContext context) {
   }
   return Center();
 }
+
+Future<dynamic> _showGenderDialog(BuildContext context) async =>
+  showCupertinoDialog<String>(
+    context: context,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: Text('Please select your gender'),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          child: Text('Male'),
+          onPressed: () => Navigator.pop(context, 'M')
+        ),
+        CupertinoDialogAction(
+          child: Text('Female'),
+          onPressed: () => Navigator.pop(context, 'M')
+        ),
+        CupertinoDialogAction(
+          child: Text('Cancel'),
+          onPressed: () => Navigator.pop(context, null),
+          isDestructiveAction: true
+        )
+      ],
+    )
+  );
