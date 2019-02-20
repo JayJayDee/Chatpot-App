@@ -29,6 +29,7 @@ class DefaultRequester implements Requester {
     Map<String, dynamic> body
   }) async {
     String wholeUrl = _buildWholeUrl(url, qs: qs);
+    print("REQUEST WHOLE URL = $wholeUrl");
     var resp;
     try {
       if (method == HttpMethod.GET) resp = await http.get(wholeUrl);
@@ -54,18 +55,46 @@ class DefaultRequester implements Requester {
     Map<String, dynamic> body
   }) async {
     try {
+      String sessKey = await _authAccessor.getSessionKey();
+      if (qs == null) qs = new Map();  
+      qs['session_key'] = sessKey;
+
       return await this.request(url: url, 
         method: method, qs: qs, body: body);
     } catch (err) {
-      if (err is ApiSessionExpiredError) {
-        url = 'http://dev-auth.chatpot.chat/auth/reauth';
 
-        // TODO: add crypter.
-        var resp = http.post(url,
+      if (err is ApiSessionExpiredError) {
+        String reAuthurl = 'http://dev-auth.chatpot.chat/auth/reauth';
+        String oldSessionKey = await _authAccessor.getSessionKey();
+        String token = await _authAccessor.getToken();
+        String secret = await _authAccessor.getPassword();
+
+        String refreshKey = _authCrypter.createRefreshToken(
+          token: token,
+          password: secret,
+          oldSessionKey: oldSessionKey
+        );
+        
+        var wholeUrl = _buildWholeUrl(reAuthurl, qs: {
+          'session_key': oldSessionKey,
+          'refresh_key': refreshKey
+        });
+
+        var resp = await http.post(wholeUrl,
           body: {
-            'token': _authAccessor.getToken()
+            'token': token
           }
         );
+        Map<String, dynamic> respMap;
+        try {
+          respMap = jsonDecode(resp.body);
+          String newSessionKey = respMap['session_key'];
+          print("NEW SESSION KEY = $newSessionKey");
+          await _authAccessor.setSessionKey(newSessionKey);
+          return await requestWithAuth(url: url, method: method, qs: qs, body: body);
+        } catch (err) {
+          throw new ApiFailureError('failed to decode response: ${resp.body}', 500);
+        }
       }
       throw err;
     }
@@ -78,7 +107,7 @@ class DefaultRequester implements Requester {
       qs.forEach((String k, dynamic v) {
         builder.append(k, v);
       });
-      qsExpr = '?${qs.toString()}';
+      qsExpr = '?${builder.toString()}';
     }
     return "$_baseUrl$url$qsExpr";
   }

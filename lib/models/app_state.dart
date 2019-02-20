@@ -34,6 +34,18 @@ class AppState extends Model {
       return AppInitState.NEWCOMER;
     }
 
+    var secret = await accesor.getPassword();
+    var oldSessionKey = await accesor.getSessionKey();
+    
+    var newSessionKey = authCrypter().createRefreshToken(
+      token: token,
+      password: secret,
+      oldSessionKey: oldSessionKey
+    );
+    await accesor.setSessionKey(newSessionKey);
+
+    var member = await memberApi().fetchMy(token);
+    _member = member;
     _loading = false;
     notifyListeners();
     return AppInitState.LOGGED_IN;

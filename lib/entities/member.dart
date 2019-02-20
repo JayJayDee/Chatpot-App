@@ -1,9 +1,25 @@
 class Member {
   Nick nick;
+  String region;
+  String language;
   String token;
   Gender gender;
 
   Member();
+
+  factory Member.fromJson(Map<String, dynamic> map) {
+    Member member = Member();
+    member.nick = Nick.fromJson(map['nick']);
+    member.region = map['region'];
+    member.language = map['language'];
+    member.token = map['token'];
+    if (map['gender'] == 'F') member.gender = Gender.F;
+    else if (map['gender'] == 'M') member.gender = Gender.M;
+    return member;
+  }
+  
+  @override
+  toString() => "${nick.ko}:$token";
 }
 
 class Nick {

@@ -15,6 +15,7 @@ class SimpleSignupScene extends StatelessWidget {
       region: locale.countryCode,
       language: locale.languageCode
     );
+    Navigator.pop(context, true);
   }
 
   @override

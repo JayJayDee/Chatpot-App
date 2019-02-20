@@ -1,4 +1,6 @@
 import 'package:meta/meta.dart';
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:chatpot_app/utils/auth_crypter.dart';
 
 class DefaultAuthCrypter extends AuthCrypter {
@@ -8,7 +10,8 @@ class DefaultAuthCrypter extends AuthCrypter {
     @required String password,
     @required String oldSessionKey
   }) {
-    return '';
+    String rawRefToken = "$token$oldSessionKey$password";
+    var bytes = utf8.encode(rawRefToken);
+    return '${sha256.convert(bytes)}';
   }
-
 }
