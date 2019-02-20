@@ -9,10 +9,17 @@ class SimpleSignupScene extends StatelessWidget {
     // final model = ScopedModel.of<AppState>(context);
     // await model.simpleSignup();
 
-    await authApi().requestSimpleJoin(
+    var res = await authApi().requestSimpleJoin(
       region: 'KR',
       language: 'ko',
       gender: 'M');
+    print(res);
+    
+    var authRes = await authApi().requestAuth(
+      loginId: res.token,
+      password: res.passphrase
+    );
+    print(authRes);
   }
 
   @override
