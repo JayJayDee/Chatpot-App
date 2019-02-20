@@ -13,7 +13,7 @@ class SplashScene extends StatelessWidget {
     
     if (state == AppInitState.NEWCOMER) {
       var resp = await Navigator.pushNamed(context, '/login');
-      print(resp);
+      if (resp == true) onCreate(context);
     } else if (state == AppInitState.LOGGED_IN) {
       Navigator.pushReplacementNamed(context, '/container');
     }

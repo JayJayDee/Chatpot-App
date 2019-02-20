@@ -22,7 +22,7 @@ class LoginScene extends StatelessWidget {
 
   void _onSimpleSignUp(BuildContext context) async {
     var resp = await Navigator.pushNamed(context, '/signup/simple');
-    print(resp);
+    if (resp == true) Navigator.pop(context, true);
   }
 
   @override
