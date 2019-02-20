@@ -34,16 +34,6 @@ class AppState extends Model {
       return AppInitState.NEWCOMER;
     }
 
-    var secret = await accesor.getPassword();
-    var oldSessionKey = await accesor.getSessionKey();
-    
-    var newSessionKey = authCrypter().createRefreshToken(
-      token: token,
-      password: secret,
-      oldSessionKey: oldSessionKey
-    );
-    await accesor.setSessionKey(newSessionKey);
-
     var member = await memberApi().fetchMy(token);
     _member = member;
     _loading = false;
@@ -64,11 +54,13 @@ class AppState extends Model {
       region: region,
       language: language
     );
+    print(joinResp);
 
     var authResp = await authApi().requestAuth(
       loginId: joinResp.token,
       password: joinResp.passphrase
     );
+    print(authResp);
 
     await authAccessor().setToken(joinResp.token);
     await authAccessor().setPassword(joinResp.passphrase);
