@@ -6,6 +6,7 @@ import 'package:chatpot_app/apis/auth_api.dart';
 import 'package:chatpot_app/apis/member_api.dart';
 import 'package:chatpot_app/utils/auth_crypter.dart';
 import 'package:chatpot_app/utils/default_auth_crypter.dart';
+import 'package:chatpot_app/utils/locale_converter.dart';
 
 Map<String, dynamic> _instances;
 
@@ -13,6 +14,7 @@ void initFactory() {
   _instances = new Map<String, dynamic>();
   _instances['AuthAccessor'] = PrefAuthAccessor();
   _instances['AuthCrypter'] = DefaultAuthCrypter();
+  _instances['LocaleConverter'] = LocaleConverter();
 
   _instances['MemberRequester'] = _initMemberRequester();
   _instances['RoomRequester'] = _initRoomRequseter();
@@ -41,3 +43,4 @@ AuthAccessor authAccessor() => _instances['AuthAccessor'];
 AuthApi authApi() => _instances['AuthApi'];
 MemberApi memberApi() => _instances['MemberApi'];
 AuthCrypter authCrypter() => _instances['AuthCrypter'];
+LocaleConverter localeConverter() => _instances['LocaleConverter'];
