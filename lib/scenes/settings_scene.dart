@@ -11,6 +11,14 @@ class SettingsScene extends StatelessWidget {
 
   }
 
+  void _onSignoutClicked() async {
+
+  }
+
+  void _onAboutClicked() async {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -31,21 +39,8 @@ class SettingsScene extends StatelessWidget {
               )
             ),
             Padding(padding: EdgeInsets.only(top: 20)),
-            Container(
-              decoration: BoxDecoration(
-                color: Color(0xffffffff),
-                border: Border(
-                  top: BorderSide(color: Color(0xFFBCBBC1), width: 0.1),
-                  bottom: BorderSide(color: Color(0xFFBCBBC1), width: 0.1)
-                ),
-              ),
-              child: CupertinoButton(
-                child: Text('Sign out'),
-                onPressed: () {
-
-                }
-              ),
-            )
+            _buildMenuItem('Sign out', _onSignoutClicked),
+            _buildMenuItem('About Chatpot..', _onAboutClicked),
           ],
         ),
       )
@@ -100,5 +95,24 @@ Widget _buildProfileCard(BuildContext context, VoidCallback callback) {
         ],
       ),
     )
+  );
+}
+
+Widget _buildMenuItem(String title, VoidCallback pressedCallback) {
+  return Container(
+    decoration: BoxDecoration(
+      color: Color(0xffffffff),
+      border: Border(
+        top: BorderSide(color: Color(0xFFBCBBC1), width: 0.3),
+        bottom: BorderSide(color: Color(0xFFBCBBC1), width: 0.3)
+      ),
+    ),
+    child: CupertinoButton(
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(title),
+      ),
+      onPressed: pressedCallback
+    ),
   );
 }
