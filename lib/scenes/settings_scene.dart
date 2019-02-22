@@ -41,7 +41,33 @@ Widget _buildProfileCard(BuildContext context) {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Text("Hello, $nick!", textScaleFactor: 1.5)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    fit: BoxFit.contain,
+                    image: AssetImage('assets/placeholder-profile.png')
+                  )
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(right: 20)),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(nick, textScaleFactor: 1.5),
+                  Padding(padding: EdgeInsets.only(top: 10)),
+                  Text('South Korea, Republic of',
+                    textScaleFactor: 1.0,
+                  )
+                ],
+              )
+            ],
+          )
         ],
       ),
     )
