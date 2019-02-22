@@ -3,12 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/styles.dart';
 
 class SettingsScene extends StatelessWidget {
+
+  void _onEditProfileClicked() async {
+
+  }
 
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: Styles.mainBackground,
       navigationBar: CupertinoNavigationBar(
         middle: Text('Settings')
       ),
@@ -20,9 +26,25 @@ class SettingsScene extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  _buildProfileCard(context)
+                  _buildProfileCard(context, _onEditProfileClicked)
                 ],
               )
+            ),
+            Padding(padding: EdgeInsets.only(top: 20)),
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xffffffff),
+                border: Border(
+                  top: BorderSide(color: Color(0xFFBCBBC1), width: 0.1),
+                  bottom: BorderSide(color: Color(0xFFBCBBC1), width: 0.1)
+                ),
+              ),
+              child: CupertinoButton(
+                child: Text('Sign out'),
+                onPressed: () {
+
+                }
+              ),
             )
           ],
         ),
@@ -31,7 +53,7 @@ class SettingsScene extends StatelessWidget {
   }
 }
 
-Widget _buildProfileCard(BuildContext context) {
+Widget _buildProfileCard(BuildContext context, VoidCallback callback) {
   final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
   String nick;
   if (model.member != null) nick = localeConverter().getNick(model.member.nick);
@@ -55,14 +77,21 @@ Widget _buildProfileCard(BuildContext context) {
                   )
                 ),
               ),
-              Padding(padding: EdgeInsets.only(right: 20)),
+              Padding(padding: EdgeInsets.only(right: 10)),
               Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(nick, textScaleFactor: 1.5),
-                  Padding(padding: EdgeInsets.only(top: 10)),
+                  Padding(padding: EdgeInsets.only(top: 5)),
                   Text('South Korea, Republic of',
                     textScaleFactor: 1.0,
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 20)),
+                  CupertinoButton(
+                    child: Text('Edit my profile', style: Styles.cardActionTextStyle),
+                    color: CupertinoColors.activeBlue,
+                    onPressed: callback,
                   )
                 ],
               )

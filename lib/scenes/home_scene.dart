@@ -7,7 +7,7 @@ class HomeScene extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: Styles.appBackground,
+      backgroundColor: Styles.mainBackground,
       navigationBar: CupertinoNavigationBar(
         middle: Text('Home')
       ),
