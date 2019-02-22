@@ -35,8 +35,8 @@ class AppState extends Model {
     }
 
     var member = await memberApi().fetchMy(token);
-    print(member);
     _member = member;
+    
     _loading = false;
     notifyListeners();
     return AppInitState.LOGGED_IN;

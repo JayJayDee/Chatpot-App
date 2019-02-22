@@ -1,6 +1,7 @@
 class Member {
   Nick nick;
   String region;
+  String regionName;
   String language;
   String token;
   Gender gender;

@@ -12,6 +12,11 @@ class LocaleConverter {
   String getNick(Nick nick) {
     if (_language == 'ko') return nick.ko;
     else if (_language == 'ja') return nick.ja;
-    return nick.en;
+    return _convertNickEnOnly(nick.en);
   }
+
+  String _convertNickEnOnly(String enNick) =>
+    enNick.split(' ')
+      .map((String token) => '${token[0].toUpperCase()}${token.substring(1)}')
+      .join(' ');
 }
