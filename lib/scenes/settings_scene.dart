@@ -1,16 +1,32 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/components/profile_card.dart';
+import 'package:chatpot_app/models/app_state.dart';
+import 'package:chatpot_app/entities/member.dart';
+
+VoidCallback _closeParent;
 
 class SettingsScene extends StatelessWidget {
+
+  SettingsScene(VoidCallback closeParent) {
+    _closeParent = closeParent;
+  }
 
   void _onEditProfileClicked() async {
 
   }
 
-  void _onSignoutClicked() async {
+  void _onSignoutClicked(BuildContext context) async {
+    final model = ScopedModel.of<AppState>(context);
+    bool isSimple = model.member.authType == AuthType.SIMPLE;
+    var resp = await _showSignoutWarningDialog(context, isSimple);
 
+    if (resp == 'SIGNOUT') {
+      // TODO: sign out.
+      print('signout!');
+    }
   }
 
   void _onAboutClicked() async {
@@ -27,9 +43,10 @@ class SettingsScene extends StatelessWidget {
       child: SafeArea(
         child: ListView(
           children: <Widget>[
-            buildProfileCard(context, editButton: false, editCallback: _onEditProfileClicked),
+            Padding(padding: EdgeInsets.only(top: 10)),
+            buildProfileCard(context, editButton: true, editCallback: _onEditProfileClicked),
             Padding(padding: EdgeInsets.only(top: 20)),
-            _buildMenuItem('Sign out', _onSignoutClicked),
+            _buildMenuItem('Sign out', () => _onSignoutClicked(context)),
             _buildMenuItem('About Chatpot..', _onAboutClicked),
           ],
         ),
@@ -54,5 +71,36 @@ Widget _buildMenuItem(String title, VoidCallback pressedCallback) {
       ),
       onPressed: pressedCallback
     ),
+  );
+}
+
+Future<dynamic> _showSignoutWarningDialog(BuildContext context, bool isSimple) {
+  String content = '';
+  if (isSimple == true) {
+    content = "You are now logged in as SIMPLE type.\n" + 
+    "If you log in this way, your account information will be lost when you sign out.\n" +
+    "To prevent this, you can link your mail account.\n"
+    "Are you sure you want to sign out?";
+  } else {
+    content = 'Are you sure you want to sign out?';
+  }
+  return showCupertinoDialog<String>(
+    context: context,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: Text('Sign out'),
+      content: Text(content),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          child: Text('Sign out'),
+          onPressed: () => Navigator.pop(context, 'SIGNOUT')
+        ),
+        CupertinoDialogAction(
+          child: Text('Cancel'),
+          onPressed: () => Navigator.pop(context),
+          isDefaultAction: true,
+          isDestructiveAction: true,
+        )
+      ]
+    )
   );
 }

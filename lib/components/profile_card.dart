@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
@@ -27,11 +28,11 @@ Widget buildProfileCard(BuildContext context, {
                 width: 100,
                 height: 100,
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    fit: BoxFit.contain,
-                    image: AssetImage('assets/placeholder-profile.png')
-                  )
+                  shape: BoxShape.circle
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: model.member.avatar.thumb,
+                  placeholder: (context, url) => CupertinoActivityIndicator(),
                 ),
               ),
               Padding(padding: EdgeInsets.only(right: 10)),
