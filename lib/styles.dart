@@ -2,5 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 abstract class Styles {
   static const appBackground = Color(0xffd0d0d0);
-  // static const menuBackground = Color.fromRGBO(r, g, b, opacity)
+  static const mainBackground = Color(0xffefefef);
+
+  static const cardActionTextStyle = TextStyle(fontSize: 15.0);
 }

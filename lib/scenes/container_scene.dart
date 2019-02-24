@@ -6,6 +6,8 @@ import 'package:chatpot_app/scenes/settings_scene.dart';
 class ContainerScene extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var closer = _createCloser(context);
+
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(items: [
         BottomNavigationBarItem(
@@ -27,9 +29,14 @@ class ContainerScene extends StatelessWidget {
         } else if (index == 1) {
           return ChatsScene();
         } else if (index == 2) {
-          return SettingsScene();
+          return SettingsScene(closer);
         }
       },
     );
   }
 }
+
+_createCloser(BuildContext context) =>
+  () {
+    Navigator.pushNamed(context, '/splash');
+  };

@@ -1,29 +1,53 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:chatpot_app/styles.dart';
+import 'package:chatpot_app/components/profile_card.dart';
 import 'package:chatpot_app/models/app_state.dart';
-import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/entities/member.dart';
+
+VoidCallback _closeParent;
 
 class SettingsScene extends StatelessWidget {
+
+  SettingsScene(VoidCallback closeParent) {
+    _closeParent = closeParent;
+  }
+
+  void _onEditProfileClicked() async {
+
+  }
+
+  void _onSignoutClicked(BuildContext context) async {
+    final model = ScopedModel.of<AppState>(context);
+    bool isSimple = model.member.authType == AuthType.SIMPLE;
+    var resp = await _showSignoutWarningDialog(context, isSimple);
+
+    if (resp == 'SIGNOUT') {
+      // TODO: sign out.
+      print('signout!');
+    }
+  }
+
+  void _onAboutClicked() async {
+
+  }
 
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: Styles.mainBackground,
       navigationBar: CupertinoNavigationBar(
         middle: Text('Settings')
       ),
       child: SafeArea(
         child: ListView(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  _buildProfileCard(context)
-                ],
-              )
-            )
+            Padding(padding: EdgeInsets.only(top: 10)),
+            buildProfileCard(context, editButton: true, editCallback: _onEditProfileClicked),
+            Padding(padding: EdgeInsets.only(top: 20)),
+            _buildMenuItem('Sign out', () => _onSignoutClicked(context)),
+            _buildMenuItem('About Chatpot..', _onAboutClicked),
           ],
         ),
       )
@@ -31,45 +55,52 @@ class SettingsScene extends StatelessWidget {
   }
 }
 
-Widget _buildProfileCard(BuildContext context) {
-  final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
-  String nick;
-  if (model.member != null) nick = localeConverter().getNick(model.member.nick);
-  return Card(
-    child: Container(
-      padding: EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    fit: BoxFit.contain,
-                    image: AssetImage('assets/placeholder-profile.png')
-                  )
-                ),
-              ),
-              Padding(padding: EdgeInsets.only(right: 20)),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(nick, textScaleFactor: 1.5),
-                  Padding(padding: EdgeInsets.only(top: 10)),
-                  Text('South Korea, Republic of',
-                    textScaleFactor: 1.0,
-                  )
-                ],
-              )
-            ],
-          )
-        ],
+Widget _buildMenuItem(String title, VoidCallback pressedCallback) {
+  return Container(
+    decoration: BoxDecoration(
+      color: Color(0xffffffff),
+      border: Border(
+        top: BorderSide(color: Color(0xFFBCBBC1), width: 0.3),
+        bottom: BorderSide(color: Color(0xFFBCBBC1), width: 0.3)
       ),
+    ),
+    child: CupertinoButton(
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(title),
+      ),
+      onPressed: pressedCallback
+    ),
+  );
+}
+
+Future<dynamic> _showSignoutWarningDialog(BuildContext context, bool isSimple) {
+  String content = '';
+  if (isSimple == true) {
+    content = "You are now logged in as SIMPLE type.\n" + 
+    "If you log in this way, your account information will be lost when you sign out.\n" +
+    "To prevent this, you can link your mail account.\n"
+    "Are you sure you want to sign out?";
+  } else {
+    content = 'Are you sure you want to sign out?';
+  }
+  return showCupertinoDialog<String>(
+    context: context,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: Text('Sign out'),
+      content: Text(content),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          child: Text('Sign out'),
+          onPressed: () => Navigator.pop(context, 'SIGNOUT')
+        ),
+        CupertinoDialogAction(
+          child: Text('Cancel'),
+          onPressed: () => Navigator.pop(context),
+          isDefaultAction: true,
+          isDestructiveAction: true,
+        )
+      ]
     )
   );
 }
