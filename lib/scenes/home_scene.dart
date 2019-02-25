@@ -8,9 +8,9 @@ class HomeScene extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       backgroundColor: Styles.mainBackground,
-      navigationBar: CupertinoNavigationBar(
-        middle: Text('Home')
-      ),
+      // navigationBar: CupertinoNavigationBar(
+      //   middle: Text('Home')
+      // ),
       child: SafeArea(
         child: ListView(children: <Widget>[
           Column(

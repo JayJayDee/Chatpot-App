@@ -15,44 +15,47 @@ Widget buildProfileCard(BuildContext context, {
 
   String nick;
   if (model.member != null) nick = localeConverter().getNick(model.member.nick);
-  return Card(
-    child: Container(
-      padding: EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle
-                ),
-                child: CachedNetworkImage(
-                  imageUrl: model.member.avatar.thumb,
-                  placeholder: (context, url) => CupertinoActivityIndicator(),
-                ),
-              ),
-              Padding(padding: EdgeInsets.only(right: 10)),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(nick, textScaleFactor: 1.5),
-                  Padding(padding: EdgeInsets.only(top: 5)),
-                  Text('South Korea, Republic of',
-                    textScaleFactor: 1.0,
+  return Container(
+    padding: EdgeInsets.all(10),
+    child: Card(
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle
                   ),
-                  Padding(padding: EdgeInsets.only(top: 20)),
-                  _buildEditButton(context, editButton, editCallback)
-                ],
-              )
-            ],
-          )
-        ],
-      ),
+                  child: CachedNetworkImage(
+                    imageUrl: model.member.avatar.thumb,
+                    placeholder: (context, url) => CupertinoActivityIndicator(),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(right: 10)),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(nick, textScaleFactor: 1.5),
+                    Padding(padding: EdgeInsets.only(top: 5)),
+                    Text('South Korea, Republic of',
+                      textScaleFactor: 1.0,
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 20)),
+                    _buildEditButton(context, editButton, editCallback)
+                  ],
+                )
+              ],
+            )
+          ],
+        ),
+      )
     )
   );
 }

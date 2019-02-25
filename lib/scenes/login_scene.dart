@@ -30,7 +30,8 @@ class LoginScene extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         previousPageTitle: 'Back',
-        middle: Text('Sign in')
+        middle: Text('Sign in'),
+        transitionBetweenRoutes: true
       ),
       child: SafeArea(
         child: Column(
