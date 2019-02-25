@@ -3,10 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/components/profile_card.dart';
+import 'package:chatpot_app/components/not_login_card.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/member.dart';
 
+BuildContext _parent;
+
 class SettingsScene extends StatelessWidget {
+  
+  SettingsScene(BuildContext parent) {
+    _parent = parent;
+  }
 
   void _onEditProfileClicked() async {
 
@@ -18,9 +25,13 @@ class SettingsScene extends StatelessWidget {
     var resp = await _showSignoutWarningDialog(context, isSimple);
 
     if (resp == 'SIGNOUT') {
-      // TODO: sign out.
-      print('signout!');
+      model.signout();
     }
+  }
+
+  void _onSigninClicked(BuildContext context) async {
+    print('sign-in');
+    Navigator.of(_parent).pushReplacementNamed('/login');
   }
 
   void _onAboutClicked() async {
@@ -29,20 +40,31 @@ class SettingsScene extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final model = ScopedModel.of<AppState>(context);
+    var elems;
+
+    if (model.member == null) {
+      elems = <Widget>[
+        buildNotLoginCard(context, loginSelectCallback: () => _onSigninClicked(context)),
+        _buildMenuItem('Sign in', () => _onSigninClicked(context)),
+        _buildMenuItem('About Chatpot..', _onAboutClicked)
+      ];
+    } else {
+      elems = <Widget> [
+        buildProfileCard(context, editButton: true, editCallback: _onEditProfileClicked),
+        _buildMenuItem('Sign out', () => _onSignoutClicked(context)),
+        _buildMenuItem('About Chatpot..', _onAboutClicked)
+      ];
+    }
+
     return CupertinoPageScaffold(
       backgroundColor: Styles.mainBackground,
-      navigationBar: CupertinoNavigationBar(
+      navigationBar: const CupertinoNavigationBar(
         middle: Text('Settings')
       ),
       child: SafeArea(
         child: ListView(
-          children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: 10)),
-            buildProfileCard(context, editButton: true, editCallback: _onEditProfileClicked),
-            Padding(padding: EdgeInsets.only(top: 20)),
-            _buildMenuItem('Sign out', () => _onSignoutClicked(context)),
-            _buildMenuItem('About Chatpot..', _onAboutClicked),
-          ],
+          children: elems
         ),
       )
     );

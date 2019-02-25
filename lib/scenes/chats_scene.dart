@@ -7,9 +7,9 @@ class ChatsScene extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       backgroundColor: Styles.mainBackground,
-      navigationBar: CupertinoNavigationBar(
-        middle: Text('Chats')
-      ),
+      // navigationBar: CupertinoNavigationBar(
+      //   middle: Text('Chats')
+      // ),
       child: Center()
     );
   }
