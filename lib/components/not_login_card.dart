@@ -9,9 +9,9 @@ Widget buildNotLoginCard(BuildContext context, {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          
+          Text('You\'re not logged in.')
         ],
       ),
     ),
   );
-}
+} 
