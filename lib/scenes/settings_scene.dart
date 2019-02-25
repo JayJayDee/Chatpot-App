@@ -6,13 +6,7 @@ import 'package:chatpot_app/components/profile_card.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/member.dart';
 
-VoidCallback _closeParent;
-
 class SettingsScene extends StatelessWidget {
-
-  SettingsScene(VoidCallback closeParent) {
-    _closeParent = closeParent;
-  }
 
   void _onEditProfileClicked() async {
 

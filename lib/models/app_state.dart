@@ -70,4 +70,17 @@ class AppState extends Model {
     _loading = false;
     notifyListeners();
   }
+
+  Future<void> signout() async {
+    _loading = true;
+    notifyListeners();
+
+    authAccessor().setToken(null);
+    authAccessor().setPassword(null);
+    authAccessor().setSessionKey(null);
+
+    await delaySec(1);
+    _member = null;
+    notifyListeners();
+  }
 }
