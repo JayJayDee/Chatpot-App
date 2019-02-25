@@ -14,4 +14,4 @@ Widget buildNotLoginCard(BuildContext context, {
       ),
     ),
   );
-} 
+}
