@@ -45,9 +45,11 @@ class RoomListApiResp {
     RoomListApiResp resp = RoomListApiResp();
     resp.all = map['all'];
     resp.size = map['size'];
-    List<Map<String, dynamic>> rawList = map['list'];
-    List<Room> roomList = rawList.map((elem) => Room.fromJson(elem));
-    resp.list = roomList;
+    resp.list = [];
+
+    List<dynamic> list = map['list'];
+    List<Room> rooms = list.map((elem) => Room.fromJson(elem)).toList();
+    resp.list = rooms;
     return resp;
   }
   @override

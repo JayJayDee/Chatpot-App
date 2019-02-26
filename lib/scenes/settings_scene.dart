@@ -37,8 +37,8 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
   }
 
   @override
-  Future<void> onSelected() async {
-
+  Future<void> onSelected(BuildContext context) async {
+    print('SETTINGS_SCENE');
   }
 
   @override
