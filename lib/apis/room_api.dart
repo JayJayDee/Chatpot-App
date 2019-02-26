@@ -8,4 +8,12 @@ class RoomApi {
   RoomApi(Requester requester) {
     _requester = requester;
   }
+
+  Future<RoomListApiResp> requestRoomList() async {
+    Map<String, dynamic> resp = await _requester.request(
+      url: '/rooms',
+      method: HttpMethod.GET
+    );
+    return RoomListApiResp.fromJson(resp);
+  }
 }

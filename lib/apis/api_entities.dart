@@ -1,4 +1,5 @@
 import 'package:chatpot_app/entities/member.dart';
+import 'package:chatpot_app/entities/room.dart';
 
 class SimpleJoinApiResp {
   Nick nick;
@@ -32,4 +33,23 @@ class AuthApiResp {
 
   @override
   toString() => "AUTH_API_RESP: $sessionKey";
+}
+
+class RoomListApiResp {
+  int all;
+  int size;
+  List<Room> list;
+  RoomListApiResp();
+  
+  factory RoomListApiResp.fromJson(Map<String, dynamic> map) {
+    RoomListApiResp resp = RoomListApiResp();
+    resp.all = map['all'];
+    resp.size = map['size'];
+    List<Map<String, dynamic>> rawList = map['list'];
+    List<Room> roomList = rawList.map((elem) => Room.fromJson(elem));
+    resp.list = roomList;
+    return resp;
+  }
+  @override
+  toString() => "ROOM_API_RESP: $size $all";
 }

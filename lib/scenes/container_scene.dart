@@ -34,7 +34,7 @@ class _ContainerSceneState extends State<ContainerScene> {
     }
     else if (key == '2') {
       cached = CupertinoTabView(
-        builder: (BuildContext context) => SettingsScene(context),
+        builder: (BuildContext context) => SettingsScene(),
         defaultTitle: 'Settings',
       );
     }
