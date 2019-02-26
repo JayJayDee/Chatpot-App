@@ -55,18 +55,19 @@ class AppState extends Model {
       region: region,
       language: language
     );
-    print(joinResp);
 
     var authResp = await authApi().requestAuth(
       loginId: joinResp.token,
       password: joinResp.passphrase
     );
-    print(authResp);
 
     await authAccessor().setToken(joinResp.token);
     await authAccessor().setPassword(joinResp.passphrase);
     await authAccessor().setSessionKey(authResp.sessionKey);
 
+    var member = await memberApi().fetchMy(joinResp.token);
+    print(member);
+    _member = member;
     _loading = false;
     notifyListeners();
   }
@@ -81,6 +82,7 @@ class AppState extends Model {
 
     await delaySec(1);
     _member = null;
+    _loading = false;
     notifyListeners();
   }
 }

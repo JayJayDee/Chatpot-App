@@ -6,15 +6,10 @@ import 'package:chatpot_app/components/profile_card.dart';
 import 'package:chatpot_app/components/not_login_card.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/member.dart';
-
-BuildContext _parent;
+import 'package:chatpot_app/scenes/login_scene.dart';
 
 class SettingsScene extends StatelessWidget {
   
-  SettingsScene(BuildContext parent) {
-    _parent = parent;
-  }
-
   void _onEditProfileClicked() async {
 
   }
@@ -30,8 +25,10 @@ class SettingsScene extends StatelessWidget {
   }
 
   void _onSigninClicked(BuildContext context) async {
-    print('sign-in');
-    Navigator.of(_parent).pushReplacementNamed('/login');
+    await Navigator.of(context).push(CupertinoPageRoute<bool>(
+      title: 'Sign in',
+      builder: (BuildContext context) => LoginScene()
+    ));
   }
 
   void _onAboutClicked() async {
@@ -40,7 +37,7 @@ class SettingsScene extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = ScopedModel.of<AppState>(context);
+    final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
     var elems;
 
     if (model.member == null) {

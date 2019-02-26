@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:toast/toast.dart';
+import 'package:chatpot_app/scenes/signup_simple_scene.dart';
 
 String _email = '';
 String _password = '';
@@ -21,7 +22,10 @@ class LoginScene extends StatelessWidget {
   }
 
   void _onSimpleSignUp(BuildContext context) async {
-    var resp = await Navigator.pushNamed(context, '/signup/simple');
+    var resp = await Navigator.of(context).push(CupertinoPageRoute<bool>(
+      title: 'Start without sign up',
+      builder: (BuildContext context) => SimpleSignupScene()
+    ));
     if (resp == true) Navigator.pop(context, true);
   }
 
