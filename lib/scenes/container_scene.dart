@@ -1,41 +1,72 @@
+import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/scenes/home_scene.dart';
 import 'package:chatpot_app/scenes/chats_scene.dart';
 import 'package:chatpot_app/scenes/settings_scene.dart';
+import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 
 class ContainerScene extends StatefulWidget {
   @override
   _ContainerSceneState createState() => _ContainerSceneState();
 }
 
+class _WidgetWrapper {
+  _WidgetWrapper({
+    @required Widget widget,
+    @required EventReceivable receivable
+  }) {
+    _widget = widget;
+    _receivable = receivable;
+  }
+  Widget _widget;
+  EventReceivable _receivable;
+
+  Widget get widget => _widget;
+  EventReceivable get receivable => _receivable;
+}
+
 class _ContainerSceneState extends State<ContainerScene> {
-  Map<String, Widget> _widgetMap;
+  Map<String, _WidgetWrapper> _widgetMap;
 
   _ContainerSceneState() {
     _widgetMap = Map();
   }
 
-  Widget _inflate(BuildContext context, int index) {
+  _WidgetWrapper _inflate(BuildContext context, int index) {
     String key = index.toString();
-    Widget cached = _widgetMap[key];
+    _WidgetWrapper cached = _widgetMap[key];
     if (cached != null) return cached;
-    
+      
     if (key == '0') {
-      cached = CupertinoTabView(
-        builder: (BuildContext context) => HomeScene(),
-        defaultTitle: 'Home',
+      HomeScene scene = HomeScene();
+      cached = _WidgetWrapper(
+        widget: CupertinoTabView(
+          builder: (BuildContext context) => scene,
+          defaultTitle: 'Home',
+        ),
+        receivable: scene
       );
+      
 
     } else if (key == '1') {
-      cached = CupertinoTabView(
-        builder: (BuildContext context) => ChatsScene(),
-        defaultTitle: 'Chats',
+      ChatsScene scene = ChatsScene();
+      cached = _WidgetWrapper(
+        widget: CupertinoTabView(
+          builder: (BuildContext context) => scene,
+          defaultTitle: 'Chats',
+        ),
+        receivable: scene
       );
     }
+
     else if (key == '2') {
-      cached = CupertinoTabView(
-        builder: (BuildContext context) => SettingsScene(),
-        defaultTitle: 'Settings',
+      SettingsScene scene = SettingsScene();
+      cached = _WidgetWrapper(
+        widget: CupertinoTabView(
+          builder: (BuildContext context) => scene,
+          defaultTitle: 'Settings',
+        ),
+        receivable: scene
       );
     }
 
@@ -60,7 +91,13 @@ class _ContainerSceneState extends State<ContainerScene> {
           title: Text('Settings'),
         ),
       ]),
-      tabBuilder: (context, index) => _inflate(context, index)
+      tabBuilder: (context, index) {
+        _WidgetWrapper wrapper = _inflate(context, index);
+        new Future.delayed(Duration(milliseconds: 100)).then((dynamic val) {
+          wrapper.receivable.onSelected();
+        });
+        return wrapper.widget;
+      }
     );
   }
 }

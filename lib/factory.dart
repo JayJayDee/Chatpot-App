@@ -4,6 +4,7 @@ import 'package:chatpot_app/storage/pref_auth_accessor.dart';
 import 'package:chatpot_app/apis/default_requester.dart';
 import 'package:chatpot_app/apis/auth_api.dart';
 import 'package:chatpot_app/apis/member_api.dart';
+import 'package:chatpot_app/apis/room_api.dart';
 import 'package:chatpot_app/utils/auth_crypter.dart';
 import 'package:chatpot_app/utils/default_auth_crypter.dart';
 import 'package:chatpot_app/utils/locale_converter.dart';
@@ -19,7 +20,8 @@ void initFactory() {
   _instances['MemberRequester'] = _initMemberRequester();
   _instances['RoomRequester'] = _initRoomRequseter();
   _instances['AuthApi'] = AuthApi(requester: _memberRequester());
-  _instances['MemberApi'] = MemberApi(requester:_memberRequester());
+  _instances['MemberApi'] = MemberApi(requester: _memberRequester());
+  _instances['RoomApi'] = RoomApi(requester: _roomRequester());
 }
 
 Requester _initMemberRequester() => DefaultRequester(
@@ -42,5 +44,6 @@ Requester _roomRequester() => _instances['RoomRequester'];
 AuthAccessor authAccessor() => _instances['AuthAccessor'];
 AuthApi authApi() => _instances['AuthApi'];
 MemberApi memberApi() => _instances['MemberApi'];
+RoomApi roomApi() => _instances['RoomApi'];
 AuthCrypter authCrypter() => _instances['AuthCrypter'];
 LocaleConverter localeConverter() => _instances['LocaleConverter'];

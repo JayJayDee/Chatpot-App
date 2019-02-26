@@ -5,7 +5,9 @@ import 'package:chatpot_app/apis/api_entities.dart';
 class RoomApi {
   Requester _requester;
 
-  RoomApi(Requester requester) {
+  RoomApi({
+    @required Requester requester
+  }) {
     _requester = requester;
   }
 
