@@ -7,8 +7,9 @@ import 'package:chatpot_app/components/not_login_card.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/scenes/login_scene.dart';
+import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 
-class SettingsScene extends StatelessWidget {
+class SettingsScene extends StatelessWidget implements EventReceivable {
   
   void _onEditProfileClicked() async {
 
@@ -32,6 +33,11 @@ class SettingsScene extends StatelessWidget {
   }
 
   void _onAboutClicked() async {
+
+  }
+
+  @override
+  Future<void> onSelected() async {
 
   }
 

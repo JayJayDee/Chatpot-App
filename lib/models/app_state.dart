@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/entities/member.dart';
+import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/factory.dart';
 
 delaySec(int sec) => Future.delayed(Duration(milliseconds: sec * 1000));
@@ -10,16 +11,19 @@ enum AppInitState {
 }
 
 class AppState extends Model {
+  List<Room> _publicRooms;
   Member _member;
   bool _loading;
 
   AppState() {
     _member = null;
     _loading = true;
+    _publicRooms = <Room>[];
   }
 
   Member get member => _member;
   bool get loading => _loading;
+  List<Room> get publicRooms => _publicRooms;
 
   Future<AppInitState> tryAutoLogin() async {
     _loading = true;
@@ -82,6 +86,17 @@ class AppState extends Model {
 
     await delaySec(1);
     _member = null;
+    _loading = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchPublicRooms() async {
+    _loading = true;
+    notifyListeners();
+
+    var apiResp = await roomApi().requestRoomList();
+    List<Room> rooms = apiResp.list;
+    _publicRooms = rooms;
     _loading = false;
     notifyListeners();
   }
