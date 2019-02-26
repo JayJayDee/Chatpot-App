@@ -15,7 +15,7 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
     );
   }
 
-  Future<void> onSelected() async {
-    return null;
+  Future<void> onSelected(BuildContext context) async {
+    print('CHATS_SCENE');
   }
 }

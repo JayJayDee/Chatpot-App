@@ -9,6 +9,10 @@ import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 
 class HomeScene extends StatelessWidget implements EventReceivable {
 
+  void _onChatRowSelected() {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -17,23 +21,30 @@ class HomeScene extends StatelessWidget implements EventReceivable {
         middle: Text('Home')
       ),
       child: SafeArea(
-        child: ListView(children: <Widget>[
-          Container(
-          )
-        ])
+        child: ListView(
+          children: <Widget>[]
+            ..addAll(_getPublicChatRows(context, _onChatRowSelected))
+        )
       )
     );
   }
 
   @override
-  Future<void> onSelected() async {
-    
+  Future<void> onSelected(BuildContext context) async {
+    print('HOME_SCENE');
+    final model = ScopedModel.of<AppState>(context);
+    await model.fetchPublicRooms();
+    print('HOME_SCENE_COMPLETED');
   }
 }
 
-List<RoomRow> getPublicChatRows(BuildContext context, VoidCallback rowClickCallback) {
+List<RoomRow> _getPublicChatRows(BuildContext context, VoidCallback rowClickCallback) {
   final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
-  return [
-    
-  ];
+  return model.publicRooms.map((r) {
+    print(r);
+    return new RoomRow(
+      room: r,
+      rowClickCallback: rowClickCallback
+    );
+  }).toList();
 }

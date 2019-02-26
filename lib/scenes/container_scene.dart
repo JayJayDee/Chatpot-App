@@ -27,9 +27,11 @@ class _WidgetWrapper {
 
 class _ContainerSceneState extends State<ContainerScene> {
   Map<String, _WidgetWrapper> _widgetMap;
+  Map<String, bool> _initMap;
 
   _ContainerSceneState() {
     _widgetMap = Map();
+    _initMap = Map();
   }
 
   _WidgetWrapper _inflate(BuildContext context, int index) {
@@ -40,21 +42,15 @@ class _ContainerSceneState extends State<ContainerScene> {
     if (key == '0') {
       HomeScene scene = HomeScene();
       cached = _WidgetWrapper(
-        widget: CupertinoTabView(
-          builder: (BuildContext context) => scene,
-          defaultTitle: 'Home',
-        ),
+        widget: scene,
         receivable: scene
       );
-      
-
-    } else if (key == '1') {
+    } 
+    
+    else if (key == '1') {
       ChatsScene scene = ChatsScene();
       cached = _WidgetWrapper(
-        widget: CupertinoTabView(
-          builder: (BuildContext context) => scene,
-          defaultTitle: 'Chats',
-        ),
+        widget:  scene,
         receivable: scene
       );
     }
@@ -62,10 +58,7 @@ class _ContainerSceneState extends State<ContainerScene> {
     else if (key == '2') {
       SettingsScene scene = SettingsScene();
       cached = _WidgetWrapper(
-        widget: CupertinoTabView(
-          builder: (BuildContext context) => scene,
-          defaultTitle: 'Settings',
-        ),
+        widget: scene,
         receivable: scene
       );
     }
@@ -77,26 +70,40 @@ class _ContainerSceneState extends State<ContainerScene> {
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
-      tabBar: CupertinoTabBar(items: [
-        BottomNavigationBarItem(
-          icon: Icon(CupertinoIcons.home),
-          title: Text('Home'),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(CupertinoIcons.mail),
-          title: Text('Chats'),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(CupertinoIcons.settings),
-          title: Text('Settings'),
-        ),
-      ]),
+      tabBar: CupertinoTabBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.home),
+            title: Text('Home'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.mail),
+            title: Text('Chats'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.settings),
+            title: Text('Settings'),
+          )
+        ],
+        onTap: (int index) {
+          var wrapper = _inflate(context, index);
+          wrapper.receivable.onSelected(context);
+        }
+      ),
       tabBuilder: (context, index) {
         _WidgetWrapper wrapper = _inflate(context, index);
-        new Future.delayed(Duration(milliseconds: 100)).then((dynamic val) {
-          wrapper.receivable.onSelected();
-        });
-        return wrapper.widget;
+        var inited = _initMap[index.toString()];
+        if (inited == null) {
+          _initMap[index.toString()] = true;
+          Future.delayed(Duration(milliseconds: 200)).then((dynamic val) {
+            var delayedWrapper = _widgetMap[index.toString()];
+            if (delayedWrapper != null) delayedWrapper.receivable.onSelected(context);
+          });
+        }
+
+        return CupertinoTabView(
+          builder: (BuildContext context) => wrapper.widget
+        );
       }
     );
   }

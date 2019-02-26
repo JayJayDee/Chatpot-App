@@ -16,6 +16,7 @@ class RoomRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(_room.title);
     return CupertinoButton(
       onPressed: _rowClickCallback,
       child: Text(_room.title)

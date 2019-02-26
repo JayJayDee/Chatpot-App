@@ -92,7 +92,10 @@ class AppState extends Model {
 
   Future<void> fetchPublicRooms() async {
     _loading = true;
+    _publicRooms = []; // TODO: to be removed.
     notifyListeners();
+
+    await delaySec(1); // TODO: to be removed.
 
     var apiResp = await roomApi().requestRoomList();
     List<Room> rooms = apiResp.list;

@@ -20,4 +20,7 @@ class Room {
     room.regDate = DateTime.parse(map['reg_date']);
     return room;
   }
+
+  @override
+  toString() => "$roomToken:$title";
 }
