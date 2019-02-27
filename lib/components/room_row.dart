@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:chatpot_app/entities/room.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 VoidCallback _rowClickCallback;
 Room _room;
 
 class RoomRow extends StatelessWidget {
+
   RoomRow({
     @required Room room,
     @required VoidCallback rowClickCallback
@@ -17,9 +19,24 @@ class RoomRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(_room.title);
-    return CupertinoButton(
-      onPressed: _rowClickCallback,
-      child: Text(_room.title)
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          CachedNetworkImage(
+            imageUrl: _room.owner.avatar.thumb,
+            placeholder: (context, url) => CupertinoActivityIndicator()
+          )
+        ]
+      )
     );
   }
+}
+
+Image _getFlagImage(String regionCode) {
+  String lowered = regionCode.toLowerCase();
+  String path = "assets/flags/$lowered.png";
+  print(path);
+  return Image.asset(path);
 }
