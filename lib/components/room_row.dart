@@ -18,15 +18,23 @@ class RoomRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(_room.title);
     return Container(
+      height: 70,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          CachedNetworkImage(
-            imageUrl: _room.owner.avatar.thumb,
-            placeholder: (context, url) => CupertinoActivityIndicator()
+          Container(
+            width: 60,
+            height: 60,
+            child: CachedNetworkImage(
+              imageUrl: _room.owner.avatar.thumb,
+              placeholder: (context, url) => CupertinoActivityIndicator()
+            )
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 10),
+            child: Text(_room.title),
           )
         ]
       )
