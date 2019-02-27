@@ -27,9 +27,27 @@ class RoomRow extends StatelessWidget {
           Container(
             width: 60,
             height: 60,
-            child: CachedNetworkImage(
-              imageUrl: _room.owner.avatar.thumb,
-              placeholder: (context, url) => CupertinoActivityIndicator()
+            child: Stack(
+              children: <Widget>[
+                CachedNetworkImage(
+                  imageUrl: _room.owner.avatar.thumb,
+                  placeholder: (context, url) => CupertinoActivityIndicator()
+                ),
+                Positioned(
+                  left: 34,
+                  top: 47,
+                  child: Container(
+                    width: 26,
+                    height: 13,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: _getFlagImage(_room.owner.region),
+                        fit: BoxFit.cover
+                      )
+                    ),
+                  )
+                )
+              ],
             )
           ),
           Container(
@@ -42,9 +60,8 @@ class RoomRow extends StatelessWidget {
   }
 }
 
-Image _getFlagImage(String regionCode) {
+AssetImage _getFlagImage(String regionCode) {
   String lowered = regionCode.toLowerCase();
-  String path = "assets/flags/$lowered.png";
-  print(path);
-  return Image.asset(path);
+  String path = "assets/$lowered.png";
+  return AssetImage(path);
 }
