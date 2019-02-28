@@ -24,14 +24,22 @@ class RoomRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(left: 10)
+          ),
           Container(
             width: 60,
             height: 60,
             child: Stack(
               children: <Widget>[
-                CachedNetworkImage(
-                  imageUrl: _room.owner.avatar.thumb,
-                  placeholder: (context, url) => CupertinoActivityIndicator()
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(30.0),
+                  child: CachedNetworkImage(
+                    imageUrl: _room.owner.avatar.thumb,
+                    placeholder: (context, url) => CupertinoActivityIndicator(),
+                    width: 60,
+                    height: 60,
+                  )
                 ),
                 Positioned(
                   left: 34,
@@ -50,9 +58,37 @@ class RoomRow extends StatelessWidget {
               ],
             )
           ),
-          Container(
-            padding: EdgeInsets.only(left: 10),
-            child: Text(_room.title),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(
+                    _room.title,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Color(0xFF505050)
+                    )
+                  ),
+                )
+              ),
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(
+                    'Ms. Disgusting Banana and 3 others',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      color: Color(0xFF929292)
+                    )
+                  ),
+                )
+              ),
+            ],
           )
         ]
       )
