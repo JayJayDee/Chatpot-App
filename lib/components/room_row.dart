@@ -32,6 +32,7 @@ class RoomRow extends StatelessWidget {
             width: 60,
             height: 60,
             child: Stack(
+              alignment: Alignment.bottomRight,
               children: <Widget>[
                 ClipRRect(
                   borderRadius: BorderRadius.circular(30.0),
@@ -43,11 +44,9 @@ class RoomRow extends StatelessWidget {
                   )
                 ),
                 Positioned(
-                  left: 34,
-                  top: 47,
                   child: Container(
-                    width: 26,
-                    height: 13,
+                    width: 30,
+                    height: 15,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: _getFlagImage(_room.owner.region),

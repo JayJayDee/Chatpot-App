@@ -1,3 +1,5 @@
+import 'dart:async';
+
 abstract class AuthAccessor {
   Future<String> getToken();
   Future<void> setToken(String token);

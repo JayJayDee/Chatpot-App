@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
