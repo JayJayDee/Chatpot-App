@@ -1,9 +1,11 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/scenes/home_scene.dart';
 import 'package:chatpot_app/scenes/chats_scene.dart';
 import 'package:chatpot_app/scenes/settings_scene.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
+import 'package:chatpot_app/models/app_state.dart';
 
 class ContainerScene extends StatefulWidget {
   @override
@@ -102,9 +104,24 @@ class _ContainerSceneState extends State<ContainerScene> {
         }
 
         return CupertinoTabView(
-          builder: (BuildContext context) => wrapper.widget
+          builder: (BuildContext context) => 
+            Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                wrapper.widget,
+                Positioned(
+                  child: _buildProgressBar(context)
+                )
+              ],
+            )
         );
       }
     );
   }
+}
+
+Widget _buildProgressBar(BuildContext context) {
+  final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
+  if (model.loading == true) return CupertinoActivityIndicator();
+  return Center();
 }
