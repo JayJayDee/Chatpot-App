@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
-import 'package:chatpot_app/entities/room.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chatpot_app/entities/room.dart';
+import 'package:chatpot_app/factory.dart';
 
 VoidCallback _rowClickCallback;
 Room _room;
@@ -79,7 +80,7 @@ class RoomRow extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.only(left: 10),
                   child: Text(
-                    'Ms. Disgusting Banana and 3 others',
+                    _subTitle(_room),
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 14.0,
@@ -88,9 +89,25 @@ class RoomRow extends StatelessWidget {
                   ),
                 )
               ),
-            ],
+            ]
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: CupertinoButton(
+                    child: Icon(CupertinoIcons.plus_circled),
+                    onPressed: () {
+
+                    }
+                  )
+                )
+              ]
+            )
           )
-        ]
+        ],
       )
     );
   }
@@ -100,4 +117,11 @@ AssetImage _getFlagImage(String regionCode) {
   String lowered = regionCode.toLowerCase();
   String path = "assets/$lowered.png";
   return AssetImage(path);
+}
+
+String _subTitle(Room room) {
+  String nick = localeConverter().getNick(room.owner.nick);
+  int others = room.numAttendee - 1;
+  if (others == 0) return "$nick alone";
+  return "$nick and $others others";
 }
