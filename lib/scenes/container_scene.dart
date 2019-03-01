@@ -96,7 +96,7 @@ class _ContainerSceneState extends State<ContainerScene> {
       tabBuilder: (context, index) {
         _WidgetWrapper wrapper = _inflate(context, index);
         var inited = _initMap[index.toString()];
-        if (inited == null) {
+        if (inited == null && index == 0) {
           _initMap[index.toString()] = true;
           Future.delayed(Duration(milliseconds: 200)).then((dynamic val) {
             var delayedWrapper = _widgetMap[index.toString()];
