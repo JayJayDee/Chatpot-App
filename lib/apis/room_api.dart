@@ -19,4 +19,17 @@ class RoomApi {
     );
     return RoomListApiResp.fromJson(resp);
   }
+
+  Future<void> requestRoomJoin({
+    @required String roomToken,
+    @required String memberToken
+  }) async {
+    await _requester.requestWithAuth(
+      url: "/room/$roomToken/join",
+      method: HttpMethod.POST,
+      body: {
+        'member_token': memberToken
+      }
+    );
+  }
 }

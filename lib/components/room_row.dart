@@ -4,18 +4,18 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/factory.dart';
 
-VoidCallback _rowClickCallback;
-Room _room;
+typedef RoomCallback = Function(Room);
 
+@immutable
 class RoomRow extends StatelessWidget {
 
+  final RoomCallback rowClickCallback;
+  final Room room;
+
   RoomRow({
-    @required Room room,
-    @required VoidCallback rowClickCallback
-  }) {
-    _rowClickCallback = rowClickCallback;
-    _room = room;
-  }
+    this.room,
+    this.rowClickCallback
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class RoomRow extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(30.0),
                   child: CachedNetworkImage(
-                    imageUrl: _room.owner.avatar.thumb,
+                    imageUrl: room.owner.avatar.thumb,
                     placeholder: (context, url) => CupertinoActivityIndicator(),
                     width: 60,
                     height: 60,
@@ -49,7 +49,7 @@ class RoomRow extends StatelessWidget {
                     height: 15,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: _getFlagImage(_room.owner.region),
+                        image: _getFlagImage(room.owner.region),
                         fit: BoxFit.cover
                       )
                     ),
@@ -66,7 +66,7 @@ class RoomRow extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.only(left: 10),
                   child: Text(
-                    _room.title,
+                    room.title,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 16.0,
@@ -79,7 +79,7 @@ class RoomRow extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.only(left: 10),
                   child: Text(
-                    _subTitle(_room),
+                    _subTitle(room),
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 14.0,
@@ -98,9 +98,7 @@ class RoomRow extends StatelessWidget {
                 Container(
                   child: CupertinoButton(
                     child: Icon(CupertinoIcons.plus_circled),
-                    onPressed: () {
-
-                    }
+                    onPressed: () => rowClickCallback(room)
                   )
                 )
               ]

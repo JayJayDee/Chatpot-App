@@ -36,7 +36,7 @@ class HomeScene extends StatelessWidget implements EventReceivable {
             if (idx == 0) return _buildRecentsHeader(_onRoomsDetailClicked);
             return RoomRow(
               room: rooms[idx - 1],
-              rowClickCallback: () => _onChatRowSelected(rooms[idx - 1])
+              rowClickCallback: _onChatRowSelected
             );
           },
         )

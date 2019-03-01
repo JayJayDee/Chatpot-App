@@ -104,4 +104,12 @@ class AppState extends Model {
     _loading = false;
     notifyListeners();
   }
+
+  Future<void> joinToRoom(String roomToken) async {
+    _loading = true;
+    // TODO: update my rooms.
+    notifyListeners();
+
+    
+  }
 }
