@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:chatpot_app/storage/misc_accessor.dart';
 
 class PrefMiscAccessor extends MiscAccessor {

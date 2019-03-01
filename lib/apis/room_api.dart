@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:chatpot_app/apis/requester.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
@@ -17,5 +18,18 @@ class RoomApi {
       method: HttpMethod.GET
     );
     return RoomListApiResp.fromJson(resp);
+  }
+
+  Future<void> requestRoomJoin({
+    @required String roomToken,
+    @required String memberToken
+  }) async {
+    await _requester.requestWithAuth(
+      url: "/room/$roomToken/join",
+      method: HttpMethod.POST,
+      body: {
+        'member_token': memberToken
+      }
+    );
   }
 }

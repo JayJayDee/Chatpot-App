@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -35,7 +36,7 @@ class HomeScene extends StatelessWidget implements EventReceivable {
             if (idx == 0) return _buildRecentsHeader(_onRoomsDetailClicked);
             return RoomRow(
               room: rooms[idx - 1],
-              rowClickCallback: () => _onChatRowSelected(rooms[idx - 1])
+              rowClickCallback: _onChatRowSelected
             );
           },
         )

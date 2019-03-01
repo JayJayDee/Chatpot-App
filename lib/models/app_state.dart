@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/entities/member.dart';
@@ -102,5 +103,13 @@ class AppState extends Model {
     _publicRooms = rooms;
     _loading = false;
     notifyListeners();
+  }
+
+  Future<void> joinToRoom(String roomToken) async {
+    _loading = true;
+    // TODO: update my rooms.
+    notifyListeners();
+
+    
   }
 }
