@@ -13,6 +13,7 @@ enum AppInitState {
 
 class AppState extends Model {
   List<Room> _publicRooms;
+  List<MyRoom> _myRooms;
   Member _member;
   bool _loading;
 
@@ -20,11 +21,13 @@ class AppState extends Model {
     _member = null;
     _loading = true;
     _publicRooms = <Room>[];
+    _myRooms = <MyRoom>[];
   }
 
   Member get member => _member;
   bool get loading => _loading;
   List<Room> get publicRooms => _publicRooms;
+  List<MyRoom> get myRooms => _myRooms;
 
   Future<AppInitState> tryAutoLogin() async {
     _loading = true;
@@ -98,7 +101,7 @@ class AppState extends Model {
 
     await delaySec(1); // TODO: to be removed.
 
-    var apiResp = await roomApi().requestRoomList();
+    var apiResp = await roomApi().requestPublicRooms();
     List<Room> rooms = apiResp.list;
     _publicRooms = rooms;
     _loading = false;
@@ -110,6 +113,26 @@ class AppState extends Model {
     // TODO: update my rooms.
     notifyListeners();
 
-    
+    await roomApi().requestRoomJoin(
+      memberToken: _member.token,
+      roomToken: roomToken);
+
+    var apiResp = await roomApi().requestPublicRooms();
+    _publicRooms = apiResp.list;
+    _loading = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchMyRooms() async {
+    _loading = true;
+    _myRooms = [];
+    notifyListeners();
+
+    await delaySec(1);
+
+    var resp = await roomApi().requestMyRooms(memberToken: _member.token);
+    _myRooms = resp;
+    _loading = false;
+    notifyListeners();
   }
 }

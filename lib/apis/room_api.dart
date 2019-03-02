@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:chatpot_app/apis/requester.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
+import 'package:chatpot_app/entities/room.dart';
 
 class RoomApi {
   Requester _requester;
@@ -12,7 +13,7 @@ class RoomApi {
     _requester = requester;
   }
 
-  Future<RoomListApiResp> requestRoomList() async {
+  Future<RoomListApiResp> requestPublicRooms() async {
     Map<String, dynamic> resp = await _requester.request(
       url: '/rooms',
       method: HttpMethod.GET
@@ -31,5 +32,17 @@ class RoomApi {
         'member_token': memberToken
       }
     );
+  }
+
+  Future<List<MyRoom>> requestMyRooms({
+    @required String memberToken
+  }) async {
+    var resp = await _requester.requestWithAuth(
+      url: "/my/$memberToken/rooms",
+      method: HttpMethod.GET
+    );
+    List<dynamic> list = resp;
+    List<MyRoom> myRooms = list.toList().map((elem) => MyRoom.fromJson(elem)).toList();
+    return myRooms;
   }
 }

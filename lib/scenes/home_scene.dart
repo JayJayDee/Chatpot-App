@@ -10,8 +10,12 @@ import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 
 class HomeScene extends StatelessWidget implements EventReceivable {
 
-  void _onChatRowSelected(Room room) {
-    print(room);
+  void _onChatRowSelected(BuildContext context, Room room) async {
+    final model = ScopedModel.of<AppState>(context);
+    bool isJoin = await _showJoinConfirm(context, room);
+    if (isJoin == true) {
+      await model.joinToRoom(room.roomToken);
+    }
   }
 
   void _onMoreRoomsClicked() {
@@ -36,7 +40,7 @@ class HomeScene extends StatelessWidget implements EventReceivable {
             if (idx == 0) return _buildRecentsHeader(_onMoreRoomsClicked);
             return RoomRow(
               room: rooms[idx - 1],
-              rowClickCallback: _onChatRowSelected
+              rowClickCallback: (Room room) => _onChatRowSelected(context, room)
             );
           }
         )
@@ -84,6 +88,28 @@ Widget _buildRecentsHeader(VoidCallback detailButtonCallback) {
             ),
             onPressed: detailButtonCallback,
           )
+        )
+      ]
+    )
+  );
+}
+
+Future<bool> _showJoinConfirm(BuildContext context, Room room) {
+  String content = "Title: ${room.title}\n\nDo you really want to enter the chat room?";
+  return showCupertinoDialog<bool>(
+    context: context,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: Text('Join chat'),
+      content: Text(content),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          child: Text('Join'),
+          onPressed: () => Navigator.pop(context, true),
+        ),
+        CupertinoDialogAction(
+          child: Text('Cancel'),
+          onPressed: () => Navigator.pop(context, false),
+          isDestructiveAction: true
         )
       ]
     )
