@@ -5,6 +5,7 @@ import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/room.dart';
+import 'package:chatpot_app/components/my_room_row.dart';
 
 class ChatsScene extends StatelessWidget implements EventReceivable {
 
@@ -43,7 +44,7 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
       itemCount: myRooms.length,
       itemBuilder: (BuildContext context, int idx) {
         MyRoom room = myRooms[idx];
-        return Text(room.title);
+        return MyRoomRow(myRoom: room);
       }
     );
   }
