@@ -17,7 +17,7 @@ class MessageScene extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         previousPageTitle: 'Chats',
-        middle: Text(room.title),
+        middle: Text(room.title), 
         transitionBetweenRoutes: true
       ),
       child: SafeArea(

@@ -44,12 +44,8 @@ class SplashScene extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(bottom: 20),
-                    child: Text('Chatpot', textScaleFactor: 1.5)
-                  ),
                   Image(
-                    image: AssetImage('assets/test_logo.png'),
+                    image: AssetImage('assets/chatpot_logo.png'),
                     width: 150,
                     height: 150,
                   )
