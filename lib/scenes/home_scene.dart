@@ -7,6 +7,7 @@ import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/components/room_row.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
+import 'package:toast/toast.dart';
 
 class HomeScene extends StatelessWidget implements EventReceivable {
 
@@ -14,7 +15,13 @@ class HomeScene extends StatelessWidget implements EventReceivable {
     final model = ScopedModel.of<AppState>(context);
     bool isJoin = await _showJoinConfirm(context, room);
     if (isJoin == true) {
-      await model.joinToRoom(room.roomToken);
+      var joinResp = await model.joinToRoom(room.roomToken);
+
+      if (joinResp.success == true) {
+        Toast.show('Successfully joined to room', context);
+      } else {
+        Toast.show("Failed to join the room: ${joinResp.cause}", context);
+      }
     }
   }
 
@@ -122,3 +129,18 @@ Future<bool> _showJoinConfirm(BuildContext context, Room room) {
     )
   );
 }
+
+Future<void> _showJoinFailDialog(BuildContext context, String cause) async =>
+  showCupertinoDialog<bool>(
+    context: context,
+    builder: (conext) => CupertinoAlertDialog(
+      title: Text('Failed to join'),
+      content: Text(cause),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          child: Text('Confirm'),
+          onPressed: () => Navigator.of(context).pop()
+        )
+      ],
+    )
+  );
