@@ -23,7 +23,7 @@ class DefaultRequester implements Requester {
     _authCrypter = crypter;
   }
 
-  Future<Map<String, dynamic>> request({
+  Future<dynamic> request({
     @required String url,
     @required HttpMethod method,
     Map<String, dynamic> qs,
@@ -33,6 +33,7 @@ class DefaultRequester implements Requester {
     print("REQUEST WHOLE URL = $wholeUrl");
     var resp;
     Map<String, dynamic> respMap;
+    List<dynamic> respList;
 
     if (method == HttpMethod.GET) resp = await http.get(wholeUrl);
     else if (method == HttpMethod.POST) resp = await http.post(wholeUrl, body: body);
@@ -40,7 +41,11 @@ class DefaultRequester implements Requester {
     try {
       respMap = jsonDecode(resp.body);
     } catch (err) {
-      throw new ApiFailureError('failed to decode response: ${resp.body}', 500);
+      try {
+        respList = jsonDecode(resp.body);
+      } catch (err) {
+        throw new ApiFailureError('failed to decode response: ${resp.body}', 500);
+      }
     }
 
     if (resp.statusCode != 200) {
@@ -50,10 +55,20 @@ class DefaultRequester implements Requester {
       throw new ApiFailureError(respMap['message'],
         resp.statusCode, code: respMap['code']);
     }
-    return respMap;
+
+    var ret;
+    if (respMap != null) {
+      print('RESPONSE WAS MAP');
+      ret = respMap;
+    }
+    if (respList != null) {
+      print('RESPONSE WAS LIST');
+      ret = respList;
+    } 
+    return ret;
   }
 
-  Future<Map<String, dynamic>> requestWithAuth({
+  Future<dynamic> requestWithAuth({
     @required String url,
     @required HttpMethod method,
     Map<String, dynamic> qs,
