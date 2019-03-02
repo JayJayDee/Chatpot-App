@@ -6,6 +6,9 @@ abstract class Styles {
 
   static const cardActionTextStyle = TextStyle(fontSize: 15.0);
 
+  static const primaryFontColor = Color(0xFF505050);
+  static const secondaryFontColor = Color(0xFF929292);
+
   static const listViewRowBackground = Color(0xffefefef);
   static const listRowHeaderBackground = Color(0xffefefef);
   static const listRowDivider = Color(0xffa4a4a4);

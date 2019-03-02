@@ -14,8 +14,8 @@ class HomeScene extends StatelessWidget implements EventReceivable {
     print(room);
   }
 
-  void _onRoomsDetailClicked() {
-
+  void _onMoreRoomsClicked() {
+    print('more_room clicked!');
   }
 
   @override
@@ -33,12 +33,12 @@ class HomeScene extends StatelessWidget implements EventReceivable {
           scrollDirection: Axis.vertical,
           itemCount: rooms.length + 1,
           itemBuilder: (BuildContext context, int idx) {
-            if (idx == 0) return _buildRecentsHeader(_onRoomsDetailClicked);
+            if (idx == 0) return _buildRecentsHeader(_onMoreRoomsClicked);
             return RoomRow(
               room: rooms[idx - 1],
               rowClickCallback: _onChatRowSelected
             );
-          },
+          }
         )
       )
     );
@@ -82,8 +82,7 @@ Widget _buildRecentsHeader(VoidCallback detailButtonCallback) {
                 fontSize: 13
               ),
             ),
-            onPressed: () {
-            },
+            onPressed: detailButtonCallback,
           )
         )
       ]
