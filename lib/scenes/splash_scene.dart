@@ -3,8 +3,10 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 bool _init = false;
+final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
 class SplashScene extends StatelessWidget {
 
@@ -13,6 +15,9 @@ class SplashScene extends StatelessWidget {
     AppInitState state = await model.tryAutoLogin();
     
     if (state == AppInitState.NEWCOMER) {
+       _firebaseMessaging.requestNotificationPermissions();
+       _firebaseMessaging.configure();
+
       var resp = await Navigator.pushNamed(context, '/login');
       if (resp == true) onCreate(context);
     } else if (state == AppInitState.LOGGED_IN) {

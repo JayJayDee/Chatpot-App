@@ -29,27 +29,54 @@ Widget buildProfileCard(BuildContext context, {
                 Container(
                   width: 100,
                   height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle
-                  ),
-                  child: CachedNetworkImage(
-                    imageUrl: model.member.avatar.thumb,
-                    placeholder: (context, url) => CupertinoActivityIndicator(),
-                  ),
+                  child: Stack(
+                    alignment: Alignment.bottomRight,
+                    children: <Widget>[
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: CachedNetworkImage(
+                          imageUrl: model.member.avatar.thumb,
+                          placeholder: (context, url) => CupertinoActivityIndicator(),
+                        )
+                      ),
+                      Container(
+                        width: 40,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: _getFlagImage(model.member.region),
+                            fit: BoxFit.cover
+                          )
+                        )
+                      )
+                    ],
+                  )
                 ),
-                Padding(padding: EdgeInsets.only(right: 10)),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(nick, textScaleFactor: 1.5),
-                    Padding(padding: EdgeInsets.only(top: 5)),
-                    Text('South Korea, Republic of',
-                      textScaleFactor: 1.0,
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 20)),
-                    _buildEditButton(context, editButton, editCallback)
-                  ],
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.only(right: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Text(nick, 
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Styles.primaryFontColor
+                          )
+                        ),
+                        Padding(padding: EdgeInsets.only(top: 5)),
+                        Text('South Korea, Republic of',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Styles.secondaryFontColor
+                          )
+                        ),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        _buildEditButton(context, editButton, editCallback)
+                      ],
+                    )
+                  )
                 )
               ],
             )
@@ -63,8 +90,18 @@ Widget buildProfileCard(BuildContext context, {
 Widget _buildEditButton(BuildContext context, bool isEditShow, VoidCallback callback) {
   if (isEditShow == false) return Center();
   return CupertinoButton(
-    child: Text('Edit my profile', style: Styles.cardActionTextStyle),
-    color: CupertinoColors.activeBlue,
+    child: Text('Edit my profile',
+      style: TextStyle(
+        fontSize: 15
+      )
+    ),
+    padding: EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
     onPressed: callback,
   );
+}
+
+AssetImage _getFlagImage(String regionCode) {
+  String lowered = regionCode.toLowerCase();
+  String path = "assets/$lowered.png";
+  return AssetImage(path);
 }
