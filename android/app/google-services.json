@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "430757482947",
+    "firebase_url": "https://chatpot-dev.firebaseio.com",
+    "project_id": "chatpot-dev",
+    "storage_bucket": "chatpot-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430757482947:android:dabd3553c8c5fe9d",
+        "android_client_info": {
+          "package_name": "chat.chatpot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "430757482947-1r1o4ls2crot66mn0s83vcbl34n3764v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "chat.chatpot",
+            "certificate_hash": "31a40f43fd6c820bdac463b7f366c4bccf63158d"
+          }
+        },
+        {
+          "client_id": "430757482947-6blc2o7srd6r6b8dfq2cs4r2o4jv5s27.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCO-sME-EOESXs9OzqizP-Ak7QHFkQ1cro"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "430757482947-6blc2o7srd6r6b8dfq2cs4r2o4jv5s27.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "430757482947-a90gu97uevo2639ipl3aint2qr81bimm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "chat.chatpot"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
