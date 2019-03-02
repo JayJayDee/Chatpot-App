@@ -8,6 +8,7 @@ import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/components/my_room_row.dart';
 import 'package:chatpot_app/scenes/new_chat_scene.dart';
+import 'package:chatpot_app/scenes/message_scene.dart';
 
 @immutable
 class ChatsScene extends StatelessWidget implements EventReceivable {
@@ -24,6 +25,13 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
     Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
       title: 'New chat',
       builder: (BuildContext context) => NewChatScene()
+    ));
+  }
+
+  void _onMyRoomSelected(MyRoom room) {
+    Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
+      title: room.title,
+      builder: (BuildContext context) => MessageScene(room: room)
     ));
   }
 
@@ -58,7 +66,10 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
       itemCount: myRooms.length,
       itemBuilder: (BuildContext context, int idx) {
         MyRoom room = myRooms[idx];
-        return MyRoomRow(myRoom: room);
+        return MyRoomRow(
+          myRoom: room,
+          myRoomSelectCallback: _onMyRoomSelected,
+        );
       }
     );
   }
