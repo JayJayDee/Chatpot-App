@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/styles.dart';
@@ -6,11 +7,24 @@ import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/components/my_room_row.dart';
+import 'package:chatpot_app/scenes/new_chat_scene.dart';
 
+@immutable
 class ChatsScene extends StatelessWidget implements EventReceivable {
+
+  final BuildContext parentContext;
+
+  ChatsScene({
+    this.parentContext
+  });
 
   Future<void> _onNewChatClicked(BuildContext context) async {
     print('NEW CHAT CLICKED');
+
+    Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
+      title: 'New chat',
+      builder: (BuildContext context) => NewChatScene()
+    ));
   }
 
   @override
@@ -20,7 +34,7 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
       navigationBar: CupertinoNavigationBar(
         middle: Text('Chats'),
         trailing: CupertinoButton(
-          child: Text('New chat'),
+          child: Icon(CupertinoIcons.plus_circled),
           onPressed: () => _onNewChatClicked(context)
         ),
       ),

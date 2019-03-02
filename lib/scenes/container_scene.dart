@@ -51,7 +51,7 @@ class _ContainerSceneState extends State<ContainerScene> {
     } 
     
     else if (key == '1') {
-      ChatsScene scene = ChatsScene();
+      ChatsScene scene = ChatsScene(parentContext: context);
       cached = _WidgetWrapper(
         widget:  scene,
         receivable: scene

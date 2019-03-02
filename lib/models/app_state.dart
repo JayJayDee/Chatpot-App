@@ -4,6 +4,8 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/apis/api_errors.dart';
+import 'package:chatpot_app/models/model_entities.dart';
 
 delaySec(int sec) => Future.delayed(Duration(milliseconds: sec * 1000));
 
@@ -108,19 +110,28 @@ class AppState extends Model {
     notifyListeners();
   }
 
-  Future<void> joinToRoom(String roomToken) async {
+  Future<JoinRoomResp> joinToRoom(String roomToken) async {
     _loading = true;
     // TODO: update my rooms.
     notifyListeners();
 
-    await roomApi().requestRoomJoin(
-      memberToken: _member.token,
-      roomToken: roomToken);
+    try {
+      await roomApi().requestRoomJoin(
+        memberToken: _member.token,
+        roomToken: roomToken);
+    } catch (err) {
+      if (err is ApiFailureError) {
+        _loading = false;
+        notifyListeners();
+        return JoinRoomResp(success: false, cause: err.code);
+      }
+    }
 
     var apiResp = await roomApi().requestPublicRooms();
     _publicRooms = apiResp.list;
     _loading = false;
     notifyListeners();
+    return JoinRoomResp(success: true);
   }
 
   Future<void> fetchMyRooms() async {
