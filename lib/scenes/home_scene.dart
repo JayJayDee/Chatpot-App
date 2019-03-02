@@ -35,11 +35,12 @@ class HomeScene extends StatelessWidget implements EventReceivable {
       child: SafeArea(
         child: ListView.builder(
           scrollDirection: Axis.vertical,
-          itemCount: rooms.length + 1,
+          itemCount: rooms.length + 2,
           itemBuilder: (BuildContext context, int idx) {
-            if (idx == 0) return _buildRecentsHeader(_onMoreRoomsClicked);
+            if (idx == 0) return _buildSummaryView(context);
+            if (idx == 1) return _buildRecentsHeader(context, _onMoreRoomsClicked);
             return RoomRow(
-              room: rooms[idx - 1],
+              room: rooms[idx - 2],
               rowClickCallback: (Room room) => _onChatRowSelected(context, room)
             );
           }
@@ -57,7 +58,13 @@ class HomeScene extends StatelessWidget implements EventReceivable {
   }
 }
 
-Widget _buildRecentsHeader(VoidCallback detailButtonCallback) {
+Widget _buildSummaryView(BuildContext context) {
+  return Container(
+    height: 100
+  );
+}
+
+Widget _buildRecentsHeader(BuildContext context, VoidCallback detailButtonCallback) {
   return Container(
     decoration: BoxDecoration(
       color: CupertinoColors.white,
