@@ -20,12 +20,24 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
   });
 
   Future<void> _onNewChatClicked(BuildContext context) async {
-    print('NEW CHAT CLICKED');
-
-    Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
+    final model = ScopedModel.of<AppState>(context);
+    String roomToken = await Navigator.of(parentContext).push(CupertinoPageRoute<String>(
       title: 'New chat',
       builder: (BuildContext context) => NewChatScene()
     ));
+    if (roomToken == null) return;
+
+    // if room was created, move to new room
+    if (roomToken != null) {
+      List<MyRoom> rooms = model.myRooms.where((elem) => elem.roomToken == roomToken).toList();
+      if (rooms.length > 0) {
+        MyRoom room = rooms[0];
+        Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
+          title: room.title,
+          builder: (BuildContext context) => MessageScene(room: room)
+        ));
+      }
+    }
   }
 
   void _onMyRoomSelected(MyRoom room) {
@@ -42,6 +54,7 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
       navigationBar: CupertinoNavigationBar(
         middle: Text('Chats'),
         trailing: CupertinoButton(
+          padding: EdgeInsets.all(0),
           child: Icon(CupertinoIcons.plus_circled),
           onPressed: () => _onNewChatClicked(context)
         ),

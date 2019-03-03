@@ -16,6 +16,7 @@ void main() {
     ScopedModel<AppState>(
       model: AppState(),
       child: CupertinoApp(
+        debugShowCheckedModeBanner: false,
         color: Styles.appBackground,
         initialRoute: '/',
         routes: {

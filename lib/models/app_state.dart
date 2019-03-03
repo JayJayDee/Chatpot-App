@@ -138,4 +138,27 @@ class AppState extends Model {
     _loading = false;
     notifyListeners();
   }
+
+  Future<String> createNewRoom({
+    @required String roomTitle,
+    @required int maxAttendee
+  }) async {
+    _loading = true;
+    notifyListeners();
+
+    String roomToken = await roomApi().requestCreateRoom(
+      memberToken: _member.token,
+      title: roomTitle,
+      maxAttendee: maxAttendee
+    );
+
+    List<MyRoom> myRooms = await roomApi().requestMyRooms(
+      memberToken: _member.token
+    );
+    _myRooms = myRooms;
+
+    _loading = false;
+    notifyListeners();
+    return roomToken;
+  }
 }
