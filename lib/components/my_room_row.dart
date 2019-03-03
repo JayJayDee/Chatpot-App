@@ -89,7 +89,7 @@ class MyRoomRow extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
-                      _subTitle(myRoom),
+                      localeConverter().myRoomSubtitle(myRoom),
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 14.0,
@@ -128,11 +128,4 @@ AssetImage _getFlagImage(String regionCode) {
   String lowered = regionCode.toLowerCase();
   String path = "assets/$lowered.png";
   return AssetImage(path);
-}
-
-String _subTitle(MyRoom room) {
-  String nick = localeConverter().getNick(room.owner.nick);
-  int others = room.numAttendee - 1;
-  if (others == 0) return "$nick alone";
-  return "$nick and $others others";
 }

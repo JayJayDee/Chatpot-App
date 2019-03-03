@@ -45,4 +45,22 @@ class RoomApi {
     List<MyRoom> myRooms = list.toList().map((elem) => MyRoom.fromJson(elem)).toList();
     return myRooms;
   }
+
+  Future<String> requestCreateRoom({
+    @required String memberToken,
+    @required String title,
+    @required int maxAttendee
+  }) async {
+    var resp = await _requester.requestWithAuth(
+      url: '/room',
+      method: HttpMethod.POST,
+      body: {
+        'member_token': memberToken,
+        'max_attendee': maxAttendee.toString(),
+        'title': title
+      }
+    );
+    Map<String, dynamic> respMap = resp;
+    return respMap['room_token'];
+  }
 }
