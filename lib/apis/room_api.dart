@@ -13,10 +13,20 @@ class RoomApi {
     _requester = requester;
   }
 
-  Future<RoomListApiResp> requestPublicRooms() async {
+  Future<RoomListApiResp> requestPublicRooms({
+    int offset,
+    int size,
+    String order
+  }) async {
+    Map<String, dynamic> qsMap = Map();
+    if (offset != null) qsMap['offset'] = offset;
+    if (size != null) qsMap['size'] = size;
+    if (order != null) qsMap['order'] = order;
+
     Map<String, dynamic> resp = await _requester.request(
       url: '/rooms',
-      method: HttpMethod.GET
+      method: HttpMethod.GET,
+      qs: qsMap
     );
     return RoomListApiResp.fromJson(resp);
   }
