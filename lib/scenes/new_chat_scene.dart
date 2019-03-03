@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/styles.dart';
 
 class NewChatScene extends StatelessWidget {
@@ -11,31 +12,39 @@ class NewChatScene extends StatelessWidget {
         transitionBetweenRoutes: true
       ),
       child: SafeArea(
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(left: 10, top: 10, right: 10),
-              child: Text('Creates a new chat.',
-                style: TextStyle(
-                  color: Styles.primaryFontColor,
-                  fontSize: 17
-                )
-              )
-            ),
-            _buildRoomTitleField(),
-            _buildMaxAttendeefield(),
-            Container(
-              padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-              child: CupertinoButton(
-                child: Text('Create a new chat'),
-                color: CupertinoColors.activeBlue,
-                onPressed: () {
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            ListView(
+              scrollDirection: Axis.vertical,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(left: 10, top: 10, right: 10),
+                  child: Text('Creates a new chat.',
+                    style: TextStyle(
+                      color: Styles.primaryFontColor,
+                      fontSize: 17
+                    )
+                  )
+                ),
+                _buildRoomTitleField(),
+                _buildMaxAttendeefield(),
+                Container(
+                  padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+                  child: CupertinoButton(
+                    child: Text('Create a new chat'),
+                    color: CupertinoColors.activeBlue,
+                    onPressed: () {
 
-                }
-              ),
+                    }
+                  ),
+                )
+              ],
+            ),
+            Positioned(
+              child: CupertinoActivityIndicator()
             )
-          ],
+          ]
         )
       )
     );
