@@ -10,7 +10,14 @@ import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/scenes/login_scene.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 
+@immutable
 class SettingsScene extends StatelessWidget implements EventReceivable {
+
+  final BuildContext parentContext;
+
+  SettingsScene({
+    this.parentContext
+  });
   
   void _onEditProfileClicked() async {
 
@@ -22,7 +29,10 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
     var resp = await _showSignoutWarningDialog(context, isSimple);
 
     if (resp == 'SIGNOUT') {
-      model.signout();
+      await model.signout();
+      Navigator.of(parentContext).pushReplacement(CupertinoPageRoute<bool>(
+        builder: (BuildContext context) => LoginScene()
+      ));
     }
   }
 
