@@ -43,7 +43,7 @@ class _ContainerSceneState extends State<ContainerScene> {
     if (cached != null) return cached;
       
     if (key == '0') {
-      HomeScene scene = HomeScene();
+      HomeScene scene = HomeScene(parentContext: context);
       cached = _WidgetWrapper(
         widget: scene,
         receivable: scene

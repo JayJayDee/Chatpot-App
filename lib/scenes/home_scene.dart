@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:toast/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -7,9 +8,16 @@ import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/components/room_row.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
-import 'package:toast/toast.dart';
+import 'package:chatpot_app/scenes/more_chats_scene.dart';
 
+@immutable
 class HomeScene extends StatelessWidget implements EventReceivable {
+
+  final BuildContext parentContext;
+
+  HomeScene({
+    this.parentContext
+  });
 
   void _onChatRowSelected(BuildContext context, Room room) async {
     final model = ScopedModel.of<AppState>(context);
@@ -18,15 +26,20 @@ class HomeScene extends StatelessWidget implements EventReceivable {
       var joinResp = await model.joinToRoom(room.roomToken);
 
       if (joinResp.success == true) {
-        Toast.show('Successfully joined to room', context);
+        Toast.show('Successfully joined to room', context, duration: 2);
       } else {
-        Toast.show("Failed to join the room: ${joinResp.cause}", context);
+        Toast.show("Failed to join the room: ${joinResp.cause}", context, duration: 2);
       }
     }
   }
 
-  void _onMoreRoomsClicked() {
-    print('more_room clicked!');
+  void _onMoreRoomsClicked(BuildContext context) {
+    Navigator.of(context).push(
+      CupertinoPageRoute(
+        title: 'More chats',
+        builder: (BuildContext context) => MoreChatsScene()
+      )
+    );
   }
 
   @override
@@ -45,7 +58,7 @@ class HomeScene extends StatelessWidget implements EventReceivable {
           itemCount: rooms.length + 2,
           itemBuilder: (BuildContext context, int idx) {
             if (idx == 0) return _buildSummaryView(context);
-            if (idx == 1) return _buildRecentsHeader(context, _onMoreRoomsClicked);
+            if (idx == 1) return _buildRecentsHeader(context, () => _onMoreRoomsClicked(context));
             return RoomRow(
               room: rooms[idx - 2],
               rowClickCallback: (Room room) => _onChatRowSelected(context, room)

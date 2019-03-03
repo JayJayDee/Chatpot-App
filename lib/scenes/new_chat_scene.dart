@@ -12,8 +12,6 @@ class NewChatScene extends StatelessWidget {
   void _onClickNewChat(BuildContext context) async {
     final model = ScopedModel.of<AppState>(context);
     
-    print(_inputedRoomTitle);
-
     if (_inputedRoomTitle.trim().length == 0) {
       Toast.show('Room title required', context, duration: 2);
       return;
