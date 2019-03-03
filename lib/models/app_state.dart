@@ -34,7 +34,6 @@ class AppState extends Model {
   Future<AppInitState> tryAutoLogin() async {
     _loading = true;
     notifyListeners();
-    await delaySec(2);
 
     var accesor = authAccessor();
     var token = await accesor.getToken();
@@ -90,7 +89,6 @@ class AppState extends Model {
     authAccessor().setPassword(null);
     authAccessor().setSessionKey(null);
 
-    await delaySec(1);
     _member = null;
     _loading = false;
     notifyListeners();
@@ -98,10 +96,7 @@ class AppState extends Model {
 
   Future<void> fetchPublicRooms() async {
     _loading = true;
-    _publicRooms = []; // TODO: to be removed.
     notifyListeners();
-
-    await delaySec(1); // TODO: to be removed.
 
     var apiResp = await roomApi().requestPublicRooms();
     List<Room> rooms = apiResp.list;
@@ -112,7 +107,6 @@ class AppState extends Model {
 
   Future<JoinRoomResp> joinToRoom(String roomToken) async {
     _loading = true;
-    // TODO: update my rooms.
     notifyListeners();
 
     try {
@@ -138,8 +132,6 @@ class AppState extends Model {
     _loading = true;
     _myRooms = [];
     notifyListeners();
-
-    await delaySec(1);
 
     var resp = await roomApi().requestMyRooms(memberToken: _member.token);
     _myRooms = resp;
