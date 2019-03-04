@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/scenes/home_scene.dart';
 import 'package:chatpot_app/scenes/chats_scene.dart';
@@ -76,15 +77,15 @@ class _ContainerSceneState extends State<ContainerScene> {
       tabBar: CupertinoTabBar(
         items: [
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.home),
-            title: Text('Home'),
+            icon: Icon(MdiIcons.tea),
+            title: Text('Lounge'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.mail),
+            icon: Icon(MdiIcons.chatProcessing),
             title: Text('Chats'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.settings),
+            icon: Icon(MdiIcons.settings),
             title: Text('Settings'),
           )
         ],
