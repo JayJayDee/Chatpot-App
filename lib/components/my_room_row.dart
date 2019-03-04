@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/factory.dart';
@@ -106,12 +107,10 @@ class MyRoomRow extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.only(right: 10),
-                    child: Text('>',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Styles.primaryFontColor
-                      ),
+                    padding: EdgeInsets.only(right: 5),
+                    child: IconTheme(
+                      data: IconThemeData(color: Styles.secondaryFontColor),
+                      child: Icon(MdiIcons.chevronRight)
                     )
                   )
                 ]

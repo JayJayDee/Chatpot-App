@@ -54,14 +54,14 @@ Widget buildProfileCard(BuildContext context, {
                 ),
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.only(right: 10),
+                    padding: EdgeInsets.only(right: 10, top: 10),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         Text(nick, 
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 20,
                             color: Styles.primaryFontColor
                           )
                         ),

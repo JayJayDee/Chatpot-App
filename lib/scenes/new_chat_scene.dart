@@ -32,6 +32,7 @@ class NewChatScene extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: Styles.mainBackground,
       navigationBar: CupertinoNavigationBar(
         previousPageTitle: 'Back',
         middle: Text('New chat'),
@@ -49,7 +50,7 @@ class NewChatScene extends StatelessWidget {
                   child: Text('Creates a new chat.',
                     style: TextStyle(
                       color: Styles.primaryFontColor,
-                      fontSize: 17
+                      fontSize: 15
                     )
                   )
                 ),
