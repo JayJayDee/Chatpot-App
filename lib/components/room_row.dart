@@ -63,12 +63,12 @@ class RoomRow extends StatelessWidget {
                 ],
               )
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Flexible(
-                  child: Container(
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
                       room.title,
@@ -78,10 +78,8 @@ class RoomRow extends StatelessWidget {
                         color: Color(0xFF505050)
                       )
                     ),
-                  )
-                ),
-                Flexible(
-                  child: Container(
+                  ),
+                  Container(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
                       localeConverter().roomSubtitle(room),
@@ -92,23 +90,21 @@ class RoomRow extends StatelessWidget {
                       )
                     ),
                   )
-                ),
-              ]
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(right: 5),
-                    child: IconTheme(
-                      data: IconThemeData(color: Styles.secondaryFontColor),
-                      child: Icon(MdiIcons.chevronRight)
-                    )
-                  )
                 ]
-              )
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(right: 5),
+                  child: IconTheme(
+                    data: IconThemeData(color: Styles.secondaryFontColor),
+                    child: Icon(MdiIcons.chevronRight)
+                  )
+                )
+              ]
             )
           ],
         )
