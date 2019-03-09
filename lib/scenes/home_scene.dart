@@ -50,7 +50,7 @@ class HomeScene extends StatelessWidget implements EventReceivable {
     return CupertinoPageScaffold(
       backgroundColor: Styles.mainBackground,
       navigationBar: CupertinoNavigationBar(
-        middle: Text('Home')
+        middle: Text('Lounge')
       ),
       child: SafeArea(
         child: ListView.builder(

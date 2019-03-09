@@ -5,6 +5,7 @@ import 'package:chatpot_app/apis/default_requester.dart';
 import 'package:chatpot_app/apis/auth_api.dart';
 import 'package:chatpot_app/apis/member_api.dart';
 import 'package:chatpot_app/apis/room_api.dart';
+import 'package:chatpot_app/apis/message_api.dart';
 import 'package:chatpot_app/utils/auth_crypter.dart';
 import 'package:chatpot_app/utils/default_auth_crypter.dart';
 import 'package:chatpot_app/utils/locale_converter.dart';
@@ -19,9 +20,11 @@ void initFactory() {
 
   _instances['MemberRequester'] = _initMemberRequester();
   _instances['RoomRequester'] = _initRoomRequseter();
+  _instances['MessageRequester'] = _initMessageRequester();
   _instances['AuthApi'] = AuthApi(requester: _memberRequester());
   _instances['MemberApi'] = MemberApi(requester: _memberRequester());
   _instances['RoomApi'] = RoomApi(requester: _roomRequester());
+  _instances['MessageApi'] = MessageApi(requester: _messageRequester());
 }
 
 Requester _initMemberRequester() => DefaultRequester(
@@ -36,9 +39,16 @@ Requester _initRoomRequseter() => DefaultRequester(
   baseUrl: 'http://dev-room.chatpot.chat'
 );
 
+Requester _initMessageRequester() => DefaultRequester(
+  crypter: authCrypter(),
+  accessor: authAccessor(),
+  baseUrl: 'http://dev-message.chatpot.chat'
+);
+
 // internal factory uses.
 Requester _memberRequester() => _instances['MemberRequester'];
 Requester _roomRequester() => _instances['RoomRequester'];
+Requester _messageRequester() => _instances['MessageRequester'];
 
 // exports.
 AuthAccessor authAccessor() => _instances['AuthAccessor'];
