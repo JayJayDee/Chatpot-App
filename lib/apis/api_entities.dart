@@ -1,5 +1,6 @@
 import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/entities/room.dart';
+import 'package:chatpot_app/entities/message.dart';
 
 class SimpleJoinApiResp {
   Nick nick;
@@ -52,6 +53,32 @@ class RoomListApiResp {
     resp.list = rooms;
     return resp;
   }
+
   @override
   toString() => "ROOM_API_RESP: $size $all";
+}
+
+class MessagesApiResp {
+  List<Message> messages;
+  int all;
+  int offset;
+  int size;
+
+  MessagesApiResp();
+
+  factory MessagesApiResp.fromJson(Map<String, dynamic> map) {
+    MessagesApiResp resp = MessagesApiResp();
+    resp.all = map['all'];
+    resp.offset = map['offset'];
+    resp.size = map['size'];
+    resp.messages = [];
+
+    List<dynamic> list = map['messages'];
+    List<Message> messages = list.map((elem) => Message.fromJson(elem)).toList();
+    resp.messages = messages;
+    return resp;
+  }
+
+  @override
+  toString() => "MESSAGES_API_RESP: $size $all";
 }
