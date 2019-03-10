@@ -18,12 +18,14 @@ class AppState extends Model {
   List<MyRoom> _myRooms;
   Member _member;
   bool _loading;
+  Map<String, RoomMessages> _messages;
 
   AppState() {
     _member = null;
     _loading = true;
     _publicRooms = <Room>[];
     _myRooms = <MyRoom>[];
+    _messages = new Map();
   }
 
   Member get member => _member;
@@ -175,5 +177,28 @@ class AppState extends Model {
     _loading = false;
     notifyListeners();
     return roomToken;
+  }
+
+  Future<void> fetchMoreMessages({
+    @required String roomToken
+  }) async {
+    _loading = true;
+    notifyListeners();
+
+    RoomMessages msg = _messages[roomToken];
+    if (msg == null) {
+      msg = RoomMessages();
+      _messages[roomToken] = msg;
+    }
+
+    var resp = await messageApi().requestMessages(
+      roomToken: roomToken,
+      offset: msg.offset,
+      size: msg.size
+    );
+    print(resp);
+
+    _loading = false;
+    notifyListeners();
   }
 }

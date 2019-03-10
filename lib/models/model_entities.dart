@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:chatpot_app/entities/message.dart';
 
 class JoinRoomResp {
   bool _success;
@@ -14,4 +15,18 @@ class JoinRoomResp {
 
   bool get success => _success;
   String get cause => _cause;
+}
+
+class RoomMessages {
+  List<Message> messages;
+  int offset;
+  int size;
+  bool moreMessages;
+
+  RoomMessages() {
+    messages = List();
+    offset = 0;
+    size = 0;
+    moreMessages = true;
+  }
 }
