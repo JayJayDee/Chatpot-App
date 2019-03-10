@@ -13,10 +13,23 @@ class MessageApi {
   }
 
   Future<MessagesApiResp> requestMessages({
-    @required String roomToken
+    @required String roomToken,
+    int offset,
+    int size,
   }) async {
-    // TODO: to be implemented.
-    return null;
+    if (offset == null || size == null) {
+      size = 10;
+      offset = 0;
+    }
+    Map<String, dynamic> resp = await _requester.requestWithAuth(
+      url: "/room/$roomToken/messages",
+      method: HttpMethod.GET,
+      qs: {
+        'offset': offset,
+        'size': size
+      }
+    );
+    return MessagesApiResp.fromJson(resp);
   }
 
   Future<void> requestRegister({
