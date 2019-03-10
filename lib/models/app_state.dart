@@ -51,6 +51,21 @@ class AppState extends Model {
     return AppInitState.LOGGED_IN;
   }
 
+  Future<void> registerDevice() async {
+    _loading = true;
+    notifyListeners();
+
+    String deviceToken = await firebaseMessaging().getToken();
+
+    await messageApi().requestRegister(
+      memberToken: _member.token,
+      deviceToken: deviceToken
+    );
+
+    _loading = false;
+    notifyListeners();
+  }
+
   Future<void> simpleSignup({
     @required String gender,
     @required String region,

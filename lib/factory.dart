@@ -9,11 +9,13 @@ import 'package:chatpot_app/apis/message_api.dart';
 import 'package:chatpot_app/utils/auth_crypter.dart';
 import 'package:chatpot_app/utils/default_auth_crypter.dart';
 import 'package:chatpot_app/utils/locale_converter.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 Map<String, dynamic> _instances;
 
 void initFactory() {
   _instances = new Map<String, dynamic>();
+  _instances['FirebaseMessaging'] = FirebaseMessaging();
   _instances['AuthAccessor'] = PrefAuthAccessor();
   _instances['AuthCrypter'] = DefaultAuthCrypter();
   _instances['LocaleConverter'] = LocaleConverter();
@@ -55,5 +57,7 @@ AuthAccessor authAccessor() => _instances['AuthAccessor'];
 AuthApi authApi() => _instances['AuthApi'];
 MemberApi memberApi() => _instances['MemberApi'];
 RoomApi roomApi() => _instances['RoomApi'];
+MessageApi messageApi() => _instances['MessageApi'];
 AuthCrypter authCrypter() => _instances['AuthCrypter'];
 LocaleConverter localeConverter() => _instances['LocaleConverter'];
+FirebaseMessaging firebaseMessaging() => _instances['FirebaseMessaging'];
