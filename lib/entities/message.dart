@@ -5,7 +5,7 @@ class Message {
   MessageType messageType;
   Member from;
   DateTime sentTime;
-  Map<String, dynamic> content;
+  dynamic content;
 
   Message();
 
@@ -19,9 +19,9 @@ class Message {
     return null;
   }
 
-  TextContent getTextContent() {
+  String getTextContent() {
     if (messageType != MessageType.TEXT) return null;
-    return null;
+    return content;
   }
 
   ImageContent getImageContent() {

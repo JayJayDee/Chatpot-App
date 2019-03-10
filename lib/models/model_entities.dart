@@ -26,7 +26,7 @@ class RoomMessages {
   RoomMessages() {
     messages = List();
     offset = 0;
-    size = 0;
+    size = 10;
     moreMessages = true;
   }
 }
