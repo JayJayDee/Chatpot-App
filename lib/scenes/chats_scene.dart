@@ -32,18 +32,21 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
       List<MyRoom> rooms = model.myRooms.where((elem) => elem.roomToken == roomToken).toList();
       if (rooms.length > 0) {
         MyRoom room = rooms[0];
+        await model.selectRoom(room: room);
         Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
           title: room.title,
-          builder: (BuildContext context) => MessageScene(room: room)
+          builder: (BuildContext context) => MessageScene()
         ));
       }
     }
   }
 
-  void _onMyRoomSelected(MyRoom room) {
+  Future<void> _onMyRoomSelected(BuildContext context, MyRoom room) async {
+    final model = ScopedModel.of<AppState>(context);
+    await model.selectRoom(room: room);
     Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
       title: room.title,
-      builder: (BuildContext context) => MessageScene(room: room)
+      builder: (BuildContext context) => MessageScene()
     ));
   }
 
@@ -81,7 +84,7 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
         MyRoom room = myRooms[idx];
         return MyRoomRow(
           myRoom: room,
-          myRoomSelectCallback: _onMyRoomSelected,
+          myRoomSelectCallback: (r) => _onMyRoomSelected(context, r)
         );
       }
     );

@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/entities/room.dart';
+import 'package:chatpot_app/entities/message.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:chatpot_app/models/model_entities.dart';
@@ -18,20 +19,27 @@ class AppState extends Model {
   List<MyRoom> _myRooms;
   Member _member;
   bool _loading;
-  Map<String, RoomMessages> _messages;
+
+  MyRoom _currentRoom;
+  RoomMessages _messages;
 
   AppState() {
     _member = null;
     _loading = true;
     _publicRooms = <Room>[];
     _myRooms = <MyRoom>[];
-    _messages = new Map();
+    _messages = null;
   }
 
   Member get member => _member;
   bool get loading => _loading;
   List<Room> get publicRooms => _publicRooms;
   List<MyRoom> get myRooms => _myRooms;
+  MyRoom get currentRoom => _currentRoom;
+  List<Message> get messages {
+    if (_messages == null) return [];
+    return _messages.messages;
+  }
 
   Future<AppInitState> tryAutoLogin() async {
     _loading = true;
@@ -179,24 +187,35 @@ class AppState extends Model {
     return roomToken;
   }
 
+  Future<void> selectRoom({
+    @required MyRoom room
+  }) async {
+    _currentRoom = room;
+    _messages = RoomMessages();
+  }
+
+  Future<void> leaveRoom() async {
+    _currentRoom = null;
+    _messages = null;
+  }
+
   Future<void> fetchMoreMessages({
     @required String roomToken
   }) async {
     _loading = true;
     notifyListeners();
 
-    RoomMessages msg = _messages[roomToken];
-    if (msg == null) {
-      msg = RoomMessages();
-      _messages[roomToken] = msg;
-    }
-
     var resp = await messageApi().requestMessages(
       roomToken: roomToken,
-      offset: msg.offset,
-      size: msg.size
+      offset: _messages.offset,
+      size: _messages.size
     );
-    print(resp);
+
+    if (_messages.messages.length >= resp.all) {
+      _messages.moreMessages = false;
+    } 
+    _messages.messages.addAll(resp.messages);
+    _messages.offset = _messages.offset + resp.size;
 
     _loading = false;
     notifyListeners();
