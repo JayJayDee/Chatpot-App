@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:chatpot_app/entities/member.dart';
 
 class Message {
@@ -16,7 +17,7 @@ class Message {
     message.from = Member.fromJson(map['from']);
     message.sentTime = DateTime.fromMillisecondsSinceEpoch(map['sent_time']);
     message.content = map['content'];
-    return null;
+    return message;
   }
 
   String getTextContent() {
@@ -33,6 +34,9 @@ class Message {
     if (messageType != MessageType.NOTIFICATION) return null;
     return null;
   }
+
+  @override
+  toString() => "MESSAGE($messageId): $content";
 }
 
 enum MessageType {
@@ -55,4 +59,15 @@ class ImageContent {
 
 class NotificationContent {
 
+}
+
+class MessageViewModel {
+  Message _messageReceived;
+
+  MessageViewModel({
+    Message message,
+
+  }) {
+    _messageReceived = message;
+  }
 }

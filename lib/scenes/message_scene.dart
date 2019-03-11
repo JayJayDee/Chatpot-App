@@ -21,7 +21,6 @@ class _MessageSceneState extends State<MessageScene> {
   Future<void> _onSceneShown(BuildContext context) async {
     final model = ScopedModel.of<AppState>(context);
     MyRoom room = model.currentRoom;
-
     await model.fetchMoreMessages(roomToken: room.roomToken);
     print("ROOM MESSAGE FETCHED, room:${room.title}, size:${model.messages.length}");
   }

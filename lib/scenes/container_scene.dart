@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +9,8 @@ import 'package:chatpot_app/scenes/chats_scene.dart';
 import 'package:chatpot_app/scenes/settings_scene.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 import 'package:chatpot_app/models/app_state.dart';
+import 'package:chatpot_app/entities/message.dart';
+import 'package:chatpot_app/factory.dart';
 
 class ContainerScene extends StatefulWidget {
   @override
@@ -36,6 +39,30 @@ class _ContainerSceneState extends State<ContainerScene> {
   _ContainerSceneState() {
     _widgetMap = Map();
     _initMap = Map();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    firebaseMessaging().configure(
+      onMessage: (Map<String, dynamic> message) {
+        if (message['data'] != null) {
+          String payload = message['data']['payload'];
+          Map<String, dynamic> payloadMap = jsonDecode(payload);
+          Message msg = Message.fromJson(payloadMap);
+          print('MESSAGE ARRIVAL');
+          print(msg);
+        }
+      },
+      onResume: (Map<String, dynamic> message) {
+        print('ON_RESUME');
+        print(message);
+      },
+      onLaunch: (Map<String, dynamic> message) {
+        print('ON_LAUNCH');
+        print(message);
+      }
+    );
   }
 
   _WidgetWrapper _inflate(BuildContext context, int index) {
