@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:chatpot_app/entities/member.dart';
 
 class Message {
@@ -55,4 +56,15 @@ class ImageContent {
 
 class NotificationContent {
 
+}
+
+class MessageViewModel {
+  Message _messageReceived;
+
+  MessageViewModel({
+    Message message,
+
+  }) {
+    _messageReceived = message;
+  }
 }
