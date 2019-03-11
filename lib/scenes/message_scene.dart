@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/models/app_state.dart';
 
@@ -21,6 +22,20 @@ class _MessageSceneState extends State<MessageScene> {
   Future<void> _onSceneShown(BuildContext context) async {
     final model = ScopedModel.of<AppState>(context);
     MyRoom room = model.currentRoom;
+    firebaseMessaging().configure(
+      onMessage: (Map<String, dynamic> message) {
+        print('ON_MESSAGE');
+        print(message);
+      },
+      onResume: (Map<String, dynamic> message) {
+        print('ON_RESUME');
+        print(message);
+      },
+      onLaunch: (Map<String, dynamic> message) {
+        print('ON_LAUNCH');
+        print(message);
+      }
+    );
 
     await model.fetchMoreMessages(roomToken: room.roomToken);
     print("ROOM MESSAGE FETCHED, room:${room.title}, size:${model.messages.length}");
