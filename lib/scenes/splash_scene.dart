@@ -13,7 +13,7 @@ class SplashScene extends StatelessWidget {
     AppInitState state = await model.tryAutoLogin();
 
     firebaseMessaging().requestNotificationPermissions();
-    firebaseMessaging().configure();
+    // firebaseMessaging().configure();
     
     if (state == AppInitState.NEWCOMER) {
       var resp = await Navigator.pushNamed(context, '/login');
