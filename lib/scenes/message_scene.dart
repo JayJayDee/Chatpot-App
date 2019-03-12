@@ -4,6 +4,8 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/models/app_state.dart';
+import 'package:chatpot_app/entities/message.dart';
+import 'package:chatpot_app/components/message_row.dart';
 
 @immutable
 class MessageScene extends StatefulWidget {
@@ -57,6 +59,7 @@ class _MessageSceneState extends State<MessageScene> {
         previousPageTitle: 'Chats',
         middle: Text(room.title), 
         trailing: CupertinoButton(
+          padding: EdgeInsets.all(0),
           child: Text('Leave'),
           onPressed: () => _onRoomLeaveClicked(context)
         ),
@@ -66,11 +69,7 @@ class _MessageSceneState extends State<MessageScene> {
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
-            ListView(
-              children: <Widget>[
-
-              ],
-            ),
+            _buildListView(context),
             Positioned(
               child: _buildProgressBar(context)
             )
@@ -79,6 +78,18 @@ class _MessageSceneState extends State<MessageScene> {
       )
     );
   }
+}
+
+Widget _buildListView(BuildContext context) {
+  final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
+  return ListView.builder(
+    scrollDirection: Axis.vertical,
+    itemCount: model.currentRoom.messages.messages.length,
+    itemBuilder: (BuildContext context, int idx) {
+      Message msg = model.currentRoom.messages.messages[idx];
+      return MessageRow(message: msg);
+    }
+  );
 }
 
 Widget _buildProgressBar(BuildContext context) {
