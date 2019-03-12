@@ -27,7 +27,7 @@ class Message {
 
   ImageContent getImageContent() {
     if (messageType != MessageType.IMAGE) return null;
-    return null;
+    return ImageContent.fromJson(content);
   }
 
   NotificationContent getNotificationContent() {
