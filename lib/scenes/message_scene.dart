@@ -17,18 +17,21 @@ class MessageScene extends StatefulWidget {
 class _MessageSceneState extends State<MessageScene> {
 
   bool _inited = false;
+  AppState _model;
 
   Future<void> _onSceneShown(BuildContext context) async {
     final model = ScopedModel.of<AppState>(context);
+    _model = model;
     MyRoom room = model.currentRoom;
     await model.fetchMoreMessages(roomToken: room.roomToken);
     print("ROOM MESSAGE FETCHED, room:${room.title}, size:${model.messages.length}");
   }
 
   Future<void> _onRoomLeaveClicked(BuildContext context) async {
+    final model = ScopedModel.of<AppState>(context);
     bool isLeave = await _showLeaveDialog(context);
     if (isLeave == true) {
-      print('ROOM_LEAVE');
+      await model.leaveFromRoom(model.currentRoom.roomToken);
       Navigator.of(context).pop();
     }
   }
@@ -36,6 +39,7 @@ class _MessageSceneState extends State<MessageScene> {
   @override
   void dispose() {
     _inited = false;
+    _model.outFromRoom();
     super.dispose();
   }
 

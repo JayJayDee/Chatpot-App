@@ -47,7 +47,6 @@ class _ContainerSceneState extends State<ContainerScene> {
       onMessage: (Map<String, dynamic> message) {
         if (message.isEmpty) return;
         print('MESSAGE_ARRIVAL');
-        print(message);
 
         Map<String, dynamic> source;
         if (Platform.isIOS) {

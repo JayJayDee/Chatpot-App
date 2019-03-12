@@ -153,6 +153,23 @@ class AppState extends Model {
     return JoinRoomResp(success: true);
   }
 
+  void outFromRoom() {
+    _currentRoom = null;
+  }
+
+  Future<void> leaveFromRoom(String roomToken) async {
+    _loading = true;
+    notifyListeners();
+
+    await roomApi().requestRoomLeave(
+      roomToken: roomToken,
+      memberToken: _member.token
+    );
+    _myRooms.removeWhere((var r) => r.roomToken == roomToken);
+    _loading = false;
+    notifyListeners();
+  }
+
   Future<void> fetchMyRooms() async {
     _loading = true;
     _myRooms = [];
@@ -191,10 +208,6 @@ class AppState extends Model {
     @required MyRoom room
   }) async {
     _currentRoom = room;
-  }
-
-  Future<void> leaveRoom() async {
-    _currentRoom = null;
   }
 
   Future<void> fetchMoreMessages({

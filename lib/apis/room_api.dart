@@ -44,6 +44,19 @@ class RoomApi {
     );
   }
 
+  Future<void> requestRoomLeave({
+    @required String roomToken,
+    @required String memberToken
+  }) async {
+    await _requester.requestWithAuth(
+      url: "/room/$roomToken/leave",
+      method: HttpMethod.POST,
+      body: {
+        'member_token': memberToken
+      }
+    );
+  }
+
   Future<List<MyRoom>> requestMyRooms({
     @required String memberToken
   }) async {
