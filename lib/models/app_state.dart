@@ -21,14 +21,12 @@ class AppState extends Model {
   bool _loading;
 
   MyRoom _currentRoom;
-  RoomMessages _messages;
 
   AppState() {
     _member = null;
     _loading = true;
     _publicRooms = <Room>[];
     _myRooms = <MyRoom>[];
-    _messages = null;
   }
 
   Member get member => _member;
@@ -36,9 +34,10 @@ class AppState extends Model {
   List<Room> get publicRooms => _publicRooms;
   List<MyRoom> get myRooms => _myRooms;
   MyRoom get currentRoom => _currentRoom;
+
   List<Message> get messages {
-    if (_messages == null) return [];
-    return _messages.messages;
+    if (_currentRoom == null) return [];
+    return _currentRoom.messages.messages;
   }
 
   Future<AppInitState> tryAutoLogin() async {
@@ -66,6 +65,7 @@ class AppState extends Model {
     notifyListeners();
 
     String deviceToken = await firebaseMessaging().getToken();
+    print("DEVICE_TOKEN = $deviceToken");
 
     await messageApi().requestRegister(
       memberToken: _member.token,
@@ -191,31 +191,31 @@ class AppState extends Model {
     @required MyRoom room
   }) async {
     _currentRoom = room;
-    _messages = RoomMessages();
   }
 
   Future<void> leaveRoom() async {
     _currentRoom = null;
-    _messages = null;
   }
 
   Future<void> fetchMoreMessages({
     @required String roomToken
   }) async {
+    if (_currentRoom == null) return;
+
     _loading = true;
     notifyListeners();
 
     var resp = await messageApi().requestMessages(
       roomToken: roomToken,
-      offset: _messages.offset,
-      size: _messages.size
+      offset: _currentRoom.messages.offset,
+      size: 10
     );
 
-    if (_messages.messages.length >= resp.all) {
-      _messages.moreMessages = false;
+    if (_currentRoom.messages.messages.length >= resp.all) {
+      _currentRoom.messages.moreMessage = false;
     } 
-    _messages.messages.addAll(resp.messages);
-    _messages.offset = _messages.offset + resp.size;
+    _currentRoom.messages.messages.addAll(resp.messages);
+    _currentRoom.messages.offset = _currentRoom.messages.offset + resp.size;
 
     _loading = false;
     notifyListeners();

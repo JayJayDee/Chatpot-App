@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'dart:io' show Platform;
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -41,16 +42,24 @@ class _ContainerSceneState extends State<ContainerScene> {
     _initMap = Map();
   }
 
-  @override
-  void initState() {
-    super.initState();
+  void _initFcm(BuildContext context) {
     firebaseMessaging().configure(
       onMessage: (Map<String, dynamic> message) {
-        if (message['data'] != null) {
-          String payload = message['data']['payload'];
+        if (message.isEmpty) return;
+        print('MESSAGE_ARRIVAL');
+        print(message);
+
+        Map<String, dynamic> source;
+        if (Platform.isIOS) {
+          source = message;
+        } else if (Platform.isAndroid) {
+          source = message['data'].cast<String, dynamic>();
+        }
+
+        if (source != null) {
+          String payload = source['payload'];
           Map<String, dynamic> payloadMap = jsonDecode(payload);
           Message msg = Message.fromJson(payloadMap);
-          print('MESSAGE ARRIVAL');
           print(msg);
         }
       },
@@ -100,6 +109,7 @@ class _ContainerSceneState extends State<ContainerScene> {
 
   @override
   Widget build(BuildContext context) {
+    _initFcm(context);
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         items: [

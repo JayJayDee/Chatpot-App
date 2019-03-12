@@ -1,4 +1,5 @@
 import 'package:chatpot_app/entities/member.dart';
+import 'package:chatpot_app/entities/message.dart';
 
 class Room {
   String roomToken; 
@@ -32,8 +33,11 @@ class MyRoom {
   int numAttendee;
   int maxAttendee;
   DateTime regDate;
+  RoomMessages messages;
 
-  MyRoom();
+  MyRoom() {
+    messages = RoomMessages();
+  }
 
   factory MyRoom.fromJson(Map<String, dynamic> map) {
     MyRoom room = MyRoom();
