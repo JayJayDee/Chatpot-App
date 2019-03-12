@@ -49,25 +49,34 @@ MessageType _getType(String expr) {
   return null;
 }
 
-class TextContent {
-
-}
-
 class ImageContent {
-  
+  String imageUrl;
+  String thumbnailUrl;
+
+  ImageContent({
+    @required this.imageUrl,
+    @required this.thumbnailUrl
+  }); 
+
+  factory ImageContent.fromJson(Map<dynamic, String> map) =>
+    ImageContent(
+      imageUrl: map['profile_img'],
+      thumbnailUrl: map['profile_thumb']
+    );
 }
 
 class NotificationContent {
 
 }
 
-class MessageViewModel {
-  Message _messageReceived;
+class RoomMessages {
+  int offset;
+  List<Message> messages;
+  bool moreMessage;
 
-  MessageViewModel({
-    Message message,
-
-  }) {
-    _messageReceived = message;
+  RoomMessages() {
+    offset = 0;
+    messages = List();
+    moreMessage = true;
   }
 }

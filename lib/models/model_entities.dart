@@ -16,17 +16,3 @@ class JoinRoomResp {
   bool get success => _success;
   String get cause => _cause;
 }
-
-class RoomMessages {
-  List<Message> messages;
-  int offset;
-  int size;
-  bool moreMessages;
-
-  RoomMessages() {
-    messages = List();
-    offset = 0;
-    size = 10;
-    moreMessages = true;
-  }
-}
