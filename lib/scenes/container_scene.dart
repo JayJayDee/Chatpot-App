@@ -42,23 +42,24 @@ class _ContainerSceneState extends State<ContainerScene> {
     _initMap = Map();
   }
 
-  Future<void> _initFcm(BuildContext context) async {
+  void _initFcm(BuildContext context) {
     firebaseMessaging().configure(
       onMessage: (Map<String, dynamic> message) {
         if (message.isEmpty) return;
+        print('MESSAGE_ARRIVAL');
+        print(message);
 
         Map<String, dynamic> source;
         if (Platform.isIOS) {
           source = message;
         } else if (Platform.isAndroid) {
-          source = message['data'];
+          source = message['data'].cast<String, dynamic>();
         }
 
         if (source != null) {
           String payload = source['payload'];
           Map<String, dynamic> payloadMap = jsonDecode(payload);
           Message msg = Message.fromJson(payloadMap);
-          print('PAYLOAD');
           print(msg);
         }
       },

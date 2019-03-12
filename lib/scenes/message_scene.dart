@@ -25,6 +25,14 @@ class _MessageSceneState extends State<MessageScene> {
     print("ROOM MESSAGE FETCHED, room:${room.title}, size:${model.messages.length}");
   }
 
+  Future<void> _onRoomLeaveClicked(BuildContext context) async {
+    bool isLeave = await _showLeaveDialog(context);
+    if (isLeave == true) {
+      print('ROOM_LEAVE');
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   void dispose() {
     _inited = false;
@@ -44,6 +52,10 @@ class _MessageSceneState extends State<MessageScene> {
       navigationBar: CupertinoNavigationBar(
         previousPageTitle: 'Chats',
         middle: Text(room.title), 
+        trailing: CupertinoButton(
+          child: Text('Leave'),
+          onPressed: () => _onRoomLeaveClicked(context)
+        ),
         transitionBetweenRoutes: true
       ),
       child: SafeArea(
@@ -70,3 +82,23 @@ Widget _buildProgressBar(BuildContext context) {
   if (model.loading == false) return Center();
   return CupertinoActivityIndicator();
 }
+
+Future<bool> _showLeaveDialog(BuildContext context) async =>
+  showCupertinoDialog<bool>(
+    context: context,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: Text('Leaving room'),
+      content: Text('Are you sure leaving from this room?'),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          child: Text('Leave'),
+          onPressed: () => Navigator.pop(context, true)
+        ),
+        CupertinoDialogAction(
+          child: Text('Cancel'),
+          onPressed: () => Navigator.pop(context, false),
+          isDestructiveAction: true
+        )
+      ],
+    )
+  );
