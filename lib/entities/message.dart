@@ -90,9 +90,9 @@ class RoomMessages {
   }
 
   void appendMesasges(List<Message> newMessages) {
-    newMessages.forEach((m) {
+    newMessages.reversed.toList().forEach((m) {
       if (_existMap[m.messageId] != null) return;
-      _messages.insert(0, m); // TODO: think about message order.
+      _messages.add(m);
       _existMap[m.messageId] = 1;
     });
     _offset += newMessages.length;
