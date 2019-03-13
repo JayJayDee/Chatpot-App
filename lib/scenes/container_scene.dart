@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:async';
-import 'dart:io' show Platform;
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -10,7 +8,6 @@ import 'package:chatpot_app/scenes/chats_scene.dart';
 import 'package:chatpot_app/scenes/settings_scene.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 import 'package:chatpot_app/models/app_state.dart';
-import 'package:chatpot_app/entities/message.dart';
 import 'package:chatpot_app/factory.dart';
 
 class ContainerScene extends StatefulWidget {
@@ -43,34 +40,8 @@ class _ContainerSceneState extends State<ContainerScene> {
   }
 
   void _initFcm(BuildContext context) {
-    firebaseMessaging().configure(
-      onMessage: (Map<String, dynamic> message) {
-        if (message.isEmpty) return;
-        print('MESSAGE_ARRIVAL');
-
-        Map<String, dynamic> source;
-        if (Platform.isIOS) {
-          source = message;
-        } else if (Platform.isAndroid) {
-          source = message['data'].cast<String, dynamic>();
-        }
-
-        if (source != null) {
-          String payload = source['payload'];
-          Map<String, dynamic> payloadMap = jsonDecode(payload);
-          Message msg = Message.fromJson(payloadMap);
-          print(msg);
-        }
-      },
-      onResume: (Map<String, dynamic> message) {
-        print('ON_RESUME');
-        print(message);
-      },
-      onLaunch: (Map<String, dynamic> message) {
-        print('ON_LAUNCH');
-        print(message);
-      }
-    );
+    final model = ScopedModel.of<AppState>(context);
+    pushService().attach(state: model);
   }
 
   _WidgetWrapper _inflate(BuildContext context, int index) {
