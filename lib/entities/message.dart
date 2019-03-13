@@ -5,6 +5,7 @@ class Message {
   String messageId;
   MessageType messageType;
   Member from;
+  MessageTo to;
   DateTime sentTime;
   dynamic content;
 
@@ -15,6 +16,7 @@ class Message {
     message.messageId = map['message_id'];
     message.messageType = _getType(map['type']);
     message.from = Member.fromJson(map['from']);
+    message.to =MessageTo.fromJson(map['to']);
     message.sentTime = DateTime.fromMillisecondsSinceEpoch(map['sent_time']);
     message.content = map['content'];
     return message;
@@ -49,6 +51,27 @@ MessageType _getType(String expr) {
   return null;
 }
 
+class MessageTo {
+  MessageTarget type;
+  String token;
+
+  MessageTo();
+
+  factory MessageTo.fromJson(Map<String, dynamic> map) {
+    MessageTo to = MessageTo();
+    to.token = map['token'];
+    to.type = _getTarget(map['type']);
+    return to;
+  }
+}
+enum MessageTarget {
+  ROOM
+}
+MessageTarget _getTarget(String expr) {
+  if (expr == 'ROOM') return MessageTarget.ROOM;
+  return null;
+}
+
 class ImageContent {
   String imageUrl;
   String thumbnailUrl;
@@ -71,12 +94,14 @@ class NotificationContent {
 
 class RoomMessages {
   int _offset;
+  int _notViewed;
   List<Message> _messages;
   bool moreMessage;
   Map<String, int> _existMap;
 
   RoomMessages() {
     _offset = 0;
+    _notViewed = 0;
     _messages = List();
     moreMessage = true;
     _existMap = Map();
@@ -84,9 +109,18 @@ class RoomMessages {
 
   List<Message> get messages => _messages;
   int get offset => _offset;
+  int get notViewed => _notViewed;
 
   void clearOffset() {
     _offset = 0;
+  }
+
+  void clearNotViewed() {
+    _notViewed = 0;
+  }
+
+  void increaseNotViewed() {
+    _notViewed++;
   }
 
   void appendMesasges(List<Message> newMessages) {
@@ -96,5 +130,10 @@ class RoomMessages {
       _existMap[m.messageId] = 1;
     });
     _offset += newMessages.length;
+  }
+
+  void appendSingleMessage(Message msg) {
+    _messages.add(msg);
+    _existMap[msg.messageId] = 1;
   }
 }

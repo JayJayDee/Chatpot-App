@@ -229,4 +229,20 @@ class AppState extends Model {
     _loading = false;
     notifyListeners();
   }
+
+  Future<void> addSingleMessage({
+    @required Message msg
+  }) async {
+    var rooms = _myRooms.where((r) =>
+      r.roomToken == msg.to.token && msg.to.type == MessageTarget.ROOM);
+    if (rooms.length == 0) return;
+
+    MyRoom myRoom = rooms.toList()[0];
+    if (myRoom.roomToken == _currentRoom.roomToken) {
+      _currentRoom.messages.appendSingleMessage(msg);
+    } else {
+      myRoom.messages.increaseNotViewed();
+    }
+    notifyListeners();
+  }
 }
