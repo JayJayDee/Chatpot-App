@@ -70,13 +70,31 @@ class NotificationContent {
 }
 
 class RoomMessages {
-  int offset;
-  List<Message> messages;
+  int _offset;
+  List<Message> _messages;
   bool moreMessage;
+  Map<String, int> _existMap;
 
   RoomMessages() {
-    offset = 0;
-    messages = List();
+    _offset = 0;
+    _messages = List();
     moreMessage = true;
+    _existMap = Map();
+  }
+
+  List<Message> get messages => _messages;
+  int get offset => _offset;
+
+  void clearOffset() {
+    _offset = 0;
+  }
+
+  void appendMesasges(List<Message> newMessages) {
+    newMessages.forEach((m) {
+      if (_existMap[m.messageId] != null) return;
+      _messages.insert(0, m); // TODO: think about message order.
+      _existMap[m.messageId] = 1;
+    });
+    _offset += newMessages.length;
   }
 }

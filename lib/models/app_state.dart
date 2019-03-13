@@ -154,6 +154,7 @@ class AppState extends Model {
   }
 
   void outFromRoom() {
+    _currentRoom.messages.clearOffset();
     _currentRoom = null;
   }
 
@@ -223,12 +224,7 @@ class AppState extends Model {
       offset: _currentRoom.messages.offset,
       size: 10
     );
-
-    if (_currentRoom.messages.messages.length >= resp.all) {
-      _currentRoom.messages.moreMessage = false;
-    } 
-    _currentRoom.messages.messages.addAll(resp.messages);
-    _currentRoom.messages.offset = _currentRoom.messages.offset + resp.size;
+    _currentRoom.messages.appendMesasges(resp.messages);
 
     _loading = false;
     notifyListeners();
