@@ -64,7 +64,7 @@ class AppState extends Model {
     _loading = true;
     notifyListeners();
 
-    String deviceToken = await firebaseMessaging().getToken();
+    String deviceToken = await pushService().accquireDeviceToken();
     print("DEVICE_TOKEN = $deviceToken");
 
     await messageApi().requestRegister(

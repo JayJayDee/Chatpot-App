@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:chatpot_app/storage/auth_accessor.dart';
 import 'package:chatpot_app/apis/requester.dart';
 import 'package:chatpot_app/storage/pref_auth_accessor.dart';
@@ -9,7 +10,7 @@ import 'package:chatpot_app/apis/message_api.dart';
 import 'package:chatpot_app/utils/auth_crypter.dart';
 import 'package:chatpot_app/utils/default_auth_crypter.dart';
 import 'package:chatpot_app/utils/locale_converter.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:chatpot_app/services/push_service.dart';
 
 Map<String, dynamic> _instances;
 
@@ -27,6 +28,7 @@ void initFactory() {
   _instances['MemberApi'] = MemberApi(requester: _memberRequester());
   _instances['RoomApi'] = RoomApi(requester: _roomRequester());
   _instances['MessageApi'] = MessageApi(requester: _messageRequester());
+  _instances['PushService'] = PushService(msg: _firebaseMessaging());
 }
 
 Requester _initMemberRequester() => DefaultRequester(
@@ -51,6 +53,7 @@ Requester _initMessageRequester() => DefaultRequester(
 Requester _memberRequester() => _instances['MemberRequester'];
 Requester _roomRequester() => _instances['RoomRequester'];
 Requester _messageRequester() => _instances['MessageRequester'];
+FirebaseMessaging _firebaseMessaging() => _instances['FirebaseMessaging'];
 
 // exports.
 AuthAccessor authAccessor() => _instances['AuthAccessor'];
@@ -61,3 +64,4 @@ MessageApi messageApi() => _instances['MessageApi'];
 AuthCrypter authCrypter() => _instances['AuthCrypter'];
 LocaleConverter localeConverter() => _instances['LocaleConverter'];
 FirebaseMessaging firebaseMessaging() => _instances['FirebaseMessaging'];
+PushService pushService() => _instances['PushService'];
