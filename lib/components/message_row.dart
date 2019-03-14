@@ -1,20 +1,43 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatpot_app/entities/message.dart';
+import 'package:chatpot_app/models/app_state.dart';
+import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/styles.dart';
+
+enum _RowType {
+  NOTIFICATION, MY_MSG, OTHER_MSG
+}
 
 @immutable
 class MessageRow extends StatelessWidget {
 
   final Message message;
+  final AppState state;
 
   MessageRow({
-    this.message
+    @required this.message,
+    @required this.state
   });
 
   Widget build(BuildContext context) {
+    String myToken = state.member.token;
+    _RowType type = judgeRowType(message, myToken);
+
+    Widget widget;
+    if (type == _RowType.MY_MSG) widget = _MyMessageRow(message: message);
+    else if (type == _RowType.OTHER_MSG) widget = _OtherMessageRow(message: message);
+    else if (type ==_RowType.NOTIFICATION) widget = _NotificationRow(message: message);
     return Center(
-      child: Text(message.getTextContent())
+      child: widget
     );
+  }
+
+  _RowType judgeRowType(Message msg, String myToken) {
+    if (msg.messageType == MessageType.NOTIFICATION) return _RowType.NOTIFICATION;
+    else if (msg.from.token == myToken) return _RowType.MY_MSG;
+    return _RowType.OTHER_MSG;
   }
 }
 
@@ -38,7 +61,27 @@ class _MyMessageRow extends StatelessWidget {
   });
 
   Widget build(BuildContext context) {
-    return Center();
+    return Container(
+      margin: EdgeInsets.only(left: 10, top: 10, right: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Container(
+              padding: EdgeInsets.all(7),
+              color: CupertinoColors.activeBlue,
+              child: Text(message.getTextContent(),
+                style: TextStyle(
+                  fontSize: 15,
+                  color: CupertinoColors.white
+                )
+              )
+            ),
+          )
+        ]
+      )
+    );
   }
 }
 
@@ -50,6 +93,51 @@ class _OtherMessageRow extends StatelessWidget {
   });
 
   Widget build(BuildContext context) {
-    return Center();
+    return Container(
+      margin: EdgeInsets.only(left: 10, top: 10, right: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(25.0),
+            child: CachedNetworkImage(
+              imageUrl: message.from.avatar.thumb,
+              placeholder: (context, url) => CupertinoActivityIndicator(),
+              width: 50,
+              height: 50
+            )
+          ),
+          Padding(padding: EdgeInsets.only(left: 10)),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(localeConverter().getNick(message.from.nick),
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Styles.secondaryFontColor
+                  ),
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Container(
+                    padding: EdgeInsets.all(7),
+                    color: Styles.appBackground,
+                    child: Text(message.getTextContent(),
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Styles.primaryFontColor
+                      ),
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        ],
+      ),
+    );
   }
 }
