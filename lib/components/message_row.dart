@@ -66,18 +66,25 @@ class _MyMessageRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              padding: EdgeInsets.all(7),
-              color: CupertinoColors.activeBlue,
-              child: Text(message.getTextContent(),
-                style: TextStyle(
-                  fontSize: 15,
-                  color: CupertinoColors.white
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    padding: EdgeInsets.all(7),
+                    color: CupertinoColors.activeBlue,
+                    child: Text(message.getTextContent(),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: CupertinoColors.white
+                      )
+                    )
+                  ),
                 )
-              )
-            ),
+              ]
+            )
           )
         ]
       )
@@ -127,7 +134,7 @@ class _OtherMessageRow extends StatelessWidget {
                     color: Styles.appBackground,
                     child: Text(message.getTextContent(),
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 16,
                         color: Styles.primaryFontColor
                       ),
                     )
