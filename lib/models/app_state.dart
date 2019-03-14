@@ -222,7 +222,7 @@ class AppState extends Model {
     var resp = await messageApi().requestMessages(
       roomToken: roomToken,
       offset: _currentRoom.messages.offset,
-      size: 10
+      size: 20
     );
     _currentRoom.messages.appendMesasges(resp.messages);
 
