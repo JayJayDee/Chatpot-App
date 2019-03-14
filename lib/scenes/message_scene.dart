@@ -87,7 +87,7 @@ Widget _buildListView(BuildContext context) {
     itemCount: model.currentRoom.messages.messages.length,
     itemBuilder: (BuildContext context, int idx) {
       Message msg = model.currentRoom.messages.messages[idx];
-      return MessageRow(message: msg);
+      return MessageRow(message: msg, state: model);
     }
   );
 }

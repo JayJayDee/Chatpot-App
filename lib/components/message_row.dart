@@ -1,20 +1,40 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/entities/message.dart';
+import 'package:chatpot_app/models/app_state.dart';
+
+enum _RowType {
+  NOTIFICATION, MY_MSG, OTHER_MSG
+}
 
 @immutable
 class MessageRow extends StatelessWidget {
 
   final Message message;
+  final AppState state;
 
   MessageRow({
-    this.message
+    @required this.message,
+    @required this.state
   });
 
   Widget build(BuildContext context) {
+    String myToken = state.member.token;
+    _RowType type = judgeRowType(message, myToken);
+
+    Widget widget;
+    if (type == _RowType.MY_MSG) widget = _MyMessageRow(message: message);
+    else if (type == _RowType.OTHER_MSG) widget = _OtherMessageRow(message: message);
+    else if (type ==_RowType.NOTIFICATION) widget = _NotificationRow(message: message);
     return Center(
-      child: Text(message.getTextContent())
+      child: widget
     );
+  }
+
+  _RowType judgeRowType(Message msg, String myToken) {
+    if (msg.messageType == MessageType.NOTIFICATION) return _RowType.NOTIFICATION;
+    else if (msg.from.token == myToken) return _RowType.MY_MSG;
+    return _RowType.OTHER_MSG;
   }
 }
 
@@ -50,6 +70,6 @@ class _OtherMessageRow extends StatelessWidget {
   });
 
   Widget build(BuildContext context) {
-    return Center();
+    return Text(message.getTextContent());
   }
 }
