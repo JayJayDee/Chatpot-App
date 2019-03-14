@@ -63,25 +63,23 @@ class _MyMessageRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(left: 10, top: 10, right: 10),
-      child: Expanded( 
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                padding: EdgeInsets.all(7),
-                color: CupertinoColors.activeBlue,
-                child: Text(message.getTextContent(),
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: CupertinoColors.white
-                  )
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Container(
+              padding: EdgeInsets.all(7),
+              color: CupertinoColors.activeBlue,
+              child: Text(message.getTextContent(),
+                style: TextStyle(
+                  fontSize: 15,
+                  color: CupertinoColors.white
                 )
-              ),
-            )
-          ]
-        )
+              )
+            ),
+          )
+        ]
       )
     );
   }
