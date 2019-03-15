@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:toast/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:chatpot_app/entities/room.dart';
@@ -23,9 +24,21 @@ class _MessageSceneState extends State<MessageScene> {
   bool _inited = false;
   AppState _model;
   String _inputedMessage;
+  TextEditingController _messageInputFieldCtrl = TextEditingController();
 
   Future<void> _onMessageSend(BuildContext context) async {
-    print(_inputedMessage);
+    if (_inputedMessage == null || _inputedMessage.trim().length == 0) {
+      Toast.show('message was empty.', context, duration: 2);
+      return;
+    }
+
+    final model = ScopedModel.of<AppState>(context);
+    model.publishMessage(
+      content: _inputedMessage,
+      type: MessageType.TEXT
+    );
+    _messageInputFieldCtrl.clear();
+    _inputedMessage = '';
   }
 
   Future<void> _onSceneShown(BuildContext context) async {
@@ -82,6 +95,7 @@ class _MessageSceneState extends State<MessageScene> {
                   child: _buildListView(context)
                 ),
                 _buildEditText(context, 
+                  controller: _messageInputFieldCtrl,
                   valueChanged: (String value) => setState(() => _inputedMessage = value),
                   sendClicked: () => _onMessageSend(context)
                 )
@@ -110,6 +124,7 @@ Widget _buildListView(BuildContext context) {
 }
 
 Widget _buildEditText(BuildContext context, {
+  @required TextEditingController controller,
   @required ValueChanged<String> valueChanged,
   @required VoidCallback sendClicked
 }) {
@@ -127,6 +142,7 @@ Widget _buildEditText(BuildContext context, {
         ),
         Expanded(
           child: CupertinoTextField(
+            controller: controller,
             padding: EdgeInsets.all(5),
             style: TextStyle(
               fontSize: 17,

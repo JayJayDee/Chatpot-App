@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:meta/meta.dart';
 import 'package:chatpot_app/apis/requester.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
+import 'package:chatpot_app/entities/message.dart';
 
 class MessageApi {
   Requester _requester;
@@ -11,6 +13,34 @@ class MessageApi {
   }) {
     _requester = requester;
   }
+
+  Future<MessagePublishApiResp> requestPublishToRoom({
+    @required String roomToken,
+    @required String memberToken,
+    @required MessageType type,
+    @required dynamic content
+  }) async {
+    String contentString;
+
+    if (type == MessageType.TEXT) {
+      contentString = content.toString();
+    } else if (type == MessageType.IMAGE) {
+      ImageContent img = content.cast<ImageContent>();
+      contentString = jsonEncode(img.toJson());
+    }
+
+    Map<String, dynamic> resp = await _requester.requestWithAuth(
+      url: "/room/$roomToken/publish",
+      method: HttpMethod.POST,
+      body: {
+        'member_token': memberToken,
+        'type': 'TEXT', // TODO: to be fixed.
+        'content': contentString
+      }
+    );
+    var publishResult = MessagePublishApiResp.fromJson(resp);
+    return publishResult;
+  }  
 
   Future<MessagesApiResp> requestMessages({
     @required String roomToken,
