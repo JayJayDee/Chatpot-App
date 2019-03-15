@@ -25,6 +25,7 @@ class _MessageSceneState extends State<MessageScene> {
   AppState _model;
   String _inputedMessage;
   TextEditingController _messageInputFieldCtrl = TextEditingController();
+  ScrollController _scrollController = ScrollController();
 
   Future<void> _onMessageSend(BuildContext context) async {
     if (_inputedMessage == null || _inputedMessage.trim().length == 0) {
@@ -47,6 +48,9 @@ class _MessageSceneState extends State<MessageScene> {
     MyRoom room = model.currentRoom;
     await model.fetchMoreMessages(roomToken: room.roomToken);
     print("ROOM MESSAGE FETCHED, room:${room.title}, size:${model.messages.length}");
+
+    // await Future.delayed(Duration(milliseconds: 500));
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
   }
 
   Future<void> _onRoomLeaveClicked(BuildContext context) async {
@@ -92,7 +96,9 @@ class _MessageSceneState extends State<MessageScene> {
             Column(
               children: [
                 Expanded(
-                  child: _buildListView(context)
+                  child: _buildListView(context,
+                    controller: _scrollController
+                  )
                 ),
                 _buildEditText(context, 
                   controller: _messageInputFieldCtrl,
@@ -111,10 +117,13 @@ class _MessageSceneState extends State<MessageScene> {
   }
 }
 
-Widget _buildListView(BuildContext context) {
+Widget _buildListView(BuildContext context, {
+  @required ScrollController controller
+}) {
   final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
   return ListView.builder(
     scrollDirection: Axis.vertical,
+    controller: controller,
     itemCount: model.currentRoom.messages.messages.length,
     itemBuilder: (BuildContext context, int idx) {
       Message msg = model.currentRoom.messages.messages[idx];
