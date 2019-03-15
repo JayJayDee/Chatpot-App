@@ -82,3 +82,15 @@ class MessagesApiResp {
   @override
   toString() => "MESSAGES_API_RESP: $size $all";
 }
+
+class MessagePublishApiResp {
+  String messageId;
+
+  MessagePublishApiResp();
+
+  factory MessagePublishApiResp.fromJson(Map<String, dynamic> map) {
+    var resp = MessagePublishApiResp();
+    resp.messageId = map['message_id'];
+    return resp;
+  }
+}

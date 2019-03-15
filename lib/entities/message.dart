@@ -83,9 +83,16 @@ class ImageContent {
 
   factory ImageContent.fromJson(Map<dynamic, String> map) =>
     ImageContent(
-      imageUrl: map['profile_img'],
-      thumbnailUrl: map['profile_thumb']
+      imageUrl: map['image_url'],
+      thumbnailUrl: map['thumb_url']
     );
+
+  Map<dynamic, String> toJson() {
+    Map<dynamic, String> resp = Map();
+    resp['image_url'] = imageUrl;
+    resp['thumb_url'] = thumbnailUrl;
+    return resp;
+  }
 }
 
 class NotificationContent {

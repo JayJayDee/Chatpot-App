@@ -245,4 +245,17 @@ class AppState extends Model {
     }
     notifyListeners();
   }
+
+  Future<void> publishMessage({
+    @required MessageType type,
+    @required dynamic content
+  }) async {
+    if (_currentRoom == null) return;
+    await messageApi().requestPublishToRoom(
+      roomToken: _currentRoom.roomToken,
+      memberToken: _member.token,
+      type: type,
+      content: content
+    );
+  }
 }
