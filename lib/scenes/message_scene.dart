@@ -2,10 +2,12 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/message.dart';
 import 'package:chatpot_app/components/message_row.dart';
+import 'package:chatpot_app/styles.dart';
 
 @immutable
 class MessageScene extends StatefulWidget {
@@ -20,6 +22,11 @@ class _MessageSceneState extends State<MessageScene> {
 
   bool _inited = false;
   AppState _model;
+  String _inputedMessage;
+
+  Future<void> _onMessageSend(BuildContext context) async {
+    print(_inputedMessage);
+  }
 
   Future<void> _onSceneShown(BuildContext context) async {
     final model = ScopedModel.of<AppState>(context);
@@ -69,7 +76,17 @@ class _MessageSceneState extends State<MessageScene> {
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
-            _buildListView(context),
+            Column(
+              children: [
+                Expanded(
+                  child: _buildListView(context)
+                ),
+                _buildEditText(context, 
+                  valueChanged: (String value) => setState(() => _inputedMessage = value),
+                  sendClicked: () => _onMessageSend(context)
+                )
+              ]
+            ),
             Positioned(
               child: _buildProgressBar(context)
             )
@@ -90,6 +107,42 @@ Widget _buildListView(BuildContext context) {
       return MessageRow(message: msg, state: model);
     }
   );
+}
+
+Widget _buildEditText(BuildContext context, {
+  @required ValueChanged<String> valueChanged,
+  @required VoidCallback sendClicked
+}) {
+  return Container(
+    height: 50,
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        CupertinoButton(
+          padding: EdgeInsets.all(5),
+          child: Icon(Icons.photo),
+          onPressed: () {
+
+          }
+        ),
+        Expanded(
+          child: CupertinoTextField(
+            padding: EdgeInsets.all(5),
+            style: TextStyle(
+              fontSize: 17,
+              color: Styles.primaryFontColor
+            ),
+            onChanged: valueChanged,
+          )
+        ),
+        CupertinoButton(
+          padding: EdgeInsets.all(5),
+          child: Icon(Icons.send),
+          onPressed: sendClicked
+        )
+      ],
+    ),
+  );   
 }
 
 Widget _buildProgressBar(BuildContext context) {
