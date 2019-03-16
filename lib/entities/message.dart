@@ -131,7 +131,7 @@ class RoomMessages {
   }
 
   void appendMesasges(List<Message> newMessages) {
-    newMessages.reversed.toList().forEach((m) {
+    newMessages.forEach((m) {
       if (_existMap[m.messageId] != null) return;
       _messages.add(m);
       _existMap[m.messageId] = 1;
@@ -140,7 +140,7 @@ class RoomMessages {
   }
 
   void appendSingleMessage(Message msg) {
-    _messages.add(msg);
+    _messages.insert(0, msg);
     _existMap[msg.messageId] = 1;
   }
 }

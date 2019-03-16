@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
+import 'package:chatpot_app/entities/message.dart';
 
 typedef MyRoomCallback = Function(MyRoom);
 
@@ -99,6 +100,19 @@ class MyRoomRow extends StatelessWidget {
                     ),
                   )
                 ),
+                Flexible(
+                  child: Container(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      localeConverter().myRoomRecentMessage(myRoom.lastMessage),
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        color: Color(0xFF929292)
+                      )
+                    ),
+                  )
+                )
               ]
             ),
             Expanded(
