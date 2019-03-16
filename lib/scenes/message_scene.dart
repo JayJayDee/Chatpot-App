@@ -123,6 +123,7 @@ Widget _buildListView(BuildContext context, {
   final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
   return ListView.builder(
     scrollDirection: Axis.vertical,
+    reverse: true,
     controller: controller,
     itemCount: model.currentRoom.messages.messages.length,
     itemBuilder: (BuildContext context, int idx) {
