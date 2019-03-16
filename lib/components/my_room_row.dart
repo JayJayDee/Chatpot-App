@@ -104,7 +104,7 @@ class MyRoomRow extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
-                      _getLastMessageExpression(myRoom.lastMessage),
+                      localeConverter().myRoomRecentMessage(myRoom.lastMessage),
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 14.0,
@@ -141,9 +141,4 @@ AssetImage _getFlagImage(String regionCode) {
   String lowered = regionCode.toLowerCase();
   String path = "assets/$lowered.png";
   return AssetImage(path);
-}
-
-String _getLastMessageExpression(Message message) {
-  String nick = localeConverter().getNick(message.from.nick);
-  return "$nick: ${message.getTextContent()}";
 }

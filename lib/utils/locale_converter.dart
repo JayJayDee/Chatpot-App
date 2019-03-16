@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/entities/room.dart';
+import 'package:chatpot_app/entities/message.dart';
 
 class LocaleConverter {
   String _language;
@@ -54,6 +55,19 @@ class LocaleConverter {
       if (remain == 0) return "$ownerNickさんだけです。";
       return "$ownerNickさん他$remain人がいます。";
     }
+    return '';
+  }
+
+  String myRoomRecentMessage(Message lastMessage) {
+    if (lastMessage == null) return emptyMessageInRoom();
+    String nick = getNick(lastMessage.from.nick);
+    return "$nick: ${lastMessage.getTextContent()}";
+  }
+
+  String emptyMessageInRoom() {
+    if (_language == 'ko') return '채팅방 내 대화가  없습니다.';
+    else if (_language == 'ko') return 'no messages in room';
+    else if (_language == 'ja') return '部屋にメッセージはありません';
     return '';
   }
 }
