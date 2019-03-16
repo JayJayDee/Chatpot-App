@@ -238,9 +238,10 @@ class AppState extends Model {
     if (rooms.length == 0) return;
 
     MyRoom myRoom = rooms.toList()[0];
-    if (myRoom.roomToken == _currentRoom.roomToken) {
+    if (_currentRoom != null && myRoom.roomToken == _currentRoom.roomToken) {
       _currentRoom.messages.appendSingleMessage(msg);
     } else {
+      myRoom.lastMessage = msg;
       myRoom.messages.increaseNotViewed();
     }
     notifyListeners();

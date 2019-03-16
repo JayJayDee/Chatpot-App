@@ -60,8 +60,7 @@ class LocaleConverter {
 
   String myRoomRecentMessage(Message lastMessage) {
     if (lastMessage == null) return emptyMessageInRoom();
-    String nick = getNick(lastMessage.from.nick);
-    return "$nick: ${lastMessage.getTextContent()}";
+    return "${lastMessage.getTextContent()}";
   }
 
   String emptyMessageInRoom() {
