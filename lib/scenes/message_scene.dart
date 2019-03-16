@@ -46,11 +46,9 @@ class _MessageSceneState extends State<MessageScene> {
     final model = ScopedModel.of<AppState>(context);
     _model = model;
     MyRoom room = model.currentRoom;
+    room.messages.clearNotViewed();
     await model.fetchMoreMessages(roomToken: room.roomToken);
     print("ROOM MESSAGE FETCHED, room:${room.title}, size:${model.messages.length}");
-
-    // await Future.delayed(Duration(milliseconds: 1));
-    // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
   }
 
   Future<void> _onRoomLeaveClicked(BuildContext context) async {

@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
-import 'package:chatpot_app/entities/message.dart';
 
 typedef MyRoomCallback = Function(MyRoom);
 
@@ -117,15 +116,21 @@ class MyRoomRow extends StatelessWidget {
             ),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.only(right: 5),
-                    child: IconTheme(
-                      data: IconThemeData(color: Styles.secondaryFontColor),
-                      child: Icon(MdiIcons.chevronRight)
-                    )
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      _getRoomBadge(myRoom),
+                      Container(
+                        padding: EdgeInsets.only(right: 5),
+                        child: IconTheme(
+                          data: IconThemeData(color: Styles.secondaryFontColor),
+                          child: Icon(MdiIcons.chevronRight)
+                        ),
+                      )
+                    ]
                   )
                 ]
               )
@@ -141,4 +146,24 @@ AssetImage _getFlagImage(String regionCode) {
   String lowered = regionCode.toLowerCase();
   String path = "assets/$lowered.png";
   return AssetImage(path);
+}
+
+Widget _getRoomBadge(MyRoom room) {
+  int notViewed = room.messages.notViewed;
+  if (notViewed == 0) return Center();
+  return Container(
+    child: Text(
+      "$notViewed",
+      style: TextStyle(
+        color: CupertinoColors.white,
+        fontSize: 13,
+        fontWeight: FontWeight.bold
+      )
+    ),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(12)),
+      color: CupertinoColors.destructiveRed
+    ),
+    padding: EdgeInsets.only(left: 10, top: 5, bottom: 5, right: 10)
+  );
 }
