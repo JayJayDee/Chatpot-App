@@ -49,8 +49,8 @@ class _MessageSceneState extends State<MessageScene> {
     await model.fetchMoreMessages(roomToken: room.roomToken);
     print("ROOM MESSAGE FETCHED, room:${room.title}, size:${model.messages.length}");
 
-    // await Future.delayed(Duration(milliseconds: 500));
-    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    // await Future.delayed(Duration(milliseconds: 1));
+    // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
   }
 
   Future<void> _onRoomLeaveClicked(BuildContext context) async {

@@ -33,6 +33,8 @@ class MyRoom {
   int numAttendee;
   int maxAttendee;
   DateTime regDate;
+  Message lastMessage;
+
   RoomMessages messages;
 
   MyRoom() {
@@ -47,6 +49,7 @@ class MyRoom {
     room.maxAttendee = map['max_attendee'];
     room.owner = Member.fromJson(map['owner']);
     room.regDate = DateTime.parse(map['reg_date']);
+    room.lastMessage = Message.fromJson(map['last_message']);
     return room;
   }
 
