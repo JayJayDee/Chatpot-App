@@ -30,13 +30,36 @@ class _WidgetWrapper {
   EventReceivable get receivable => _receivable;
 }
 
-class _ContainerSceneState extends State<ContainerScene> {
+class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObserver {
   Map<String, _WidgetWrapper> _widgetMap;
   Map<String, bool> _initMap;
+  AppState _model;
 
   _ContainerSceneState() {
     _widgetMap = Map();
     _initMap = Map();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _model.fetchMyRooms();
+      if (_model.currentRoom != null) {
+        _model.fetchMoreMessages(roomToken: _model.currentRoom.roomToken);
+      }
+    }
   }
 
   void _initFcm(BuildContext context) {
@@ -80,6 +103,8 @@ class _ContainerSceneState extends State<ContainerScene> {
   @override
   Widget build(BuildContext context) {
     _initFcm(context);
+    final model = ScopedModel.of<AppState>(context);
+    _model = model;
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         items: [

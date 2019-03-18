@@ -1,7 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:chatpot_app/storage/auth_accessor.dart';
-import 'package:chatpot_app/apis/requester.dart';
 import 'package:chatpot_app/storage/pref_auth_accessor.dart';
+import 'package:chatpot_app/storage/messages_accessor.dart';
+import 'package:chatpot_app/storage/sqlite_messages_accessor.dart';
+import 'package:chatpot_app/apis/requester.dart';
 import 'package:chatpot_app/apis/default_requester.dart';
 import 'package:chatpot_app/apis/auth_api.dart';
 import 'package:chatpot_app/apis/member_api.dart';
@@ -20,6 +22,7 @@ void initFactory() {
   _instances['AuthAccessor'] = PrefAuthAccessor();
   _instances['AuthCrypter'] = DefaultAuthCrypter();
   _instances['LocaleConverter'] = LocaleConverter();
+  _instances['MessagesAccessor'] = SqliteMessagesAccessor(dbName: 'messages.db');
 
   _instances['MemberRequester'] = _initMemberRequester();
   _instances['RoomRequester'] = _initRoomRequseter();
@@ -65,3 +68,4 @@ AuthCrypter authCrypter() => _instances['AuthCrypter'];
 LocaleConverter localeConverter() => _instances['LocaleConverter'];
 FirebaseMessaging firebaseMessaging() => _instances['FirebaseMessaging'];
 PushService pushService() => _instances['PushService'];
+MessagesAccessor messagesAccessor() => _instances['MessagesAccessor'];
