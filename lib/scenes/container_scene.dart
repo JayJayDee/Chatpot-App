@@ -58,6 +58,7 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
       if (state == AppLifecycleState.resumed) {
         await _model.fetchMyRooms();
         if (_model.currentRoom != null) {
+          _model.currentRoom.messages.clearNotViewed();
           await _model.fetchMoreMessages(roomToken: _model.currentRoom.roomToken);
         }
       }
