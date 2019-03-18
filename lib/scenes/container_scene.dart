@@ -54,12 +54,15 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _model.fetchMyRooms();
-      if (_model.currentRoom != null) {
-        _model.fetchMoreMessages(roomToken: _model.currentRoom.roomToken);
+    var func = () async {
+      if (state == AppLifecycleState.resumed) {
+        await _model.fetchMyRooms();
+        if (_model.currentRoom != null) {
+          await _model.fetchMoreMessages(roomToken: _model.currentRoom.roomToken);
+        }
       }
-    }
+    };
+    func();
   }
 
   void _initFcm(BuildContext context) {
