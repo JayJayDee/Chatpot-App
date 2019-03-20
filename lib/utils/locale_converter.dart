@@ -72,26 +72,27 @@ class LocaleConverter {
 
   String messageReceiveTime(DateTime dt) {
     int diff =
-      ((DateTime.now().millisecondsSinceEpoch - dt.millisecondsSinceEpoch) / 1000) as int;
+      ((DateTime.now().millisecondsSinceEpoch - dt.millisecondsSinceEpoch) / 1000).round();
+
     if (diff < 60) {
       if (_language == 'ko') return "조금 전";
       else if (_language == 'en') return 'just now';
       else if (_language == 'ja') return 'ちょうど今';
 
     } else if (diff >= 60 && diff < 3600) {
-      int min = diff / 60 as int;
+      int min = (diff / 60).round();
       if (_language == 'ko') return "$min 분 전";
       else if (_language == 'en') return "$min minutes ago";
       else if (_language == 'ja') return "$min 分前";
 
     } else if (diff >= 3600 && diff <= 86400) {
-      int hour = diff / 3600 as int;
+      int hour = (diff / 3600).round();
       if (_language == 'ko') return "$hour 시간 전";
       else if (_language == 'en') return "$hour hours ago";
       else if (_language == 'ja') return "$hour 時間前";     
 
     } else {
-      int day = diff / 86400 as int;
+      int day = (diff / 86400).round();
       if (_language == 'ko') return "$day 일 전";
       else if (_language == 'en') return "$day days ago";
       else if (_language == 'ja') return "$day 日前";     
