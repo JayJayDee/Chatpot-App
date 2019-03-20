@@ -230,6 +230,26 @@ class AppState extends Model {
     notifyListeners();
   }
 
+  Future<void> fetchMessagesWhenResume({
+    @required String roomToken
+  }) async {
+    if (_currentRoom == null) return;
+    _loading = true;
+    notifyListeners();
+
+    var resp = await messageApi().requestMessages(
+      roomToken: roomToken,
+      offset: 0,
+      size: 20
+    );
+    _currentRoom.messages.clearOffset();
+    _currentRoom.messages.clearMessages();
+    _currentRoom.messages.appendMesasges(resp.messages);
+
+    _loading = false;
+    notifyListeners();
+  }
+
   Future<void> addSingleMessage({
     @required Message msg
   }) async {
