@@ -83,7 +83,10 @@ class _MyMessageRow extends StatelessWidget {
                     )
                   ),
                 ),
-                
+                Container(
+                  padding: EdgeInsets.only(top: 3, left: 3),
+                  child: _receiveTimeIndicator(message.sentTime)
+                )
               ]
             )
           )
@@ -155,7 +158,7 @@ class _OtherMessageRow extends StatelessWidget {
 }
 
 Widget _receiveTimeIndicator(DateTime dt) {
-  return Text("$dt",
+  return Text(localeConverter().messageReceiveTime(dt),
     style: TextStyle(
       fontSize: 12,
       color: Styles.secondaryFontColor

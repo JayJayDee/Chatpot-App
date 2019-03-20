@@ -8,19 +8,26 @@ class Message {
   MessageTo to;
   DateTime sentTime;
   dynamic content;
+  bool _isSending;
 
-  Message();
+  Message() {
+    _isSending = false;
+  }
 
   factory Message.fromJson(Map<String, dynamic> map) {
     Message message = Message();
     message.messageId = map['message_id'];
     message.messageType = _getType(map['type']);
     message.from = Member.fromJson(map['from']);
-    message.to =MessageTo.fromJson(map['to']);
+    message.to = MessageTo.fromJson(map['to']);
     message.sentTime = DateTime.fromMillisecondsSinceEpoch(map['sent_time']);
     message.content = map['content'];
     return message;
   }
+
+  bool get isSending => _isSending;
+  void changeToSending() => _isSending = true;
+  void changeToSent() => _isSending = false;
 
   String getTextContent() {
     if (messageType != MessageType.TEXT) return null;
