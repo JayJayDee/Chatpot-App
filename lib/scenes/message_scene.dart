@@ -122,6 +122,7 @@ Widget _buildListView(BuildContext context, {
   return ListView.builder(
     scrollDirection: Axis.vertical,
     reverse: true,
+    physics: AlwaysScrollableScrollPhysics(),
     controller: controller,
     itemCount: model.currentRoom.messages.messages.length,
     itemBuilder: (BuildContext context, int idx) {
