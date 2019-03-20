@@ -122,6 +122,11 @@ class RoomMessages {
     _offset = 0;
   }
 
+  void clearMessages() {
+    _existMap.clear();
+    _messages.clear();
+  }
+
   void clearNotViewed() {
     _notViewed = 0;
   }
@@ -140,6 +145,7 @@ class RoomMessages {
   }
 
   void appendSingleMessage(Message msg) {
+    if (_existMap[msg.messageId] != null) return;
     _messages.insert(0, msg);
     _existMap[msg.messageId] = 1;
   }
