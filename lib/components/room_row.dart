@@ -54,7 +54,7 @@ class RoomRow extends StatelessWidget {
                       height: 15,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: _getFlagImage(room.owner.region),
+                          image: localeConverter().getFlagImage(room.owner.region),
                           fit: BoxFit.cover
                         )
                       ),
@@ -111,10 +111,4 @@ class RoomRow extends StatelessWidget {
       )
     );
   }
-}
-
-AssetImage _getFlagImage(String regionCode) {
-  String lowered = regionCode.toLowerCase();
-  String path = "assets/$lowered.png";
-  return AssetImage(path);
 }

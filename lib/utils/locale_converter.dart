@@ -99,4 +99,10 @@ class LocaleConverter {
     }
     return '';
   }
+
+  AssetImage getFlagImage(String regionCode) {
+    String lowered = regionCode.toLowerCase();
+    String path = "assets/$lowered.png";
+    return AssetImage(path);
+  }
 }

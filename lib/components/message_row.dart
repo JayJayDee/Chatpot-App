@@ -110,13 +110,34 @@ class _OtherMessageRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(25.0),
-            child: CachedNetworkImage(
-              imageUrl: message.from.avatar.thumb,
-              placeholder: (context, url) => CupertinoActivityIndicator(),
-              width: 50,
-              height: 50
+          Container(
+            width: 50,
+            height: 50,
+            child: Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: CachedNetworkImage(
+                    imageUrl: message.from.avatar.thumb,
+                    placeholder: (context, url) => CupertinoActivityIndicator(),
+                    width: 50,
+                    height: 50
+                  )
+                ),
+                Positioned(
+                  child: Container(
+                    width: 24,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: localeConverter().getFlagImage(message.from.region),
+                        fit: BoxFit.cover
+                      )
+                    )
+                  )
+                )
+              ]
             )
           ),
           Padding(padding: EdgeInsets.only(left: 10)),
