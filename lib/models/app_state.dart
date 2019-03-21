@@ -273,11 +273,28 @@ class AppState extends Model {
     @required dynamic content
   }) async {
     if (_currentRoom == null) return;
-    await messageApi().requestPublishToRoom(
+    var publishResult =  await messageApi().requestPublishToRoom(
       roomToken: _currentRoom.roomToken,
       memberToken: _member.token,
       type: type,
       content: content
     );
+    String messageId = publishResult.messageId;
+    Message newMsg = Message();
+
+    var to = MessageTo();
+    to.type = MessageTarget.ROOM;
+    to.token = _currentRoom.roomToken;
+
+    newMsg.messageId = messageId;
+    newMsg.messageType = type;
+    newMsg.content = content;
+    newMsg.sentTime = DateTime.now();
+    newMsg.from = _member;
+    newMsg.to = to;
+    newMsg.changeToSending();
+    _currentRoom.messages.appendSingleMessage(newMsg);
+
+    notifyListeners();
   }
 }

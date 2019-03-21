@@ -152,7 +152,15 @@ class RoomMessages {
   }
 
   void appendSingleMessage(Message msg) {
-    if (_existMap[msg.messageId] != null) return;
+    if (_existMap[msg.messageId] != null) {
+      var existMsg = _messages.where((m) => m.messageId == msg.messageId);
+      if (existMsg.length > 0) {
+        var msg = existMsg.toList()[0];
+        if (msg.isSending == true) {
+          msg.changeToSent();
+        }
+      }
+    }
     _messages.insert(0, msg);
     _existMap[msg.messageId] = 1;
   }

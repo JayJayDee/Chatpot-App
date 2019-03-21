@@ -85,7 +85,7 @@ class _MyMessageRow extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 3, left: 3),
-                  child: _receiveTimeIndicator(message.sentTime)
+                  child: _receiveTimeIndicator(message)
                 )
               ]
             )
@@ -167,7 +167,7 @@ class _OtherMessageRow extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 3, left: 3),
-                  child: _receiveTimeIndicator(message.sentTime)
+                  child: _receiveTimeIndicator(message)
                 )
               ]
             )
@@ -178,8 +178,9 @@ class _OtherMessageRow extends StatelessWidget {
   }
 }
 
-Widget _receiveTimeIndicator(DateTime dt) {
-  return Text(localeConverter().messageReceiveTime(dt),
+Widget _receiveTimeIndicator(Message msg) {
+  if (msg.isSending == true) return CupertinoActivityIndicator();
+  return Text(localeConverter().messageReceiveTime(msg.sentTime),
     style: TextStyle(
       fontSize: 12,
       color: Styles.secondaryFontColor
