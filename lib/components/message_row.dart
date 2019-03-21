@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatpot_app/entities/message.dart';
 import 'package:chatpot_app/models/app_state.dart';
@@ -85,7 +86,7 @@ class _MyMessageRow extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 3, left: 3),
-                  child: _receiveTimeIndicator(message.sentTime)
+                  child: _receiveTimeIndicator(message)
                 )
               ]
             )
@@ -110,13 +111,34 @@ class _OtherMessageRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(25.0),
-            child: CachedNetworkImage(
-              imageUrl: message.from.avatar.thumb,
-              placeholder: (context, url) => CupertinoActivityIndicator(),
-              width: 50,
-              height: 50
+          Container(
+            width: 50,
+            height: 50,
+            child: Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: CachedNetworkImage(
+                    imageUrl: message.from.avatar.thumb,
+                    placeholder: (context, url) => CupertinoActivityIndicator(),
+                    width: 50,
+                    height: 50
+                  )
+                ),
+                Positioned(
+                  child: Container(
+                    width: 24,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: localeConverter().getFlagImage(message.from.region),
+                        fit: BoxFit.cover
+                      )
+                    )
+                  )
+                )
+              ]
             )
           ),
           Padding(padding: EdgeInsets.only(left: 10)),
@@ -146,7 +168,7 @@ class _OtherMessageRow extends StatelessWidget {
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 3, left: 3),
-                  child: _receiveTimeIndicator(message.sentTime)
+                  child: _receiveTimeIndicator(message)
                 )
               ]
             )
@@ -157,8 +179,18 @@ class _OtherMessageRow extends StatelessWidget {
   }
 }
 
-Widget _receiveTimeIndicator(DateTime dt) {
-  return Text(localeConverter().messageReceiveTime(dt),
+Widget _receiveTimeIndicator(Message msg) {
+  if (msg.isSending == true) {
+    return Container(
+      width: 12,
+      height: 12,
+      margin: EdgeInsets.only(right: 5),
+      child: CircularProgressIndicator(
+        strokeWidth: 1,
+      )
+    );
+  }
+  return Text(localeConverter().messageReceiveTime(msg.sentTime),
     style: TextStyle(
       fontSize: 12,
       color: Styles.secondaryFontColor

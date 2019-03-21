@@ -81,22 +81,28 @@ class LocaleConverter {
 
     } else if (diff >= 60 && diff < 3600) {
       int min = (diff / 60).round();
-      if (_language == 'ko') return "$min 분 전";
-      else if (_language == 'en') return "$min minutes ago";
-      else if (_language == 'ja') return "$min 分前";
+      if (_language == 'ko') return "$min분 전";
+      else if (_language == 'en') return "${min}minutes ago";
+      else if (_language == 'ja') return "$min分前";
 
     } else if (diff >= 3600 && diff <= 86400) {
       int hour = (diff / 3600).round();
-      if (_language == 'ko') return "$hour 시간 전";
-      else if (_language == 'en') return "$hour hours ago";
-      else if (_language == 'ja') return "$hour 時間前";     
+      if (_language == 'ko') return "$hour시간 전";
+      else if (_language == 'en') return "${hour}hours ago";
+      else if (_language == 'ja') return "$hour時間前";     
 
     } else {
       int day = (diff / 86400).round();
-      if (_language == 'ko') return "$day 일 전";
-      else if (_language == 'en') return "$day days ago";
-      else if (_language == 'ja') return "$day 日前";     
+      if (_language == 'ko') return "$day일 전";
+      else if (_language == 'en') return "${day}days ago";
+      else if (_language == 'ja') return "$day日前";     
     }
     return '';
+  }
+
+  AssetImage getFlagImage(String regionCode) {
+    String lowered = regionCode.toLowerCase();
+    String path = "assets/$lowered.png";
+    return AssetImage(path);
   }
 }
