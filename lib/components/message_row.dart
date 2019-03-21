@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatpot_app/entities/message.dart';
 import 'package:chatpot_app/models/app_state.dart';
@@ -179,7 +180,16 @@ class _OtherMessageRow extends StatelessWidget {
 }
 
 Widget _receiveTimeIndicator(Message msg) {
-  if (msg.isSending == true) return CupertinoActivityIndicator();
+  if (msg.isSending == true) {
+    return Container(
+      width: 12,
+      height: 12,
+      margin: EdgeInsets.only(right: 5),
+      child: CircularProgressIndicator(
+        strokeWidth: 1,
+      )
+    );
+  }
   return Text(localeConverter().messageReceiveTime(msg.sentTime),
     style: TextStyle(
       fontSize: 12,

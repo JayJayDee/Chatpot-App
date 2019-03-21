@@ -31,7 +31,7 @@ class Message {
 
   String getTextContent() {
     if (messageType != MessageType.TEXT) return null;
-    return content;
+    return content.toString();
   }
 
   ImageContent getImageContent() {
@@ -158,6 +158,7 @@ class RoomMessages {
         var msg = existMsg.toList()[0];
         if (msg.isSending == true) {
           msg.changeToSent();
+          return;
         }
       }
     }
