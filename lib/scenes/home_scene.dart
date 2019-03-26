@@ -33,7 +33,7 @@ class HomeScene extends StatelessWidget implements EventReceivable {
     }
   }
 
-  void _onMoreRoomsClicked(BuildContext context) {
+  void _onMoreRoomsClicked(BuildContext context, String type) {
     Navigator.of(context).push(
       CupertinoPageRoute(
         title: 'More chats',
@@ -44,8 +44,10 @@ class HomeScene extends StatelessWidget implements EventReceivable {
 
   @override
   Widget build(BuildContext context) {
-    final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
-    List<Room> rooms = model.publicRooms;
+    var listItems = _buildListViewItems(context,
+      moreRoom: (type) => _onMoreRoomsClicked(context, type),
+      roomSelect: (r) => _onChatRowSelected(context, r)
+    );
 
     return CupertinoPageScaffold(
       backgroundColor: Styles.mainBackground,
@@ -55,15 +57,8 @@ class HomeScene extends StatelessWidget implements EventReceivable {
       child: SafeArea(
         child: ListView.builder(
           scrollDirection: Axis.vertical,
-          itemCount: rooms.length + 2,
-          itemBuilder: (BuildContext context, int idx) {
-            if (idx == 0) return _buildSummaryView(context);
-            if (idx == 1) return _buildRecentsHeader(context, () => _onMoreRoomsClicked(context));
-            return RoomRow(
-              room: rooms[idx - 2],
-              rowClickCallback: (Room room) => _onChatRowSelected(context, room)
-            );
-          }
+          itemCount: listItems.length,
+          itemBuilder: (BuildContext context, int idx) => listItems[idx]
         )
       )
     );
@@ -78,13 +73,41 @@ class HomeScene extends StatelessWidget implements EventReceivable {
   }
 }
 
-Widget _buildSummaryView(BuildContext context) {
-  return Container(
-    height: 100
-  );
+typedef MoreRoomCallback (String moreRoomType);
+typedef RoomSelectCallback (Room room);
+
+List<Widget> _buildListViewItems(BuildContext context, {
+  @required MoreRoomCallback moreRoom,
+  @required RoomSelectCallback roomSelect
+}) {
+  List<Widget> widgets = List();
+  final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
+
+  widgets.add(_buildRoomsHeader(context,
+    type: 'recent',
+    title: 'Recent chats',
+    detailButtonCallback: moreRoom
+  ));
+  var recentRoomRows = model.recentRooms.map((r) =>
+    RoomRow(room: r, rowClickCallback: roomSelect)).toList();
+  widgets.addAll(recentRoomRows);
+
+  widgets.add(_buildRoomsHeader(context,
+    type: 'crowded',
+    title: 'Most crowded chats',
+    detailButtonCallback: moreRoom
+  ));
+  var crowdedRoomRows = model.crowdedRooms.map((r) =>
+    RoomRow(room: r, rowClickCallback: roomSelect)).toList();
+  widgets.addAll(crowdedRoomRows);
+  return widgets;
 }
 
-Widget _buildRecentsHeader(BuildContext context, VoidCallback detailButtonCallback) {
+Widget _buildRoomsHeader(BuildContext context, {
+  @required String type,
+  @required String title,
+  @required MoreRoomCallback detailButtonCallback
+}) {
   return Container(
     decoration: BoxDecoration(
       color: CupertinoColors.white,
@@ -99,7 +122,7 @@ Widget _buildRecentsHeader(BuildContext context, VoidCallback detailButtonCallba
       children: <Widget>[
         Container(
           padding: EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
-          child: Text('Recent chats',
+          child: Text(title,
             style: TextStyle(
               fontSize: 13
             )
@@ -113,7 +136,7 @@ Widget _buildRecentsHeader(BuildContext context, VoidCallback detailButtonCallba
                 fontSize: 13
               ),
             ),
-            onPressed: detailButtonCallback,
+            onPressed: () => detailButtonCallback(type),
           )
         )
       ]
