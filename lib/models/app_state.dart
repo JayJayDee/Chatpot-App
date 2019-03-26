@@ -128,14 +128,9 @@ class AppState extends Model {
     notifyListeners();
   }
 
-  Future<void> fetchPublicRooms() async {
+  Future<void> fetchHomeSceneRooms() async {
     _loading = true;
     notifyListeners();
-
-    var apiResp = await roomApi().requestPublicRooms();
-    List<Room> rooms = apiResp.list;
-    _publicRooms = rooms;
-
     var featuredResp = await roomApi().requestFeaturedRooms();
     _recentRooms = featuredResp.recent;
     _crowdedRooms = featuredResp.crowded;

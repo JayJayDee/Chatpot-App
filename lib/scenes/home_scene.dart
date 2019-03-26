@@ -56,6 +56,7 @@ class HomeScene extends StatelessWidget implements EventReceivable {
       ),
       child: SafeArea(
         child: ListView.builder(
+          physics: AlwaysScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
           itemCount: listItems.length,
           itemBuilder: (BuildContext context, int idx) => listItems[idx]
@@ -66,10 +67,8 @@ class HomeScene extends StatelessWidget implements EventReceivable {
 
   @override
   Future<void> onSelected(BuildContext context) async {
-    print('HOME_SCENE');
     final model = ScopedModel.of<AppState>(context);
-    await model.fetchPublicRooms();
-    print('HOME_SCENE_COMPLETED');
+    await model.fetchHomeSceneRooms();
   }
 }
 
