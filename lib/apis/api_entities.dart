@@ -94,3 +94,19 @@ class MessagePublishApiResp {
     return resp;
   }
 }
+
+class FeaturedRoomsResp {
+  List<Room> recent;
+  List<Room> crowded;
+
+  FeaturedRoomsResp();
+
+  factory FeaturedRoomsResp.fromJson(Map<String, dynamic> map) {
+    var resp = FeaturedRoomsResp();
+    List<dynamic> recents = map['recent'];
+    List<dynamic> crowdes = map['crowded'];
+    resp.recent = recents.map((elem) => Room.fromJson(elem)).toList();
+    resp.crowded = crowdes.map((elem) => Room.fromJson(elem)).toList();
+    return resp;
+  }
+}
