@@ -16,6 +16,9 @@ enum AppInitState {
 
 class AppState extends Model {
   List<Room> _publicRooms;
+  List<Room> _recentRooms;
+  List<Room> _crowdedRooms;
+
   List<MyRoom> _myRooms;
   Member _member;
   bool _loading;
@@ -27,13 +30,19 @@ class AppState extends Model {
     _loading = true;
     _publicRooms = <Room>[];
     _myRooms = <MyRoom>[];
+
+    _recentRooms = <Room>[];
+    _crowdedRooms = <Room>[];
   }
 
   Member get member => _member;
   bool get loading => _loading;
   List<Room> get publicRooms => _publicRooms;
-  List<MyRoom> get myRooms => _myRooms;
+  List<Room> get recentRooms => _recentRooms;
+  List<Room> get crowdedRooms => _crowdedRooms;
+
   MyRoom get currentRoom => _currentRoom;
+  List<MyRoom> get myRooms => _myRooms;
 
   List<Message> get messages {
     if (_currentRoom == null) return [];
@@ -119,13 +128,12 @@ class AppState extends Model {
     notifyListeners();
   }
 
-  Future<void> fetchPublicRooms() async {
+  Future<void> fetchHomeSceneRooms() async {
     _loading = true;
     notifyListeners();
-
-    var apiResp = await roomApi().requestPublicRooms();
-    List<Room> rooms = apiResp.list;
-    _publicRooms = rooms;
+    var featuredResp = await roomApi().requestFeaturedRooms();
+    _recentRooms = featuredResp.recent;
+    _crowdedRooms = featuredResp.crowded;
     _loading = false;
     notifyListeners();
   }

@@ -13,6 +13,15 @@ class RoomApi {
     _requester = requester;
   }
 
+  Future<FeaturedRoomsResp> requestFeaturedRooms() async {
+    Map<String, dynamic> resp = await _requester.request(
+      url: '/rooms/featured',
+      method: HttpMethod.GET
+    );
+    var ret = FeaturedRoomsResp.fromJson(resp);
+    return ret;
+  }
+
   Future<RoomListApiResp> requestPublicRooms({
     int offset,
     int size,
