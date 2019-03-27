@@ -31,7 +31,8 @@ void main() {
           const Locale('ja', 'JP')
         ],
         localizationsDelegates: [
-          const FallbackCupertinoLocalisationsDelegate()
+          const FallbackCupertinoLocalisationsDelegate(),
+          const FallbackMaterialLocalizationDelegate()
         ]
       )
     )

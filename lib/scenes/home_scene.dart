@@ -165,17 +165,54 @@ Future<bool> _showJoinConfirm(BuildContext context, Room room) {
   );
 }
 
-Future<void> _showJoinFailDialog(BuildContext context, String cause) async =>
-  showCupertinoDialog<bool>(
+Future<bool> _showRoomDetailSheet(BuildContext context, Room room) async {
+  return await showModalBottomSheet<bool>(
     context: context,
-    builder: (conext) => CupertinoAlertDialog(
-      title: Text('Failed to join'),
-      content: Text(cause),
-      actions: <Widget>[
-        CupertinoDialogAction(
-          child: Text('Confirm'),
-          onPressed: () => Navigator.of(context).pop()
+    builder: (BuildContext context) {
+      return Container(
+        height: 160,
+        margin: EdgeInsets.only(bottom: 50),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text('Test')
+          ]
         )
-      ],
-    )
+      );
+    });
+}
+
+Future<bool> _showCupertinoRoomDetailSheet(BuildContext context, Room room) async {
+  return await showCupertinoModalPopup<bool>(
+    context: context,
+    builder: (BuildContext context) =>
+      CupertinoActionSheet(
+        message: Container(
+          height: 150,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('asdf')
+            ],
+          )
+        ),
+        actions: [
+          CupertinoActionSheetAction(
+            child: Text('A'),
+            onPressed: () {},
+          ),
+          CupertinoActionSheetAction(
+            child: Text('B'),
+            onPressed: () {},
+          ),
+          CupertinoActionSheetAction(
+            child: Text('Cancel'),
+            isDestructiveAction: true,
+            onPressed: () {},
+          )
+        ]
+      )
   );
+}
