@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class FallbackCupertinoLocalisationsDelegate
     extends LocalizationsDelegate<CupertinoLocalizations> {
@@ -14,4 +15,18 @@ class FallbackCupertinoLocalisationsDelegate
 
   @override
   bool shouldReload(FallbackCupertinoLocalisationsDelegate old) => false;
+}
+
+class FallbackMaterialLocalizationDelegate extends LocalizationsDelegate<MaterialLocalizations> {
+  const FallbackMaterialLocalizationDelegate();
+
+  @override
+  bool isSupported(Locale locale) => true;
+
+  @override
+  Future<MaterialLocalizations> load(Locale locale) =>
+      DefaultMaterialLocalizations.load(locale);
+
+  @override
+  bool shouldReload(FallbackMaterialLocalizationDelegate old) => false;
 }
