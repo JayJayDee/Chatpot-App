@@ -10,6 +10,7 @@ import 'package:chatpot_app/components/room_row.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 import 'package:chatpot_app/scenes/more_chats_scene.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
+import 'package:chatpot_app/components/room_detail_card.dart';
 
 @immutable
 class HomeScene extends StatelessWidget implements EventReceivable {
@@ -21,17 +22,19 @@ class HomeScene extends StatelessWidget implements EventReceivable {
   });
 
   void _onChatRowSelected(BuildContext context, Room room) async {
-    final model = ScopedModel.of<AppState>(context);
-    bool isJoin = await _showJoinConfirm(context, room);
-    if (isJoin == true) {
-      var joinResp = await model.joinToRoom(room.roomToken);
 
-      if (joinResp.success == true) {
-        Toast.show('Successfully joined to room', context, duration: 2);
-      } else {
-        Toast.show("Failed to join the room: ${joinResp.cause}", context, duration: 2);
-      }
-    }
+    await _showRoomDetailSheet(context, room);
+    // final model = ScopedModel.of<AppState>(context);
+    // bool isJoin = await _showJoinConfirm(context, room);
+    // if (isJoin == true) {
+    //   var joinResp = await model.joinToRoom(room.roomToken);
+
+    //   if (joinResp.success == true) {
+    //     Toast.show('Successfully joined to room', context, duration: 2);
+    //   } else {
+    //     Toast.show("Failed to join the room: ${joinResp.cause}", context, duration: 2);
+    //   }
+    // }
   }
 
   void _onMoreRoomsClicked(BuildContext context, String type) {
@@ -184,7 +187,7 @@ Future<bool> _showRoomDetailSheet(BuildContext context, Room room) async {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text('Test')
+            RoomDetailCard(room: room)
           ]
         )
       );

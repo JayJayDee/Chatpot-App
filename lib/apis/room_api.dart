@@ -22,6 +22,16 @@ class RoomApi {
     return ret;
   }
 
+  Future<RoomDetail> requestRoomDetail({
+    @required String roomToken
+  }) async {
+    Map<String, dynamic> resp = await _requester.requestWithAuth(
+      url: "/room/$roomToken",
+      method: HttpMethod.GET
+    );
+    return RoomDetail.fromJson(resp);
+  }
+
   Future<RoomListApiResp> requestPublicRooms({
     int offset,
     int size,

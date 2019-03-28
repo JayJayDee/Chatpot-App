@@ -26,6 +26,34 @@ class Room {
   toString() => "$roomToken:$title";
 }
 
+class RoomDetail {
+  String roomToken; 
+  Member owner;
+  String title;
+  int numAttendee;
+  int maxAttendee;
+  DateTime regDate;
+  List<Member> members;
+
+  RoomDetail();
+
+  factory RoomDetail.fromJson(Map<String, dynamic> map) {
+    RoomDetail room = RoomDetail();
+    room.roomToken = map['room_token'];
+    room.title = map['title'];
+    room.numAttendee = map['num_attendee'];
+    room.maxAttendee = map['max_attendee'];
+    room.owner = Member.fromJson(map['owner']);
+    room.regDate = DateTime.parse(map['reg_date']);
+    List<dynamic> memberList = map['members'];
+    room.members = memberList.map((elem) => Member.fromJson(elem)).toList();
+    return room;
+  }
+
+  @override
+  toString() => "$roomToken:$title";
+}
+
 class MyRoom {
   String roomToken; 
   Member owner;
