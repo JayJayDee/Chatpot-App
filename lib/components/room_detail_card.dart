@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/styles.dart';
 
 class RoomDetailCard extends StatefulWidget {
 
@@ -47,38 +48,80 @@ class _RoomDetailCard extends State<RoomDetailCard> {
         child: CupertinoActivityIndicator()
       );
     }
-    return Center(
-      child: Text('done!')
+    var memberListItems = _buildMemberListItems(_detail.members);
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: Column(
+        children: [
+          Text(_detail.title,
+            style: TextStyle(
+              color: Styles.primaryFontColor,
+              fontSize: 18
+            )
+          ),
+          Padding(padding: EdgeInsets.only(top: 10)),
+          Container(
+            height: 50,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              physics: AlwaysScrollableScrollPhysics(),
+              itemCount: memberListItems.length,
+              itemBuilder: (BuildContext context, int idx) => memberListItems[idx]
+            )
+          ),
+          Padding(padding: EdgeInsets.only(top: 5)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CupertinoButton(
+                child: Text('Join room'),
+                onPressed: () {},
+              ),
+              CupertinoButton(
+                child: Text('Cancel'),
+                onPressed: () {},
+              )
+            ]
+          )
+        ]
+      )
     );
   }
 
   List<Widget> _buildMemberListItems(List<Member> members) {
     return members.map((m) =>
-      Stack(
-        alignment: Alignment.bottomRight,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(25.0),
-            child: CachedNetworkImage(
-              imageUrl: m.avatar.thumb,
-              placeholder: (context, url) => CupertinoActivityIndicator(),
-              width: 50,
-              height: 50
-            )
-          ),
-          Positioned(
-            child: Container(
-              width: 24,
-              height: 12,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: localeConverter().getFlagImage(m.region),
-                  fit: BoxFit.cover
+      Container(
+        margin: EdgeInsets.only(left: 5),
+        child: Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(25.0),
+              child: CachedNetworkImage(
+                imageUrl: m.avatar.thumb,
+                placeholder: (context, url) => Container(
+                  width: 50,
+                  height: 50,
+                  child: CupertinoActivityIndicator()
+                ),
+                width: 50,
+                height: 50
+              )
+            ),
+            Positioned(
+              child: Container(
+                width: 24,
+                height: 12,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: localeConverter().getFlagImage(m.region),
+                    fit: BoxFit.cover
+                  )
                 )
               )
             )
-          )
-        ]
+          ]
+        )
       )
     ).toList();
   }
