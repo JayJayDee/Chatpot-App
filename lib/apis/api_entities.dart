@@ -36,6 +36,10 @@ class AuthApiResp {
   toString() => "AUTH_API_RESP: $sessionKey";
 }
 
+enum RoomQueryOrder {
+  REGDATE_DESC, ATTENDEE_DESC
+}
+
 class RoomListApiResp {
   int all;
   int size;

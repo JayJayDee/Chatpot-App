@@ -25,12 +25,12 @@ class RoomApi {
   Future<RoomListApiResp> requestPublicRooms({
     int offset,
     int size,
-    String order
+    RoomQueryOrder order
   }) async {
     Map<String, dynamic> qsMap = Map();
     if (offset != null) qsMap['offset'] = offset;
     if (size != null) qsMap['size'] = size;
-    if (order != null) qsMap['order'] = order;
+    if (order != null) qsMap['order'] = order.toString();
 
     Map<String, dynamic> resp = await _requester.request(
       url: '/rooms',
