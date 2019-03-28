@@ -181,7 +181,7 @@ Future<bool> _showRoomDetailSheet(BuildContext context, Room room) async {
     context: context,
     builder: (BuildContext context) {
       return Container(
-        height: 160,
+        height: 170,
         margin: EdgeInsets.only(bottom: 50),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

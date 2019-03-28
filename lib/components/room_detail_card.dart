@@ -44,19 +44,34 @@ class _RoomDetailCard extends State<RoomDetailCard> {
   @override
   Widget build(BuildContext context) {
     if (_detail == null) {
-      return Center(
-        child: CupertinoActivityIndicator()
+      return Container(
+        height: 170,
+        decoration: BoxDecoration(
+          border: BorderDirectional(bottom: BorderSide(
+            width: 0.0,
+            color: CupertinoColors.inactiveGray
+          ))
+        ),
+        child: Center(
+          child: CupertinoActivityIndicator()
+        ),
       );
     }
     var memberListItems = _buildMemberListItems(_detail.members);
     return Container(
+      decoration: BoxDecoration(
+        border: BorderDirectional(bottom: BorderSide(
+          width: 0.0,
+          color: CupertinoColors.inactiveGray
+        ))
+      ),
       padding: EdgeInsets.all(10),
       child: Column(
         children: [
           Text(_detail.title,
             style: TextStyle(
-              color: Styles.primaryFontColor,
-              fontSize: 18
+              color: Styles.secondaryFontColor,
+              fontSize: 16
             )
           ),
           Padding(padding: EdgeInsets.only(top: 10)),
@@ -74,11 +89,17 @@ class _RoomDetailCard extends State<RoomDetailCard> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               CupertinoButton(
+                padding: EdgeInsets.all(0),
                 child: Text('Join room'),
                 onPressed: () {},
               ),
               CupertinoButton(
-                child: Text('Cancel'),
+                padding: EdgeInsets.all(0),
+                child: Text('Cancel',
+                  style: TextStyle(
+                    color: CupertinoColors.destructiveRed
+                  )
+                ),
                 onPressed: () {},
               )
             ]
