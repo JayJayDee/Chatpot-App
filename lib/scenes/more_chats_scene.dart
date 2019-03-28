@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:meta/meta.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
 
 class RoomSearchCondition {
@@ -14,8 +13,7 @@ class RoomSearchCondition {
   }
 }
 
-@immutable
-class MoreChatsScene extends StatelessWidget {
+class MoreChatsScene extends StatefulWidget {
 
   final RoomSearchCondition condition;
 
@@ -24,16 +22,37 @@ class MoreChatsScene extends StatelessWidget {
   );
 
   @override
+  _MoreChatsSceneState createState() =>
+    _MoreChatsSceneState(condition: condition);
+}
+
+class _MoreChatsSceneState extends State<MoreChatsScene> {
+
+  RoomSearchCondition _condition;
+
+  _MoreChatsSceneState({
+    @required RoomSearchCondition condition
+  }) {
+    _condition = condition;
+  }
+
+  @override
+  initState() {
+    print(_condition.order);
+    super.initState();
+  }
+  
+  @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        previousPageTitle: 'Back',
-        middle: Text('More chats'),
-        transitionBetweenRoutes: true
-      ),
-      child: SafeArea(
-        child: Center()
-      )
-    );
+        navigationBar: CupertinoNavigationBar(
+          previousPageTitle: 'Back',
+          middle: Text('More chats'),
+          transitionBetweenRoutes: true
+        ),
+        child: SafeArea(
+          child: Center()
+        )
+      );
   }
 }
