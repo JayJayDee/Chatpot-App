@@ -9,6 +9,7 @@ import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/components/room_row.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 import 'package:chatpot_app/scenes/more_chats_scene.dart';
+import 'package:chatpot_app/apis/api_entities.dart';
 
 @immutable
 class HomeScene extends StatelessWidget implements EventReceivable {
@@ -34,10 +35,17 @@ class HomeScene extends StatelessWidget implements EventReceivable {
   }
 
   void _onMoreRoomsClicked(BuildContext context, String type) {
+    var order;
+    if (type == 'crowded') order = RoomQueryOrder.ATTENDEE_DESC;
+    if (type == 'recent') order =RoomQueryOrder.REGDATE_DESC;
+
     Navigator.of(context).push(
       CupertinoPageRoute(
         title: 'More chats',
-        builder: (BuildContext context) => MoreChatsScene()
+        builder: (BuildContext context) =>
+          MoreChatsScene(RoomSearchCondition(
+            order: order
+          ))
       )
     );
   }
