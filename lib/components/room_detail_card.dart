@@ -7,24 +7,36 @@ import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
 
+typedef RoomSelectCallback (Room room);
+
 class RoomDetailCard extends StatefulWidget {
 
   final Room room;
+  final RoomSelectCallback roomSelected;
 
   RoomDetailCard({
-    this.room
+    this.room,
+    this.roomSelected
   });
 
-  _RoomDetailCard createState() => _RoomDetailCard(room);
+  _RoomDetailCard createState() => _RoomDetailCard(
+    room: room,
+    callback: roomSelected
+  );
 }
 
 class _RoomDetailCard extends State<RoomDetailCard> {
 
   Room _room;
   RoomDetail _detail;
+  RoomSelectCallback _callback;
 
-  _RoomDetailCard(Room room) {
+  _RoomDetailCard({
+    @required Room room,
+    @required RoomSelectCallback callback
+  }) {
     _room = room;
+    _callback = callback;
   }
 
   Future<void> initDetailCard() async {
@@ -44,8 +56,10 @@ class _RoomDetailCard extends State<RoomDetailCard> {
   @override
   Widget build(BuildContext context) {
     if (_detail == null) {
-      return Center(
-        child: CupertinoActivityIndicator()
+      return Container(
+        child: Center(
+          child: CupertinoActivityIndicator()
+        ),
       );
     }
     var memberListItems = _buildMemberListItems(_detail.members);
@@ -55,8 +69,8 @@ class _RoomDetailCard extends State<RoomDetailCard> {
         children: [
           Text(_detail.title,
             style: TextStyle(
-              color: Styles.primaryFontColor,
-              fontSize: 18
+              color: Styles.secondaryFontColor,
+              fontSize: 16
             )
           ),
           Padding(padding: EdgeInsets.only(top: 10)),
@@ -68,20 +82,6 @@ class _RoomDetailCard extends State<RoomDetailCard> {
               itemCount: memberListItems.length,
               itemBuilder: (BuildContext context, int idx) => memberListItems[idx]
             )
-          ),
-          Padding(padding: EdgeInsets.only(top: 5)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              CupertinoButton(
-                child: Text('Join room'),
-                onPressed: () {},
-              ),
-              CupertinoButton(
-                child: Text('Cancel'),
-                onPressed: () {},
-              )
-            ]
           )
         ]
       )

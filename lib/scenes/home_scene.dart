@@ -22,19 +22,17 @@ class HomeScene extends StatelessWidget implements EventReceivable {
   });
 
   void _onChatRowSelected(BuildContext context, Room room) async {
+    final model = ScopedModel.of<AppState>(context);
+    bool isJoin = await _showCupertinoRoomDetailSheet(context, room);
+    if (isJoin == true) {
+      var joinResp = await model.joinToRoom(room.roomToken);
 
-    await _showRoomDetailSheet(context, room);
-    // final model = ScopedModel.of<AppState>(context);
-    // bool isJoin = await _showJoinConfirm(context, room);
-    // if (isJoin == true) {
-    //   var joinResp = await model.joinToRoom(room.roomToken);
-
-    //   if (joinResp.success == true) {
-    //     Toast.show('Successfully joined to room', context, duration: 2);
-    //   } else {
-    //     Toast.show("Failed to join the room: ${joinResp.cause}", context, duration: 2);
-    //   }
-    // }
+      if (joinResp.success == true) {
+        Toast.show('Successfully joined to room', context, duration: 2);
+      } else {
+        Toast.show("Failed to join the room: ${joinResp.cause}", context, duration: 2);
+      }
+    }
   }
 
   void _onMoreRoomsClicked(BuildContext context, String type) {
@@ -181,7 +179,7 @@ Future<bool> _showRoomDetailSheet(BuildContext context, Room room) async {
     context: context,
     builder: (BuildContext context) {
       return Container(
-        height: 160,
+        height: 170,
         margin: EdgeInsets.only(bottom: 50),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -200,28 +198,28 @@ Future<bool> _showCupertinoRoomDetailSheet(BuildContext context, Room room) asyn
     builder: (BuildContext context) =>
       CupertinoActionSheet(
         message: Container(
-          height: 150,
+          padding: EdgeInsets.all(0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('asdf')
+              RoomDetailCard(room: room)
             ],
           )
         ),
         actions: [
           CupertinoActionSheetAction(
-            child: Text('A'),
-            onPressed: () {},
-          ),
-          CupertinoActionSheetAction(
-            child: Text('B'),
-            onPressed: () {},
+            child: Text('Join'),
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
           ),
           CupertinoActionSheetAction(
             child: Text('Cancel'),
             isDestructiveAction: true,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
           )
         ]
       )
