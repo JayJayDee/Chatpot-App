@@ -197,25 +197,30 @@ Future<bool> _showCupertinoRoomDetailSheet(BuildContext context, Room room) asyn
     context: context,
     builder: (BuildContext context) =>
       CupertinoActionSheet(
-        message: Container(
-          padding: EdgeInsets.all(0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              RoomDetailCard(room: room)
-            ],
-          )
+        message: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            RoomDetailCard(room: room)
+          ],
         ),
         actions: [
           CupertinoActionSheetAction(
-            child: Text('Join'),
+            child: Text('Join',
+              style: TextStyle(
+                fontSize: 17
+              )
+            ),
             onPressed: () {
               Navigator.pop(context, true);
             },
           ),
           CupertinoActionSheetAction(
-            child: Text('Cancel'),
+            child: Text('Cancel',
+              style: TextStyle(
+                fontSize: 17
+              )
+            ),
             isDestructiveAction: true,
             onPressed: () {
               Navigator.pop(context);

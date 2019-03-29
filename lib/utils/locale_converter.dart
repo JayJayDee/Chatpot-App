@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/entities/room.dart';
@@ -98,6 +99,24 @@ class LocaleConverter {
       else if (_language == 'ja') return "$day日前";     
     }
     return '';
+  }
+
+  String toDateTime(DateTime dt) {
+    DateFormat formatter;
+    if (_language == 'ko') formatter = DateFormat('yyyy년 M월 d일 hh시 mm분 ss초');
+    else if (_language == 'ja') formatter = DateFormat('yyyy年 M月 d日 hh時 mm分 ss秒');
+    else formatter = DateFormat('MMMM d, yyyy hh:mm:ss');
+    return formatter.format(dt);
+  }
+
+  String numMembersInRoom(List<Member> members) {
+    Map<String, int> regionMap = Map();
+    members.forEach((m) => regionMap[m.region] = 1);
+    int numCountry = regionMap.keys.length;
+    int numMember = members.length;
+    if (_language == 'ko') return "$numCountry개 국가의 $numMember명이 채팅중!";
+    else if (_language == 'ja') return "$numCountryカ国の$numMember人がチャット中です。";
+    return "$numCountry people from $numMember countries are chatting";
   }
 
   AssetImage getFlagImage(String regionCode) {
