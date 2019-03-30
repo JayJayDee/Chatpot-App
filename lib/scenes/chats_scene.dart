@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
@@ -9,6 +10,7 @@ import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/components/my_room_row.dart';
 import 'package:chatpot_app/scenes/new_chat_scene.dart';
 import 'package:chatpot_app/scenes/message_scene.dart';
+import 'package:chatpot_app/factory.dart';
 
 @immutable
 class ChatsScene extends StatelessWidget implements EventReceivable {
@@ -55,10 +57,10 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
     return CupertinoPageScaffold(
       backgroundColor: Styles.mainBackground,
       navigationBar: CupertinoNavigationBar(
-        middle: Text('Chats'),
+        middle: Text(locales().chats.title),
         trailing: CupertinoButton(
           padding: EdgeInsets.all(0),
-          child: Icon(CupertinoIcons.plus_circled),
+          child: Icon(MdiIcons.plus),
           onPressed: () => _onNewChatClicked(context)
         ),
       ),
@@ -69,7 +71,6 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
   }
 
   Future<void> onSelected(BuildContext context) async {
-    print('CHATS_SCENE');
     final model = ScopedModel.of<AppState>(context);
     await model.fetchMyRooms();
   }

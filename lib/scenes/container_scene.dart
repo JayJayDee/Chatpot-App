@@ -114,15 +114,15 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
         items: [
           BottomNavigationBarItem(
             icon: Icon(MdiIcons.tea),
-            title: Text('Lounge'),
+            title: Text(locales().home.title)
           ),
           BottomNavigationBarItem(
             icon: Icon(MdiIcons.chatProcessing),
-            title: Text('Chats'),
+            title: Text(locales().chats.title)
           ),
           BottomNavigationBarItem(
             icon: Icon(MdiIcons.settings),
-            title: Text('Settings'),
+            title: Text(locales().setting.title)
           )
         ],
         onTap: (int index) {

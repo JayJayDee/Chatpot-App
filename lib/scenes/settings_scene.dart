@@ -9,6 +9,7 @@ import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/scenes/login_scene.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
+import 'package:chatpot_app/factory.dart';
 
 @immutable
 class SettingsScene extends StatelessWidget implements EventReceivable {
@@ -47,6 +48,10 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
 
   }
 
+  void _onDonationClicked() async {
+
+  }
+
   @override
   Future<void> onSelected(BuildContext context) async {
     print('SETTINGS_SCENE');
@@ -55,26 +60,31 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
   @override
   Widget build(BuildContext context) {
     final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
-    var elems;
+    List<Widget> elems;
 
     if (model.member == null) {
       elems = <Widget>[
         buildNotLoginCard(context, loginSelectCallback: () => _onSigninClicked(context)),
-        _buildMenuItem('Sign in', () => _onSigninClicked(context)),
-        _buildMenuItem('About Chatpot..', _onAboutClicked)
+        _buildMenuItem(locales().setting.signin, () => _onSigninClicked(context)),
       ];
     } else {
       elems = <Widget> [
         buildProfileCard(context, editButton: true, editCallback: _onEditProfileClicked),
-        _buildMenuItem('Sign out', () => _onSignoutClicked(context)),
-        _buildMenuItem('About Chatpot..', _onAboutClicked)
+        _buildMenuItem(locales().setting.signout, () => _onSignoutClicked(context)),
       ];
     }
 
+    if (model.member != null && model.member.authType == AuthType.SIMPLE) {
+      elems.add(_buildMenuItem(locales().setting.linkMail, () {}));
+    }
+
+    elems.add(_buildMenuItem(locales().setting.about, _onAboutClicked));
+    elems.add(_buildMenuItem(locales().setting.donation, _onDonationClicked));
+
     return CupertinoPageScaffold(
       backgroundColor: Styles.mainBackground,
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('Settings')
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(locales().setting.title)
       ),
       child: SafeArea(
         child: ListView(
@@ -97,7 +107,11 @@ Widget _buildMenuItem(String title, VoidCallback pressedCallback) {
     child: CupertinoButton(
       child: Align(
         alignment: Alignment.centerLeft,
-        child: Text(title),
+        child: Text(title,
+          style: TextStyle(
+            fontSize: 16
+          )
+        ),
       ),
       onPressed: pressedCallback
     ),
@@ -107,25 +121,22 @@ Widget _buildMenuItem(String title, VoidCallback pressedCallback) {
 Future<dynamic> _showSignoutWarningDialog(BuildContext context, bool isSimple) {
   String content = '';
   if (isSimple == true) {
-    content = "You are now logged in as SIMPLE type.\n" + 
-    "If you log in this way, your account information will be lost when you sign out.\n" +
-    "To prevent this, you can link your mail account.\n"
-    "Are you sure you want to sign out?";
+    content = locales().setting.simpleSignoutWarning;
   } else {
-    content = 'Are you sure you want to sign out?';
+    content = locales().setting.signoutDialogTitle;
   }
   return showCupertinoDialog<String>(
     context: context,
     builder: (BuildContext context) => CupertinoAlertDialog(
-      title: Text('Sign out'),
+      title: Text(locales().setting.signout),
       content: Text(content),
       actions: <Widget>[
         CupertinoDialogAction(
-          child: Text('Sign out'),
+          child: Text(locales().setting.signout),
           onPressed: () => Navigator.pop(context, 'SIGNOUT')
         ),
         CupertinoDialogAction(
-          child: Text('Cancel'),
+          child: Text(locales().setting.cancel),
           onPressed: () => Navigator.pop(context),
           isDefaultAction: true,
           isDestructiveAction: true,

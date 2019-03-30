@@ -14,7 +14,7 @@ Widget buildProfileCard(BuildContext context, {
   if (editButton == null) editButton = false;
 
   String nick;
-  if (model.member != null) nick = localeConverter().getNick(model.member.nick);
+  if (model.member != null) nick = locales().getNick(model.member.nick);
   return Container(
     padding: EdgeInsets.all(10),
     child: Card(

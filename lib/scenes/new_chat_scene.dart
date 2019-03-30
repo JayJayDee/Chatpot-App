@@ -3,6 +3,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:toast/toast.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/models/app_state.dart';
+import 'package:chatpot_app/factory.dart';
 
 String _inputedRoomTitle = '';
 String _inputedMaxAttendee = '';
@@ -34,8 +35,8 @@ class NewChatScene extends StatelessWidget {
     return CupertinoPageScaffold(
       backgroundColor: Styles.mainBackground,
       navigationBar: CupertinoNavigationBar(
-        previousPageTitle: 'Back',
-        middle: Text('New chat'),
+        previousPageTitle: locales().chats.title,
+        middle: Text(locales().newchat.title),
         transitionBetweenRoutes: true
       ),
       child: SafeArea(
@@ -46,18 +47,18 @@ class NewChatScene extends StatelessWidget {
               scrollDirection: Axis.vertical,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.only(left: 10, top: 10, right: 10),
-                  child: Text('Creates a new chat.',
+                  padding: EdgeInsets.only(left: 10, top: 20, right: 10, bottom: 20),
+                  child: Text(locales().newchat.header,
                     style: TextStyle(
                       color: Styles.primaryFontColor,
-                      fontSize: 15
+                      fontSize: 16
                     )
                   )
                 ),
                 _buildRoomTitleField((String value) => _inputedRoomTitle = value),
                 _buildMaxAttendeefield((String value) => _inputedMaxAttendee = value),
                 Container(
-                  padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+                  padding: EdgeInsets.only(top: 50, left: 10, right: 10),
                   child: _buildNewChatButton(context, () => _onClickNewChat(context))
                 )
               ],
@@ -83,7 +84,7 @@ Widget _buildRoomTitleField(ValueChanged<String> valueChanged) {
       ),
       onChanged: valueChanged,
       padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
-      placeholder: 'Room title here',
+      placeholder: locales().newchat.placeHolderTitle,
       keyboardType: TextInputType.emailAddress,
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
@@ -103,7 +104,7 @@ Widget _buildMaxAttendeefield(ValueChanged<String> valueChanged) {
       ),
       onChanged: valueChanged,
       padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
-      placeholder: 'number of max attendee (2 ~ 10)',
+      placeholder: locales().newchat.placeHolderMaxAttendee,
       keyboardType: TextInputType.number,
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
@@ -124,7 +125,11 @@ Widget _buildNewChatButton(BuildContext context, VoidCallback callback) {
   if (model.loading == false) conditionalCallback = callback;
   
   return CupertinoButton(
-    child: Text('Create a new chat'),
+    child: Text(locales().newchat.buttonCreate,
+      style: TextStyle(
+        fontSize: 15
+      )
+    ),
     color: CupertinoColors.activeBlue,
     onPressed: conditionalCallback
   );

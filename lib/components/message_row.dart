@@ -132,7 +132,7 @@ class _OtherMessageRow extends StatelessWidget {
                     height: 12,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: localeConverter().getFlagImage(message.from.region),
+                        image: locales().getFlagImage(message.from.region),
                         fit: BoxFit.cover
                       )
                     )
@@ -147,7 +147,7 @@ class _OtherMessageRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text(localeConverter().getNick(message.from.nick),
+                Text(locales().getNick(message.from.nick),
                   style: TextStyle(
                     fontSize: 13,
                     color: Styles.secondaryFontColor
@@ -190,7 +190,7 @@ Widget _receiveTimeIndicator(Message msg) {
       )
     );
   }
-  return Text(localeConverter().messageReceiveTime(msg.sentTime),
+  return Text(locales().message.messageReceiveTime(msg.sentTime),
     style: TextStyle(
       fontSize: 12,
       color: Styles.secondaryFontColor

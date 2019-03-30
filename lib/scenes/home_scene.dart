@@ -11,6 +11,7 @@ import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 import 'package:chatpot_app/scenes/more_chats_scene.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/components/room_detail_card.dart';
+import 'package:chatpot_app/factory.dart';
 
 @immutable
 class HomeScene extends StatelessWidget implements EventReceivable {
@@ -61,7 +62,7 @@ class HomeScene extends StatelessWidget implements EventReceivable {
     return CupertinoPageScaffold(
       backgroundColor: Styles.mainBackground,
       navigationBar: CupertinoNavigationBar(
-        middle: Text('Lounge')
+        middle: Text(locales().home.title)
       ),
       child: SafeArea(
         child: ListView.builder(
@@ -93,7 +94,7 @@ List<Widget> _buildListViewItems(BuildContext context, {
 
   widgets.add(_buildRoomsHeader(context,
     type: 'recent',
-    title: 'Recent chats',
+    title: locales().home.recentChatHeader,
     detailButtonCallback: moreRoom
   ));
   var recentRoomRows = model.recentRooms.map((r) =>
@@ -102,7 +103,7 @@ List<Widget> _buildListViewItems(BuildContext context, {
 
   widgets.add(_buildRoomsHeader(context,
     type: 'crowded',
-    title: 'Most crowded chats',
+    title: locales().home.crowdedChatHeader,
     detailButtonCallback: moreRoom
   ));
   var crowdedRoomRows = model.crowdedRooms.map((r) =>
@@ -139,7 +140,7 @@ Widget _buildRoomsHeader(BuildContext context, {
         Container(
           child: CupertinoButton(
             padding: EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
-            child: Text('More chats ..',
+            child: Text(locales().home.moreChat,
               style: TextStyle(
                 fontSize: 13
               ),
@@ -150,46 +151,6 @@ Widget _buildRoomsHeader(BuildContext context, {
       ]
     )
   );
-}
-
-Future<bool> _showJoinConfirm(BuildContext context, Room room) {
-  String content = "Title: ${room.title}\n\nDo you really want to enter the chat room?";
-  return showCupertinoDialog<bool>(
-    context: context,
-    builder: (BuildContext context) => CupertinoAlertDialog(
-      title: Text('Join chat'),
-      content: Text(content),
-      actions: <Widget>[
-        CupertinoDialogAction(
-          child: Text('Join'),
-          onPressed: () => Navigator.pop(context, true),
-        ),
-        CupertinoDialogAction(
-          child: Text('Cancel'),
-          onPressed: () => Navigator.pop(context, false),
-          isDestructiveAction: true
-        )
-      ]
-    )
-  );
-}
-
-Future<bool> _showRoomDetailSheet(BuildContext context, Room room) async {
-  return await showModalBottomSheet<bool>(
-    context: context,
-    builder: (BuildContext context) {
-      return Container(
-        height: 170,
-        margin: EdgeInsets.only(bottom: 50),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            RoomDetailCard(room: room)
-          ]
-        )
-      );
-    });
 }
 
 Future<bool> _showCupertinoRoomDetailSheet(BuildContext context, Room room) async {
@@ -206,7 +167,7 @@ Future<bool> _showCupertinoRoomDetailSheet(BuildContext context, Room room) asyn
         ),
         actions: [
           CupertinoActionSheetAction(
-            child: Text('Join',
+            child: Text(locales().home.joinChat,
               style: TextStyle(
                 fontSize: 17
               )
@@ -216,7 +177,7 @@ Future<bool> _showCupertinoRoomDetailSheet(BuildContext context, Room room) asyn
             },
           ),
           CupertinoActionSheetAction(
-            child: Text('Cancel',
+            child: Text(locales().home.cancelChat,
               style: TextStyle(
                 fontSize: 17
               )

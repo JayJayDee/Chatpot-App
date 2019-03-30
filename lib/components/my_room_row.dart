@@ -90,7 +90,7 @@ class MyRoomRow extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
-                      localeConverter().myRoomSubtitle(myRoom),
+                      locales().room.myRoomSubtitle(myRoom),
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 14.0,
@@ -103,7 +103,7 @@ class MyRoomRow extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
-                      localeConverter().myRoomRecentMessage(myRoom.lastMessage),
+                      locales().room.myRoomRecentMessage(myRoom.lastMessage),
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 14.0,
