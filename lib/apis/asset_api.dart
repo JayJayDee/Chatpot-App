@@ -16,11 +16,12 @@ class AssetApi {
   Future<AssetUploadResp> uploadImage(File file, {
     UploadProgressCallback callback    
   }) async {
-    await _requester.upload(
+    Map<String, dynamic> resp = await _requester.upload(
       url: '/image/upload',
       method: HttpMethod.POST,
-      file: file
+      file: file,
+      progress: callback
     );
-    return null;
+    return AssetUploadResp.fromJson(resp);
   }
 }

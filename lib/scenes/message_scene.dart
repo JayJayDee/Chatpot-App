@@ -34,8 +34,12 @@ class _MessageSceneState extends State<MessageScene> {
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
     
-    assetApi().uploadImage(image);
-    // TODO: image upload.
+    await assetApi().uploadImage(image,
+      callback: (prog) {
+        print("IMAGE_UPLOAD_PROGRESS = $prog");
+      }
+    );
+    print('IMAGE UPLOAD DONE');
   }
 
   Future<void> _onMessageSend(BuildContext context) async {

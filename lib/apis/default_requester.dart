@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:path/path.dart';
 import 'package:async/async.dart';
 import 'package:meta/meta.dart';
@@ -78,25 +80,23 @@ class DefaultRequester implements Requester {
     Map<String, dynamic> qs,
     UploadProgressCallback progress
   }) async {
-    var stream = http.ByteStream(DelegatingStream.typed(file.openRead()));
-    int length = await stream.length;
+    var dio = Dio();
     String wholeUrl = _buildWholeUrl("$_baseUrl$url", qs: qs);
-    print("UPLOAD_URL = $wholeUrl");
     try {
-      var uri = Uri.parse(wholeUrl);
-      print('uri made');
-      var request = new http.MultipartRequest('POST', uri);
-      request.files.add(new http.MultipartFile('image', stream, length,
-        filename: basename(file.path)
-      ));
-      print('req made');
-      var resp = await request.send();
-      print('req completed');
-      print(resp.statusCode);
-      resp.stream.transform(utf8.decoder).listen((value) => print(value));
+      FormData formData = FormData.from({
+        "image": UploadFileInfo(file, basename(file.path))
+      });
+      var resp = await dio.post(wholeUrl,
+        data: formData,
+        onSendProgress: (received, total) {
+          int percent = (received / total * 100).round();
+          if (progress != null) progress(percent);
+        }
+      );
+      Map<String, dynamic> respMap = jsonDecode(resp.toString());
+      return respMap;
     } catch (err) {
-      print('UPLOAD_ERROR OCCURED!!');
-      print(err);
+      throw err;
     }
   }
 
