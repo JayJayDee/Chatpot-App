@@ -9,6 +9,7 @@ import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/message.dart';
 import 'package:chatpot_app/components/message_row.dart';
 import 'package:chatpot_app/styles.dart';
+import 'package:chatpot_app/factory.dart';
 
 @immutable
 class MessageScene extends StatefulWidget {
@@ -48,7 +49,6 @@ class _MessageSceneState extends State<MessageScene> {
     MyRoom room = model.currentRoom;
     room.messages.clearNotViewed();
     await model.fetchMoreMessages(roomToken: room.roomToken);
-    print("ROOM MESSAGE FETCHED, room:${room.title}, size:${model.messages.length}");
   }
 
   Future<void> _onRoomLeaveClicked(BuildContext context) async {
@@ -78,11 +78,11 @@ class _MessageSceneState extends State<MessageScene> {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        previousPageTitle: 'Chats',
+        previousPageTitle: locales().chats.title,
         middle: Text(room.title), 
         trailing: CupertinoButton(
           padding: EdgeInsets.all(0),
-          child: Text('Leave'),
+          child: Text(locales().msgscene.leave),
           onPressed: () => _onRoomLeaveClicked(context)
         ),
         transitionBetweenRoutes: true
@@ -180,15 +180,15 @@ Future<bool> _showLeaveDialog(BuildContext context) async =>
   showCupertinoDialog<bool>(
     context: context,
     builder: (BuildContext context) => CupertinoAlertDialog(
-      title: Text('Leaving room'),
-      content: Text('Are you sure leaving from this room?'),
+      title: Text(locales().msgscene.leaveDialogTitle),
+      content: Text(locales().msgscene.leaveDialogText),
       actions: <Widget>[
         CupertinoDialogAction(
-          child: Text('Leave'),
+          child: Text(locales().msgscene.leave),
           onPressed: () => Navigator.pop(context, true)
         ),
         CupertinoDialogAction(
-          child: Text('Cancel'),
+          child: Text(locales().msgscene.cancel),
           onPressed: () => Navigator.pop(context, false),
           isDestructiveAction: true
         )
