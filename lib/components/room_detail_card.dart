@@ -70,7 +70,8 @@ class _RoomDetailCard extends State<RoomDetailCard> {
           Text(_detail.title,
             style: TextStyle(
               color: Styles.secondaryFontColor,
-              fontSize: 16
+              fontSize: 18,
+              fontWeight: FontWeight.normal
             )
           ),
           Padding(padding: EdgeInsets.only(top: 10)),
@@ -81,6 +82,20 @@ class _RoomDetailCard extends State<RoomDetailCard> {
               physics: AlwaysScrollableScrollPhysics(),
               itemCount: memberListItems.length,
               itemBuilder: (BuildContext context, int idx) => memberListItems[idx]
+            )
+          ),
+          Padding(padding: EdgeInsets.only(top: 10)),
+          Text(
+            localeConverter().toDateTime(_room.regDate),
+            style: TextStyle(
+              fontWeight: FontWeight.normal
+            )
+          ),
+          Padding(padding: EdgeInsets.only(top: 5)),
+          Text(
+            localeConverter().numMembersInRoom(_detail.members),
+            style: TextStyle(
+              fontWeight: FontWeight.normal
             )
           )
         ]
