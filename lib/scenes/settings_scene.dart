@@ -60,23 +60,26 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
   @override
   Widget build(BuildContext context) {
     final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
-    var elems;
+    List<Widget> elems;
 
     if (model.member == null) {
       elems = <Widget>[
         buildNotLoginCard(context, loginSelectCallback: () => _onSigninClicked(context)),
         _buildMenuItem(locales().setting.signin, () => _onSigninClicked(context)),
-        _buildMenuItem(locales().setting.about, _onAboutClicked),
-        _buildMenuItem(locales().setting.donation, _onDonationClicked)
       ];
     } else {
       elems = <Widget> [
         buildProfileCard(context, editButton: true, editCallback: _onEditProfileClicked),
         _buildMenuItem(locales().setting.signout, () => _onSignoutClicked(context)),
-        _buildMenuItem(locales().setting.about, _onAboutClicked),
-        _buildMenuItem(locales().setting.donation, _onDonationClicked)
       ];
     }
+
+    if (model.member != null && model.member.authType == AuthType.SIMPLE) {
+      elems.add(_buildMenuItem(locales().setting.linkMail, () {}));
+    }
+
+    elems.add(_buildMenuItem(locales().setting.about, _onAboutClicked));
+    elems.add(_buildMenuItem(locales().setting.donation, _onDonationClicked));
 
     return CupertinoPageScaffold(
       backgroundColor: Styles.mainBackground,
@@ -118,25 +121,22 @@ Widget _buildMenuItem(String title, VoidCallback pressedCallback) {
 Future<dynamic> _showSignoutWarningDialog(BuildContext context, bool isSimple) {
   String content = '';
   if (isSimple == true) {
-    content = "You are now logged in as SIMPLE type.\n" + 
-    "If you log in this way, your account information will be lost when you sign out.\n" +
-    "To prevent this, you can link your mail account.\n"
-    "Are you sure you want to sign out?";
+    content = locales().setting.simpleSignoutWarning;
   } else {
-    content = 'Are you sure you want to sign out?';
+    content = locales().setting.signoutDialogTitle;
   }
   return showCupertinoDialog<String>(
     context: context,
     builder: (BuildContext context) => CupertinoAlertDialog(
-      title: Text('Sign out'),
+      title: Text(locales().setting.signout),
       content: Text(content),
       actions: <Widget>[
         CupertinoDialogAction(
-          child: Text('Sign out'),
+          child: Text(locales().setting.signout),
           onPressed: () => Navigator.pop(context, 'SIGNOUT')
         ),
         CupertinoDialogAction(
-          child: Text('Cancel'),
+          child: Text(locales().setting.cancel),
           onPressed: () => Navigator.pop(context),
           isDefaultAction: true,
           isDestructiveAction: true,

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
@@ -59,7 +60,7 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
         middle: Text(locales().chats.title),
         trailing: CupertinoButton(
           padding: EdgeInsets.all(0),
-          child: Icon(CupertinoIcons.plus_circled),
+          child: Icon(MdiIcons.plus),
           onPressed: () => _onNewChatClicked(context)
         ),
       ),

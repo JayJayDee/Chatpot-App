@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
+import 'package:chatpot_app/factory.dart';
 
 class RoomSearchCondition {
   String query;
@@ -46,8 +47,8 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          previousPageTitle: 'Back',
-          middle: Text('More chats'),
+          previousPageTitle: locales().home.title,
+          middle: Text(locales().morechat.title),
           transitionBetweenRoutes: true
         ),
         child: SafeArea(
