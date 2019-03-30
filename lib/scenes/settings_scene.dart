@@ -9,6 +9,7 @@ import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/scenes/login_scene.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
+import 'package:chatpot_app/factory.dart';
 
 @immutable
 class SettingsScene extends StatelessWidget implements EventReceivable {
@@ -47,6 +48,10 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
 
   }
 
+  void _onDonationClicked() async {
+
+  }
+
   @override
   Future<void> onSelected(BuildContext context) async {
     print('SETTINGS_SCENE');
@@ -60,21 +65,23 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
     if (model.member == null) {
       elems = <Widget>[
         buildNotLoginCard(context, loginSelectCallback: () => _onSigninClicked(context)),
-        _buildMenuItem('Sign in', () => _onSigninClicked(context)),
-        _buildMenuItem('About Chatpot..', _onAboutClicked)
+        _buildMenuItem(locales().setting.signin, () => _onSigninClicked(context)),
+        _buildMenuItem(locales().setting.about, _onAboutClicked),
+        _buildMenuItem(locales().setting.donation, _onDonationClicked)
       ];
     } else {
       elems = <Widget> [
         buildProfileCard(context, editButton: true, editCallback: _onEditProfileClicked),
-        _buildMenuItem('Sign out', () => _onSignoutClicked(context)),
-        _buildMenuItem('About Chatpot..', _onAboutClicked)
+        _buildMenuItem(locales().setting.signout, () => _onSignoutClicked(context)),
+        _buildMenuItem(locales().setting.about, _onAboutClicked),
+        _buildMenuItem(locales().setting.donation, _onDonationClicked)
       ];
     }
 
     return CupertinoPageScaffold(
       backgroundColor: Styles.mainBackground,
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('Settings')
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(locales().setting.title)
       ),
       child: SafeArea(
         child: ListView(
@@ -97,7 +104,11 @@ Widget _buildMenuItem(String title, VoidCallback pressedCallback) {
     child: CupertinoButton(
       child: Align(
         alignment: Alignment.centerLeft,
-        child: Text(title),
+        child: Text(title,
+          style: TextStyle(
+            fontSize: 16
+          )
+        ),
       ),
       onPressed: pressedCallback
     ),
