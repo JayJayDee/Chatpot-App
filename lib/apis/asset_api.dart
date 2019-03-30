@@ -12,4 +12,15 @@ class AssetApi {
   }) {
     _requester = requester;
   }
+
+  Future<AssetUploadResp> uploadImage(File file, {
+    UploadProgressCallback callback    
+  }) async {
+    await _requester.upload(
+      url: '/image/upload',
+      method: HttpMethod.POST,
+      file: file
+    );
+    return null;
+  }
 }

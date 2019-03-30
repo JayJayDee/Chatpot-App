@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
+import 'package:path/path.dart';
 import 'package:async/async.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
@@ -79,9 +80,24 @@ class DefaultRequester implements Requester {
   }) async {
     var stream = http.ByteStream(DelegatingStream.typed(file.openRead()));
     int length = await stream.length;
-    var request = new http.MultipartRequest('POST', Uri.parse("$_baseUrl$url"));
-
-    // TODO: implementation required
+    String wholeUrl = _buildWholeUrl("$_baseUrl$url", qs: qs);
+    print("UPLOAD_URL = $wholeUrl");
+    try {
+      var uri = Uri.parse(wholeUrl);
+      print('uri made');
+      var request = new http.MultipartRequest('POST', uri);
+      request.files.add(new http.MultipartFile('image', stream, length,
+        filename: basename(file.path)
+      ));
+      print('req made');
+      var resp = await request.send();
+      print('req completed');
+      print(resp.statusCode);
+      resp.stream.transform(utf8.decoder).listen((value) => print(value));
+    } catch (err) {
+      print('UPLOAD_ERROR OCCURED!!');
+      print(err);
+    }
   }
 
   Future<dynamic> uploadWithAuth({
@@ -91,7 +107,7 @@ class DefaultRequester implements Requester {
     Map<String, dynamic> qs,
     UploadProgressCallback progress
   }) async {
-    
+    // TODO: to be implemented.
   }
 
   Future<dynamic> requestWithAuth({

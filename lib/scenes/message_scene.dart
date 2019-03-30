@@ -33,7 +33,8 @@ class _MessageSceneState extends State<MessageScene> {
   Future<void> _onImageSentClicked(BuildContext context) async {
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
-    print(image.uri);
+    
+    assetApi().uploadImage(image);
     // TODO: image upload.
   }
 
