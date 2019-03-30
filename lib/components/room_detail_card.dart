@@ -86,14 +86,14 @@ class _RoomDetailCard extends State<RoomDetailCard> {
           ),
           Padding(padding: EdgeInsets.only(top: 10)),
           Text(
-            localeConverter().toDateTime(_room.regDate),
+            locales().toDateTime(_room.regDate),
             style: TextStyle(
               fontWeight: FontWeight.normal
             )
           ),
           Padding(padding: EdgeInsets.only(top: 5)),
           Text(
-            localeConverter().numMembersInRoom(_detail.members),
+            locales().room.numMembersInRoom(_detail.members),
             style: TextStyle(
               fontWeight: FontWeight.normal
             )
@@ -129,7 +129,7 @@ class _RoomDetailCard extends State<RoomDetailCard> {
                 height: 12,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: localeConverter().getFlagImage(m.region),
+                    image: locales().getFlagImage(m.region),
                     fit: BoxFit.cover
                   )
                 )

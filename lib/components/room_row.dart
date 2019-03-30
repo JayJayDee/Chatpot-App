@@ -54,7 +54,7 @@ class RoomRow extends StatelessWidget {
                       height: 15,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: localeConverter().getFlagImage(room.owner.region),
+                          image: locales().getFlagImage(room.owner.region),
                           fit: BoxFit.cover
                         )
                       ),
@@ -82,7 +82,7 @@ class RoomRow extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
-                      localeConverter().roomSubtitle(room),
+                      locales().room.roomSubtitle(room),
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 14.0,

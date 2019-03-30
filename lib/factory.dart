@@ -11,7 +11,7 @@ import 'package:chatpot_app/apis/room_api.dart';
 import 'package:chatpot_app/apis/message_api.dart';
 import 'package:chatpot_app/utils/auth_crypter.dart';
 import 'package:chatpot_app/utils/default_auth_crypter.dart';
-import 'package:chatpot_app/utils/locale_converter.dart';
+import 'package:chatpot_app/locales/root_locale_converter.dart';
 import 'package:chatpot_app/services/push_service.dart';
 
 Map<String, dynamic> _instances;
@@ -21,7 +21,7 @@ void initFactory() {
   _instances['FirebaseMessaging'] = FirebaseMessaging();
   _instances['AuthAccessor'] = PrefAuthAccessor();
   _instances['AuthCrypter'] = DefaultAuthCrypter();
-  _instances['LocaleConverter'] = LocaleConverter();
+  _instances['LocaleConverter'] = RootLocaleConverter();
   _instances['MessagesAccessor'] = SqliteMessagesAccessor(dbName: 'messages.db');
 
   _instances['MemberRequester'] = _initMemberRequester();
@@ -65,7 +65,7 @@ MemberApi memberApi() => _instances['MemberApi'];
 RoomApi roomApi() => _instances['RoomApi'];
 MessageApi messageApi() => _instances['MessageApi'];
 AuthCrypter authCrypter() => _instances['AuthCrypter'];
-LocaleConverter localeConverter() => _instances['LocaleConverter'];
+RootLocaleConverter locales() => _instances['LocaleConverter'];
 FirebaseMessaging firebaseMessaging() => _instances['FirebaseMessaging'];
 PushService pushService() => _instances['PushService'];
 MessagesAccessor messagesAccessor() => _instances['MessagesAccessor'];

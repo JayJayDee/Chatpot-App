@@ -27,7 +27,7 @@ class SplashScene extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    localeConverter().selectLanguage(context);
+    locales().selectLanguage(context);
     if (_init == false) {
       onCreate(context);
       _init = true;
