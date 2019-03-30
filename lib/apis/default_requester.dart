@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:convert';
+import 'package:async/async.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 import 'package:query_params/query_params.dart';
@@ -66,6 +68,30 @@ class DefaultRequester implements Requester {
       ret = respList;
     } 
     return ret;
+  }
+
+  Future<dynamic> upload({
+    @required String url,
+    @required HttpMethod method,
+    @required File file,
+    Map<String, dynamic> qs,
+    UploadProgressCallback progress
+  }) async {
+    var stream = http.ByteStream(DelegatingStream.typed(file.openRead()));
+    int length = await stream.length;
+    var request = new http.MultipartRequest('POST', Uri.parse("$_baseUrl$url"));
+
+    // TODO: implementation required
+  }
+
+  Future<dynamic> uploadWithAuth({
+    @required String url,
+    @required HttpMethod method,
+    @required File file,
+    Map<String, dynamic> qs,
+    UploadProgressCallback progress
+  }) async {
+    
   }
 
   Future<dynamic> requestWithAuth({
