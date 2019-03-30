@@ -21,19 +21,19 @@ class MessageLocales {
     } else if (diff >= 60 && diff < 3600) {
       int min = (diff / 60).round();
       if (language == 'ko') return "$min분 전";
-      else if (language == 'en') return "${min}minutes ago";
+      else if (language == 'en') return "$min minutes ago";
       else if (language == 'ja') return "$min分前";
 
     } else if (diff >= 3600 && diff <= 86400) {
       int hour = (diff / 3600).round();
       if (language == 'ko') return "$hour시간 전";
-      else if (language == 'en') return "${hour}hours ago";
+      else if (language == 'en') return "$hour hours ago";
       else if (language == 'ja') return "$hour時間前";     
 
     } else {
       int day = (diff / 86400).round();
       if (language == 'ko') return "$day일 전";
-      else if (language == 'en') return "${day}days ago";
+      else if (language == 'en') return "$day days ago";
       else if (language == 'ja') return "$day日前";
     }
     return '';
