@@ -57,6 +57,8 @@
 	</array>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<string>NO</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>uploads user photo to chat room</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>

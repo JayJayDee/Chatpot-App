@@ -114,3 +114,17 @@ class FeaturedRoomsResp {
     return resp;
   }
 }
+
+class AssetUploadResp {
+  String orig;
+  String thumbnail;
+
+  AssetUploadResp();
+
+  factory AssetUploadResp.fromJson(Map<String, dynamic> map) {
+    var resp = AssetUploadResp();
+    resp.orig = map['orig'];
+    resp.thumbnail = map['thumbnail'];
+    return resp;
+  } 
+}

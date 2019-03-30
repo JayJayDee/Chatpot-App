@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:toast/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +29,13 @@ class _MessageSceneState extends State<MessageScene> {
   String _inputedMessage;
   TextEditingController _messageInputFieldCtrl = TextEditingController();
   ScrollController _scrollController = ScrollController();
+
+  Future<void> _onImageSentClicked(BuildContext context) async {
+    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (image == null) return;
+    print(image.uri);
+    // TODO: image upload.
+  }
 
   Future<void> _onMessageSend(BuildContext context) async {
     if (_inputedMessage == null || _inputedMessage.trim().length == 0) {
@@ -101,6 +110,7 @@ class _MessageSceneState extends State<MessageScene> {
                 _buildEditText(context, 
                   controller: _messageInputFieldCtrl,
                   valueChanged: (String value) => setState(() => _inputedMessage = value),
+                  imageSelected: () => _onImageSentClicked(context),
                   sendClicked: () => _onMessageSend(context)
                 )
               ]
@@ -135,6 +145,7 @@ Widget _buildListView(BuildContext context, {
 Widget _buildEditText(BuildContext context, {
   @required TextEditingController controller,
   @required ValueChanged<String> valueChanged,
+  @required VoidCallback imageSelected,
   @required VoidCallback sendClicked
 }) {
   return Container(
@@ -145,9 +156,7 @@ Widget _buildEditText(BuildContext context, {
         CupertinoButton(
           padding: EdgeInsets.all(5),
           child: Icon(Icons.photo),
-          onPressed: () {
-
-          }
+          onPressed: imageSelected
         ),
         Expanded(
           child: CupertinoTextField(
