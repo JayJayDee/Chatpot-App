@@ -220,8 +220,8 @@ Widget _getLoadingImageContentWidget(Message message) =>
     )
   );
 
-Widget _getRemoteImageContentWidget(Message message) =>
-  ClipRRect(
+Widget _getRemoteImageContentWidget(Message message) {
+  return ClipRRect(
     borderRadius: BorderRadius.circular(10.0),
     child: CachedNetworkImage(
       imageUrl: message.getImageContent().thumbnailUrl,
@@ -230,6 +230,7 @@ Widget _getRemoteImageContentWidget(Message message) =>
       height: 150,
     )
   );
+}
 
 Widget _getTextContentWidget(Message message) =>
   ClipRRect(

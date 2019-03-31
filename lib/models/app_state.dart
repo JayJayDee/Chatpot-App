@@ -280,7 +280,8 @@ class AppState extends Model {
 
   Future<void> publishMessage({
     @required MessageType type,
-    @required dynamic content
+    @required dynamic content,
+    String previousMessageId
   }) async {
     if (_currentRoom == null) return;
     var publishResult =  await messageApi().requestPublishToRoom(
@@ -290,7 +291,20 @@ class AppState extends Model {
       content: content
     );
     String messageId = publishResult.messageId;
-    Message newMsg = Message();
+
+    Message newMsg;
+    
+    if (previousMessageId == null) {
+      newMsg = Message();
+    } else {
+      List<Message> found = _currentRoom.messages.messages.where((m) =>
+        m.messageId == previousMessageId).toList();
+      if (found.length > 0) {
+        newMsg = found[0];
+      } else {
+        newMsg = Message();
+      }
+    }
 
     var to = MessageTo();
     to.type = MessageTarget.ROOM;
@@ -303,12 +317,15 @@ class AppState extends Model {
     newMsg.from = _member;
     newMsg.to = to;
     newMsg.changeToSending();
-    _currentRoom.messages.appendSingleMessage(newMsg);
+
+    if (previousMessageId == null) {
+      _currentRoom.messages.appendSingleMessage(newMsg);
+    }
 
     notifyListeners();
   }
 
-  Future<void> uploadImage({
+  Future<ImageContent> uploadImage({
     @required File image,
     @required String tempMessageId
   }) async {
@@ -318,6 +335,7 @@ class AppState extends Model {
     to.type = MessageTarget.ROOM;
     to.token = _currentRoom.roomToken;
     msg.to = to;
+    msg.changeToSending();
 
     msg.messageId = tempMessageId;
     msg.messageType = MessageType.IMAGE;
@@ -339,6 +357,12 @@ class AppState extends Model {
       imageUrl: resp.orig,
       thumbUrl: resp.thumbnail
     );
+    currentRoom.messages.dumpQueuedMessagesToMessage();
     notifyListeners();
+    ImageContent content = ImageContent(
+      imageUrl: resp.orig,
+      thumbnailUrl: resp.thumbnail
+    );
+    return content;
   }
 }

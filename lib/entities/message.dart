@@ -22,6 +22,7 @@ class Message {
     _isSending = false;
     _attachedImageStatus = null;
     _imageUploadProgress = 0;
+    _attachedImageStatus = AttchedImageStatus.REMOTE_IMAGE;
   }
 
   factory Message.fromJson(Map<String, dynamic> map) {
@@ -71,7 +72,9 @@ class Message {
 
   ImageContent getImageContent() {
     if (messageType != MessageType.IMAGE) return null;
-    return ImageContent.fromJson(content);
+    if (content is ImageContent) return content;
+    Map<String, dynamic> converted = Map.from(content);
+    return ImageContent.fromJson(converted);
   }
 
   NotificationContent getNotificationContent() {
@@ -123,14 +126,14 @@ class ImageContent {
     @required this.thumbnailUrl
   }); 
 
-  factory ImageContent.fromJson(Map<dynamic, String> map) =>
+  factory ImageContent.fromJson(Map<String, dynamic> map) =>
     ImageContent(
       imageUrl: map['image_url'],
       thumbnailUrl: map['thumb_url']
     );
 
-  Map<dynamic, String> toJson() {
-    Map<dynamic, String> resp = Map();
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> resp = Map();
     resp['image_url'] = imageUrl;
     resp['thumb_url'] = thumbnailUrl;
     return resp;
