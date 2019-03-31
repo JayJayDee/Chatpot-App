@@ -22,24 +22,47 @@ class MessageScene extends StatefulWidget {
   _MessageSceneState createState() => _MessageSceneState();
 }
 
-class _MessageSceneState extends State<MessageScene> {
-
+class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver {
   bool _inited = false;
   AppState _model;
   String _inputedMessage;
   TextEditingController _messageInputFieldCtrl = TextEditingController();
   ScrollController _scrollController = ScrollController();
 
+  String _generateTemporaryMessageId() =>
+    "${DateTime.now().millisecondsSinceEpoch}";
+
   Future<void> _onImageSentClicked(BuildContext context) async {
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
+
+    String tempMessageId = _generateTemporaryMessageId();
+    Message msg = Message();
     
-    await assetApi().uploadImage(image,
+    MessageTo to = MessageTo();
+    to.type = MessageTarget.ROOM;
+    to.token = _model.currentRoom.roomToken;
+    msg.to = to;
+
+    msg.messageId = tempMessageId;
+    msg.messageType = MessageType.IMAGE;
+    msg.from = _model.member;
+    msg.changeToLocalImage(image.path);
+    msg.sentTime = DateTime.now();
+
+    _model.currentRoom.messages.appendQueuedMessage(msg);
+    
+    var resp = await assetApi().uploadImage(image,
       callback: (prog) {
-        print("IMAGE_UPLOAD_PROGRESS = $prog");
+        msg.changeUploadProgress(prog);
       }
     );
-    print('IMAGE UPLOAD DONE');
+
+    msg.changeToRemoteImage(
+      imageUrl: resp.orig,
+      thumbUrl: resp.thumbnail
+    );
+    print('DONE!');
   }
 
   Future<void> _onMessageSend(BuildContext context) async {
@@ -58,6 +81,7 @@ class _MessageSceneState extends State<MessageScene> {
   }
 
   Future<void> _onSceneShown(BuildContext context) async {
+    print('ON_SCENE_SHOWN');
     final model = ScopedModel.of<AppState>(context);
     _model = model;
     MyRoom room = model.currentRoom;
@@ -75,10 +99,30 @@ class _MessageSceneState extends State<MessageScene> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
   void dispose() {
     _inited = false;
     _model.outFromRoom();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    var func = () async {
+      if (state == AppLifecycleState.resumed) {
+        if (_model.currentRoom != null) {
+          _model.currentRoom.messages.clearNotViewed();
+          await _model.fetchMessagesWhenResume(roomToken: _model.currentRoom.roomToken);
+        }
+      }
+    };
+    func();
   }
 
   @override

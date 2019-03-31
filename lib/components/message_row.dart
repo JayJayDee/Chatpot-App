@@ -62,6 +62,17 @@ class _MyMessageRow extends StatelessWidget {
   });
 
   Widget build(BuildContext context) {
+    Widget contentWidget;
+    if (message.messageType == MessageType.TEXT) {
+      contentWidget = _getTextContentWidget(message);
+    } else if (message.messageType == MessageType.IMAGE) {
+      if (message.attchedImageStatus == AttchedImageStatus.LOCAL_IMAGE) {
+        contentWidget = _getLoadingImageContentWidget(message);
+      } else if (message.attchedImageStatus == AttchedImageStatus.REMOTE_IMAGE) {
+        contentWidget = _getRemoteImageContentWidget(message);
+      }
+    }
+
     return Container(
       margin: EdgeInsets.only(left: 10, top: 10, right: 10),
       child: Row(
@@ -71,19 +82,7 @@ class _MyMessageRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                    padding: EdgeInsets.all(7),
-                    color: CupertinoColors.activeBlue,
-                    child: Text(message.getTextContent(),
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: CupertinoColors.white
-                      )
-                    )
-                  ),
-                ),
+                contentWidget,
                 Container(
                   padding: EdgeInsets.only(top: 3, left: 3),
                   child: _receiveTimeIndicator(message)
@@ -197,3 +196,52 @@ Widget _receiveTimeIndicator(Message msg) {
     )
   );
 }
+
+Widget _getLoadingImageContentWidget(Message message) =>
+  Container(
+    color: CupertinoColors.activeBlue,
+    width: 100,
+    height: 100,
+    child: Stack(
+      alignment: Alignment.center,
+      children: [
+        CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(CupertinoColors.white)
+        ),
+        Positioned(
+          child: Text("${message.attatchmentUploadProgress}",
+            style: TextStyle(
+              fontSize: 15,
+              color: CupertinoColors.white
+            )
+          )
+        )
+      ]
+    )
+  );
+
+Widget _getRemoteImageContentWidget(Message message) =>
+  ClipRRect(
+    borderRadius: BorderRadius.circular(10.0),
+    child: CachedNetworkImage(
+      imageUrl: message.getImageContent().thumbnailUrl,
+      placeholder: (context, url) => CupertinoActivityIndicator(),
+      width: 150,
+      height: 150,
+    )
+  );
+
+Widget _getTextContentWidget(Message message) =>
+  ClipRRect(
+    borderRadius: BorderRadius.circular(10),
+    child: Container(
+      padding: EdgeInsets.all(7),
+      color: CupertinoColors.activeBlue,
+      child: Text(message.getTextContent(),
+        style: TextStyle(
+          fontSize: 16,
+          color: CupertinoColors.white
+        )
+      )
+    ),
+  );

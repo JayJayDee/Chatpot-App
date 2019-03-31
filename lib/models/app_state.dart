@@ -253,6 +253,7 @@ class AppState extends Model {
     _currentRoom.messages.clearOffset();
     _currentRoom.messages.clearMessages();
     _currentRoom.messages.appendMesasges(resp.messages);
+    _currentRoom.messages.dumpQueuedMessagesToMessage();
 
     _loading = false;
     notifyListeners();

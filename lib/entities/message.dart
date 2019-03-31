@@ -1,6 +1,10 @@
 import 'package:meta/meta.dart';
 import 'package:chatpot_app/entities/member.dart';
 
+enum AttchedImageStatus {
+  REMOTE_IMAGE, LOCAL_IMAGE
+}
+
 class Message {
   String messageId;
   MessageType messageType;
@@ -8,10 +12,16 @@ class Message {
   MessageTo to;
   DateTime sentTime;
   dynamic content;
+
   bool _isSending;
+
+  AttchedImageStatus _attachedImageStatus;
+  int _imageUploadProgress;
 
   Message() {
     _isSending = false;
+    _attachedImageStatus = null;
+    _imageUploadProgress = 0;
   }
 
   factory Message.fromJson(Map<String, dynamic> map) {
@@ -26,8 +36,33 @@ class Message {
   }
 
   bool get isSending => _isSending;
+  int get attatchmentUploadProgress => _imageUploadProgress;
   void changeToSending() => _isSending = true;
   void changeToSent() => _isSending = false;
+
+  AttchedImageStatus get attchedImageStatus => _attachedImageStatus;
+
+  void changeToLocalImage(String imagePath) {
+    _attachedImageStatus = AttchedImageStatus.LOCAL_IMAGE;
+    Map<String, String> imageSrcMap = Map();
+    imageSrcMap['image_url'] = imagePath;
+    imageSrcMap['thumb_url'] = imagePath;
+    this.content = imageSrcMap;
+    _imageUploadProgress = 0;
+  }
+
+  void changeUploadProgress(int prog) => _imageUploadProgress = prog;
+
+  void changeToRemoteImage({
+    @required String imageUrl,
+    @required String thumbUrl
+  }) {
+    _attachedImageStatus = AttchedImageStatus.REMOTE_IMAGE;
+    Map<String, String> imageSrcMap = Map();
+    imageSrcMap['image_url'] = imageUrl;
+    imageSrcMap['thumb_url'] = thumbUrl;
+    this.content = imageSrcMap;
+  }
 
   String getTextContent() {
     if (messageType != MessageType.TEXT) return null;
@@ -110,6 +145,7 @@ class RoomMessages {
   int _offset;
   int _notViewed;
   List<Message> _messages;
+  List<Message> _queuedMessages;
   bool moreMessage;
   Map<String, int> _existMap;
 
@@ -117,6 +153,7 @@ class RoomMessages {
     _offset = 0;
     _notViewed = 0;
     _messages = List();
+    _queuedMessages = List();
     moreMessage = true;
     _existMap = Map();
   }
@@ -149,6 +186,15 @@ class RoomMessages {
       _existMap[m.messageId] = 1;
     });
     _offset += newMessages.length;
+  }
+
+  void appendQueuedMessage(Message msg) {
+    _queuedMessages.add(msg);
+  }
+
+  void dumpQueuedMessagesToMessage() {
+    _queuedMessages.forEach((m) => _messages.insert(0, m));
+    _queuedMessages.clear();
   }
 
   void appendSingleMessage(Message msg) {
