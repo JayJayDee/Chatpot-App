@@ -22,24 +22,34 @@ class MessageScene extends StatefulWidget {
   _MessageSceneState createState() => _MessageSceneState();
 }
 
-class _MessageSceneState extends State<MessageScene> {
-
+class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver {
   bool _inited = false;
   AppState _model;
   String _inputedMessage;
   TextEditingController _messageInputFieldCtrl = TextEditingController();
   ScrollController _scrollController = ScrollController();
 
+  String _generateTemporaryMessageId() =>
+    "${DateTime.now().millisecondsSinceEpoch}";
+
   Future<void> _onImageSentClicked(BuildContext context) async {
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
-    
-    await assetApi().uploadImage(image,
-      callback: (prog) {
-        print("IMAGE_UPLOAD_PROGRESS = $prog");
-      }
+
+    final model = ScopedModel.of<AppState>(context);
+    String tempMessageId = _generateTemporaryMessageId();
+
+    var imageContent = await model.uploadImage(
+      image: image,
+      tempMessageId: tempMessageId
     );
-    print('IMAGE UPLOAD DONE');
+    print('IMAGE_UPLOAD_DONE');
+
+    model.publishMessage(
+      content: imageContent,
+      type: MessageType.IMAGE,
+      previousMessageId: tempMessageId
+    );
   }
 
   Future<void> _onMessageSend(BuildContext context) async {
@@ -58,6 +68,7 @@ class _MessageSceneState extends State<MessageScene> {
   }
 
   Future<void> _onSceneShown(BuildContext context) async {
+    print('ON_SCENE_SHOWN');
     final model = ScopedModel.of<AppState>(context);
     _model = model;
     MyRoom room = model.currentRoom;
@@ -75,10 +86,30 @@ class _MessageSceneState extends State<MessageScene> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
   void dispose() {
     _inited = false;
     _model.outFromRoom();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    var func = () async {
+      if (state == AppLifecycleState.resumed) {
+        if (_model.currentRoom != null) {
+          _model.currentRoom.messages.clearNotViewed();
+          await _model.fetchMessagesWhenResume(roomToken: _model.currentRoom.roomToken);
+        }
+      }
+    };
+    func();
   }
 
   @override

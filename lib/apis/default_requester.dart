@@ -96,6 +96,7 @@ class DefaultRequester implements Requester {
       Map<String, dynamic> respMap = jsonDecode(resp.toString());
       return respMap;
     } catch (err) {
+      print(err.toString());
       throw err;
     }
   }

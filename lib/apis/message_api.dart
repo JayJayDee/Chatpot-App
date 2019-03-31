@@ -21,20 +21,23 @@ class MessageApi {
     @required dynamic content
   }) async {
     String contentString;
+    String typeExpr;
 
     if (type == MessageType.TEXT) {
       contentString = content.toString();
+      typeExpr = 'TEXT';
     } else if (type == MessageType.IMAGE) {
-      ImageContent img = content.cast<ImageContent>();
+      ImageContent img = content;
       contentString = jsonEncode(img.toJson());
+      typeExpr = 'IMAGE';
     }
-
+    
     Map<String, dynamic> resp = await _requester.requestWithAuth(
       url: "/room/$roomToken/publish",
       method: HttpMethod.POST,
       body: {
         'member_token': memberToken,
-        'type': 'TEXT', // TODO: to be fixed.
+        'type': typeExpr,
         'content': contentString
       }
     );

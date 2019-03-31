@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/entities/member.dart';
@@ -253,6 +254,7 @@ class AppState extends Model {
     _currentRoom.messages.clearOffset();
     _currentRoom.messages.clearMessages();
     _currentRoom.messages.appendMesasges(resp.messages);
+    _currentRoom.messages.dumpQueuedMessagesToMessage();
 
     _loading = false;
     notifyListeners();
@@ -278,7 +280,8 @@ class AppState extends Model {
 
   Future<void> publishMessage({
     @required MessageType type,
-    @required dynamic content
+    @required dynamic content,
+    String previousMessageId
   }) async {
     if (_currentRoom == null) return;
     var publishResult =  await messageApi().requestPublishToRoom(
@@ -288,7 +291,20 @@ class AppState extends Model {
       content: content
     );
     String messageId = publishResult.messageId;
-    Message newMsg = Message();
+
+    Message newMsg;
+    
+    if (previousMessageId == null) {
+      newMsg = Message();
+    } else {
+      List<Message> found = _currentRoom.messages.messages.where((m) =>
+        m.messageId == previousMessageId).toList();
+      if (found.length > 0) {
+        newMsg = found[0];
+      } else {
+        newMsg = Message();
+      }
+    }
 
     var to = MessageTo();
     to.type = MessageTarget.ROOM;
@@ -301,8 +317,52 @@ class AppState extends Model {
     newMsg.from = _member;
     newMsg.to = to;
     newMsg.changeToSending();
-    _currentRoom.messages.appendSingleMessage(newMsg);
+
+    if (previousMessageId == null) {
+      _currentRoom.messages.appendSingleMessage(newMsg);
+    }
 
     notifyListeners();
+  }
+
+  Future<ImageContent> uploadImage({
+    @required File image,
+    @required String tempMessageId
+  }) async {
+    Message msg = Message();
+    
+    MessageTo to = MessageTo();
+    to.type = MessageTarget.ROOM;
+    to.token = _currentRoom.roomToken;
+    msg.to = to;
+    msg.changeToSending();
+
+    msg.messageId = tempMessageId;
+    msg.messageType = MessageType.IMAGE;
+    msg.from = member;
+    msg.changeToLocalImage(image.path);
+    msg.sentTime = DateTime.now();
+
+    currentRoom.messages.appendQueuedMessage(msg);
+    notifyListeners();
+
+    var resp = await assetApi().uploadImage(image,
+      callback: (prog) {
+        msg.changeUploadProgress(prog);
+        notifyListeners();
+      }
+    );
+
+    msg.changeToRemoteImage(
+      imageUrl: resp.orig,
+      thumbUrl: resp.thumbnail
+    );
+    currentRoom.messages.dumpQueuedMessagesToMessage();
+    notifyListeners();
+    ImageContent content = ImageContent(
+      imageUrl: resp.orig,
+      thumbnailUrl: resp.thumbnail
+    );
+    return content;
   }
 }

@@ -61,7 +61,15 @@ class RoomLocales {
 
   String myRoomRecentMessage(Message lastMessage) {
     if (lastMessage == null) return emptyMessageInRoom();
-    return "${lastMessage.getTextContent()}";
+
+    if (lastMessage.messageType == MessageType.TEXT) {
+      return "${lastMessage.getTextContent()}";
+    } else if (lastMessage.messageType == MessageType.IMAGE) {
+      if (language == 'ko') return '(사진)';
+      else if (language == 'ja') return '(写真)';
+      else return '(Photo)';
+    }
+    return '';
   }
 
   String emptyMessageInRoom() {
