@@ -104,6 +104,13 @@ class _OtherMessageRow extends StatelessWidget {
   });
 
   Widget build(BuildContext context) {
+    Widget contentWidget;
+    if (message.messageType == MessageType.TEXT) {
+      contentWidget = _getTextContentWidget(message);
+    } else if (message.messageType == MessageType.IMAGE) {
+      contentWidget = _getRemoteImageContentWidget(message);
+    }
+
     return Container(
       margin: EdgeInsets.only(left: 10, top: 10, right: 10),
       child: Row(
@@ -152,19 +159,7 @@ class _OtherMessageRow extends StatelessWidget {
                     color: Styles.secondaryFontColor
                   ),
                 ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Container(
-                    padding: EdgeInsets.all(7),
-                    color: Styles.appBackground,
-                    child: Text(message.getTextContent(),
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Styles.primaryFontColor
-                      ),
-                    )
-                  )
-                ),
+                contentWidget,
                 Container(
                   padding: EdgeInsets.only(top: 3, left: 3),
                   child: _receiveTimeIndicator(message)
