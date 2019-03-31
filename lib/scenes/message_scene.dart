@@ -36,33 +36,14 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
 
+    final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
     String tempMessageId = _generateTemporaryMessageId();
-    Message msg = Message();
-    
-    MessageTo to = MessageTo();
-    to.type = MessageTarget.ROOM;
-    to.token = _model.currentRoom.roomToken;
-    msg.to = to;
 
-    msg.messageId = tempMessageId;
-    msg.messageType = MessageType.IMAGE;
-    msg.from = _model.member;
-    msg.changeToLocalImage(image.path);
-    msg.sentTime = DateTime.now();
-
-    _model.currentRoom.messages.appendQueuedMessage(msg);
-    
-    var resp = await assetApi().uploadImage(image,
-      callback: (prog) {
-        msg.changeUploadProgress(prog);
-      }
+    await model.uploadImage(
+      image: image,
+      tempMessageId: tempMessageId
     );
-
-    msg.changeToRemoteImage(
-      imageUrl: resp.orig,
-      thumbUrl: resp.thumbnail
-    );
-    print('DONE!');
+    print('IMAGE_UPLOAD_DONE');
   }
 
   Future<void> _onMessageSend(BuildContext context) async {

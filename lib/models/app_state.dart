@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/entities/member.dart';
@@ -304,6 +305,40 @@ class AppState extends Model {
     newMsg.changeToSending();
     _currentRoom.messages.appendSingleMessage(newMsg);
 
+    notifyListeners();
+  }
+
+  Future<void> uploadImage({
+    @required File image,
+    @required String tempMessageId
+  }) async {
+    Message msg = Message();
+    
+    MessageTo to = MessageTo();
+    to.type = MessageTarget.ROOM;
+    to.token = _currentRoom.roomToken;
+    msg.to = to;
+
+    msg.messageId = tempMessageId;
+    msg.messageType = MessageType.IMAGE;
+    msg.from = member;
+    msg.changeToLocalImage(image.path);
+    msg.sentTime = DateTime.now();
+
+    currentRoom.messages.appendQueuedMessage(msg);
+    notifyListeners();
+
+    var resp = await assetApi().uploadImage(image,
+      callback: (prog) {
+        msg.changeUploadProgress(prog);
+        notifyListeners();
+      }
+    );
+
+    msg.changeToRemoteImage(
+      imageUrl: resp.orig,
+      thumbUrl: resp.thumbnail
+    );
     notifyListeners();
   }
 }
