@@ -9,6 +9,7 @@ import 'package:chatpot_app/locales/setting_scene_locales.dart';
 import 'package:chatpot_app/locales/message_scene_locales.dart';
 import 'package:chatpot_app/locales/more_chat_scene_locales.dart';
 import 'package:chatpot_app/locales/new_chat_scene_locales.dart';
+import 'package:chatpot_app/locales/login_scene_locales.dart';
 
 class RootLocaleConverter {
   String _language;
@@ -20,6 +21,7 @@ class RootLocaleConverter {
   MessageSceneLocales _msgscene;
   MoreChatSceneLocales _morechat;
   NewChatSceneLocales _newchat;
+  LoginSceneLocales _login;
 
   HomeSceneLocales get home => _home;
   MessageLocales get message => _message;
@@ -29,6 +31,7 @@ class RootLocaleConverter {
   MessageSceneLocales get msgscene => _msgscene;
   MoreChatSceneLocales get morechat => _morechat;
   NewChatSceneLocales get newchat => _newchat;
+  LoginSceneLocales get login => _login;
 
   void selectLanguage(BuildContext context) {
     Locale locale = Localizations.localeOf(context);

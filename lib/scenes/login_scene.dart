@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:toast/toast.dart';
 import 'package:chatpot_app/scenes/signup_simple_scene.dart';
+import 'package:chatpot_app/factory.dart';
 
 String _email = '';
 String _password = '';
@@ -33,8 +34,7 @@ class LoginScene extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        previousPageTitle: 'Back',
-        middle: Text('Sign in'),
+        middle: Text(locales().login.title),
         transitionBetweenRoutes: true
       ),
       child: SafeArea(
