@@ -299,17 +299,16 @@ class AppState extends Model {
     );
     String messageId = publishResult.messageId;
 
+    Message newMsg;
     if (previousMessageId != null) {
-      var foundPrevs = _currentRoom.messages.messages.where((m) =>
-        m.messageId == previousMessageId).toList();
-
-      if (foundPrevs.length > 0) {
-        Message foundMsg = foundPrevs[0];
-        foundMsg.messageId = messageId;
-      }
+      print("PREV_MESSAGE_ID = $previousMessageId");
+      print("NEW_MESSAGE_ID = $messageId");
+      newMsg = _findMessagesInCurrentRoom(previousMessageId);
+      
+    } else {
+      newMsg = Message();
     }
 
-    Message newMsg = Message();
     var to = MessageTo();
     to.type = MessageTarget.ROOM;
     to.token = _currentRoom.roomToken;
@@ -322,7 +321,9 @@ class AppState extends Model {
     newMsg.to = to;
     newMsg.changeToSending();
 
-    _currentRoom.messages.appendSingleMessage(newMsg);
+    if (previousMessageId == null) {
+      _currentRoom.messages.appendSingleMessage(newMsg);
+    }
 
     notifyListeners();
   }
