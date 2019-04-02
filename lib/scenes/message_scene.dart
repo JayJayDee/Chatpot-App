@@ -47,8 +47,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
     model.publishMessage(
       content: imageContent,
-      type: MessageType.IMAGE,
-      previousMessageId: tempMessageId
+      type: MessageType.IMAGE
     );
   }
 

@@ -278,13 +278,20 @@ class AppState extends Model {
     notifyListeners();
   }
 
+  Message _findMessagesInCurrentRoom(String messageId) {
+    var foundMsgs = _currentRoom.messages.messages.where((m) =>
+        m.messageId == messageId).toList();
+    if (foundMsgs.length == 0) return null;
+    return foundMsgs[0];
+  }
+
   Future<void> publishMessage({
     @required MessageType type,
     @required dynamic content,
     String previousMessageId
   }) async {
     if (_currentRoom == null) return;
-    var publishResult =  await messageApi().requestPublishToRoom(
+    var publishResult = await messageApi().requestPublishToRoom(
       roomToken: _currentRoom.roomToken,
       memberToken: _member.token,
       type: type,
@@ -292,20 +299,17 @@ class AppState extends Model {
     );
     String messageId = publishResult.messageId;
 
-    Message newMsg;
-    
-    if (previousMessageId == null) {
-      newMsg = Message();
-    } else {
-      List<Message> found = _currentRoom.messages.messages.where((m) =>
+    if (previousMessageId != null) {
+      var foundPrevs = _currentRoom.messages.messages.where((m) =>
         m.messageId == previousMessageId).toList();
-      if (found.length > 0) {
-        newMsg = found[0];
-      } else {
-        newMsg = Message();
+
+      if (foundPrevs.length > 0) {
+        Message foundMsg = foundPrevs[0];
+        foundMsg.messageId = messageId;
       }
     }
 
+    Message newMsg = Message();
     var to = MessageTo();
     to.type = MessageTarget.ROOM;
     to.token = _currentRoom.roomToken;
@@ -318,9 +322,7 @@ class AppState extends Model {
     newMsg.to = to;
     newMsg.changeToSending();
 
-    if (previousMessageId == null) {
-      _currentRoom.messages.appendSingleMessage(newMsg);
-    }
+    _currentRoom.messages.appendSingleMessage(newMsg);
 
     notifyListeners();
   }

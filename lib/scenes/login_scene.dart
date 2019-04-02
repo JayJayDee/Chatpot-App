@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:toast/toast.dart';
 import 'package:chatpot_app/scenes/signup_simple_scene.dart';
+import 'package:chatpot_app/factory.dart';
 
 String _email = '';
 String _password = '';
@@ -33,8 +34,7 @@ class LoginScene extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        previousPageTitle: 'Back',
-        middle: Text('Sign in'),
+        middle: Text(locales().login.title),
         transitionBetweenRoutes: true
       ),
       child: SafeArea(
@@ -57,7 +57,7 @@ class LoginScene extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.only(top: 20),
                       child: CupertinoButton(
-                        child: Text('Sign in'),
+                        child: Text(locales().login.signInButton),
                         color: CupertinoColors.activeBlue,
                         onPressed: () => _onLoginSubmit(context)
                       )
@@ -65,7 +65,7 @@ class LoginScene extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.only(top: 10),
                       child: CupertinoButton(
-                        child: Text('Start without Sign-up'),
+                        child: Text(locales().login.simpleSignupButton),
                         color: CupertinoColors.activeGreen,
                         onPressed: () => _onSimpleSignUp(context)
                       )
@@ -73,7 +73,7 @@ class LoginScene extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.only(top: 10),
                       child: CupertinoButton(
-                        child: Text('Sign up'),
+                        child: Text(locales().login.signupButton),
                         onPressed: () {
 
                         }
