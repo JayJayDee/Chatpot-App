@@ -196,13 +196,31 @@ class RoomMessages {
   }
 
   void dumpQueuedMessagesToMessage() {
-    _queuedMessages.forEach((m) => _messages.insert(0, m));
+    _queuedMessages.forEach((m) {
+      if (_existMap[m.messageId] == null) {
+        _messages.insert(0, m);
+        _existMap[m.messageId] = 1;
+      }
+    });
     _queuedMessages.clear();
+  }
+
+  void changeMessageId(String prevId, String nextId) {
+    _existMap.remove(prevId);
+    _existMap[nextId] = 1;
+    _messages.forEach((m) {
+      if (m.messageId == prevId) {
+        m.messageId = nextId;
+      }
+    });
   }
 
   void appendSingleMessage(Message msg) {
     if (_existMap[msg.messageId] != null) {
       var existMsg = _messages.where((m) => m.messageId == msg.messageId);
+      print("EXIST MSG WITH MESSAGEID: ${msg.messageId}");
+      print("LENGTH = ${existMsg.length}");
+
       if (existMsg.length > 0) {
         var msg = existMsg.toList()[0];
         if (msg.isSending == true) {

@@ -195,8 +195,8 @@ Widget _receiveTimeIndicator(Message msg) {
 Widget _getLoadingImageContentWidget(Message message) =>
   Container(
     color: CupertinoColors.activeBlue,
-    width: 100,
-    height: 100,
+    width: 120,
+    height: 120,
     child: Stack(
       alignment: Alignment.center,
       children: [
@@ -204,9 +204,9 @@ Widget _getLoadingImageContentWidget(Message message) =>
           valueColor: AlwaysStoppedAnimation<Color>(CupertinoColors.white)
         ),
         Positioned(
-          child: Text("${message.attatchmentUploadProgress}",
+          child: Text("${message.attatchmentUploadProgress}%",
             style: TextStyle(
-              fontSize: 15,
+              fontSize: 14,
               color: CupertinoColors.white
             )
           )

@@ -278,13 +278,6 @@ class AppState extends Model {
     notifyListeners();
   }
 
-  Message _findMessagesInCurrentRoom(String messageId) {
-    var foundMsgs = _currentRoom.messages.messages.where((m) =>
-        m.messageId == messageId).toList();
-    if (foundMsgs.length == 0) return null;
-    return foundMsgs[0];
-  }
-
   Future<void> publishMessage({
     @required MessageType type,
     @required dynamic content,
@@ -300,29 +293,24 @@ class AppState extends Model {
     String messageId = publishResult.messageId;
 
     if (previousMessageId != null) {
-      var foundPrevs = _currentRoom.messages.messages.where((m) =>
-        m.messageId == previousMessageId).toList();
+      _currentRoom.messages.changeMessageId(previousMessageId, messageId);
 
-      if (foundPrevs.length > 0) {
-        Message foundMsg = foundPrevs[0];
-        foundMsg.messageId = messageId;
-      }
+    } else {
+      Message newMsg = Message();
+      var to = MessageTo();
+      to.type = MessageTarget.ROOM;
+      to.token = _currentRoom.roomToken;
+
+      newMsg.messageId = messageId;
+      newMsg.messageType = type;
+      newMsg.content = content;
+      newMsg.sentTime = DateTime.now();
+      newMsg.from = _member;
+      newMsg.to = to;
+      newMsg.changeToSending();
+
+      _currentRoom.messages.appendSingleMessage(newMsg);
     }
-
-    Message newMsg = Message();
-    var to = MessageTo();
-    to.type = MessageTarget.ROOM;
-    to.token = _currentRoom.roomToken;
-
-    newMsg.messageId = messageId;
-    newMsg.messageType = type;
-    newMsg.content = content;
-    newMsg.sentTime = DateTime.now();
-    newMsg.from = _member;
-    newMsg.to = to;
-    newMsg.changeToSending();
-
-    _currentRoom.messages.appendSingleMessage(newMsg);
 
     notifyListeners();
   }
@@ -346,6 +334,7 @@ class AppState extends Model {
     msg.sentTime = DateTime.now();
 
     currentRoom.messages.appendQueuedMessage(msg);
+    if (currentRoom == null) return null;
     notifyListeners();
 
     var resp = await assetApi().uploadImage(image,
@@ -359,7 +348,10 @@ class AppState extends Model {
       imageUrl: resp.orig,
       thumbUrl: resp.thumbnail
     );
+
+    if (currentRoom == null) return null;
     currentRoom.messages.dumpQueuedMessagesToMessage();
+
     notifyListeners();
     ImageContent content = ImageContent(
       imageUrl: resp.orig,
