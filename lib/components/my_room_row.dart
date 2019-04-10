@@ -1,10 +1,13 @@
 import 'package:meta/meta.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
+import 'package:chatpot_app/models/app_state.dart';
 
 typedef MyRoomCallback = Function(MyRoom);
 
@@ -28,7 +31,7 @@ class MyRoomRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
+      height: 76,
       child: CupertinoButton(
         padding: EdgeInsets.all(0),
         onPressed: _onRowClicked,
@@ -40,18 +43,18 @@ class MyRoomRow extends StatelessWidget {
               padding: EdgeInsets.only(left: 10)
             ),
             Container(
-              width: 60,
-              height: 60,
+              width: 66,
+              height: 66,
               child: Stack(
                 alignment: Alignment.bottomRight,
                 children: <Widget>[
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(30.0),
+                    borderRadius: BorderRadius.circular(33.0),
                     child: CachedNetworkImage(
                       imageUrl: myRoom.owner.avatar.thumb,
                       placeholder: (context, url) => CupertinoActivityIndicator(),
-                      width: 60,
-                      height: 60,
+                      width: 66,
+                      height: 66,
                     )
                   ),
                   Positioned(
@@ -86,30 +89,38 @@ class MyRoomRow extends StatelessWidget {
                     ),
                   )
                 ),
+                _buildTranslationRow(context, myRoom),
                 Flexible(
                   child: Container(
                     padding: EdgeInsets.only(left: 10),
-                    child: Text(
-                      locales().room.myRoomSubtitle(myRoom),
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color: Color(0xFF929292)
-                      )
-                    ),
-                  )
-                ),
-                Flexible(
-                  child: Container(
-                    padding: EdgeInsets.only(left: 10),
-                    child: Text(
-                      locales().room.myRoomRecentMessage(myRoom.lastMessage),
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color: Color(0xFF929292)
-                      )
-                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          locales().room.numMembersSimple(myRoom.numAttendee),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: Color(0xFF929292)
+                          )
+                        ),
+                        Text(
+                          ' - ',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: Color(0xFF929292)
+                          )
+                        ),
+                        Text(
+                          locales().room.myRoomRecentMessage(myRoom.lastMessage),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: Color(0xFF929292)
+                          )
+                        )
+                      ]
+                    )
                   )
                 )
               ]
@@ -165,5 +176,50 @@ Widget _getRoomBadge(MyRoom room) {
       color: CupertinoColors.destructiveRed
     ),
     padding: EdgeInsets.only(left: 10, top: 5, bottom: 5, right: 10)
+  );
+}
+
+Widget _buildTranslationRow(BuildContext context, MyRoom room) { 
+  final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
+  bool translationRequired = false;
+  if (model.member.language != room.owner.language) translationRequired = true;
+
+  if (translationRequired == false) {
+    return Center();
+  }
+
+  Widget indicator;
+  if (room.titleTranslated != null) {
+    indicator = Text(room.titleTranslated,
+      style: TextStyle(
+        fontSize: 14,
+        color: Styles.primaryFontColor
+      )
+    );
+  } else {
+    indicator = Container(
+      width: 13,
+      height: 13,
+      child: CircularProgressIndicator(
+        strokeWidth: 2
+      )
+    );
+  }
+
+  return Container(
+    padding: EdgeInsets.only(left: 10),
+    child: Row(
+      children: [
+        Text(locales().room.translateLabel,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Styles.primaryFontColor
+          )
+        ),
+        Padding(padding: EdgeInsets.only(left: 5)),
+        indicator
+      ],
+    )
   );
 }
