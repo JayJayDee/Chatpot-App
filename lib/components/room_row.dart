@@ -155,7 +155,7 @@ Widget _buildTranslationRow(BuildContext context, Room room) {
             color: Styles.primaryFontColor
           )
         ),
-        Padding(padding: EdgeInsets.only(left: 10)),
+        Padding(padding: EdgeInsets.only(left: 5)),
         indicator
       ],
     )
