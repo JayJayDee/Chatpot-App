@@ -17,9 +17,7 @@ class TranslateApi {
     @required List<TranslateParam> queries,
     @required String toLocale
   }) async {
-    List<TranslateResp> response = List();
     String query = jsonEncode(queries.map((p) => p.toMap()).toList());
-    print("TRANSLATE_QUERY_EXPR = $query");
 
     var resp = await _requester.requestWithAuth(
       url: "/translate/room",
@@ -29,7 +27,8 @@ class TranslateApi {
         'query': query
       }
     );
-    print(resp);
-    return response;
+    List<dynamic> list = resp;
+    List<TranslateResp> retList = list.map((map) => TranslateResp.fromJson(map)).toList();
+    return retList;
   }
 }
