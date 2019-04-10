@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/factory.dart';
@@ -48,7 +50,6 @@ class _RoomDetailCard extends State<RoomDetailCard> {
 
   @override
   void initState() {
-    print('ROOM_DETAIL_INIT');
     initDetailCard();
     super.initState();
   }
@@ -74,6 +75,8 @@ class _RoomDetailCard extends State<RoomDetailCard> {
               fontWeight: FontWeight.normal
             )
           ),
+          Padding(padding: EdgeInsets.only(top: 5)),
+          _buildTranslationRow(context, _room),
           Padding(padding: EdgeInsets.only(top: 10)),
           Container(
             height: 50,
@@ -140,4 +143,51 @@ class _RoomDetailCard extends State<RoomDetailCard> {
       )
     ).toList();
   }
+}
+
+Widget _buildTranslationRow(BuildContext context, Room room) { 
+  final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
+  bool translationRequired = false;
+  if (model.member.language != room.owner.language) translationRequired = true;
+
+  if (translationRequired == false) {
+    return Center();
+  }
+
+  Widget indicator;
+  if (room.titleTranslated != null) {
+    indicator = Text(room.titleTranslated,
+      style: TextStyle(
+        fontSize: 14,
+        color: Styles.secondaryFontColor,
+        fontWeight: FontWeight.normal
+      )
+    );
+  } else {
+    indicator = Container(
+      width: 16,
+      height: 16,
+      child: CircularProgressIndicator(
+        strokeWidth: 2
+      )
+    );
+  }
+
+  return Container(
+    padding: EdgeInsets.only(left: 10),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(locales().room.translateLabel,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Styles.secondaryFontColor
+          )
+        ),
+        Padding(padding: EdgeInsets.only(left: 5)),
+        indicator
+      ],
+    )
+  );
 }

@@ -93,4 +93,10 @@ class RoomLocales {
     else if (language == 'ja') return "$numCountryカ国の$numMember人がチャット中です。";
     return "$numCountry people from $numMember countries are chatting";
   }
+
+  String numMembersSimple(int numAttendee) {
+    if (language == 'ko') return "$numAttendee명";
+    else if (language == 'ja') return "$numAttendee人";
+    return "$numAttendee people";
+  }
 }

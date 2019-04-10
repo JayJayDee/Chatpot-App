@@ -391,4 +391,30 @@ class AppState extends Model {
     });
     notifyListeners();
   }
+
+  Future<void> translateMyRooms() async {
+    Map<String, TranslateParam> paramMap = Map();
+    _myRooms.forEach((r) {
+      if (r.owner.language == _member.language) return;
+      paramMap[r.roomToken] = TranslateParam(
+        key: r.roomToken,
+        message: r.title,
+        from: r.owner.language
+      );
+    });
+
+    List<TranslateParam> queries =
+      paramMap.keys.map((k) => paramMap[k]).toList();
+    
+    var apiResp = await translateApi().requestTranslateRooms(
+      toLocale: _member.language,
+      queries: queries
+    );
+
+    apiResp.forEach((t) {
+      List<MyRoom> founds = _myRooms.where((r) => r.roomToken == t.key).toList();
+      if (founds.length > 0) founds[0].titleTranslated = t.translated;
+    });
+    notifyListeners();
+  }
 }

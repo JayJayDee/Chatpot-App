@@ -65,6 +65,7 @@ class MyRoom {
   int maxAttendee;
   DateTime regDate;
   Message lastMessage;
+  String titleTranslated;
 
   RoomMessages messages;
 
