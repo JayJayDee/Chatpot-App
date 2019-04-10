@@ -50,7 +50,6 @@ class _RoomDetailCard extends State<RoomDetailCard> {
 
   @override
   void initState() {
-    print('ROOM_DETAIL_INIT');
     initDetailCard();
     super.initState();
   }
@@ -160,13 +159,14 @@ Widget _buildTranslationRow(BuildContext context, Room room) {
     indicator = Text(room.titleTranslated,
       style: TextStyle(
         fontSize: 14,
-        color: Styles.secondaryFontColor
+        color: Styles.secondaryFontColor,
+        fontWeight: FontWeight.normal
       )
     );
   } else {
     indicator = Container(
-      width: 13,
-      height: 13,
+      width: 16,
+      height: 16,
       child: CircularProgressIndicator(
         strokeWidth: 2
       )

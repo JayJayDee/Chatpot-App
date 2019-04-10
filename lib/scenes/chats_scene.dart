@@ -73,6 +73,7 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
   Future<void> onSelected(BuildContext context) async {
     final model = ScopedModel.of<AppState>(context);
     await model.fetchMyRooms();
+    await model.translateMyRooms();
   }
 
   Widget _buildMyRoomsView(BuildContext context) {
