@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/entities/message.dart';
@@ -8,12 +9,13 @@ class TranslateParam {
   String from;
   
   TranslateParam({
-    String key,
-    String message,
-    String from
+    @required String key,
+    @required String message,
+    @required String from
   }) {
     this.key = key;
     this.message = message;
+    this.from = from;
   }
 
   Map<String, String> toMap() {

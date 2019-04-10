@@ -12,6 +12,12 @@ class RoomLocales {
     this.root
   });
 
+  String get translateLabel {
+    if (language == 'ko') return '번역';
+    else if (language == 'ja') return '翻訳';
+    return 'Translation';
+  }
+
   String getNick(Nick nick) {
     if (language == 'ko') return nick.ko;
     else if (language == 'ja') return nick.ja;

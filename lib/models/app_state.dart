@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -361,23 +362,33 @@ class AppState extends Model {
     _crowdedRooms.forEach((r) {
       if (r.owner.language == _member.language) return;
       paramMap[r.roomToken] = TranslateParam(
+        from: r.owner.language,
         key: r.roomToken,
         message: r.title);
     });
     _recentRooms.forEach((r) {
       if (r.owner.language == _member.language) return;
       paramMap[r.roomToken] = TranslateParam(
+        from: r.owner.language,
         key: r.roomToken,
         message: r.title);
     });
     
     List<TranslateParam> queries =
       paramMap.keys.map((k) => paramMap[k]).toList();
-    print(queries);
 
-    // var apiResp = translateApi().requestTranslateRooms(
-    //   fromLocale: _member.language,
-    //   toLocale: 
-    // );
+    var apiResp = await translateApi().requestTranslateRooms(
+      toLocale: _member.language,
+      queries: queries
+    );
+    
+    apiResp.forEach((t) {
+      List<Room> foundInCrowd = _crowdedRooms.where((r) => r.roomToken == t.key).toList();
+      if (foundInCrowd.length > 0) foundInCrowd[0].titleTranslated = t.translated;
+
+      List<Room> foundInRecent = _recentRooms.where((r) => r.roomToken == t.key).toList();
+      if (foundInRecent.length > 0) foundInRecent[0].titleTranslated = t.translated;
+    });
+    notifyListeners();
   }
 }
