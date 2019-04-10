@@ -8,6 +8,7 @@ import 'package:chatpot_app/entities/message.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:chatpot_app/models/model_entities.dart';
+import 'package:chatpot_app/apis/api_entities.dart';
 
 delaySec(int sec) => Future.delayed(Duration(milliseconds: sec * 1000));
 
@@ -356,6 +357,27 @@ class AppState extends Model {
   }
 
   Future<void> translatePublicRooms() async {
+    Map<String, TranslateParam> paramMap = Map();
+    _crowdedRooms.forEach((r) {
+      if (r.owner.language == _member.language) return;
+      paramMap[r.roomToken] = TranslateParam(
+        key: r.roomToken,
+        message: r.title);
+    });
+    _recentRooms.forEach((r) {
+      if (r.owner.language == _member.language) return;
+      paramMap[r.roomToken] = TranslateParam(
+        key: r.roomToken,
+        message: r.title);
+    });
     
+    List<TranslateParam> queries =
+      paramMap.keys.map((k) => paramMap[k]).toList();
+    print(queries);
+
+    // var apiResp = translateApi().requestTranslateRooms(
+    //   fromLocale: _member.language,
+    //   toLocale: 
+    // );
   }
 }

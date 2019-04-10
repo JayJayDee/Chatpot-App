@@ -20,6 +20,9 @@ class TranslateParam {
     respMap['message'] = message;
     return respMap;
   }
+
+  @override
+  String toString() => "TRNSLATE_PARAM $key:$message";
 }
 
 class TranslateResp {
