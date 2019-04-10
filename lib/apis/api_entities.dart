@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/entities/message.dart';
@@ -5,21 +6,28 @@ import 'package:chatpot_app/entities/message.dart';
 class TranslateParam {
   String key;
   String message;
+  String from;
   
   TranslateParam({
-    String key,
-    String message
+    @required String key,
+    @required String message,
+    @required String from
   }) {
     this.key = key;
     this.message = message;
+    this.from = from;
   }
 
   Map<String, String> toMap() {
     Map<String, String> respMap = Map();
     respMap['key'] = key;
     respMap['message'] = message;
+    respMap['from'] = from;
     return respMap;
   }
+
+  @override
+  String toString() => "TRNSLATE_PARAM $key:$message";
 }
 
 class TranslateResp {

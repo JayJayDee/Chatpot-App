@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -8,6 +9,7 @@ import 'package:chatpot_app/entities/message.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:chatpot_app/models/model_entities.dart';
+import 'package:chatpot_app/apis/api_entities.dart';
 
 delaySec(int sec) => Future.delayed(Duration(milliseconds: sec * 1000));
 
@@ -356,6 +358,37 @@ class AppState extends Model {
   }
 
   Future<void> translatePublicRooms() async {
+    Map<String, TranslateParam> paramMap = Map();
+    _crowdedRooms.forEach((r) {
+      if (r.owner.language == _member.language) return;
+      paramMap[r.roomToken] = TranslateParam(
+        from: r.owner.language,
+        key: r.roomToken,
+        message: r.title);
+    });
+    _recentRooms.forEach((r) {
+      if (r.owner.language == _member.language) return;
+      paramMap[r.roomToken] = TranslateParam(
+        from: r.owner.language,
+        key: r.roomToken,
+        message: r.title);
+    });
     
+    List<TranslateParam> queries =
+      paramMap.keys.map((k) => paramMap[k]).toList();
+
+    var apiResp = await translateApi().requestTranslateRooms(
+      toLocale: _member.language,
+      queries: queries
+    );
+    
+    apiResp.forEach((t) {
+      List<Room> foundInCrowd = _crowdedRooms.where((r) => r.roomToken == t.key).toList();
+      if (foundInCrowd.length > 0) foundInCrowd[0].titleTranslated = t.translated;
+
+      List<Room> foundInRecent = _recentRooms.where((r) => r.roomToken == t.key).toList();
+      if (foundInRecent.length > 0) foundInRecent[0].titleTranslated = t.translated;
+    });
+    notifyListeners();
   }
 }

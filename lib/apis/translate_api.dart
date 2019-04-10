@@ -14,19 +14,17 @@ class TranslateApi {
   }
 
   Future<List<TranslateResp>> requestTranslateRooms({
-    @required List<TranslateParam> params,
-    @required String fromLocale,
+    @required List<TranslateParam> queries,
     @required String toLocale
   }) async {
     List<TranslateResp> response = List();
-    String query = jsonEncode(params.map((p) => p.toMap()).toList());
+    String query = jsonEncode(queries.map((p) => p.toMap()).toList());
     print("TRANSLATE_QUERY_EXPR = $query");
 
     var resp = await _requester.requestWithAuth(
       url: "/translate/room",
       method: HttpMethod.GET,
       qs: {
-        'from': fromLocale,
         'to': toLocale,
         'query': query
       }
