@@ -15,7 +15,6 @@ class TranslateApi {
 
   Future<List<TranslateResp>> requestTranslateRooms({
     @required List<TranslateParam> params,
-    @required String fromLocale,
     @required String toLocale
   }) async {
     List<TranslateResp> response = List();
@@ -26,7 +25,6 @@ class TranslateApi {
       url: "/translate/room",
       method: HttpMethod.GET,
       qs: {
-        'from': fromLocale,
         'to': toLocale,
         'query': query
       }

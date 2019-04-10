@@ -5,10 +5,12 @@ import 'package:chatpot_app/entities/message.dart';
 class TranslateParam {
   String key;
   String message;
+  String from;
   
   TranslateParam({
     String key,
-    String message
+    String message,
+    String from
   }) {
     this.key = key;
     this.message = message;
@@ -18,6 +20,7 @@ class TranslateParam {
     Map<String, String> respMap = Map();
     respMap['key'] = key;
     respMap['message'] = message;
+    respMap['from'] = from;
     return respMap;
   }
 
