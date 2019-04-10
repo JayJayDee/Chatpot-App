@@ -16,7 +16,6 @@ enum AppInitState {
 }
 
 class AppState extends Model {
-  List<Room> _publicRooms;
   List<Room> _recentRooms;
   List<Room> _crowdedRooms;
 
@@ -29,7 +28,6 @@ class AppState extends Model {
   AppState() {
     _member = null;
     _loading = true;
-    _publicRooms = <Room>[];
     _myRooms = <MyRoom>[];
 
     _recentRooms = <Room>[];
@@ -38,7 +36,6 @@ class AppState extends Model {
 
   Member get member => _member;
   bool get loading => _loading;
-  List<Room> get publicRooms => _publicRooms;
   List<Room> get recentRooms => _recentRooms;
   List<Room> get crowdedRooms => _crowdedRooms;
 
@@ -155,8 +152,6 @@ class AppState extends Model {
       }
     }
 
-    var apiResp = await roomApi().requestPublicRooms();
-    _publicRooms = apiResp.list;
     _loading = false;
     notifyListeners();
     return JoinRoomResp(success: true);
@@ -358,5 +353,9 @@ class AppState extends Model {
       thumbnailUrl: resp.thumbnail
     );
     return content;
+  }
+
+  Future<void> translatePublicRooms() async {
+    
   }
 }

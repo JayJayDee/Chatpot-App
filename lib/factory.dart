@@ -10,6 +10,7 @@ import 'package:chatpot_app/apis/member_api.dart';
 import 'package:chatpot_app/apis/room_api.dart';
 import 'package:chatpot_app/apis/message_api.dart';
 import 'package:chatpot_app/apis/asset_api.dart';
+import 'package:chatpot_app/apis/translate_api.dart';
 import 'package:chatpot_app/utils/auth_crypter.dart';
 import 'package:chatpot_app/utils/default_auth_crypter.dart';
 import 'package:chatpot_app/locales/root_locale_converter.dart';
@@ -33,6 +34,7 @@ void initFactory() {
   _instances['RoomApi'] = RoomApi(requester: _roomRequester());
   _instances['MessageApi'] = MessageApi(requester: _messageRequester());
   _instances['AssetApi'] = AssetApi(requester: _initAssetRequester());
+  _instances['TranslateApi'] = TranslateApi(requester: _initTranslateRequester());
   _instances['PushService'] = PushService(msg: _firebaseMessaging());
 }
 
@@ -60,6 +62,12 @@ Requester _initAssetRequester() => DefaultRequester(
   baseUrl: 'http://dev-asset.chatpot.chat'
 );
 
+Requester _initTranslateRequester() => DefaultRequester(
+  crypter: authCrypter(),
+  accessor: authAccessor(),
+  baseUrl: 'http://dev-translate.chatpot.chat'
+);
+
 // internal factory uses.
 Requester _memberRequester() => _instances['MemberRequester'];
 Requester _roomRequester() => _instances['RoomRequester'];
@@ -73,6 +81,7 @@ MemberApi memberApi() => _instances['MemberApi'];
 RoomApi roomApi() => _instances['RoomApi'];
 MessageApi messageApi() => _instances['MessageApi'];
 AssetApi assetApi() => _instances['AssetApi'];
+TranslateApi translateApi() => _instances['TranslateApi'];
 AuthCrypter authCrypter() => _instances['AuthCrypter'];
 RootLocaleConverter locales() => _instances['LocaleConverter'];
 FirebaseMessaging firebaseMessaging() => _instances['FirebaseMessaging'];

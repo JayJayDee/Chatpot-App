@@ -19,7 +19,19 @@ class TranslateApi {
     @required String toLocale
   }) async {
     List<TranslateResp> response = List();
-    // TODO: api request & parse required
+    String query = jsonEncode(params.map((p) => p.toMap()).toList());
+    print("TRANSLATE_QUERY_EXPR = $query");
+
+    var resp = await _requester.requestWithAuth(
+      url: "/translate/room",
+      method: HttpMethod.GET,
+      qs: {
+        'from': fromLocale,
+        'to': toLocale,
+        'query': query
+      }
+    );
+    print(resp);
     return response;
   }
 }

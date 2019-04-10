@@ -8,8 +8,11 @@ class Room {
   int numAttendee;
   int maxAttendee;
   DateTime regDate;
+  String titleTranslated;
 
-  Room();
+  Room() {
+    titleTranslated = null;
+  }
 
   factory Room.fromJson(Map<String, dynamic> map) {
     Room room = Room();

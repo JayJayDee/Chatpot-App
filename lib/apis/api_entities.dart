@@ -3,10 +3,23 @@ import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/entities/message.dart';
 
 class TranslateParam {
-  String id;
+  String key;
   String message;
   
-  TranslateParam();
+  TranslateParam({
+    String key,
+    String message
+  }) {
+    this.key = key;
+    this.message = message;
+  }
+
+  Map<String, String> toMap() {
+    Map<String, String> respMap = Map();
+    respMap['key'] = key;
+    respMap['message'] = message;
+    return respMap;
+  }
 }
 
 class TranslateResp {

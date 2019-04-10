@@ -79,6 +79,7 @@ class HomeScene extends StatelessWidget implements EventReceivable {
   Future<void> onSelected(BuildContext context) async {
     final model = ScopedModel.of<AppState>(context);
     await model.fetchHomeSceneRooms();
+    await model.translatePublicRooms();
   }
 }
 
