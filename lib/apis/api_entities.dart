@@ -2,6 +2,45 @@ import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/entities/message.dart';
 
+class TranslateParam {
+  String key;
+  String message;
+  
+  TranslateParam({
+    String key,
+    String message
+  }) {
+    this.key = key;
+    this.message = message;
+  }
+
+  Map<String, String> toMap() {
+    Map<String, String> respMap = Map();
+    respMap['key'] = key;
+    respMap['message'] = message;
+    return respMap;
+  }
+}
+
+class TranslateResp {
+  String key;
+  String translated;
+  String hash;
+
+  TranslateResp();
+
+  factory TranslateResp.fromJson(Map<String, dynamic> map) {
+    var res = TranslateResp();
+    res.key = map['key'];
+    res.translated = map['translated'];
+    res.hash = map['hash'];
+    return res;
+  }
+
+  @override
+  toString() => "TRANSLATE_API_RESP: $key = $translated";
+}
+
 class SimpleJoinApiResp {
   Nick nick;
   String token;
