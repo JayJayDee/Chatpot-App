@@ -16,3 +16,17 @@ class JoinRoomResp {
   bool get success => _success;
   String get cause => _cause;
 }
+
+class QueuedTranslation {
+  final String roomToken;
+  final String from;
+  final String message;
+  final String messageId;
+
+  QueuedTranslation({
+    this.roomToken,
+    this.from,
+    this.message,
+    this.messageId
+  });
+}
