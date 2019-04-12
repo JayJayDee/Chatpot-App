@@ -177,9 +177,47 @@ class _OtherMessageRow extends StatelessWidget {
 }
 
 Widget _translatedTextIndicator(AppState state, Message message) {
+  if (message.messageType != MessageType.TEXT) return Center();
   if (state.member.language == message.from.language) return Center();
-  // TODO: shows translated result
-  return Center();
+  Widget translated;
+  if (message.translated == null) {
+    translated = Container(
+      width: 14,
+      height: 14,
+      child: CircularProgressIndicator(
+        strokeWidth: 1
+      )
+    );
+  } else {
+    translated = Expanded(
+      child: Text(message.translated,
+        style: TextStyle(
+          fontSize: 14,
+          color: Styles.secondaryFontColor
+        )
+      )  
+    );
+  }
+  return Container(
+    padding: EdgeInsets.only(top: 5),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(padding: EdgeInsets.only(left: 5)),
+        Container(
+          child: Text('번역',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Styles.secondaryFontColor
+            )
+          )
+        ),
+        Padding(padding: EdgeInsets.only(left: 5)),
+        translated
+      ]
+    )
+  );
 }
 
 Widget _receiveTimeIndicator(Message msg) {
