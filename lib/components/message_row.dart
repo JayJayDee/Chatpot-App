@@ -206,7 +206,7 @@ Widget _translatedTextIndicator(AppState state, Message message) {
       children: [
         Padding(padding: EdgeInsets.only(left: 5)),
         Container(
-          child: Text('번역',
+          child: Text(locales().message.translateLabel,
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,

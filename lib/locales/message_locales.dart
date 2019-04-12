@@ -38,4 +38,10 @@ class MessageLocales {
     }
     return '';
   }
+
+  String get translateLabel {
+    if (language == 'ko') return '번역';
+    else if (language == 'ja') return '翻訳';
+    return 'Translation';
+  }
 }
