@@ -21,7 +21,6 @@ class AppState extends Model {
   List<Room> _recentRooms;
   List<Room> _crowdedRooms;
   List<MyRoom> _myRooms;
-  List<QueuedTranslation> _translationQueue;
   Member _member;
   bool _loading;
 
@@ -34,7 +33,6 @@ class AppState extends Model {
 
     _recentRooms = <Room>[];
     _crowdedRooms = <Room>[];
-    _translationQueue = <QueuedTranslation>[];
   }
 
   Member get member => _member;
@@ -48,20 +46,6 @@ class AppState extends Model {
   List<Message> get messages {
     if (_currentRoom == null) return [];
     return _currentRoom.messages.messages;
-  }
-
-  void enqueueTranslation(QueuedTranslation elem) =>
-    _translationQueue.add(elem);
-  
-  List<QueuedTranslation> popTranslations(int numElem) {
-    List<QueuedTranslation> poped = List();
-    for (int i = 0; i < numElem; i++) {
-      if (_translationQueue.length > 0) {
-        poped.add(_translationQueue[0]);
-        _translationQueue.removeAt(0);
-      }
-    }
-    return poped;
   }
 
   Future<AppInitState> tryAutoLogin() async {
@@ -434,6 +418,6 @@ class AppState extends Model {
   }
 
   Future<void> translateMessages() async {
-    // TODO: to be implemented.
+    if (_currentRoom == null) return;
   }
 }

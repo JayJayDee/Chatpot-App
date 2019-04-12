@@ -7,6 +7,7 @@ enum AttchedImageStatus {
 
 class Message {
   String messageId;
+  String translated;
   MessageType messageType;
   Member from;
   MessageTo to;
