@@ -182,6 +182,7 @@ Widget _translatedTextIndicator(AppState state, Message message) {
   Widget translated;
   if (message.translated == null) {
     translated = Container(
+      margin: EdgeInsets.only(top: 3),
       width: 14,
       height: 14,
       child: CircularProgressIndicator(
