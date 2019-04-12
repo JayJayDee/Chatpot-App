@@ -66,11 +66,13 @@ class MyRoom {
   DateTime regDate;
   Message lastMessage;
   String titleTranslated;
+  Map<String, String> messageTranslated;
 
   RoomMessages messages;
 
   MyRoom() {
     messages = RoomMessages();
+    messageTranslated = Map();
   }
 
   factory MyRoom.fromJson(Map<String, dynamic> map) {
@@ -85,6 +87,12 @@ class MyRoom {
       room.lastMessage = Message.fromJson(map['last_message']);
     }
     return room;
+  }
+
+  String translatedMessage(String messageId) => messageTranslated[messageId];
+
+  void cacheTranslation(String messageId, String translated) {
+    messageTranslated[messageId] = translated;
   }
 
   @override

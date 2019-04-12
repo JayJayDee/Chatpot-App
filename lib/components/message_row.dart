@@ -28,7 +28,7 @@ class MessageRow extends StatelessWidget {
 
     Widget widget;
     if (type == _RowType.MY_MSG) widget = _MyMessageRow(message: message);
-    else if (type == _RowType.OTHER_MSG) widget = _OtherMessageRow(message: message);
+    else if (type == _RowType.OTHER_MSG) widget = _OtherMessageRow(message: message, appState: state);
     else if (type ==_RowType.NOTIFICATION) widget = _NotificationRow(message: message);
     return Center(
       child: widget
@@ -98,9 +98,11 @@ class _MyMessageRow extends StatelessWidget {
 
 class _OtherMessageRow extends StatelessWidget {
   final Message message;
+  final AppState appState;
 
   _OtherMessageRow({
-    this.message
+    this.message,
+    this.appState
   });
 
   Widget build(BuildContext context) {
@@ -160,6 +162,7 @@ class _OtherMessageRow extends StatelessWidget {
                   ),
                 ),
                 contentWidget,
+                _translatedTextIndicator(appState, message),
                 Container(
                   padding: EdgeInsets.only(top: 3, left: 3),
                   child: _receiveTimeIndicator(message)
@@ -171,6 +174,12 @@ class _OtherMessageRow extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _translatedTextIndicator(AppState state, Message message) {
+  if (state.member.language == message.from.language) return Center();
+  // TODO: shows translated result
+  return Center();
 }
 
 Widget _receiveTimeIndicator(Message msg) {
