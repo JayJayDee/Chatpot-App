@@ -424,45 +424,59 @@ class AppState extends Model {
       _currentRoom.messages.messages.where((m) {
         if (m.from.language == _member.language) return false;
         if (m.messageType != MessageType.TEXT) return false;
-        if (_currentRoom.messageTranslated[m.messageId] != null) return false;
         return true;
       }).toList();
 
+    List<Translated> cachedTranslations =
+      await translationCacheAccessor().getCachedTranslations(
+        roomToken: _currentRoom.roomToken,
+        keys: translationTargets.map((m) => m.messageId).toList()
+      );
+
     List<TranslateParam> queries =
-      translationTargets.map((m) => TranslateParam(
+      translationTargets
+      .where((m) =>
+        cachedTranslations.where((t) => 
+          t.key == m.messageId).length == 0
+      )
+      .map((m) => TranslateParam(
         from: m.from.language,
         key: m.messageId,
         message: m.getTextContent()
-      )).toList();
+      ))
+      .toList();
 
     if (queries.length > 0) {
       var resp = await translateApi().requestTranslateMessages(
         queries: queries,
         toLocale: _member.language
       );
-      resp.forEach((t) {
-        _currentRoom.messageTranslated[t.key] = t.translated;
-      });
-    }
 
-    translationTargets.forEach((m) {
-      var translated = _currentRoom.messageTranslated[m.messageId];
-      if (translated != null) {
-        m.translated = translated;
-      }
+      resp.forEach((t) {
+        print("API_CALL_TRANSLATED_MESSAGE: ${t.translated}");
+        Message m = _currentRoom.messages.findMessage(t.key);
+        if (m != null) m.translated = t.translated;
+      });
+
+      List<Translated> cacheElems = 
+        resp.map<Translated>((t) =>
+          Translated(
+            key: t.key,
+            translated: t.translated
+          )
+        ).toList();
+
+      translationCacheAccessor().cacheTranslations(
+        roomToken: _currentRoom.roomToken,
+        translated: cacheElems);
+    } 
+
+    cachedTranslations.forEach((t) {
+      print("CACHED_TRANSLATED_MESSAGE: ${t.translated}");
+      Message msg = _currentRoom.messages.findMessage(t.key);
+      if (msg != null) msg.translated = t.translated;
     });
 
-    List<Translated> cacheElems = 
-      translationTargets.map<Translated>((m) =>
-        Translated(
-          key: m.messageId,
-          translated: m.translated
-        )
-      ).toList();
-
-    translationCacheAccessor().cacheTranslations(
-      roomToken: _currentRoom.roomToken,
-      translated: cacheElems);
     notifyListeners();
   }
 }

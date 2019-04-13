@@ -7,22 +7,26 @@ import 'package:sqflite/sqflite.dart';
 class SqliteTranslationCacheAccessor extends TranslationCacheAccessor {
 
   final String dbName;
+  final int dbVersion = 1;
   Database _db;
 
   SqliteTranslationCacheAccessor({
     @required this.dbName
   }) {
-    _initAsync();
+    _getDb();
   }
 
-  void _initAsync() async {
+  Future<Database> _getDb() async {
+    if (_db != null) return _db;
+
     String dbPath = await getDatabasesPath();
     String fullPath = join(dbPath, dbName);
 
     Database database = await openDatabase(fullPath,
+      version: dbVersion,
       onCreate: (Database db, int version) async {
         String createSql = """
-          CREATE TABLE translation_cache (
+          CREATE TABLE translation_cache_$dbVersion (
             no INTEGER PRIMARY KEY AUTOINCREMENT,
             room_token VARCHAR(80) NOT NULL,
             message_id VARCHAR(80) NOT NULL,
@@ -31,14 +35,14 @@ class SqliteTranslationCacheAccessor extends TranslationCacheAccessor {
         """;
         await db.execute(createSql);
         String indexSql = """
-          CREATE INDEX idx_translation ON
-            translation_cache (room_token, message_id)
+          CREATE INDEX idx_translation_$dbVersion ON
+            translation_cache_$dbVersion (room_token, message_id)
         """;
         await db.execute(indexSql);
       }
     );
     _db = database;
-    print('DB INITED!');
+    return database;
   }
 
   Future<void> cacheTranslations({
@@ -49,22 +53,40 @@ class SqliteTranslationCacheAccessor extends TranslationCacheAccessor {
       "('$roomToken','${t.key}','${t.translated}')").toList();
     String valuesClause = values.join(',');
     String insertQuery = """
-      INSERT INTO translation_cache
+      INSERT INTO translation_cache_$dbVersion
         (room_token, message_id, translated)
       VALUES
         $valuesClause
     """;
-    if (_db == null) {
-      print("DB NULL!");
-    } else {
-      await _db.execute(insertQuery);
-    }
+    var db = await _getDb();
+    await db.execute(insertQuery);
   }
 
   Future<List<Translated>> getCachedTranslations({
     @required String roomToken,
     @required List<String> keys
   }) async {
-    return null;
+    if (keys.length == 0) return [];
+    String inClause = keys.map((k) => "'$k'").toList().join(',');
+    String selectQuery = """
+      SELECT 
+        message_id,
+        translated
+      FROM 
+        translation_cache_$dbVersion
+      WHERE
+        room_token='$roomToken' AND
+        message_id IN ($inClause)
+    """;
+
+    var db = await _getDb();
+    List<Map<String, dynamic>> result = await db.rawQuery(selectQuery);
+    List<Translated> translates = result.map((elem) =>
+      Translated(
+        key: elem['message_id'],
+        translated: elem['translated']
+      )
+    ).toList();
+    return translates;
   }
 }

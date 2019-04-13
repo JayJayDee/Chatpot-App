@@ -35,6 +35,7 @@ class RootLocaleConverter {
 
   void selectLanguage(BuildContext context) {
     Locale locale = Localizations.localeOf(context);
+    _login = LoginSceneLocales(root: this, language: _language);
     _language = locale.languageCode;
     _home = HomeSceneLocales(root: this, language: _language);
     _message = MessageLocales(root: this, language: _language);

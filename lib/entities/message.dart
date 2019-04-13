@@ -166,6 +166,13 @@ class RoomMessages {
   int get offset => _offset;
   int get notViewed => _notViewed;
 
+  Message findMessage(messageId) {
+    List<Message> found = 
+      _messages.where((m) => m.messageId == messageId).toList();
+    if (found.length == 0) return null;
+    return found[0];
+  }
+
   void clearOffset() {
     _offset = 0;
   }
