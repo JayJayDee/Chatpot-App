@@ -419,5 +419,38 @@ class AppState extends Model {
 
   Future<void> translateMessages() async {
     if (_currentRoom == null) return;
+
+    List<Message> translationTargets =
+      _currentRoom.messages.messages.where((m) {
+        if (m.from.language == _member.language) return false;
+        if (m.messageType != MessageType.TEXT) return false;
+        if (_currentRoom.messageTranslated[m.messageId] != null) return false;
+        return true;
+      }).toList();
+
+    List<TranslateParam> queries =
+      translationTargets.map((m) => TranslateParam(
+        from: m.from.language,
+        key: m.messageId,
+        message: m.getTextContent()
+      )).toList();
+
+    if (queries.length > 0) {
+      var resp = await translateApi().requestTranslateMessages(
+        queries: queries,
+        toLocale: _member.language
+      );
+      resp.forEach((t) {
+        _currentRoom.messageTranslated[t.key] = t.translated;
+      });
+    }
+
+    translationTargets.forEach((m) {
+      var translated = _currentRoom.messageTranslated[m.messageId];
+      if (translated != null) {
+        m.translated = translated;
+      }
+    });
+    notifyListeners();
   }
 }

@@ -74,6 +74,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     MyRoom room = model.currentRoom;
     room.messages.clearNotViewed();
     await model.fetchMoreMessages(roomToken: room.roomToken);
+    await model.translateMessages();
   }
 
   Future<void> _onRoomLeaveClicked(BuildContext context) async {
