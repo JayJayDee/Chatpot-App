@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:toast/toast.dart';
 import 'package:chatpot_app/scenes/signup_simple_scene.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/styles.dart';
 
 String _email = '';
 String _password = '';
@@ -42,16 +43,19 @@ class LoginScene extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(left: 20, right: 20, top: 20),
-              child: Text("Please sign in for using Chatpot.\nOr, you can just start Chatpot without sign up.")
-            ),
             Expanded(
               child: SizedBox(
                 width: 500,
                 child: ListView(
                   padding: EdgeInsets.only(top: 20, left: 20, right: 20),
                   children: <Widget>[
+                    Text(locales().login.loginIntroduce,
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: Styles.primaryFontColor
+                      )
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10)),
                     _buildLoginField(context, (String value) => _email = value),
                     _buildPasswordField(context, (String value) => _password = value),
                     Container(
@@ -97,7 +101,7 @@ Widget _buildLoginField(BuildContext context, ValueChanged<String> valueChange) 
     size: 28.0
   ),
   padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
-  placeholder: 'Email address',
+  placeholder: locales().login.emailHint,
   keyboardType: TextInputType.emailAddress,
   decoration: BoxDecoration(
     border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
@@ -112,7 +116,7 @@ Widget _buildPasswordField(BuildContext context, ValueChanged<String> valueChang
     size: 28.0
   ),
   padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
-  placeholder: 'Password',
+  placeholder: locales().login.passwordHint,
   keyboardType: TextInputType.text,
   obscureText: true,
   decoration: BoxDecoration(

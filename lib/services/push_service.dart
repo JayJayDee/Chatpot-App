@@ -39,14 +39,14 @@ class PushService {
     print('ON_MESSAGE FIRED');
     Message msg = _parseMessage(message);
     print(msg);
-    _state.addSingleMessage(msg: msg);
+    _state.addSingleMessageFromPush(msg: msg);
   }
 
   Future<dynamic> _onResume(Map<String, dynamic> message) async {
     print('ON_RESUME FIRED');
     Message msg = _parseMessage(message);
     print(msg);
-    _state.addSingleMessage(msg: msg);
+    _state.addSingleMessageFromPush(msg: msg);
   }
 
   Future<dynamic> _onLaunch(Map<String, dynamic> message) async {
