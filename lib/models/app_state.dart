@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -10,6 +9,7 @@ import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:chatpot_app/models/model_entities.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
+import 'package:chatpot_app/storage/translation_cache_accessor.dart';
 
 delaySec(int sec) => Future.delayed(Duration(milliseconds: sec * 1000));
 
@@ -451,6 +451,18 @@ class AppState extends Model {
         m.translated = translated;
       }
     });
+
+    List<Translated> cacheElems = 
+      translationTargets.map<Translated>((m) =>
+        Translated(
+          key: m.messageId,
+          translated: m.translated
+        )
+      ).toList();
+
+    translationCacheAccessor().cacheTranslations(
+      roomToken: _currentRoom.roomToken,
+      translated: cacheElems);
     notifyListeners();
   }
 }
