@@ -191,10 +191,12 @@ Widget _translatedTextIndicator(AppState state, Message message) {
     );
   } else {
     translated = Expanded(
-      child: Text(message.translated,
-        style: TextStyle(
-          fontSize: 14,
-          color: Styles.secondaryFontColor
+      child: Container(
+        child: Text(message.translated,
+          style: TextStyle(
+            fontSize: 14,
+            color: Styles.secondaryFontColor
+          )
         )
       )  
     );
