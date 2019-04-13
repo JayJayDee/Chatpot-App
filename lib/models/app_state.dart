@@ -274,6 +274,51 @@ class AppState extends Model {
     notifyListeners();
   }
 
+  Future<void> addSingleMessageFromPush({
+    @required Message msg
+  }) async {
+    var rooms = _myRooms.where((r) =>
+      r.roomToken == msg.to.token && msg.to.type == MessageTarget.ROOM);
+    if (rooms.length == 0) return;
+
+    MyRoom myRoom = rooms.toList()[0];
+    if (_currentRoom != null && myRoom.roomToken == _currentRoom.roomToken) {
+      _currentRoom.messages.appendSingleMessage(msg);
+      _currentRoom.lastMessage = msg;
+
+      if (msg.from.token != _member.token &&
+            msg.messageType == MessageType.TEXT &&
+            msg.from.language != _member.language) {
+
+        TranslateParam param = TranslateParam(
+          key: msg.messageId,
+          message: msg.getTextContent(),
+          from: msg.from.language
+        );
+        var translated = await translateApi().requestTranslateMessages(
+          queries: [ param ],
+          toLocale: _member.language
+        );
+
+        if (translated.length > 0) {
+          msg.translated = translated[0].translated;
+          translationCacheAccessor().cacheTranslations(
+            roomToken: _currentRoom.roomToken,
+            translated: [Translated(
+              key: msg.messageId,
+              translated: translated[0].translated
+            )]
+          );
+        }
+      }
+
+    } else {
+      myRoom.lastMessage = msg;
+      myRoom.messages.increaseNotViewed();
+    }
+    notifyListeners();
+  }
+
   Future<void> publishMessage({
     @required MessageType type,
     @required dynamic content,
