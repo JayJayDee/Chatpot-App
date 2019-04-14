@@ -121,6 +121,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
         if (_model.currentRoom != null) {
           _model.currentRoom.messages.clearNotViewed();
           await _model.fetchMessagesWhenResume(roomToken: _model.currentRoom.roomToken);
+          await _model.translateMessages();
         }
       }
     };
