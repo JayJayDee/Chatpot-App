@@ -421,18 +421,46 @@ class AppState extends Model {
     List<TranslateParam> queries =
       paramMap.keys.map((k) => paramMap[k]).toList();
 
-    var apiResp = await translateApi().requestTranslateRooms(
-      toLocale: _member.language,
-      queries: queries
-    );
-    
-    apiResp.forEach((t) {
-      List<Room> foundInCrowd = _crowdedRooms.where((r) => r.roomToken == t.key).toList();
-      if (foundInCrowd.length > 0) foundInCrowd[0].titleTranslated = t.translated;
+    List<String> cacheQueries = queries.map((q) => q.key).toList();
+    List<Translated> cachedTranslations = await
+      translationCacheAccessor().getCachedRoomTitleTranslations(keys: cacheQueries);
 
-      List<Room> foundInRecent = _recentRooms.where((r) => r.roomToken == t.key).toList();
-      if (foundInRecent.length > 0) foundInRecent[0].titleTranslated = t.translated;
+    cachedTranslations.forEach((c) {
+      List<Room> foundInCrowd = _crowdedRooms.where((r) => r.roomToken == c.key).toList();
+      if (foundInCrowd.length > 0) foundInCrowd[0].titleTranslated = c.translated;
+
+      List<Room> foundInRecent = _recentRooms.where((r) => r.roomToken == c.key).toList();
+      if (foundInRecent.length > 0) foundInRecent[0].titleTranslated = c.translated;
     });
+
+    List<TranslateParam> filteredQuery = 
+      queries.where((q) =>
+         cachedTranslations.where((c) => 
+          c.key == q.key).length == 0).toList();
+
+    if (filteredQuery.length > 0) {
+      var apiResp = await translateApi().requestTranslateRooms(
+        toLocale: _member.language,
+        queries: filteredQuery
+      );
+      
+      apiResp.forEach((t) {
+        List<Room> foundInCrowd = _crowdedRooms.where((r) => r.roomToken == t.key).toList();
+        if (foundInCrowd.length > 0) foundInCrowd[0].titleTranslated = t.translated;
+
+        List<Room> foundInRecent = _recentRooms.where((r) => r.roomToken == t.key).toList();
+        if (foundInRecent.length > 0) foundInRecent[0].titleTranslated = t.translated;
+      });
+
+      if (apiResp.length > 0) {
+        List<Translated> cacheParams = 
+        apiResp.map((r) => Translated(
+          key: r.key,
+          translated: r.translated
+        )).toList();
+        await translationCacheAccessor().cacheRoomTitleTranslations(translated: cacheParams);
+      }
+    }
     notifyListeners();
   }
 
@@ -440,6 +468,7 @@ class AppState extends Model {
     Map<String, TranslateParam> paramMap = Map();
     _myRooms.forEach((r) {
       if (r.owner.language == _member.language) return;
+      if (r.titleTranslated != null) return;
       paramMap[r.roomToken] = TranslateParam(
         key: r.roomToken,
         message: r.title,
@@ -449,16 +478,47 @@ class AppState extends Model {
 
     List<TranslateParam> queries =
       paramMap.keys.map((k) => paramMap[k]).toList();
-    
-    var apiResp = await translateApi().requestTranslateRooms(
-      toLocale: _member.language,
-      queries: queries
-    );
 
-    apiResp.forEach((t) {
-      List<MyRoom> founds = _myRooms.where((r) => r.roomToken == t.key).toList();
-      if (founds.length > 0) founds[0].titleTranslated = t.translated;
+    List<Translated> cachedList =
+      await translationCacheAccessor()
+        .getCachedRoomTitleTranslations(
+          keys: queries.map((q) => q.key).toList());
+
+    cachedList.forEach((c) {
+      List<MyRoom> founds = _myRooms.where((r) => r.roomToken == c.key).toList();
+      if (founds.length > 0) {
+        founds[0].titleTranslated = c.translated;
+      }
+      print("MY_ROOM_TITLE TRANSLATION CACHE USED");
     });
+
+    List<TranslateParam> filteredQuery = 
+      queries.where((q) =>
+         cachedList.where((c) => 
+          c.key == q.key).length == 0).toList();
+
+    if (filteredQuery.length > 0) {
+      var apiResp = await translateApi().requestTranslateRooms(
+        toLocale: _member.language,
+        queries: filteredQuery
+      );
+
+      // cache translation response.
+      if (apiResp.length > 0) {
+        apiResp.forEach((t) {
+          List<MyRoom> founds = _myRooms.where((r) => r.roomToken == t.key).toList();
+          if (founds.length > 0) founds[0].titleTranslated = t.translated;
+          print("MY_ROOM_TITLE TRANSLATION API RESPONSE USED");
+        });
+        List<Translated> cacheParams = 
+          apiResp.map((r) => Translated(
+            key: r.key,
+            translated: r.translated
+          )).toList();
+        await translationCacheAccessor().cacheRoomTitleTranslations(translated: cacheParams);
+      }
+    }    
+
     notifyListeners();
   }
 

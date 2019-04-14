@@ -45,6 +45,22 @@ class SqliteTranslationCacheAccessor extends TranslationCacheAccessor {
     return database;
   }
 
+  Future<void> cacheRoomTitleTranslations({
+    @required List<Translated> translated
+  }) async {
+    List<String> values = translated.map((t) =>
+      "('${t.key}','ROOM_TITLE','${t.translated}')").toList();
+    String valuesClause = values.join(',');
+    String insertQuery = """
+      INSERT INTO translation_cache_$dbVersion
+        (room_token, message_id, translated)
+      VALUES
+        $valuesClause
+    """;
+    var db = await _getDb();
+    await db.execute(insertQuery);
+  }
+
   Future<void> cacheTranslations({
     @required String roomToken,
     @required List<Translated> translated
@@ -60,6 +76,33 @@ class SqliteTranslationCacheAccessor extends TranslationCacheAccessor {
     """;
     var db = await _getDb();
     await db.execute(insertQuery);
+  }
+
+  Future<List<Translated>> getCachedRoomTitleTranslations({
+    @required List<String> keys
+  }) async {
+    if (keys.length == 0) return [];
+    String inClause = keys.map((k) => "'$k'").toList().join(',');
+    String selectQuery = """
+      SELECT 
+        room_token,
+        translated
+      FROM 
+        translation_cache_$dbVersion
+      WHERE
+        room_token IN ($inClause) AND
+        message_id='ROOM_TITLE'
+    """;
+
+    var db = await _getDb();
+    List<Map<String, dynamic>> result = await db.rawQuery(selectQuery);
+    List<Translated> translates = result.map((elem) =>
+      Translated(
+        key: elem['room_token'],
+        translated: elem['translated']
+      )
+    ).toList();
+    return translates;
   }
 
   Future<List<Translated>> getCachedTranslations({

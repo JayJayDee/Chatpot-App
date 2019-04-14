@@ -94,6 +94,7 @@ class MyRoomRow extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.only(left: 10),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
                           locales().room.numMembersSimple(myRoom.numAttendee),

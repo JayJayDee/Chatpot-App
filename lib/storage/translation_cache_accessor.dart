@@ -17,8 +17,16 @@ abstract class TranslationCacheAccessor {
     @required List<Translated> translated
   });
 
+  Future<void> cacheRoomTitleTranslations({
+    @required List<Translated> translated
+  });
+
   Future<List<Translated>> getCachedTranslations({
     @required String roomToken,
+    @required List<String> keys
+  });
+
+  Future<List<Translated>> getCachedRoomTitleTranslations({
     @required List<String> keys
   });
 }
