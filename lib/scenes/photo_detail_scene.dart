@@ -57,19 +57,56 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
         transitionBetweenRoutes: true
       ),
       child: SafeArea(
-        child: Swiper(
-          itemBuilder: (BuildContext context, int idx) =>
-            _buildImagePage(context, _imageMessages[idx], idx),
-          itemCount: _imageMessages.length,
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Swiper(
+              itemBuilder: (BuildContext context, int idx) =>
+                _buildImagePage(context, _imageMessages[idx], idx),
+              itemCount: _imageMessages.length,
+              index: _selectedIdx,
+              onIndexChanged: (int idx) {
+                print("CURRENT IDX = $idx");
+              },
+            ),
+            Positioned(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text('TEST',
+                    style: TextStyle(
+                      color: CupertinoColors.white
+                    )
+                  ),
+                  Text('TEST',
+                    style: TextStyle(
+                      color: CupertinoColors.white
+                    )
+                  )
+                ]
+              )
+            )
+          ]
         )
       )
+    );
+  }
+
+  Widget _overlayIndicator(BuildContext context) {
+    return Container(
+
     );
   }
 }
 
 Widget _buildImagePage(BuildContext context, Message message, int idx) {
   return Container(
+    color: CupertinoColors.black,
     alignment: Alignment.center,
-    child: Text("CURRENT_INDEX=$idx")
+    child: PhotoView(
+      imageProvider: NetworkImage(
+        message.getImageContent().imageUrl
+      ),
+    )
   );
 }
