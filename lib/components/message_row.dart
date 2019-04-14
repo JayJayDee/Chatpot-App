@@ -11,15 +11,19 @@ enum _RowType {
   NOTIFICATION, MY_MSG, OTHER_MSG
 }
 
+typedef ImageClickCallback (String messageId);
+
 @immutable
 class MessageRow extends StatelessWidget {
 
   final Message message;
   final AppState state;
+  final ImageClickCallback imageClickCallback;
 
   MessageRow({
     @required this.message,
-    @required this.state
+    @required this.state,
+    @required this.imageClickCallback
   });
 
   Widget build(BuildContext context) {
@@ -27,9 +31,24 @@ class MessageRow extends StatelessWidget {
     _RowType type = judgeRowType(message, myToken);
 
     Widget widget;
-    if (type == _RowType.MY_MSG) widget = _MyMessageRow(message: message);
-    else if (type == _RowType.OTHER_MSG) widget = _OtherMessageRow(message: message, appState: state);
-    else if (type ==_RowType.NOTIFICATION) widget = _NotificationRow(message: message);
+    if (type == _RowType.MY_MSG) {
+      widget = _MyMessageRow(
+        message: message,
+        imageClickCallback: imageClickCallback
+      );
+
+    } else if (type == _RowType.OTHER_MSG) {
+      widget = _OtherMessageRow(
+        message: message,
+        appState: state,
+        imageClickCallback: imageClickCallback
+      );
+
+    } else if (type ==_RowType.NOTIFICATION) {
+      widget = _NotificationRow(
+        message: message
+      );
+    }
     return Center(
       child: widget
     );
@@ -56,9 +75,11 @@ class _NotificationRow extends StatelessWidget {
 
 class _MyMessageRow extends StatelessWidget {
   final Message message;
+  final ImageClickCallback imageClickCallback;
 
   _MyMessageRow({
-    this.message
+    this.message,
+    this.imageClickCallback
   });
 
   Widget build(BuildContext context) {
@@ -69,7 +90,7 @@ class _MyMessageRow extends StatelessWidget {
       if (message.attchedImageStatus == AttchedImageStatus.LOCAL_IMAGE) {
         contentWidget = _getLoadingImageContentWidget(message);
       } else if (message.attchedImageStatus == AttchedImageStatus.REMOTE_IMAGE) {
-        contentWidget = _getRemoteImageContentWidget(message);
+        contentWidget = _getRemoteImageContentWidget(message, imageClickCallback);
       }
     }
 
@@ -99,10 +120,12 @@ class _MyMessageRow extends StatelessWidget {
 class _OtherMessageRow extends StatelessWidget {
   final Message message;
   final AppState appState;
+  final ImageClickCallback imageClickCallback;
 
   _OtherMessageRow({
     this.message,
-    this.appState
+    this.appState,
+    this.imageClickCallback
   });
 
   Widget build(BuildContext context) {
@@ -110,7 +133,7 @@ class _OtherMessageRow extends StatelessWidget {
     if (message.messageType == MessageType.TEXT) {
       contentWidget = _getTextContentWidget(message);
     } else if (message.messageType == MessageType.IMAGE) {
-      contentWidget = _getRemoteImageContentWidget(message);
+      contentWidget = _getRemoteImageContentWidget(message, imageClickCallback);
     }
 
     return Container(
@@ -265,17 +288,20 @@ Widget _getLoadingImageContentWidget(Message message) =>
     )
   );
 
-Widget _getRemoteImageContentWidget(Message message) {
-  return ClipRRect(
-    borderRadius: BorderRadius.circular(10.0),
-    child: CachedNetworkImage(
-      imageUrl: message.getImageContent().thumbnailUrl,
-      placeholder: (context, url) => CupertinoActivityIndicator(),
-      width: 150,
-      height: 150,
-    )
+Widget _getRemoteImageContentWidget(Message message, ImageClickCallback callback) =>
+  CupertinoButton(
+    padding: EdgeInsets.all(0),
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(10.0),
+      child: CachedNetworkImage(
+        imageUrl: message.getImageContent().thumbnailUrl,
+        placeholder: (context, url) => CupertinoActivityIndicator(),
+        width: 150,
+        height: 150,
+      )
+    ),
+    onPressed: () => callback(message.messageId)
   );
-}
 
 Widget _getTextContentWidget(Message message) =>
   ClipRRect(

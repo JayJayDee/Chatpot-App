@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:chatpot_app/entities/message.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
 
 class PhotoDetailScene extends StatefulWidget {
-  
+
+  final BuildContext messagesSceneContext;
   final List<Message> messages;
   final String selectedMessageId;
 
   PhotoDetailScene(
+    this.messagesSceneContext,
     this.messages,
     this.selectedMessageId
   );
@@ -23,7 +26,7 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
   Message _selectedMessage;
 
   _PhotoDetailSceneState() {
-    
+
   }
 
   @override
