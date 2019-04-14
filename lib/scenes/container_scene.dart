@@ -57,6 +57,7 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
     var func = () async {
       if (state == AppLifecycleState.resumed) {
         await _model.fetchMyRooms();
+        await _model.translateMyRooms();
       }
     };
     func();
