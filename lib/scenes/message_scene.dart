@@ -12,6 +12,7 @@ import 'package:chatpot_app/entities/message.dart';
 import 'package:chatpot_app/components/message_row.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/scenes/photo_detail_scene.dart';
 
 typedef ImageClickCallback (String messageId);
 
@@ -87,7 +88,16 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onImageClicked(BuildContext context, String messageId) async {
-    print("IMAGE_CLICKED, MESSAGE_ID=$messageId");
+    final model = ScopedModel.of<AppState>(context);
+    await Navigator.of(context).push(CupertinoPageRoute<String>(
+      title: 'Photo',
+      builder: (BuildContext context) => 
+        PhotoDetailScene(
+          context,
+          model.currentRoom.messages.messages,
+          messageId
+        )
+    ));
   }
 
   @override
