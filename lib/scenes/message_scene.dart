@@ -12,6 +12,9 @@ import 'package:chatpot_app/entities/message.dart';
 import 'package:chatpot_app/components/message_row.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/scenes/photo_detail_scene.dart';
+
+typedef ImageClickCallback (String messageId);
 
 @immutable
 class MessageScene extends StatefulWidget {
@@ -43,8 +46,6 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
       image: image,
       tempMessageId: tempMessageId
     );
-    print('IMAGE_UPLOAD_DONE');
-
     model.publishMessage(
       content: imageContent,
       type: MessageType.IMAGE,
@@ -84,6 +85,19 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
       await model.leaveFromRoom(model.currentRoom.roomToken);
       Navigator.of(context).pop();
     }
+  }
+
+  Future<void> _onImageClicked(BuildContext context, String messageId) async {
+    final model = ScopedModel.of<AppState>(context);
+    await Navigator.of(context).push(CupertinoPageRoute<String>(
+      title: 'Photo',
+      builder: (BuildContext context) => 
+        PhotoDetailScene(
+          context,
+          model.currentRoom.messages.messages,
+          messageId
+        )
+    ));
   }
 
   @override
@@ -141,7 +155,9 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
               children: [
                 Expanded(
                   child: _buildListView(context,
-                    controller: _scrollController
+                    controller: _scrollController,
+                    imageClickCallback: (String messageId) =>
+                      _onImageClicked(context, messageId)
                   )
                 ),
                 _buildEditText(context, 
@@ -163,7 +179,8 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 }
 
 Widget _buildListView(BuildContext context, {
-  @required ScrollController controller
+  @required ScrollController controller,
+  @required ImageClickCallback imageClickCallback
 }) {
   final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
   return ListView.builder(
@@ -174,7 +191,11 @@ Widget _buildListView(BuildContext context, {
     itemCount: model.currentRoom.messages.messages.length,
     itemBuilder: (BuildContext context, int idx) {
       Message msg = model.currentRoom.messages.messages[idx];
-      return MessageRow(message: msg, state: model);
+      return MessageRow(
+        message: msg,
+        state: model,
+        imageClickCallback: imageClickCallback,
+      );
     }
   );
 }
