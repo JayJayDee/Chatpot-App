@@ -30,7 +30,10 @@ class Message {
     Message message = Message();
     message.messageId = map['message_id'];
     message.messageType = _getType(map['type']);
-    message.from = Member.fromJson(map['from']);
+
+    if (map['from'] != null) {
+      message.from = Member.fromJson(map['from']);
+    }
     message.to = MessageTo.fromJson(map['to']);
     message.sentTime = DateTime.fromMillisecondsSinceEpoch(map['sent_time']);
     message.content = map['content'];
