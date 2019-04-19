@@ -527,6 +527,7 @@ class AppState extends Model {
 
     List<Message> translationTargets =
       _currentRoom.messages.messages.where((m) {
+        if (m.from == null) return false;
         if (m.from.language == _member.language) return false;
         if (m.messageType != MessageType.TEXT) return false;
         return true;
