@@ -1,6 +1,6 @@
 <resources>
   <string name="MESSAGE_ARRIVAL">새로운 메시지</string>
-  <string name="ROOM_JOIN_TITLE">누군가가 채팅에 참여했습니다.</string>
-  <string name="ROOM_LEAVE_TITLE">누군가가 채팅에서 떠났습니다.</string>
+  <string name="ROOM_JOIN_TITLE">누군가가 채팅에 참여했습니다</string>
+  <string name="ROOM_LEAVE_TITLE">누군가가 채팅에서 떠났습니다</string>
   <string name="MESSAGE_PICTURE">(사진)</string>
 </resources>
