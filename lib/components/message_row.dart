@@ -69,7 +69,30 @@ class _NotificationRow extends StatelessWidget {
   });
 
   Widget build(BuildContext context) {
-    return Center();
+    String text = locales().message.notificationText(message.getNotificationContent());
+    return Container(
+      margin: EdgeInsets.only(left: 10, top: 5, bottom: 5, right: 10),
+      child: Row(
+        children: [
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(5),
+                color: Styles.thirdFontColor,
+                child: Text(text,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Styles.primaryFontColor
+                  )
+                )
+              )
+            )
+          )
+        ]
+      )
+    );
   }
 }
 
