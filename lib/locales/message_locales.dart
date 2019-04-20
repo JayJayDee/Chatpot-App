@@ -1,4 +1,5 @@
 import 'package:chatpot_app/locales/root_locale_converter.dart';
+import 'package:chatpot_app/entities/message.dart';
 
 class MessageLocales {
   String language;
@@ -43,5 +44,25 @@ class MessageLocales {
     if (language == 'ko') return '번역';
     else if (language == 'ja') return '翻訳';
     return 'Translation';
+  }
+
+  String notificationText(NotificationContent noti) {
+    if (noti.notificationType == NotificationType.JOIN_ROOM) return _roomJoinText(noti);
+    if (noti.notificationType == NotificationType.LEAVE_ROOM) return _roomLeaveText(noti);
+    return ' ';
+  }
+
+  String _roomJoinText(NotificationContent noti) {
+    String nick = root.getNick(noti.member.nick);
+    if (language == 'ko') return "$nick님이 채팅에 참여했습니다.";
+    else if (language == 'ja') return "$nickさんがチャットに参加しました。";
+    return "The $nick has joined the chat.";
+  }
+
+  String _roomLeaveText(NotificationContent noti) {
+    String nick = root.getNick(noti.member.nick);
+    if (language == 'ko') return "$nick님이 채팅에서 나갔습니다.";
+    else if (language == 'ja') return "$nickさんがチャットを離れました。";
+    return "The $nick has left the chat.";
   }
 }

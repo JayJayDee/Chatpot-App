@@ -5,6 +5,10 @@ enum AttchedImageStatus {
   REMOTE_IMAGE, LOCAL_IMAGE
 }
 
+enum NotificationType {
+  JOIN_ROOM, LEAVE_ROOM
+}
+
 class Message {
   String messageId;
   String translated;
@@ -83,7 +87,9 @@ class Message {
 
   NotificationContent getNotificationContent() {
     if (messageType != MessageType.NOTIFICATION) return null;
-    return null;
+    if (content is NotificationContent) return content;
+    Map<String, dynamic> converted = Map.from(content);
+    return NotificationContent.fromJson(converted);
   }
 
   @override
@@ -145,7 +151,33 @@ class ImageContent {
 }
 
 class NotificationContent {
+  NotificationType notificationType;
+  Member member;
+  String roomToken;
 
+  NotificationContent({
+    @required this.notificationType,
+    @required this.member,
+    @required this.roomToken
+  });
+
+  factory NotificationContent.fromJson(Map<String, dynamic> map) =>
+    NotificationContent(
+      notificationType: _parseType(map['notification_type'].toString()),
+      member: Member.fromJson(map['member']),
+      roomToken: map['room_token']
+    );
+
+  static NotificationType _parseType(String typeExpr) {
+    if (typeExpr == 'JOIN_ROOM') return NotificationType.JOIN_ROOM;
+    else if (typeExpr == 'LEAVE_ROOM') return NotificationType.LEAVE_ROOM;
+    return null;
+  }
+
+  @override
+  String toString() {
+    return "${notificationType.toString()} - $roomToken";
+  }
 }
 
 class RoomMessages {
