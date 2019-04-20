@@ -71,20 +71,20 @@ class _NotificationRow extends StatelessWidget {
   Widget build(BuildContext context) {
     String text = locales().message.notificationText(message.getNotificationContent());
     return Container(
-      margin: EdgeInsets.all(10),
+      margin: EdgeInsets.only(left: 10, top: 5, bottom: 5, right: 10),
       child: Row(
         children: [
           Expanded(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(4),
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(5),
-                color: Styles.secondaryFontColor,
+                color: Styles.thirdFontColor,
                 child: Text(text,
                   style: TextStyle(
-                    fontSize: 15,
-                    color: CupertinoColors.white
+                    fontSize: 14,
+                    color: Styles.primaryFontColor
                   )
                 )
               )

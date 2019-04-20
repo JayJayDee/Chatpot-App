@@ -8,6 +8,7 @@ abstract class Styles {
 
   static const primaryFontColor = Color(0xFF505050);
   static const secondaryFontColor = Color(0xFF929292);
+  static const thirdFontColor = Color(0xFFCCCCCC);
 
   static const listViewRowBackground = Color(0xffefefef);
   static const listRowHeaderBackground = Color(0xffefefef);
