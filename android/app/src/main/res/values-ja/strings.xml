@@ -1,3 +1,5 @@
 <resources>
-  <string name="noti_room_message">%1$sからのメッセージ</string>
+  <string name="MESSAGE_ARRIVAL">新しいメッセージ</string>
+  <string name="ROOM_JOIN_TITLE">誰かがチャットに参加しました</string>
+  <string name="ROOM_LEAVE_TITLE">誰かがチャットを離れました</string>
 </resources>
