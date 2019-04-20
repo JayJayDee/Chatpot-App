@@ -286,8 +286,8 @@ class AppState extends Model {
       _currentRoom.messages.appendSingleMessage(msg);
       _currentRoom.lastMessage = msg;
 
-      if (msg.from.token != _member.token &&
-            msg.messageType == MessageType.TEXT &&
+      if (msg.messageType == MessageType.TEXT &&
+            msg.from.token != _member.token &&
             msg.from.language != _member.language) {
 
         TranslateParam param = TranslateParam(
