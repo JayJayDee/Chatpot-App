@@ -48,9 +48,11 @@ class SqliteTranslationCacheAccessor extends TranslationCacheAccessor {
   Future<void> cacheRoomTitleTranslations({
     @required List<Translated> translated
   }) async {
-    List<String> values = translated.map((t) =>
-      "('${t.key}','ROOM_TITLE','${t.translated}')").toList();
-    String valuesClause = values.join(',');
+    List<dynamic> values = [];
+    String valuesClause = translated.map((t) {
+      values.addAll([t.key, 'ROOM_TITLE', t.translated]);
+      return "(?,?,?)";
+    }).toList().join(',');
     String insertQuery = """
       INSERT INTO translation_cache_$dbVersion
         (room_token, message_id, translated)
@@ -58,16 +60,18 @@ class SqliteTranslationCacheAccessor extends TranslationCacheAccessor {
         $valuesClause
     """;
     var db = await _getDb();
-    await db.execute(insertQuery);
+    await db.rawInsert(insertQuery, values);
   }
 
   Future<void> cacheTranslations({
     @required String roomToken,
     @required List<Translated> translated
   }) async {
-    List<String> values = translated.map((t) =>
-      "('$roomToken','${t.key}','${t.translated}')").toList();
-    String valuesClause = values.join(',');
+    List<dynamic> values = [];
+    String valuesClause = translated.map((t) {
+      values.addAll([roomToken, t.key, t.translated]);
+      return "(?, ?, ?)";
+    }).toList().join(',');
     String insertQuery = """
       INSERT INTO translation_cache_$dbVersion
         (room_token, message_id, translated)
@@ -75,7 +79,7 @@ class SqliteTranslationCacheAccessor extends TranslationCacheAccessor {
         $valuesClause
     """;
     var db = await _getDb();
-    await db.execute(insertQuery);
+    await db.rawInsert(insertQuery, values);
   }
 
   Future<List<Translated>> getCachedRoomTitleTranslations({

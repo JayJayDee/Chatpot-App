@@ -132,7 +132,9 @@ Widget _buildTranslationRow(BuildContext context, Room room) {
       style: TextStyle(
         fontSize: 14,
         color: Styles.primaryFontColor
-      )
+      ),
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1
     );
   } else {
     indicator = Container(
@@ -156,7 +158,9 @@ Widget _buildTranslationRow(BuildContext context, Room room) {
           )
         ),
         Padding(padding: EdgeInsets.only(left: 5)),
-        indicator
+        Flexible(
+          child: indicator
+        )
       ],
     )
   );
