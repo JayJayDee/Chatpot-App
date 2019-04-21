@@ -1,0 +1,4 @@
+"MESSAGE_ARRIVAL" = "新しいメッセージ";
+"JOIN_ROOM" = "誰かがチャットに参加しました";
+"LEAVE_ROOM" = "誰かがチャットを離れました";
+"MESSAGE_PICTURE" = "(写真)";

@@ -161,7 +161,8 @@ Widget _buildTranslationRow(BuildContext context, Room room) {
         fontSize: 14,
         color: Styles.secondaryFontColor,
         fontWeight: FontWeight.normal
-      )
+      ),
+      textAlign: TextAlign.left,
     );
   } else {
     indicator = Container(
@@ -176,6 +177,7 @@ Widget _buildTranslationRow(BuildContext context, Room room) {
   return Container(
     padding: EdgeInsets.only(left: 10),
     child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(locales().room.translateLabel,
@@ -185,8 +187,10 @@ Widget _buildTranslationRow(BuildContext context, Room room) {
             color: Styles.secondaryFontColor
           )
         ),
-        Padding(padding: EdgeInsets.only(left: 5)),
-        indicator
+        Padding(padding: EdgeInsets.only(left: 7)),
+        Flexible(
+          child: indicator
+        )
       ],
     )
   );

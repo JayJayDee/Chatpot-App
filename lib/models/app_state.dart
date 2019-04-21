@@ -558,6 +558,8 @@ class AppState extends Model {
         toLocale: _member.language
       );
 
+      if (_currentRoom == null) return;
+
       resp.forEach((t) {
         print("API_CALL_TRANSLATED_MESSAGE: ${t.translated}");
         Message m = _currentRoom.messages.findMessage(t.key);
@@ -571,6 +573,8 @@ class AppState extends Model {
             translated: t.translated
           )
         ).toList();
+
+      if (_currentRoom == null) return;
 
       translationCacheAccessor().cacheTranslations(
         roomToken: _currentRoom.roomToken,
