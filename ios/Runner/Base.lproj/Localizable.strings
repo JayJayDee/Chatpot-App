@@ -1,4 +1,4 @@
 "MESSAGE_ARRIVAL" = "New Message";
-"ROOM_JOIN_TITLE" = "New visitor in the chat";
-"ROOM_LEAVE_TITLE" = "Someone has left the chat";
+"JOIN_ROOM" = "New visitor in the chat";
+"LEAVE_ROOM" = "Someone has left the chat";
 "MESSAGE_PICTURE" = "(Picture)";
