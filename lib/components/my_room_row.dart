@@ -36,118 +36,44 @@ class MyRoomRow extends StatelessWidget {
         padding: EdgeInsets.all(0),
         onPressed: _onRowClicked,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(left: 10)
-            ),
+          children: [
             Container(
-              width: 66,
-              height: 66,
-              child: Stack(
-                alignment: Alignment.bottomRight,
-                children: <Widget>[
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(33.0),
-                    child: CachedNetworkImage(
-                      imageUrl: myRoom.owner.avatar.thumb,
-                      placeholder: (context, url) => CupertinoActivityIndicator(),
-                      width: 66,
-                      height: 66,
-                    )
-                  ),
-                  Positioned(
-                    child: Container(
-                      width: 30,
-                      height: 15,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: _getFlagImage(myRoom.owner.region),
-                          fit: BoxFit.cover
-                        )
-                      ),
-                    )
-                  )
-                ],
-              )
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Flexible(
-                  child: Container(
-                    padding: EdgeInsets.only(left: 10),
-                    child: Text(
-                      myRoom.title,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Color(0xFF505050)
-                      )
-                    ),
-                  )
-                ),
-                _buildTranslationRow(context, myRoom),
-                Flexible(
-                  child: Container(
-                    padding: EdgeInsets.only(left: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          locales().room.numMembersSimple(myRoom.numAttendee),
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Color(0xFF929292)
-                          )
-                        ),
-                        Text(
-                          ' - ',
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Color(0xFF929292)
-                          )
-                        ),
-                        Text(
-                          locales().room.myRoomRecentMessage(myRoom.lastMessage),
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Color(0xFF929292)
-                          )
-                        )
-                      ]
-                    )
+              margin: EdgeInsets.only(left: 5),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  child: CachedNetworkImage(
+                    imageUrl: myRoom.owner.avatar.thumb
                   )
                 )
-              ]
+              )
             ),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      _getRoomBadge(myRoom),
-                      Container(
-                        padding: EdgeInsets.only(right: 5),
-                        child: IconTheme(
-                          data: IconThemeData(color: Styles.secondaryFontColor),
-                          child: Icon(MdiIcons.chevronRight)
-                        ),
-                      )
-                    ]
+                  Container(
+                    padding: EdgeInsets.only(left: 5),
+                    child: Text('asdfjaskldjfklasjdfkljaksdfhajshdfaksdfja',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Styles.primaryFontColor
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis
+                    )
                   )
                 ]
               )
+            ),
+            Container(
+              margin: EdgeInsets.only(right: 5),
+              child: Icon(MdiIcons.chevronRight)
             )
-          ],
+          ]
         )
       )
     );
