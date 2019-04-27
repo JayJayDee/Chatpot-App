@@ -74,6 +74,8 @@ class RoomLocales {
       if (language == 'ko') return '(사진)';
       else if (language == 'ja') return '(写真)';
       else return '(Photo)';
+    } else if (lastMessage.messageType == MessageType.NOTIFICATION) {
+      return root.message.notificationText(lastMessage.getNotificationContent());
     }
     return '';
   }
