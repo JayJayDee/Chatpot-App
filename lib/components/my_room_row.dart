@@ -86,13 +86,33 @@ class MyRoomRow extends StatelessWidget {
                   _buildTranslationRow(context, myRoom),
                   Container(
                     padding: EdgeInsets.only(left: 10),
-                    child: Text(locales().room.myRoomRecentMessage(myRoom.lastMessage),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Styles.secondaryFontColor,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: Container(
+                            color: Styles.secondaryFontColor,
+                            padding: EdgeInsets.all(3),
+                            child: Text(locales().room.numMembersSimple(myRoom.numAttendee),
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white
+                              )
+                            )
+                          )
+                        ),
+                        Padding(padding: EdgeInsets.only(left: 5)),
+                        Expanded(
+                          child: Text(locales().room.myRoomRecentMessage(myRoom.lastMessage),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Styles.secondaryFontColor,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis
+                          )
+                        )
+                      ]
                     )
                   )
                 ]
