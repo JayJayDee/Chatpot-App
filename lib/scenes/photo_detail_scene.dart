@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:chatpot_app/entities/message.dart';
 import 'package:chatpot_app/styles.dart';
@@ -60,29 +61,26 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
         child: Stack(
           alignment: Alignment.topCenter,
           children: [
-            Swiper(
-              itemBuilder: (BuildContext context, int idx) =>
-                _buildImagePage(context, _imageMessages[idx], idx),
-              itemCount: _imageMessages.length,
-              index: _selectedIdx,
-              onIndexChanged: (int idx) {
-                print("CURRENT IDX = $idx");
-              },
+            Container(
+              child: Swiper(
+                itemBuilder: (BuildContext context, int idx) =>
+                  _buildImagePage(context, _imageMessages[idx], idx),
+                itemCount: _imageMessages.length,
+                index: _selectedIdx,
+                onIndexChanged: (int idx) {
+                  print("CURRENT IDX = $idx");
+                  setState(() {
+                    _selectedIdx = idx;
+                  });
+                },
+              )
             ),
             Positioned(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text('TEST',
-                    style: TextStyle(
-                      color: CupertinoColors.white
-                    )
-                  ),
-                  Text('TEST',
-                    style: TextStyle(
-                      color: CupertinoColors.white
-                    )
-                  )
+                  _overlayIndicator(_imageMessages, _selectedIdx)
                 ]
               )
             )
@@ -92,9 +90,48 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
     );
   }
 
-  Widget _overlayIndicator(BuildContext context) {
+  Widget _overlayIndicator(List<Message> messages, int idx) {
+    Message selected = messages[idx];
     return Container(
-
+      margin: EdgeInsets.only(bottom: 20, left: 10),
+      child: Row(
+        children: [
+          Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  child: CachedNetworkImage(
+                    imageUrl: selected.from.avatar.thumb,
+                  )
+                )
+              ),
+              Positioned(
+                child: Container(
+                  width: 30,
+                  height: 15,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: locales().getFlagImage(selected.from.region),
+                      fit: BoxFit.cover
+                    )
+                  ),
+                )
+              )
+            ]
+          ),
+          Padding(padding: EdgeInsets.only(left: 10)),
+          Text(locales().getNick(selected.from.nick),
+            style: TextStyle(
+              color: CupertinoColors.white,
+              fontSize: 16
+            )
+          )
+        ]
+      )
     );
   }
 }
