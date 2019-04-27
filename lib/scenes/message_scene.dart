@@ -140,7 +140,10 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         previousPageTitle: locales().chats.title,
-        middle: Text(room.title), 
+        middle: Text(room.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ), 
         trailing: CupertinoButton(
           padding: EdgeInsets.all(0),
           child: Text(locales().msgscene.leave),

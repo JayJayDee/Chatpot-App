@@ -39,15 +39,32 @@ class MyRoomRow extends StatelessWidget {
           children: [
             Container(
               margin: EdgeInsets.only(left: 5),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  child: CachedNetworkImage(
-                    imageUrl: myRoom.owner.avatar.thumb
+              child: Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      child: CachedNetworkImage(
+                        imageUrl: myRoom.owner.avatar.thumb
+                      )
+                    )
+                  ),
+                  Positioned(
+                    child: Container(
+                      width: 30,
+                      height: 15,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: locales().getFlagImage(myRoom.owner.region),
+                          fit: BoxFit.cover
+                        )
+                      ),
+                    )
                   )
-                )
+                ]
               )
             ),
             Expanded(
@@ -56,11 +73,23 @@ class MyRoomRow extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    padding: EdgeInsets.only(left: 5),
-                    child: Text('asdfjaskldjfklasjdfkljaksdfhajshdfaksdfja',
+                    padding: EdgeInsets.only(left: 7),
+                    child: Text(myRoom.title,
                       style: TextStyle(
                         fontSize: 15,
-                        color: Styles.primaryFontColor
+                        color: Styles.primaryFontColor,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis
+                    )
+                  ),
+                  _buildTranslationRow(context, myRoom),
+                  Container(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(locales().room.myRoomRecentMessage(myRoom.lastMessage),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Styles.secondaryFontColor,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis
@@ -70,8 +99,13 @@ class MyRoomRow extends StatelessWidget {
               )
             ),
             Container(
-              margin: EdgeInsets.only(right: 5),
-              child: Icon(MdiIcons.chevronRight)
+              margin: EdgeInsets.only(right: 5, left: 5),
+              child: Row(
+                children: [
+                  _getRoomBadge(myRoom),
+                  Icon(MdiIcons.chevronRight)
+                ]
+              )
             )
           ]
         )
@@ -99,10 +133,10 @@ Widget _getRoomBadge(MyRoom room) {
       )
     ),
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(12)),
+      borderRadius: BorderRadius.all(Radius.circular(7)),
       color: CupertinoColors.destructiveRed
     ),
-    padding: EdgeInsets.only(left: 10, top: 5, bottom: 5, right: 10)
+    padding: EdgeInsets.only(left: 7, top: 2, bottom: 2, right: 7)
   );
 }
 
@@ -120,8 +154,10 @@ Widget _buildTranslationRow(BuildContext context, MyRoom room) {
     indicator = Text(room.titleTranslated,
       style: TextStyle(
         fontSize: 14,
-        color: Styles.primaryFontColor
-      )
+        color: Styles.primaryFontColor,
+      ),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis
     );
   } else {
     indicator = Container(
@@ -145,7 +181,9 @@ Widget _buildTranslationRow(BuildContext context, MyRoom room) {
           )
         ),
         Padding(padding: EdgeInsets.only(left: 5)),
-        indicator
+        Expanded(
+          child: indicator
+        )
       ],
     )
   );
