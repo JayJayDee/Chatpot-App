@@ -134,12 +134,6 @@ class MyRoomRow extends StatelessWidget {
   }
 }
 
-AssetImage _getFlagImage(String regionCode) {
-  String lowered = regionCode.toLowerCase();
-  String path = "assets/$lowered.png";
-  return AssetImage(path);
-}
-
 Widget _getRoomBadge(MyRoom room) {
   int notViewed = room.messages.notViewed;
   if (notViewed == 0) return Center();

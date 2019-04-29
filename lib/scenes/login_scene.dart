@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:toast/toast.dart';
 import 'package:chatpot_app/scenes/signup_simple_scene.dart';
+import 'package:chatpot_app/scenes/signup_scene.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
 
@@ -27,6 +28,13 @@ class LoginScene extends StatelessWidget {
     var resp = await Navigator.of(context).push(CupertinoPageRoute<bool>(
       title: 'Start without sign up',
       builder: (BuildContext context) => SimpleSignupScene()
+    ));
+    if (resp == true) Navigator.pop(context, true);
+  }
+
+  void _onEmailSignup(BuildContext context) async {
+    bool resp = await Navigator.of(context).push(CupertinoPageRoute<bool>(
+      builder: (BuildContext context) => SignupScene()
     ));
     if (resp == true) Navigator.pop(context, true);
   }
@@ -78,9 +86,7 @@ class LoginScene extends StatelessWidget {
                       padding: EdgeInsets.only(top: 10),
                       child: CupertinoButton(
                         child: Text(locales().login.signupButton),
-                        onPressed: () {
-
-                        }
+                        onPressed: () => _onEmailSignup(context)
                       )
                     )
                   ],
