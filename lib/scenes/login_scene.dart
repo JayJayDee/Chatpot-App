@@ -31,6 +31,10 @@ class LoginScene extends StatelessWidget {
     if (resp == true) Navigator.pop(context, true);
   }
 
+  void _onEmailSignup(BuildContext context) async {
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
