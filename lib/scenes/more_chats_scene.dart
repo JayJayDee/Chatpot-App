@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/factory.dart';
 
@@ -31,6 +33,7 @@ class MoreChatsScene extends StatefulWidget {
 class _MoreChatsSceneState extends State<MoreChatsScene> {
 
   RoomSearchCondition _condition;
+  bool _loading;
 
   _MoreChatsSceneState({
     @required RoomSearchCondition condition
@@ -41,7 +44,18 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
   @override
   initState() {
     super.initState();
-    print(_condition.order);
+    _loading = false;
+  }
+
+  Future<void> _refreshSearch() async {
+    setState(() {
+      _loading = true;
+    });
+  }
+
+  Future<void> _onPickerSelected(RoomQueryOrder order) async {
+    _condition.order = order;
+    await _refreshSearch();
   }
   
   @override
@@ -55,6 +69,10 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
         child: SafeArea(
           child: ListView(
             children: [
+              _buildPicker(context,
+                callback: _onPickerSelected,
+                selected: _condition.order
+              )
             ]
           )
         )
@@ -64,27 +82,25 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
 
 typedef OrderSelectCallback (RoomQueryOrder order);
 Widget _buildPicker(BuildContext context, {
+  @required RoomQueryOrder selected,
   @required OrderSelectCallback callback
 }) {
-  List<RoomQueryOrder> orders = [
+  List<RoomQueryOrder> items = [
     RoomQueryOrder.ATTENDEE_DESC,
     RoomQueryOrder.REGDATE_DESC
   ];
 
-  return CupertinoPicker(
-    children: List<Widget>.generate(orders.length, (int idx) =>
-      Center(
-        child: Text(orderLabel(orders[idx]))
-      )
-    ),
-    itemExtent: 32.0,
-    diameterRatio: 32.0,
-    onSelectedItemChanged: (int idx) {
-      if (callback != null) callback(orders[idx]);
-    }
+  return DropdownButton<RoomQueryOrder>(
+    value: selected,
+    items: items.map((item) => 
+      DropdownMenuItem(
+        value: item,
+        child: Text(_orderLabel(item))
+      )).toList(),
+    onChanged: (value) => callback(value)
   );
 }
 
-String orderLabel(RoomQueryOrder order) =>
+String _orderLabel(RoomQueryOrder order) =>
   order == RoomQueryOrder.ATTENDEE_DESC ? locales().morechat.orderPeopleDesc :
   order == RoomQueryOrder.REGDATE_DESC ? locales().morechat.orderRecentDesc : '';
