@@ -5,12 +5,13 @@ import 'package:chatpot_app/factory.dart';
 class RoomSearchCondition {
   String query;
   RoomQueryOrder order;
+
   RoomSearchCondition({
     String query,
     RoomQueryOrder order
   }) {
-    query = query;
-    order = order;
+    this.query = query;
+    this.order = order;
   }
 }
 
@@ -18,9 +19,9 @@ class MoreChatsScene extends StatefulWidget {
 
   final RoomSearchCondition condition;
 
-  MoreChatsScene(
-    this.condition
-  );
+  MoreChatsScene({
+    @required this.condition
+  });
 
   @override
   _MoreChatsSceneState createState() =>
@@ -39,8 +40,8 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
 
   @override
   initState() {
-    print(_condition.order);
     super.initState();
+    print(_condition.order);
   }
   
   @override
@@ -52,8 +53,38 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
           transitionBetweenRoutes: true
         ),
         child: SafeArea(
-          child: Center()
+          child: ListView(
+            children: [
+            ]
+          )
         )
       );
   }
 }
+
+typedef OrderSelectCallback (RoomQueryOrder order);
+Widget _buildPicker(BuildContext context, {
+  @required OrderSelectCallback callback
+}) {
+  List<RoomQueryOrder> orders = [
+    RoomQueryOrder.ATTENDEE_DESC,
+    RoomQueryOrder.REGDATE_DESC
+  ];
+
+  return CupertinoPicker(
+    children: List<Widget>.generate(orders.length, (int idx) =>
+      Center(
+        child: Text(orderLabel(orders[idx]))
+      )
+    ),
+    itemExtent: 32.0,
+    diameterRatio: 32.0,
+    onSelectedItemChanged: (int idx) {
+      if (callback != null) callback(orders[idx]);
+    }
+  );
+}
+
+String orderLabel(RoomQueryOrder order) =>
+  order == RoomQueryOrder.ATTENDEE_DESC ? locales().morechat.orderPeopleDesc :
+  order == RoomQueryOrder.REGDATE_DESC ? locales().morechat.orderRecentDesc : '';
