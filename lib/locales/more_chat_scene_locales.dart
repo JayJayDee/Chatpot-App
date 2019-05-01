@@ -14,4 +14,16 @@ class MoreChatSceneLocales {
     else if (language == 'ja') return 'もっとチャット';
     return 'More chats';
   }
+
+  String get orderPeopleDesc {
+    if (language == 'ko') return '사람 많은 순서';
+    else if (language == 'ja') return '人数で並べ替え';
+    return 'sort by number of people';
+  }
+
+  String get orderRecentDesc {
+    if (language == 'ko') return '최신순';
+    else if (language == 'ja') return '最近の並べ替え';
+    return 'sort by recent';
+  }
 }

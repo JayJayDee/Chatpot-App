@@ -37,17 +37,19 @@ class HomeScene extends StatelessWidget implements EventReceivable {
   }
 
   void _onMoreRoomsClicked(BuildContext context, String type) {
-    var order;
+    RoomQueryOrder order;
     if (type == 'crowded') order = RoomQueryOrder.ATTENDEE_DESC;
-    if (type == 'recent') order =RoomQueryOrder.REGDATE_DESC;
+    if (type == 'recent') order = RoomQueryOrder.REGDATE_DESC;
 
     Navigator.of(parentContext).push(
       CupertinoPageRoute<String>(
         title: 'More chats',
         builder: (BuildContext context) =>
-          MoreChatsScene(RoomSearchCondition(
-            order: order
-          ))
+          MoreChatsScene(
+            condition: RoomSearchCondition(
+              order: order
+            )
+          )
       )
     );
   }

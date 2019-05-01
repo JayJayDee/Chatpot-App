@@ -1,16 +1,19 @@
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/factory.dart';
 
 class RoomSearchCondition {
   String query;
   RoomQueryOrder order;
+
   RoomSearchCondition({
     String query,
     RoomQueryOrder order
   }) {
-    query = query;
-    order = order;
+    this.query = query;
+    this.order = order;
   }
 }
 
@@ -18,9 +21,9 @@ class MoreChatsScene extends StatefulWidget {
 
   final RoomSearchCondition condition;
 
-  MoreChatsScene(
-    this.condition
-  );
+  MoreChatsScene({
+    @required this.condition
+  });
 
   @override
   _MoreChatsSceneState createState() =>
@@ -30,6 +33,7 @@ class MoreChatsScene extends StatefulWidget {
 class _MoreChatsSceneState extends State<MoreChatsScene> {
 
   RoomSearchCondition _condition;
+  bool _loading;
 
   _MoreChatsSceneState({
     @required RoomSearchCondition condition
@@ -39,8 +43,19 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
 
   @override
   initState() {
-    print(_condition.order);
     super.initState();
+    _loading = false;
+  }
+
+  Future<void> _refreshSearch() async {
+    setState(() {
+      _loading = true;
+    });
+  }
+
+  Future<void> _onPickerSelected(RoomQueryOrder order) async {
+    _condition.order = order;
+    await _refreshSearch();
   }
   
   @override
@@ -52,8 +67,40 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
           transitionBetweenRoutes: true
         ),
         child: SafeArea(
-          child: Center()
+          child: ListView(
+            children: [
+              _buildPicker(context,
+                callback: _onPickerSelected,
+                selected: _condition.order
+              )
+            ]
+          )
         )
       );
   }
 }
+
+typedef OrderSelectCallback (RoomQueryOrder order);
+Widget _buildPicker(BuildContext context, {
+  @required RoomQueryOrder selected,
+  @required OrderSelectCallback callback
+}) {
+  List<RoomQueryOrder> items = [
+    RoomQueryOrder.ATTENDEE_DESC,
+    RoomQueryOrder.REGDATE_DESC
+  ];
+
+  return DropdownButton<RoomQueryOrder>(
+    value: selected,
+    items: items.map((item) => 
+      DropdownMenuItem(
+        value: item,
+        child: Text(_orderLabel(item))
+      )).toList(),
+    onChanged: (value) => callback(value)
+  );
+}
+
+String _orderLabel(RoomQueryOrder order) =>
+  order == RoomQueryOrder.ATTENDEE_DESC ? locales().morechat.orderPeopleDesc :
+  order == RoomQueryOrder.REGDATE_DESC ? locales().morechat.orderRecentDesc : '';
