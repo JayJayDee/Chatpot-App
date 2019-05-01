@@ -1,5 +1,7 @@
+import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/styles.dart';
 
 class SignupScene extends StatefulWidget {
   @override
@@ -16,9 +18,30 @@ class _SignupSceneState extends State<SignupScene> {
       ),
       child: SafeArea(
         child: ListView(
-          children: []
+          children: [
+          ]
         )
       )
     );
   }
+}
+
+typedef TextChangedCallback (String text);
+
+Widget _buildEmailField(BuildContext context, {
+  @required TextChangedCallback changedCallback
+}) {
+  return Center();  
+}
+
+Widget _buildPasswordField(BuildContext context, {
+  @required TextChangedCallback changedCallback
+}) {
+  return Center();
+}
+
+Widget _buildPasswordConfirmField(BuildContext context, {
+  @required TextChangedCallback changedCallback
+}) {
+  return Center();
 }
