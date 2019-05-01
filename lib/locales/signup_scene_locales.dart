@@ -34,8 +34,14 @@ class SignupSceneLocales {
   }
 
   String get passworConfirmPlaceHolder {
-    if (language == 'ko') return '비밀번호';
-    else if (language == 'ja') return 'パスワード';
-    return 'Password';
+    if (language == 'ko') return '비밀번호 확인';
+    else if (language == 'ja') return 'パスワード確認';
+    return 'Password confirm';
+  }
+
+  String get joinButton {
+    if (language == 'ko') return '회원가입';
+    else if (language == 'ja') return '登録';
+    return 'Sign up';
   }
 }

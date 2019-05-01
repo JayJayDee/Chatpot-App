@@ -9,6 +9,12 @@ class SignupScene extends StatefulWidget {
 }
 
 class _SignupSceneState extends State<SignupScene> {
+
+  String _email;
+  String _password;
+  String _passwordConfirm;
+
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -19,6 +25,41 @@ class _SignupSceneState extends State<SignupScene> {
       child: SafeArea(
         child: ListView(
           children: [
+            Container(
+              margin: EdgeInsets.all(10),
+              child: Text(locales().signupScene.description,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Styles.primaryFontColor
+                )
+              )
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10),
+              child: _buildEmailField(context, 
+                changedCallback: (String text) => 
+                  setState(() => _email = text))
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10),
+              child: _buildPasswordField(context, 
+                changedCallback: (String text) =>
+                  setState(() => _password = text))
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10),
+              child: _buildPasswordConfirmField(context, 
+                changedCallback: (String text) =>
+                  setState(() => _passwordConfirm = text))
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10, top: 20),
+              child: CupertinoButton(
+                child: Text(locales().signupScene.joinButton),
+                color: CupertinoColors.activeBlue,
+                onPressed: () {}
+              )
+            )
           ]
         )
       )
@@ -30,18 +71,50 @@ typedef TextChangedCallback (String text);
 
 Widget _buildEmailField(BuildContext context, {
   @required TextChangedCallback changedCallback
-}) {
-  return Center();  
-}
+}) =>
+  CupertinoTextField(
+    prefix: Icon(CupertinoIcons.mail_solid,
+      size: 28.0,
+      color: CupertinoColors.inactiveGray),
+    placeholder: locales().signupScene.emailPlaceHolder,
+    onChanged: changedCallback,
+    padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
+    keyboardType: TextInputType.emailAddress,
+    decoration: BoxDecoration(
+      border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
+    )
+  );
 
 Widget _buildPasswordField(BuildContext context, {
   @required TextChangedCallback changedCallback
-}) {
-  return Center();
-}
+}) =>
+  CupertinoTextField(
+    prefix: Icon(CupertinoIcons.padlock_solid,
+      size: 28.0,
+      color: CupertinoColors.inactiveGray),
+    placeholder: locales().signupScene.passwordPlaceHolder,
+    onChanged: changedCallback,
+    obscureText: true,
+    padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
+    keyboardType: TextInputType.emailAddress,
+    decoration: BoxDecoration(
+      border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
+    )
+  );
 
 Widget _buildPasswordConfirmField(BuildContext context, {
   @required TextChangedCallback changedCallback
-}) {
-  return Center();
-}
+}) =>
+  CupertinoTextField(
+    prefix: Icon(CupertinoIcons.mail_solid,
+      size: 28.0,
+      color: CupertinoColors.inactiveGray),
+    placeholder: locales().signupScene.passworConfirmPlaceHolder,
+    onChanged: changedCallback,
+    obscureText: true,
+    padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
+    keyboardType: TextInputType.emailAddress,
+    decoration: BoxDecoration(
+      border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
+    )
+  );
