@@ -16,9 +16,11 @@ import 'package:chatpot_app/factory.dart';
 class ChatsScene extends StatelessWidget implements EventReceivable {
 
   final BuildContext parentContext;
+  final TabActor actor;
 
   ChatsScene({
-    this.parentContext
+    @required this.parentContext,
+    @required this.actor
   });
 
   Future<void> _onNewChatClicked(BuildContext context) async {

@@ -31,14 +31,17 @@ class _WidgetWrapper {
   EventReceivable get receivable => _receivable;
 }
 
-class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObserver {
+class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObserver, TabActor {
   Map<String, _WidgetWrapper> _widgetMap;
   Map<String, bool> _initMap;
   AppState _model;
+  CustomTabScaffold _container;
+  int _currentIndex;
 
   _ContainerSceneState() {
     _widgetMap = Map();
     _initMap = Map();
+    _currentIndex = 0;
   }
 
   @override
@@ -51,6 +54,13 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  Future<void> changeTab(int tabIdx) async {
+    setState(() {
+      _currentIndex = tabIdx;
+    });
   }
 
   @override
@@ -75,7 +85,10 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
     if (cached != null) return cached;
       
     if (key == '0') {
-      HomeScene scene = HomeScene(parentContext: context);
+      HomeScene scene = HomeScene(
+        parentContext: context,
+        actor: this
+      );
       cached = _WidgetWrapper(
         widget: scene,
         receivable: scene
@@ -83,15 +96,21 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
     } 
     
     else if (key == '1') {
-      ChatsScene scene = ChatsScene(parentContext: context);
+      ChatsScene scene = ChatsScene(
+        parentContext: context,
+        actor: this
+      );
       cached = _WidgetWrapper(
-        widget:  scene,
+        widget: scene,
         receivable: scene
       );
     }
 
     else if (key == '2') {
-      SettingsScene scene = SettingsScene(parentContext: context);
+      SettingsScene scene = SettingsScene(
+        parentContext: context,
+        actor: this
+      );
       cached = _WidgetWrapper(
         widget: scene,
         receivable: scene
@@ -107,8 +126,9 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
     _initFcm(context);
     final model = ScopedModel.of<AppState>(context);
     _model = model;
-    CustomTabScaffold container = CustomTabScaffold(
+    _container = CustomTabScaffold(
       tabBar: CupertinoTabBar(
+        currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
             icon: Icon(MdiIcons.tea),
@@ -126,6 +146,7 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
         onTap: (int index) {
           var wrapper = _inflate(context, index);
           wrapper.receivable.onSelected(context);
+          _currentIndex = index;
         }
       ),
       tabBuilder: (context, index) {
@@ -153,7 +174,7 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
         );
       }
     );
-    return container;
+    return _container;
   }
 }
 

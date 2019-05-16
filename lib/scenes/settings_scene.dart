@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -15,9 +16,11 @@ import 'package:chatpot_app/factory.dart';
 class SettingsScene extends StatelessWidget implements EventReceivable {
 
   final BuildContext parentContext;
+  final TabActor actor;
 
   SettingsScene({
-    this.parentContext
+    @required this.parentContext,
+    @required this.actor
   });
   
   void _onEditProfileClicked() async {
