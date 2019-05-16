@@ -187,6 +187,10 @@ class _CupertinoTabScaffoldState extends State<CustomTabScaffold> {
     }
   }
 
+  void selectPage() {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> stacked = <Widget>[];

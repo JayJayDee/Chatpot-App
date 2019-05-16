@@ -35,6 +35,7 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
   Map<String, _WidgetWrapper> _widgetMap;
   Map<String, bool> _initMap;
   AppState _model;
+  CustomTabScaffold _container;
 
   _ContainerSceneState() {
     _widgetMap = Map();
@@ -85,7 +86,7 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
     else if (key == '1') {
       ChatsScene scene = ChatsScene(parentContext: context);
       cached = _WidgetWrapper(
-        widget:  scene,
+        widget: scene,
         receivable: scene
       );
     }
@@ -107,7 +108,7 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
     _initFcm(context);
     final model = ScopedModel.of<AppState>(context);
     _model = model;
-    CustomTabScaffold container = CustomTabScaffold(
+    _container = CustomTabScaffold(
       tabBar: CupertinoTabBar(
         items: [
           BottomNavigationBarItem(
@@ -153,7 +154,7 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
         );
       }
     );
-    return container;
+    return _container;
   }
 }
 
