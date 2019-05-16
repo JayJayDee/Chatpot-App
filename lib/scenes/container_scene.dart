@@ -9,6 +9,7 @@ import 'package:chatpot_app/scenes/settings_scene.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/components/custom_tab_scaffold.dart';
 
 class ContainerScene extends StatefulWidget {
   @override
@@ -106,7 +107,7 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
     _initFcm(context);
     final model = ScopedModel.of<AppState>(context);
     _model = model;
-    return CupertinoTabScaffold(
+    CustomTabScaffold container = CustomTabScaffold(
       tabBar: CupertinoTabBar(
         items: [
           BottomNavigationBarItem(
@@ -152,6 +153,7 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
         );
       }
     );
+    return container;
   }
 }
 
