@@ -6,5 +6,5 @@ abstract class EventReceivable {
 }
 
 abstract class TabActor {
-  Future<void> changeTab();
+  Future<void> changeTab(int tabIdx);
 }

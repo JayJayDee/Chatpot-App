@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:meta/meta.dart';
 import 'package:toast/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +18,11 @@ import 'package:chatpot_app/factory.dart';
 class HomeScene extends StatelessWidget implements EventReceivable {
 
   final BuildContext parentContext;
+  final TabActor actor;
 
   HomeScene({
-    this.parentContext
+    this.parentContext,
+    this.actor
   });
 
   void _onChatRowSelected(BuildContext context, Room room) async {
@@ -30,6 +33,7 @@ class HomeScene extends StatelessWidget implements EventReceivable {
 
       if (joinResp.success == true) {
         Toast.show('Successfully joined to room', context, duration: 2);
+        this.actor.changeTab(1);
       } else {
         Toast.show("Failed to join the room: ${joinResp.cause}", context, duration: 2);
       }

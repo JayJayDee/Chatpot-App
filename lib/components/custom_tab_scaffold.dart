@@ -169,6 +169,10 @@ class _CupertinoTabScaffoldState extends State<CustomTabScaffold> {
     _currentPage = widget.tabBar.currentIndex;
   }
 
+  void changeTab(int idx) {
+
+  }
+
   @override
   void didUpdateWidget(CustomTabScaffold oldWidget) {
     super.didUpdateWidget(oldWidget);
