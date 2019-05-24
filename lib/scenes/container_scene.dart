@@ -61,6 +61,9 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
     setState(() {
       _currentIndex = tabIdx;
     });
+    var wrapper = _inflate(context, tabIdx);
+    wrapper.receivable.onSelected(context);
+    _currentIndex = tabIdx;
   }
 
   @override
