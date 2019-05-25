@@ -28,8 +28,6 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
       _loading = true;
     });
 
-    await Future.delayed(Duration(seconds: 2));
-
     var activationStatus = 
       await activationApi().requestAcitvationStatus(
         memberToken: memberToken);
@@ -69,7 +67,7 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
 
   }
 
-  Future<void> _onCodeInputed(String email) async {
+  Future<void> _onCodeInputed(String code) async {
 
   }
 
@@ -85,9 +83,17 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
           alignment: Alignment.center,
           children: [
             ListView(
-              children: [
-                Text('asdfsa')
-              ],
+              children: 
+                this._status == ActivationStatus.IDLE ? 
+                  _buildEmailInputWidgets(
+                    emailInputCallback: (email) => _onEmailInputed(email)) :
+                this._status == ActivationStatus.SENT ?
+                  _buildCodeInputWidgets(
+                    email: _email,
+                    codeInputCallback: (code) => _onCodeInputed(code)) :
+                this._status == ActivationStatus.CONFIRMED ?
+                  _buildCompletedWidgets() :
+                []
             ),
             Positioned(
               child: _buildProgressBar(this._loading)
@@ -104,13 +110,52 @@ typedef StringInputCallback (String content);
 List<Widget> _buildEmailInputWidgets({
   @required StringInputCallback emailInputCallback
 }) => [
-  
+  Container(
+    margin: EdgeInsets.only(left: 10, top: 10, right: 10),
+    child: Text(locales().emailUpgradeScene.emailInput,
+      style: TextStyle(
+        color: Styles.primaryFontColor,
+        fontSize: 16
+      ),
+    )
+  ),
+  Container(
+    margin: EdgeInsets.only(left: 10, top: 15, right: 10),
+    child: CupertinoTextField(
+      prefix: Icon(CupertinoIcons.mail_solid,
+        size: 28.0,
+        color: CupertinoColors.inactiveGray),
+      placeholder: locales().signupScene.emailPlaceHolder,
+      onChanged: (String a) => {},
+      padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
+      keyboardType: TextInputType.emailAddress,
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
+      )
+    )
+  ),
+  Container(
+    margin: EdgeInsets.only(left: 10, top: 15, right: 10),
+    child: CupertinoButton(
+      child: Text('Send an activation mail'),
+      onPressed: () {}
+    )
+  )
 ];
 
 List<Widget> _buildCodeInputWidgets({
+  @required String email,
   @required StringInputCallback codeInputCallback 
 }) => [
-
+  Container(
+    margin: EdgeInsets.only(left: 10, top: 10, right: 10),
+    child: Text(locales().emailUpgradeScene.codeInput(email),
+      style: TextStyle(
+        color: Styles.primaryFontColor,
+        fontSize: 16
+      ),
+    )
+  ),
 ];
 
 List<Widget> _buildCompletedWidgets() => [
