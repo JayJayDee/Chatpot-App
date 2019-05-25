@@ -21,6 +21,12 @@ class EmailUpgradeSceneLocales {
     return "Connecting your email account to the account you're currently signed in. The email you entered will be available from the next login.";
   }
 
+  String get emailButtonLabel {
+    if (language == 'ko') return '인증 이메일 발송';
+    else if (language == 'ja') return '登録メールを送る';
+    return "Send an activation email";
+  }
+
   String codeInput(String email) {
     if (language == 'ko') return "입력한 이메일($email)로 인증 메일을 발송했습니다. 하단의 입력 란에 인증 메일 내에 있는 코드를 입력하세요. 또는 이메일 내에 존재하는 링크를 클릭하여 인증 절차를 완료 할 수도 있습니다.";
     else if (language == 'ja') return "入力したメールアドレス($email)に確認メールが送信されました。 下の欄に確認メールのコードを入力してください。 または、電子メール内にあるリンクをクリックして確認プロセスを完了することもできます。";

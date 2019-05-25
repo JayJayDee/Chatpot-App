@@ -63,8 +63,16 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
     });
   }
 
-  Future<void> _onEmailInputed(String email) async {
-
+  Future<void> _onEmailInputed(BuildContext context, String email) async {
+    final state = ScopedModel.of<AppState>(context);
+    setState(() {
+      this._loading = true;
+    });
+    await activationApi().requestEmailActivation(
+      email: email,
+      memberToken: state.member.token
+    );
+    _loadAndRefreshStatus();
   }
 
   Future<void> _onCodeInputed(String code) async {
@@ -86,7 +94,8 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
               children: 
                 this._status == ActivationStatus.IDLE ? 
                   _buildEmailInputWidgets(
-                    emailInputCallback: (email) => _onEmailInputed(email)) :
+                    loading: _loading,
+                    emailInputCallback: (email) => _onEmailInputed(context, email)) :
                 this._status == ActivationStatus.SENT ?
                   _buildCodeInputWidgets(
                     email: _email,
@@ -108,55 +117,63 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
 typedef StringInputCallback (String content);
 
 List<Widget> _buildEmailInputWidgets({
+  @required bool loading,
   @required StringInputCallback emailInputCallback
-}) => [
-  Container(
-    margin: EdgeInsets.only(left: 10, top: 10, right: 10),
-    child: Text(locales().emailUpgradeScene.emailInput,
-      style: TextStyle(
-        color: Styles.primaryFontColor,
-        fontSize: 16
-      ),
-    )
-  ),
-  Container(
-    margin: EdgeInsets.only(left: 10, top: 15, right: 10),
-    child: CupertinoTextField(
-      prefix: Icon(CupertinoIcons.mail_solid,
-        size: 28.0,
-        color: CupertinoColors.inactiveGray),
-      placeholder: locales().signupScene.emailPlaceHolder,
-      onChanged: (String a) => {},
-      padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
-      keyboardType: TextInputType.emailAddress,
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
+}) {
+  String inputedText = '';
+  return [
+    Container(
+      margin: EdgeInsets.only(left: 10, top: 10, right: 10),
+      child: Text(locales().emailUpgradeScene.emailInput,
+        style: TextStyle(
+          color: Styles.primaryFontColor,
+          fontSize: 16
+        ),
+      )
+    ),
+    Container(
+      margin: EdgeInsets.only(left: 10, top: 15, right: 10),
+      child: CupertinoTextField(
+        prefix: Icon(CupertinoIcons.mail_solid,
+          size: 28.0,
+          color: CupertinoColors.inactiveGray),
+        placeholder: locales().signupScene.emailPlaceHolder,
+        onChanged: (String a) => inputedText = a,
+        padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
+        keyboardType: TextInputType.emailAddress,
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
+        )
+      )
+    ),
+    Container(
+      margin: EdgeInsets.only(left: 10, top: 15, right: 10),
+      child: CupertinoButton(
+        child: Text(locales().emailUpgradeScene.emailButtonLabel),
+        onPressed: loading == true ? null : 
+          () => emailInputCallback(inputedText)
       )
     )
-  ),
-  Container(
-    margin: EdgeInsets.only(left: 10, top: 15, right: 10),
-    child: CupertinoButton(
-      child: Text('Send an activation mail'),
-      onPressed: () {}
-    )
-  )
-];
+  ];
+}
 
 List<Widget> _buildCodeInputWidgets({
   @required String email,
   @required StringInputCallback codeInputCallback 
-}) => [
-  Container(
-    margin: EdgeInsets.only(left: 10, top: 10, right: 10),
-    child: Text(locales().emailUpgradeScene.codeInput(email),
-      style: TextStyle(
-        color: Styles.primaryFontColor,
-        fontSize: 16
-      ),
-    )
-  ),
-];
+}) {
+
+  return [
+    Container(
+      margin: EdgeInsets.only(left: 10, top: 10, right: 10),
+      child: Text(locales().emailUpgradeScene.codeInput(email),
+        style: TextStyle(
+          color: Styles.primaryFontColor,
+          fontSize: 16
+        ),
+      )
+    ),
+  ];
+}
 
 List<Widget> _buildCompletedWidgets() => [
 
