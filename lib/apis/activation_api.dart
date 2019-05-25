@@ -24,4 +24,18 @@ class ActivationApi {
     );
     return ActivationStatusResp.fromJson(resp);
   }
+
+  Future<void> requestEmailActivation({
+    @required String memberToken,
+    @required String email
+  }) async {
+    await _requester.requestWithAuth(
+      url: '/activate/app/email',
+      method: HttpMethod.POST,
+      body: {
+        'member_token': memberToken,
+        'email': email
+      }
+    );
+  }
 }
