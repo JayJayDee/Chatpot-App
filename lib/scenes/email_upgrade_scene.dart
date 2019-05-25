@@ -65,6 +65,14 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
     });
   }
 
+  Future<void> _onEmailInputed(String email) async {
+
+  }
+
+  Future<void> _onCodeInputed(String email) async {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -90,6 +98,24 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
     );
   }
 }
+
+typedef StringInputCallback (String content);
+
+List<Widget> _buildEmailInputWidgets({
+  @required StringInputCallback emailInputCallback
+}) => [
+  
+];
+
+List<Widget> _buildCodeInputWidgets({
+  @required StringInputCallback codeInputCallback 
+}) => [
+
+];
+
+List<Widget> _buildCompletedWidgets() => [
+
+];
 
 Widget _buildProgressBar(bool loading) {
   if (loading == true) return CupertinoActivityIndicator();
