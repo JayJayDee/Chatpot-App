@@ -9,6 +9,7 @@ import 'package:chatpot_app/apis/auth_api.dart';
 import 'package:chatpot_app/apis/member_api.dart';
 import 'package:chatpot_app/apis/room_api.dart';
 import 'package:chatpot_app/apis/message_api.dart';
+import 'package:chatpot_app/apis/activation_api.dart';
 import 'package:chatpot_app/apis/asset_api.dart';
 import 'package:chatpot_app/apis/translate_api.dart';
 import 'package:chatpot_app/utils/auth_crypter.dart';
@@ -39,6 +40,7 @@ void initFactory() {
   _instances['AssetApi'] = AssetApi(requester: _initAssetRequester());
   _instances['TranslateApi'] = TranslateApi(requester: _initTranslateRequester());
   _instances['PushService'] = PushService(msg: _firebaseMessaging());
+  _instances['ActivationApi'] = ActivationApi(requester: _memberRequester());
 }
 
 Requester _initMemberRequester() => DefaultRequester(
@@ -85,6 +87,7 @@ RoomApi roomApi() => _instances['RoomApi'];
 MessageApi messageApi() => _instances['MessageApi'];
 AssetApi assetApi() => _instances['AssetApi'];
 TranslateApi translateApi() => _instances['TranslateApi'];
+ActivationApi activationApi() => _instances['ActivationApi'];
 AuthCrypter authCrypter() => _instances['AuthCrypter'];
 RootLocaleConverter locales() => _instances['LocaleConverter'];
 FirebaseMessaging firebaseMessaging() => _instances['FirebaseMessaging'];

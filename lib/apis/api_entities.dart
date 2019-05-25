@@ -177,19 +177,26 @@ class AssetUploadResp {
 }
 
 
-enum _ActivationStatus {
+enum ActivationStatus {
   IDLE, SENT, CONFIRMED
 }
 
 class ActivationStatusResp {
   String email;
-  _ActivationStatus status;
+  ActivationStatus status;
 
   ActivationStatusResp();
 
   factory ActivationStatusResp.fromJson(Map<String, dynamic> map) {
     var resp = ActivationStatusResp();
-    // TODO: to be filled
+    resp.email = map['email'];
+    var statusExpr = map['status'];
+    if (statusExpr == 'IDLE') resp.status = ActivationStatus.IDLE;
+    else if (statusExpr == 'SENT') resp.status = ActivationStatus.SENT;
+    else if (statusExpr == 'CONFIRMED') resp.status = ActivationStatus.CONFIRMED;
     return resp;
   }
+
+  @override
+  toString() => "ActivationStatusResp: $status $email";
 }
