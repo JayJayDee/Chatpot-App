@@ -11,6 +11,7 @@ import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/scenes/login_scene.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/scenes/email_upgrade_scene.dart';
 
 @immutable
 class SettingsScene extends StatelessWidget implements EventReceivable {
@@ -57,6 +58,9 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
 
   void _onEmailAccountClicked() async {
     print('EMAIL_ACCOUNT');
+    await Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
+      builder: (BuildContext context) => EmailUpgradeScene()
+    ));
   }
 
   @override

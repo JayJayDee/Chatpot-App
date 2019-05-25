@@ -12,6 +12,6 @@ class EmailUpgradeSceneLocales {
   String get title {
     if (language == 'ko') return '이메일 계정 연결';
     else if (language == 'ja') return 'メールアカウントを登録';
-    return 'Connect email account';
+    return 'Connect an email account';
   }
 }
