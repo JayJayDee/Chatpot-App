@@ -55,6 +55,10 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
 
   }
 
+  void _onEmailAccountClicked() async {
+    print('EMAIL_ACCOUNT');
+  }
+
   @override
   Future<void> onSelected(BuildContext context) async {
     print('SETTINGS_SCENE');
@@ -78,7 +82,7 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
     }
 
     if (model.member != null && model.member.authType == AuthType.SIMPLE) {
-      elems.add(_buildMenuItem(locales().setting.linkMail, () {}));
+      elems.add(_buildMenuItem(locales().setting.linkMail, () => _onEmailAccountClicked() ));
     }
 
     elems.add(_buildMenuItem(locales().setting.about, _onAboutClicked));
