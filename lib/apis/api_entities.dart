@@ -175,3 +175,21 @@ class AssetUploadResp {
     return resp;
   } 
 }
+
+
+enum _ActivationStatus {
+  IDLE, SENT, CONFIRMED
+}
+
+class ActivationStatusResp {
+  String email;
+  _ActivationStatus status;
+
+  ActivationStatusResp();
+
+  factory ActivationStatusResp.fromJson(Map<String, dynamic> map) {
+    var resp = ActivationStatusResp();
+    // TODO: to be filled
+    return resp;
+  }
+}
