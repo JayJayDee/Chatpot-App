@@ -76,7 +76,11 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
   }
 
   Future<void> _onCodeInputed(String code) async {
-
+    final state = ScopedModel.of<AppState>(context);
+    setState(() {
+      this._loading = true;
+    });
+    // TODO: call api.
   }
 
   Future<void> _onCompletedOkClicked() async {
@@ -186,7 +190,7 @@ List<Widget> _buildCodeInputWidgets({
         prefix: Icon(CupertinoIcons.gear,
           size: 28.0,
           color: CupertinoColors.inactiveGray),
-        placeholder: locales().emailUpgradeScene.codeInputButtonLabel,
+        placeholder: locales().emailUpgradeScene.codePlaceHolder,
         onChanged: (String a) => inputedText = a,
         padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
         keyboardType: TextInputType.text,
@@ -201,6 +205,14 @@ List<Widget> _buildCodeInputWidgets({
         child: Text(locales().emailUpgradeScene.codeInputButtonLabel),
         onPressed: loading == true ? null : 
           () => codeInputCallback(inputedText)
+      )
+    ),
+    Container(
+      margin: EdgeInsets.only(left: 10, top: 0, right: 10),
+      child: CupertinoButton(
+        child: Text(locales().emailUpgradeScene.codeResendButtonLabel),
+        onPressed: loading == true ? null : 
+          () => {}
       )
     )
   ];

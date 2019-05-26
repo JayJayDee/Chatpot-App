@@ -42,7 +42,13 @@ class EmailUpgradeSceneLocales {
   String get codeInputButtonLabel {
     if (language == 'ko') return '제출';
     else if (language == 'ja') return '適用する';
-    return "Apply"; 
+    return "Submit"; 
+  }
+
+  String get codeResendButtonLabel {
+    if (language == 'ko') return '메일 재전송';
+    else if (language == 'ja') return 'メールを再送信';
+    return "Resend an email"; 
   }
 
   String completed(String email) {
