@@ -79,6 +79,9 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
 
   }
 
+  Future<void> _onCompletedOkClicked() async {
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -98,10 +101,14 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
                     emailInputCallback: (email) => _onEmailInputed(context, email)) :
                 this._status == ActivationStatus.SENT ?
                   _buildCodeInputWidgets(
+                    loading: _loading,
                     email: _email,
                     codeInputCallback: (code) => _onCodeInputed(code)) :
                 this._status == ActivationStatus.CONFIRMED ?
-                  _buildCompletedWidgets() :
+                  _buildCompletedWidgets(
+                    email: _email,
+                    okCallback: () => _onCompletedOkClicked()
+                  ) :
                 []
             ),
             Positioned(
@@ -159,9 +166,10 @@ List<Widget> _buildEmailInputWidgets({
 
 List<Widget> _buildCodeInputWidgets({
   @required String email,
+  @required bool loading,
   @required StringInputCallback codeInputCallback 
 }) {
-
+  String inputedText = '';
   return [
     Container(
       margin: EdgeInsets.only(left: 10, top: 10, right: 10),
@@ -172,12 +180,55 @@ List<Widget> _buildCodeInputWidgets({
         ),
       )
     ),
+    Container(
+      margin: EdgeInsets.only(left: 10, top: 15, right: 10),
+      child: CupertinoTextField(
+        prefix: Icon(CupertinoIcons.gear,
+          size: 28.0,
+          color: CupertinoColors.inactiveGray),
+        placeholder: locales().emailUpgradeScene.codeInputButtonLabel,
+        onChanged: (String a) => inputedText = a,
+        padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
+        keyboardType: TextInputType.text,
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
+        )
+      )
+    ),
+    Container(
+      margin: EdgeInsets.only(left: 10, top: 15, right: 10),
+      child: CupertinoButton(
+        child: Text(locales().emailUpgradeScene.codeInputButtonLabel),
+        onPressed: loading == true ? null : 
+          () => codeInputCallback(inputedText)
+      )
+    )
   ];
 }
 
-List<Widget> _buildCompletedWidgets() => [
-
-];
+List<Widget> _buildCompletedWidgets({
+  @required String email,
+  @required VoidCallback okCallback
+}) {
+  return [
+    Container(
+      margin: EdgeInsets.only(left: 10, top: 10, right: 10),
+      child: Text(locales().emailUpgradeScene.completed(email),
+        style: TextStyle(
+          color: Styles.primaryFontColor,
+          fontSize: 16
+        ),
+      )
+    ),
+    Container(
+      margin: EdgeInsets.only(left: 10, top: 15, right: 10),
+      child: CupertinoButton(
+        child: Text(locales().emailUpgradeScene.completeOkButtonLabel),
+        onPressed: () => okCallback()
+      )
+    )
+  ];
+}
 
 Widget _buildProgressBar(bool loading) {
   if (loading == true) return CupertinoActivityIndicator();
