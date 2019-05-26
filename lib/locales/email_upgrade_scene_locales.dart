@@ -32,4 +32,34 @@ class EmailUpgradeSceneLocales {
     else if (language == 'ja') return "入力したメールアドレス($email)に確認メールが送信されました。 下の欄に確認メールのコードを入力してください。 または、電子メール内にあるリンクをクリックして確認プロセスを完了することもできます。";
     return "We have sent a verification email to the email you entered ($email). Enter the code in the verification email in the field below. Alternatively, you can complete the verification process by clicking the link that exists within the email.";
   }
+
+  String get codePlaceHolder {
+    if (language == 'ko') return '인증 코드';
+    else if (language == 'ja') return '適用する';
+    return "Activation code";
+  }
+
+  String get codeInputButtonLabel {
+    if (language == 'ko') return '제출';
+    else if (language == 'ja') return '適用する';
+    return "Submit"; 
+  }
+
+  String get codeResendButtonLabel {
+    if (language == 'ko') return '메일 재전송';
+    else if (language == 'ja') return 'メールを再送信';
+    return "Resend an email"; 
+  }
+
+  String completed(String email) {
+    if (language == 'ko') return "이메일 인증이 완료되었습니다. 지금부터 다른 Android, IOS 기기에서 $email 주소로 로그인 하실 수 있습니다.";
+    else if (language == 'ja') return "メールの確認は完了しました。 これからは、他のAndroidおよびIOSデバイスで$emailにサインインできます。";
+    return "Your email verification is complete. From now on, you can sign in to $email on other Android and IOS devices.";
+  }
+
+  String get completeOkButtonLabel {
+    if (language == 'ko') return '확인';
+    else if (language == 'ja') return 'Ok';
+    return "Ok";
+  }
 }
