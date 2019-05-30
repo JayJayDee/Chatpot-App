@@ -29,6 +29,27 @@ class AuthApi {
     return SimpleJoinApiResp.fromJson(resp);
   }
 
+  Future<EmailJoinApiResp> requestEmailJoin({
+    @required String email,
+    @required String password,
+    @required String region,
+    @required String language,
+    @required String gender
+  }) async {
+    Map<String, dynamic> resp = await _requester.request(
+      url: '/member',
+      method: HttpMethod.POST,
+      body: {
+        'email': email,
+        'password': password,
+        'region': region,
+        'language': language,
+        'gender': gender
+      }
+    );
+    return EmailJoinApiResp.fromJson(resp);
+  }
+
   Future<AuthApiResp> requestAuth({
     @required String loginId,
     @required String password

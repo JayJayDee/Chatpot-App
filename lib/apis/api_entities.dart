@@ -68,6 +68,22 @@ class SimpleJoinApiResp {
   toString() => "SIMPLEJOIN_API_RESP: $nick, $token";
 }
 
+class EmailJoinApiResp {
+  Nick nick;
+  String token;
+  Avatar avatar;
+
+  EmailJoinApiResp();
+
+  factory EmailJoinApiResp.fromJson(Map<String, dynamic> map) {
+    var res = EmailJoinApiResp();
+    res.nick = Nick.fromJson(map['nick']);
+    res.token = map['token'];
+    res.avatar = Avatar.fromJson(map['avatar']);
+    return res;
+  }
+}
+
 class AuthApiResp {
   String sessionKey;
 

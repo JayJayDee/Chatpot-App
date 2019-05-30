@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
+import 'package:toast/toast.dart';
 
 class SignupScene extends StatefulWidget {
   @override
@@ -10,10 +12,21 @@ class SignupScene extends StatefulWidget {
 
 class _SignupSceneState extends State<SignupScene> {
 
-  String _email;
-  String _password;
-  String _passwordConfirm;
+  String _email = '';
+  String _password = '';
+  String _passwordConfirm = '';
 
+  Future<void> _onSignUpClicked() async {
+    if (_email.trim().length == 0) {
+      Toast.show(locales().signupScene.emailRequired, context, duration: 2);
+    }
+    if (_password.trim().length == 0) {
+      Toast.show(locales().signupScene.passwordRequired, context, duration: 2);
+    }
+    if (_passwordConfirm.trim().compareTo(_password.trim()) != 0) {
+      Toast.show(locales().signupScene.passwordNotMatch, context, duration: 2);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +70,7 @@ class _SignupSceneState extends State<SignupScene> {
               child: CupertinoButton(
                 child: Text(locales().signupScene.joinButton),
                 color: CupertinoColors.activeBlue,
-                onPressed: () {}
+                onPressed: () => _onSignUpClicked()
               )
             )
           ]
