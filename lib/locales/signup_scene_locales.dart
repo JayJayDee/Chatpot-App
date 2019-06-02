@@ -62,4 +62,22 @@ class SignupSceneLocales {
     else if (language == 'ja') return 'パスワードが一致していません。';
     return 'Passwords do not match.';
   }
+
+  String get genderChooserLabel {
+    if (language == 'ko') return '성별을 선택하세요';
+    else if (language == 'ja') return '性別を選択してください。';
+    return 'Select your gender';
+  }
+
+  String get genderMale {
+    if (language == 'ko') return '남성';
+    else if (language == 'ja') return '男性';
+    return 'Male';
+  }
+
+  String get genderFemale {
+    if (language == 'ko') return '여성';
+    else if (language == 'ja') return '女性';
+    return 'Female';
+  }
 }

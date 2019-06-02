@@ -37,7 +37,7 @@ class AuthApi {
     @required String gender
   }) async {
     Map<String, dynamic> resp = await _requester.request(
-      url: '/member',
+      url: '/member/email',
       method: HttpMethod.POST,
       body: {
         'email': email,
