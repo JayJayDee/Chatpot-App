@@ -16,6 +16,7 @@ class _SignupSceneState extends State<SignupScene> {
   String _email = '';
   String _password = '';
   String _passwordConfirm = '';
+  String _gender = null;
 
   Future<void> _onSignUpClicked() async {
     if (_email.trim().length == 0) {
@@ -68,7 +69,14 @@ class _SignupSceneState extends State<SignupScene> {
             ),
             Container(
               margin: EdgeInsets.only(left: 10, right: 10, top: 2),
-              child: _buildGenderSeletor(context)
+              child: _buildGenderSeletor(context,
+                gender: _gender,
+                genderSelectCallback: (String g) {
+                  setState(() {
+                    _gender = g;
+                  });
+                }
+              )
             ),
             Container(
               margin: EdgeInsets.only(left: 10, right: 10, top: 20),
@@ -140,8 +148,11 @@ Widget _buildPasswordConfirmField(BuildContext context, {
     )
   );
 
-
-Widget _buildGenderSeletor(BuildContext context) =>
+typedef GenderSelectCallback (String gender);
+Widget _buildGenderSeletor(BuildContext context, {
+  @required String gender,
+  @required GenderSelectCallback genderSelectCallback
+}) =>
   Row(
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
@@ -151,14 +162,71 @@ Widget _buildGenderSeletor(BuildContext context) =>
       ),
       CupertinoButton(
         padding: EdgeInsets.only(left: 8, right: 0, top: 0, bottom: 0),
-        child: Text('Choose your gender',
+        child: Text(_currentGenderExpr(gender),
           style: TextStyle(
             color: CupertinoColors.lightBackgroundGray,
             fontWeight: FontWeight.w100,
             fontSize: 18
           )
         ),
-        onPressed: () => {}
+        onPressed: () => {
+          _showGenderPicker(context, callback: genderSelectCallback)
+        }
       )
     ]
   );
+
+String _currentGenderExpr(String gender) {
+  if (gender == null) return locales().signupScene.genderChooserLabel;
+  else if (gender == 'M') return locales().signupScene.genderMale;
+  else if (gender == 'F') return locales().signupScene.genderFemale;
+  return null;
+}
+
+Future<String> _showGenderPicker(BuildContext context, {
+  @required GenderSelectCallback callback
+}) async {
+  List<String> genderLabels = [
+    locales().signupScene.genderFemale,
+    locales().signupScene.genderMale
+  ];
+  List<String> genderValues = ['F', 'M'];
+  return await showCupertinoModalPopup<String>(
+    context: context,
+    builder: (BuildContext context) =>
+      _buildBottomPicker(
+        CupertinoPicker(
+          itemExtent: 32.0,
+          diameterRatio: 32.0,
+          backgroundColor: CupertinoColors.white,
+          children: List<Widget>.generate(genderLabels.length,
+            (int idx) => Center(child: Text(genderLabels[idx]))
+          ),
+          onSelectedItemChanged: (int idx) {
+            callback(genderValues[idx]);
+          }
+        )
+      )
+  );
+}
+
+Widget _buildBottomPicker(Widget picker) {
+  return Container(
+    height: 216.0,
+    padding: const EdgeInsets.only(top: 6.0),
+    color: CupertinoColors.white,
+    child: DefaultTextStyle(
+      style: const TextStyle(
+        color: CupertinoColors.black,
+        fontSize: 22.0,
+      ),
+      child: GestureDetector(
+        onTap: () { },
+        child: SafeArea(
+          top: false,
+          child: picker,
+        ),
+      ),
+    ),
+  );
+}

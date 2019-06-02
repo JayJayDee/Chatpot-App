@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/factory.dart';
 
@@ -89,16 +88,7 @@ Widget _buildPicker(BuildContext context, {
     RoomQueryOrder.ATTENDEE_DESC,
     RoomQueryOrder.REGDATE_DESC
   ];
-
-  return DropdownButton<RoomQueryOrder>(
-    value: selected,
-    items: items.map((item) => 
-      DropdownMenuItem(
-        value: item,
-        child: Text(_orderLabel(item))
-      )).toList(),
-    onChanged: (value) => callback(value)
-  );
+  return Center();
 }
 
 String _orderLabel(RoomQueryOrder order) =>
