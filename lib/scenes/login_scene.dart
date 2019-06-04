@@ -1,32 +1,30 @@
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
-import 'package:toast/toast.dart';
 import 'package:chatpot_app/scenes/signup_simple_scene.dart';
 import 'package:chatpot_app/scenes/signup_scene.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
+import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
 String _email = '';
 String _password = '';
 
 class LoginScene extends StatelessWidget {
 
-  void _showErrorToast(BuildContext context, String msg) =>
-    Toast.show(msg, context);
-
-  void _onLoginSubmit(BuildContext context) {
+  Future<void> _onLoginSubmit(BuildContext context) async {
     if (_email.trim().length == 0) {
-      _showErrorToast(context, 'Email requied');
+      await showSimpleAlert(context, 'Email requied'); // TODO: locale
       return;
     }
     if (_password.trim().length == 0) {
-      _showErrorToast(context, 'Password required');
+      await showSimpleAlert(context, 'Password required'); // TODO: locale
       return;
     }
   }
 
   void _onSimpleSignUp(BuildContext context) async {
     var resp = await Navigator.of(context).push(CupertinoPageRoute<bool>(
-      title: 'Start without sign up',
+      title: 'Start without sign up', // TODO: locale
       builder: (BuildContext context) => SimpleSignupScene()
     ));
     if (resp == true) Navigator.pop(context, true);

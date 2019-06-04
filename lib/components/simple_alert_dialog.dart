@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/factory.dart';
 
-Future<void> showSimpleAlert(BuildContext context, {
-  @required String msg,
+Future<void> showSimpleAlert(BuildContext context, String msg, {
   String title
 }) async {
   String titleReal = title;
@@ -17,6 +15,7 @@ Future<void> showSimpleAlert(BuildContext context, {
     builder: (BuildContext context) =>
       CupertinoAlertDialog(
         title: Text(titleReal),
+        content: Text(msg),
         actions: [
           CupertinoDialogAction(
             child: Text(locales().okButtonLabel),

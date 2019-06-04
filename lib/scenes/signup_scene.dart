@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
-import 'package:toast/toast.dart';
+import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
 class SignupScene extends StatefulWidget {
   @override
@@ -25,23 +25,23 @@ class _SignupSceneState extends State<SignupScene> {
 
   Future<void> _onSignUpClicked() async {
     if (_email.trim().length == 0) {
-      Toast.show(locales().signupScene.emailRequired, context, duration: 2);
+      await showSimpleAlert(context, locales().signupScene.emailRequired);
       return;
     }
     if (_password.trim().length == 0) {
-      Toast.show(locales().signupScene.passwordRequired, context, duration: 2);
+      await showSimpleAlert(context, locales().signupScene.passwordRequired);
       return;
     }
     if (_passwordConfirm.trim().compareTo(_password.trim()) != 0) {
-      Toast.show(locales().signupScene.passwordNotMatch, context, duration: 2);
+      await showSimpleAlert(context, locales().signupScene.passwordNotMatch);
       return;
     }
     if (_password.trim().length < 6) {
-      Toast.show(locales().signupScene.passwordTooShort, context, duration: 2);
+      await showSimpleAlert(context, locales().signupScene.passwordTooShort);
       return;
     }
     if (_gender == null) {
-      Toast.show(locales().signupScene.genderRequired, context, duration: 2);
+      await showSimpleAlert(context, locales().signupScene.genderRequired);
       return;
     }
 
@@ -60,6 +60,10 @@ class _SignupSceneState extends State<SignupScene> {
       region: region,
       language: language
     );
+
+    setState(() {
+      _loading = false;
+    });
     // TODO: exception handling required.
   }
 

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:toast/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:chatpot_app/entities/room.dart';
@@ -13,6 +12,7 @@ import 'package:chatpot_app/components/message_row.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/scenes/photo_detail_scene.dart';
+import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
 typedef ImageClickCallback (String messageId);
 
@@ -55,7 +55,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
   Future<void> _onMessageSend(BuildContext context) async {
     if (_inputedMessage == null || _inputedMessage.trim().length == 0) {
-      Toast.show('message was empty.', context, duration: 2);
+      await showSimpleAlert(context, 'message was empty.');
       return;
     }
 
