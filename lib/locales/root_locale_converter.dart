@@ -83,4 +83,16 @@ class RootLocaleConverter {
     String path = "assets/$lowered.png";
     return AssetImage(path);
   }
+
+  String get errorAlertDefaultTitle {
+    if (_language == 'ko') return '에러 발생';
+    else if (_language == 'ja') return 'エラーが発生しました';
+    return 'An error occured';
+  }
+  
+  String get okButtonLabel {
+    if (_language == 'ko') return '확인';
+    else if (_language == 'ja') return 'OK';
+    return 'Ok';
+  }
 }

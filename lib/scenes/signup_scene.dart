@@ -13,10 +13,15 @@ class SignupScene extends StatefulWidget {
 
 class _SignupSceneState extends State<SignupScene> {
 
+  _SignupSceneState() {
+    _loading = false;
+  }
+
   String _email = '';
   String _password = '';
   String _passwordConfirm = '';
   String _gender;
+  bool _loading;
 
   Future<void> _onSignUpClicked() async {
     if (_email.trim().length == 0) {
@@ -39,6 +44,23 @@ class _SignupSceneState extends State<SignupScene> {
       Toast.show(locales().signupScene.genderRequired, context, duration: 2);
       return;
     }
+
+    setState(() {
+      _loading = true;
+    });
+
+    Locale locale = Localizations.localeOf(context);
+    String region = locale.countryCode;
+    String language = locale.languageCode;
+    
+    var resp = await authApi().requestEmailJoin(
+      email: _email,
+      password: _password,
+      gender: _gender,
+      region: region,
+      language: language
+    );
+    // TODO: exception handling required.
   }
 
   @override
@@ -49,53 +71,61 @@ class _SignupSceneState extends State<SignupScene> {
         transitionBetweenRoutes: true
       ),
       child: SafeArea(
-        child: ListView(
+        child: Stack(alignment: Alignment.center,
           children: [
-            Container(
-              margin: EdgeInsets.all(10),
-              child: Text(locales().signupScene.description,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Styles.primaryFontColor
+            ListView(
+              children: [
+                Container(
+                  margin: EdgeInsets.all(10),
+                  child: Text(locales().signupScene.description,
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Styles.primaryFontColor
+                    )
+                  )
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10),
+                  child: _buildEmailField(context, 
+                    changedCallback: (String text) => 
+                      setState(() => _email = text))
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10),
+                  child: _buildPasswordField(context, 
+                    changedCallback: (String text) =>
+                      setState(() => _password = text))
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10),
+                  child: _buildPasswordConfirmField(context, 
+                    changedCallback: (String text) =>
+                      setState(() => _passwordConfirm = text))
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 2),
+                  child: _buildGenderSeletor(context,
+                    gender: _gender,
+                    genderSelectCallback: (String g) {
+                      setState(() {
+                        _gender = g;
+                      });
+                    }
+                  )
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 20),
+                  child: CupertinoButton(
+                    child: Text(locales().signupScene.joinButton),
+                    color: CupertinoColors.activeBlue,
+                    onPressed: _loading == true ? null : 
+                      () => _onSignUpClicked()
+                  )
                 )
-              )
+              ]
             ),
-            Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
-              child: _buildEmailField(context, 
-                changedCallback: (String text) => 
-                  setState(() => _email = text))
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
-              child: _buildPasswordField(context, 
-                changedCallback: (String text) =>
-                  setState(() => _password = text))
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
-              child: _buildPasswordConfirmField(context, 
-                changedCallback: (String text) =>
-                  setState(() => _passwordConfirm = text))
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 10, right: 10, top: 2),
-              child: _buildGenderSeletor(context,
-                gender: _gender,
-                genderSelectCallback: (String g) {
-                  setState(() {
-                    _gender = g;
-                  });
-                }
-              )
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 10, right: 10, top: 20),
-              child: CupertinoButton(
-                child: Text(locales().signupScene.joinButton),
-                color: CupertinoColors.activeBlue,
-                onPressed: () => _onSignUpClicked()
-              )
+            Positioned(
+              child: _buildProgress(context, loading: _loading)
             )
           ]
         )
@@ -252,4 +282,13 @@ Widget _buildBottomPicker(Widget picker) {
       ),
     ),
   );
+}
+
+Widget _buildProgress(BuildContext context, {
+  @required bool loading
+}) {
+  if (loading == true) {
+    return CupertinoActivityIndicator();
+  }
+  return Container();
 }
