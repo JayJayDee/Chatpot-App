@@ -57,10 +57,22 @@ class SignupSceneLocales {
     return 'You must enter your password.';
   }
 
+  String get genderRequired {
+    if (language == 'ko') return '성별을 선택해 주세요.';
+    else if (language == 'ja') return 'あなたの性別を選択してください。';
+    return 'Please select your gender';
+  }
+
   String get passwordNotMatch {
     if (language == 'ko') return '비밀번호가 일치하지 않습니다.';
     else if (language == 'ja') return 'パスワードが一致していません。';
     return 'Passwords do not match.';
+  }
+
+  String get passwordTooShort {
+    if (language == 'ko') return '비밀번호가 너무 짧습니다. 6자 이상으로 만들어 주세요.';
+    else if (language == 'ja') return 'パスワードが短すぎます。 6文字以上にしてください。';
+    return 'The password is too short. Please make it more than 6 characters.';
   }
 
   String get genderChooserLabel {
