@@ -170,7 +170,10 @@ Widget _buildGenderSeletor(BuildContext context, {
           )
         ),
         onPressed: () => {
-          _showGenderPicker(context, callback: genderSelectCallback)
+          _showGenderPicker(context, 
+            callback: genderSelectCallback,
+            currentGender: gender
+          )
         }
       )
     ]
@@ -184,6 +187,7 @@ String _currentGenderExpr(String gender) {
 }
 
 Future<String> _showGenderPicker(BuildContext context, {
+  @required String currentGender,
   @required GenderSelectCallback callback
 }) async {
   List<String> genderLabels = [
@@ -191,11 +195,19 @@ Future<String> _showGenderPicker(BuildContext context, {
     locales().signupScene.genderMale
   ];
   List<String> genderValues = ['F', 'M'];
+
+  int currentIdx = genderValues.indexOf(currentGender);
+  if (currentIdx == -1) currentIdx = 0;
+
+  final FixedExtentScrollController pickerScrollCtrl =
+    FixedExtentScrollController(initialItem: currentIdx);
+
   return await showCupertinoModalPopup<String>(
     context: context,
     builder: (BuildContext context) =>
       _buildBottomPicker(
         CupertinoPicker(
+          scrollController: pickerScrollCtrl,
           itemExtent: 32.0,
           diameterRatio: 32.0,
           backgroundColor: CupertinoColors.white,
@@ -212,7 +224,7 @@ Future<String> _showGenderPicker(BuildContext context, {
 
 Widget _buildBottomPicker(Widget picker) {
   return Container(
-    height: 216.0,
+    height: 180.0,
     padding: const EdgeInsets.only(top: 6.0),
     color: CupertinoColors.white,
     child: DefaultTextStyle(
