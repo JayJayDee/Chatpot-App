@@ -14,11 +14,11 @@ class NewChatScene extends StatelessWidget {
     final model = ScopedModel.of<AppState>(context);
     
     if (_inputedRoomTitle.trim().length == 0) {
-      await showSimpleAlert(context, 'Room title required'); // TODO: locale
+      await showSimpleAlert(context, locales().newchat.roomTitleRequired);
       return;
     }
     if (_inputedMaxAttendee.trim().length == 0) {
-      await showSimpleAlert(context, 'Max attendee required'); // TODO: locale
+      await showSimpleAlert(context, locales().newchat.maximunAttendeeRequired);
       return;
     }
 

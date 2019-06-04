@@ -13,6 +13,7 @@ import 'package:chatpot_app/locales/login_scene_locales.dart';
 import 'package:chatpot_app/locales/photo_detail_scene_locales.dart';
 import 'package:chatpot_app/locales/signup_scene_locales.dart';
 import 'package:chatpot_app/locales/email_upgrade_scene_locales.dart';
+import 'package:chatpot_app/locales/error_message_locales.dart';
 
 class RootLocaleConverter {
   String _language;
@@ -28,6 +29,7 @@ class RootLocaleConverter {
   PhotoDetailSceneLocales _photoDetail;
   SignupSceneLocales _signupScene;
   EmailUpgradeSceneLocales _emailUpgradeScene;
+  ErrorMessageLocales _errorLocales;
 
   HomeSceneLocales get home => _home;
   MessageLocales get message => _message;
@@ -41,6 +43,7 @@ class RootLocaleConverter {
   PhotoDetailSceneLocales get photoDetail =>  _photoDetail;
   SignupSceneLocales get signupScene => _signupScene;
   EmailUpgradeSceneLocales get emailUpgradeScene => _emailUpgradeScene;
+  ErrorMessageLocales get error => _errorLocales;
 
   void selectLanguage(BuildContext context) {
     Locale locale = Localizations.localeOf(context);
@@ -57,6 +60,7 @@ class RootLocaleConverter {
     _photoDetail = PhotoDetailSceneLocales(root: this, language: _language);
     _signupScene = SignupSceneLocales(root: this, language: _language);
     _emailUpgradeScene = EmailUpgradeSceneLocales(root: this, language: _language);
+    _errorLocales = ErrorMessageLocales(root: this, language: _language);
   }
 
   String getNick(Nick nick) {

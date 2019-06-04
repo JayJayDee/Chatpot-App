@@ -35,8 +35,7 @@ class HomeScene extends StatelessWidget implements EventReceivable {
         // TODO: to be changed to tab changed
         this.actor.changeTab(1);
       } else {
-        // TODO: locale.
-        showSimpleAlert(context, "Failed to join the room: ${joinResp.cause}");
+        showSimpleAlert(context, locales().error.messageFromErrorCode(joinResp.cause));
       }
     }
   }
