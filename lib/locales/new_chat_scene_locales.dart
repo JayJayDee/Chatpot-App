@@ -38,4 +38,16 @@ class NewChatSceneLocales {
     else if (language == 'ja') return '作成';
     return 'Create';
   }
+
+  String get roomTitleRequired {
+    if (language == 'ko') return '방 제목을 입력하셔야 합니다.';
+    else if (language == 'ja') return '部屋のタイトルが必要です。';
+    return 'Room title is required.';
+  }
+
+  String get maximunAttendeeRequired {
+    if (language == 'ko') return '방 제목을 입력하셔야 합니다.';
+    else if (language == 'ja') return '最大参加者数を入力する必要があります。';
+    return 'You must enter a maximum number of participants.';
+  }
 }
