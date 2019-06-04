@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:toast/toast.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
 String _inputedRoomTitle = '';
 String _inputedMaxAttendee = '';
@@ -14,11 +14,11 @@ class NewChatScene extends StatelessWidget {
     final model = ScopedModel.of<AppState>(context);
     
     if (_inputedRoomTitle.trim().length == 0) {
-      Toast.show('Room title required', context, duration: 2);
+      await showSimpleAlert(context, 'Room title required'); // TODO: locale
       return;
     }
     if (_inputedMaxAttendee.trim().length == 0) {
-      Toast.show('Max attendee required', context, duration: 2);
+      await showSimpleAlert(context, 'Max attendee required'); // TODO: locale
       return;
     }
 

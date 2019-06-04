@@ -589,16 +589,4 @@ class AppState extends Model {
 
     notifyListeners();
   }
-
-  Future<void> requestEmailJoin({
-    @required String email,
-    @required String password,
-    @required String gender
-  }) async {
-    this._loading = true;
-    notifyListeners();
-
-    this._loading = false;
-    notifyListeners();
-  }
 }
