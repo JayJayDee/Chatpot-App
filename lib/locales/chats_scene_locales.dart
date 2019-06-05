@@ -14,4 +14,19 @@ class ChatsSceneLocales {
     else if (language == 'ja') return '私のチャット';
     return 'Chats';
   }
+
+  String get emptyRooms {
+    if (language == 'ko') {
+      return '''참여한 채팅방이 없습니다.
+라운지에서 채팅방을 선택하거나
+새로운 채팅방을 개설하세요.''';
+    } else if (language == 'ja') {
+      return '''チャットルームがありません。
+ラウンジで部屋を選ぶ
+または、新しいチャットを開くこともできます。''';
+    }
+    return '''You have no chat rooms.
+Select a room in the Lounge,
+Or you can open a new chat.''';
+  }
 }
