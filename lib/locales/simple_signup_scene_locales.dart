@@ -31,4 +31,10 @@ Signing up with an email address allows you to use Chatpot on other devices or w
 
 Don't worry, even if you start without signing up, you can always add emails later.''';
   }
+
+  String get genderRequired  {
+    if (language == 'ko') return '성별을 선택해 주세요.';
+    else if (language == 'ja') return 'あなたの性別を選択してください。';
+    return 'Please select your gender';
+  }
 }
