@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/styles.dart';
 
 class SimpleSignupScene extends StatelessWidget {
 
@@ -38,11 +39,11 @@ class SimpleSignupScene extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Text("Just start without complicated signing up."),
-                  Padding(padding: EdgeInsets.only(top: 10)),
-                  Text("But remember, signing up with mail account allows you to use the Chatpot on other devices."),
-                  Padding(padding: EdgeInsets.only(top: 10)),
-                  Text('You can also register your mail account later.'),
+                  Text(locales().simpleSignup.description,
+                    style: TextStyle(
+                      color: Styles.primaryFontColor
+                    ),
+                  ),
                   Padding(padding: EdgeInsets.only(top: 20)),
                   _buildSignupButton(context, () => _onSimpleSignUpClicked(context)),
                   Container(
