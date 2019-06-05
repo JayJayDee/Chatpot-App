@@ -81,7 +81,7 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
   Widget _buildMyRoomsView(BuildContext context) {
     final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
     List<MyRoom> myRooms = model.myRooms;
-    if (myRooms.length == 0) {
+    if (myRooms.length == 0 && model.loading == false) {
       return _buildEmptyRoomsView(context);
     }
 

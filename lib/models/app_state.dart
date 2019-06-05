@@ -68,6 +68,14 @@ class AppState extends Model {
     return AppInitState.LOGGED_IN;
   }
 
+  Future<void> tryEmailLogin({
+    @required String email,
+    @required String password
+  }) async {
+    _loading = true;
+    notifyListeners();
+  }
+
   Future<void> registerDevice() async {
     _loading = true;
     notifyListeners();
@@ -178,7 +186,6 @@ class AppState extends Model {
 
   Future<void> fetchMyRooms() async {
     _loading = true;
-    _myRooms = [];
     notifyListeners();
 
     var resp = await roomApi().requestMyRooms(memberToken: _member.token);

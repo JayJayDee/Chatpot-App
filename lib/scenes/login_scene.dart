@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/scenes/signup_simple_scene.dart';
 import 'package:chatpot_app/scenes/signup_scene.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
+import 'package:chatpot_app/models/app_state.dart';
 
 String _email = '';
 String _password = '';
@@ -20,6 +22,9 @@ class LoginScene extends StatelessWidget {
       await showSimpleAlert(context, locales().login.passwordRequired);
       return;
     }
+
+    final state = ScopedModel.of<AppState>(context);
+    await state.tryEmailLogin(email: _email, password: _password);
   }
 
   void _onSimpleSignUp(BuildContext context) async {
@@ -45,54 +50,55 @@ class LoginScene extends StatelessWidget {
         transitionBetweenRoutes: true
       ),
       child: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Expanded(
-              child: SizedBox(
-                width: 500,
-                child: ListView(
-                  padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-                  children: <Widget>[
-                    Text(locales().login.loginIntroduce,
-                      style: TextStyle(
-                        fontSize: 17,
-                        color: Styles.primaryFontColor
-                      )
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 10)),
-                    _buildLoginField(context, (String value) => _email = value),
-                    _buildPasswordField(context, (String value) => _password = value),
-                    Container(
-                      padding: EdgeInsets.only(top: 20),
-                      child: CupertinoButton(
-                        child: Text(locales().login.signInButton),
-                        color: CupertinoColors.activeBlue,
-                        onPressed: () => _onLoginSubmit(context)
-                      )
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(top: 10),
-                      child: CupertinoButton(
-                        child: Text(locales().login.simpleSignupButton),
-                        color: CupertinoColors.activeGreen,
-                        onPressed: () => _onSimpleSignUp(context)
-                      )
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(top: 10),
-                      child: CupertinoButton(
-                        child: Text(locales().login.signupButton),
-                        onPressed: () => _onEmailSignup(context)
-                      )
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            ListView(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: Text(locales().login.loginIntroduce,
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: Styles.primaryFontColor
                     )
-                  ],
+                  )
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: _buildLoginField(context, (String value) => _email = value)
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: _buildPasswordField(context, (String value) => _password = value)
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 10, right: 10, top: 20),
+                  child: CupertinoButton(
+                    child: Text(locales().login.signInButton),
+                    color: CupertinoColors.activeBlue,
+                    onPressed: () => _onLoginSubmit(context)
+                  )
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: CupertinoButton(
+                    child: Text(locales().login.simpleSignupButton),
+                    color: CupertinoColors.activeGreen,
+                    onPressed: () => _onSimpleSignUp(context)
+                  )
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 10),
+                  child: CupertinoButton(
+                    child: Text(locales().login.signupButton),
+                    onPressed: () => _onEmailSignup(context)
+                  )
                 )
-              )
+              ]
             )
-          ],
-        ),
+          ]
+        )
       )
     );  
   }

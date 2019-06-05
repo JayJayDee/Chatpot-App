@@ -88,7 +88,7 @@ Widget _buildSignupButton(BuildContext context, VoidCallback callback) {
   if (model.loading == false) buttonCallback = callback;
   return CupertinoButton(
     color: CupertinoColors.activeBlue,
-    child: Text('Start without signup!'),
+    child: Text(locales().simpleSignup.startButtonLabel), // TODO: locale
     onPressed: buttonCallback
   );
 }
