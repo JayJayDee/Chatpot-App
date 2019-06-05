@@ -178,7 +178,6 @@ class AppState extends Model {
 
   Future<void> fetchMyRooms() async {
     _loading = true;
-    _myRooms = [];
     notifyListeners();
 
     var resp = await roomApi().requestMyRooms(memberToken: _member.token);
