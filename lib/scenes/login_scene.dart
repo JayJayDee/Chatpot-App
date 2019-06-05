@@ -13,18 +13,18 @@ class LoginScene extends StatelessWidget {
 
   Future<void> _onLoginSubmit(BuildContext context) async {
     if (_email.trim().length == 0) {
-      await showSimpleAlert(context, 'Email requied'); // TODO: locale
+      await showSimpleAlert(context, locales().login.emailRequired);
       return;
     }
     if (_password.trim().length == 0) {
-      await showSimpleAlert(context, 'Password required'); // TODO: locale
+      await showSimpleAlert(context, locales().login.passwordRequired);
       return;
     }
   }
 
   void _onSimpleSignUp(BuildContext context) async {
     var resp = await Navigator.of(context).push(CupertinoPageRoute<bool>(
-      title: 'Start without sign up', // TODO: locale
+      title: locales().login.withoutSignupButtonLabel,
       builder: (BuildContext context) => SimpleSignupScene()
     ));
     if (resp == true) Navigator.pop(context, true);

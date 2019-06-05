@@ -56,4 +56,22 @@ class LoginSceneLocales {
     else if (this.language == 'ja') return 'パスワード';
     return 'Password';
   }
+
+  String get emailRequired {
+    if (this.language == 'ko') return '이메일 주소를 입력하셔야 합니다.';
+    else if (this.language == 'ja') return 'メールアドレスを入力してください。';
+    return 'You must enter an email address.';
+  }
+
+  String get passwordRequired {
+    if (this.language == 'ko') return '이메일 주소를 입력하셔야 합니다.';
+    else if (this.language == 'ja') return 'パスワードを入力してください。';
+    return 'You must enter your password.';
+  }
+
+  String get withoutSignupButtonLabel {
+    if (this.language == 'ko') return '회원가입 없이 바로 시작!';
+    else if (this.language == 'ja') return '登録せずに今すぐ始める';
+    return 'Start now without signing up';
+  }
 }

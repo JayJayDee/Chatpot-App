@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/models/app_state.dart';
+import 'package:chatpot_app/factory.dart';
 
 class SimpleSignupScene extends StatelessWidget {
 
@@ -24,7 +25,7 @@ class SimpleSignupScene extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         previousPageTitle: 'Back',
-        middle: Text('Start without sign-up'),
+        middle: Text(locales().simpleSignup.title),
       ),
       child: SafeArea(
         child: Column(
