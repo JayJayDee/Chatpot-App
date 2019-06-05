@@ -44,6 +44,7 @@ class LoginScene extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final state = ScopedModel.of<AppState>(context, rebuildOnChange: true);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(locales().login.title),
@@ -77,7 +78,8 @@ class LoginScene extends StatelessWidget {
                   child: CupertinoButton(
                     child: Text(locales().login.signInButton),
                     color: CupertinoColors.activeBlue,
-                    onPressed: () => _onLoginSubmit(context)
+                    onPressed: state.loading == true ? null :
+                      () => _onLoginSubmit(context)
                   )
                 ),
                 Container(
@@ -85,17 +87,22 @@ class LoginScene extends StatelessWidget {
                   child: CupertinoButton(
                     child: Text(locales().login.simpleSignupButton),
                     color: CupertinoColors.activeGreen,
-                    onPressed: () => _onSimpleSignUp(context)
+                    onPressed: state.loading == true ? null :
+                      () => _onSimpleSignUp(context)
                   )
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 10),
                   child: CupertinoButton(
                     child: Text(locales().login.signupButton),
-                    onPressed: () => _onEmailSignup(context)
+                    onPressed: state.loading == true ? null :
+                      () => _onEmailSignup(context)
                   )
                 )
               ]
+            ),
+            Positioned(
+              child: _buildProgress(context)
             )
           ]
         )
@@ -121,7 +128,7 @@ Widget _buildLoginField(BuildContext context, ValueChanged<String> valueChange) 
 
 Widget _buildPasswordField(BuildContext context, ValueChanged<String> valueChange) => CupertinoTextField(
   prefix: Icon(
-    CupertinoIcons.person_solid,
+    CupertinoIcons.padlock_solid,
     color: CupertinoColors.lightBackgroundGray,
     size: 28.0
   ),
@@ -134,3 +141,11 @@ Widget _buildPasswordField(BuildContext context, ValueChanged<String> valueChang
   ),
   onChanged: valueChange
 );
+
+Widget _buildProgress(BuildContext context) {
+  final state = ScopedModel.of<AppState>(context, rebuildOnChange: true);
+  if (state.loading == true) {
+    return CupertinoActivityIndicator();
+  }
+  return Container();
+}
