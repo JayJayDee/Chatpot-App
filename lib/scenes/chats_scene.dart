@@ -81,6 +81,10 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
   Widget _buildMyRoomsView(BuildContext context) {
     final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
     List<MyRoom> myRooms = model.myRooms;
+    if (myRooms.length == 0) {
+      return _buildEmptyRoomsView(context);
+    }
+
     return ListView.builder(
       scrollDirection: Axis.vertical,
       itemCount: myRooms.length,
@@ -91,6 +95,28 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
           myRoomSelectCallback: (r) => _onMyRoomSelected(context, r)
         );
       }
+    );
+  }
+
+  Widget _buildEmptyRoomsView(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(CupertinoIcons.battery_75_percent, // TODO: change icon
+            size: 60.0,
+            color: Styles.secondaryFontColor
+          ),
+          Padding(padding: EdgeInsets.only(top: 10)),
+          Text(locales().chats.emptyRooms,
+            style: TextStyle(
+              color: Styles.secondaryFontColor,
+              fontSize: 15
+            ),
+            textAlign: TextAlign.center,
+          )
+        ]
+      )
     );
   }
 }
