@@ -64,4 +64,19 @@ class AuthApi {
     );
     return AuthApiResp.fromJson(resp);
   }
+
+  Future<AuthApiResp> requestEmailAuth({
+    @required String email,
+    @required String password
+  }) async {
+    Map<String, dynamic> resp = await _requester.request(
+      url: '/auth/email',
+      method: HttpMethod.POST,
+      body: {
+        'login_id': email,
+        'password': password
+      }
+    );
+    return AuthApiResp.fromJson(resp);
+  }
 }

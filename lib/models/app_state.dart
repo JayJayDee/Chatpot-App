@@ -74,6 +74,12 @@ class AppState extends Model {
   }) async {
     _loading = true;
     notifyListeners();
+
+    var resp = await authApi().requestEmailAuth(
+      email: email,
+      password: password
+    );
+    print(resp); // TODO: to be implemented
   }
 
   Future<void> registerDevice() async {
@@ -116,7 +122,6 @@ class AppState extends Model {
     await authAccessor().setSessionKey(authResp.sessionKey);
 
     var member = await memberApi().fetchMy(joinResp.token);
-    print(member);
     _member = member;
     _loading = false;
     notifyListeners();
