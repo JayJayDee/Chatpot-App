@@ -2,17 +2,30 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/models/app_state.dart';
+import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/styles.dart';
+import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
-class SimpleSignupScene extends StatelessWidget {
+class SimpleSignupScene extends StatefulWidget {
 
-  void _onSimpleSignUpClicked(BuildContext context) async {
-    String gender = await _showGenderDialog(context);
+  @override
+  State createState() => _SimpleSignupSceneState();
+}
+
+class _SimpleSignupSceneState extends State<SimpleSignupScene> {
+
+  String _gender;
+
+  Future<void> _onSimpleSignUpClicked(BuildContext context) async {
+    if (_gender == null) {
+      await showSimpleAlert(context, locales().simpleSignup.genderRequired);
+      return;
+    }
+
     Locale locale = Localizations.localeOf(context);
-    if (gender == null) return;
-
     final model = ScopedModel.of<AppState>(context);
     await model.simpleSignup(
-      gender: gender,
+      gender: _gender,
       region: locale.countryCode,
       language: locale.languageCode
     );
@@ -24,35 +37,32 @@ class SimpleSignupScene extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         previousPageTitle: 'Back',
-        middle: Text('Start without sign-up'),
+        middle: Text(locales().simpleSignup.title),
       ),
       child: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Text("Just start without complicated signing up."),
-                  Padding(padding: EdgeInsets.only(top: 10)),
-                  Text("But remember, signing up with mail account allows you to use the Chatpot on other devices."),
-                  Padding(padding: EdgeInsets.only(top: 10)),
-                  Text('You can also register your mail account later.'),
-                  Padding(padding: EdgeInsets.only(top: 20)),
-                  _buildSignupButton(context, () => _onSimpleSignUpClicked(context)),
-                  Container(
-                    padding: EdgeInsets.only(top: 20),
-                    child: _buildProgress(context)
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            ListView(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: Text(locales().simpleSignup.description,
+                    style: TextStyle(
+                      color: Styles.primaryFontColor
+                    )
                   )
-                ]
-              )
-            )
-          ],
-        ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 20),
+                  child: _buildSignupButton(context, () => 
+                    _onSimpleSignUpClicked(context))
+                )
+              ],
+            ),
+            _buildProgress(context)
+          ]
+        )
       )
     );
   } 
@@ -76,7 +86,7 @@ Widget _buildProgress(BuildContext context) {
       child: CupertinoActivityIndicator()
     );
   }
-  return Center();
+  return Container();
 }
 
 Future<dynamic> _showGenderDialog(BuildContext context) async =>
