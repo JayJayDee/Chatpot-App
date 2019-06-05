@@ -95,7 +95,7 @@ class RootLocaleConverter {
   String get errorAlertDefaultTitle {
     if (_language == 'ko') return '에러 발생';
     else if (_language == 'ja') return 'エラーが発生しました';
-    return 'An error occured';
+    return 'An error has occured';
   }
   
   String get okButtonLabel {

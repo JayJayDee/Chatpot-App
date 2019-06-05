@@ -5,6 +5,7 @@ import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
+import 'package:chatpot_app/components/gender_selector.dart';
 
 class SimpleSignupScene extends StatefulWidget {
 
@@ -32,6 +33,12 @@ class _SimpleSignupSceneState extends State<SimpleSignupScene> {
     Navigator.pop(context, true);
   }
 
+  void _onGenderSelected(String gender) {
+    setState(() {
+      _gender = gender;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -54,7 +61,14 @@ class _SimpleSignupSceneState extends State<SimpleSignupScene> {
                   )
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 10, right: 10, top: 20),
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 25),
+                  child: buildGenderSeletor(context,
+                    gender: _gender,
+                    genderSelectCallback: _onGenderSelected
+                  )
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 25),
                   child: _buildSignupButton(context, () => 
                     _onSimpleSignUpClicked(context))
                 )
@@ -88,26 +102,3 @@ Widget _buildProgress(BuildContext context) {
   }
   return Container();
 }
-
-Future<dynamic> _showGenderDialog(BuildContext context) async =>
-  showCupertinoDialog<String>(
-    context: context,
-    builder: (BuildContext context) => CupertinoAlertDialog(
-      title: Text('Please select your gender'),
-      actions: <Widget>[
-        CupertinoDialogAction(
-          child: Text('Male'),
-          onPressed: () => Navigator.pop(context, 'M')
-        ),
-        CupertinoDialogAction(
-          child: Text('Female'),
-          onPressed: () => Navigator.pop(context, 'M')
-        ),
-        CupertinoDialogAction(
-          child: Text('Cancel'),
-          onPressed: () => Navigator.pop(context, null),
-          isDestructiveAction: true
-        )
-      ],
-    )
-  );
