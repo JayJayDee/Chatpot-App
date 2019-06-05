@@ -24,7 +24,7 @@ class ErrorMessageLocales {
   String get maximumAttendeeExceeded {
     if (language == 'ko') return '이미 채팅방의 최대 인원수에 도달하였습니다.';
     else if (language == 'ja') return 'すでに最大参加人数に達しています。';
-    return "Already reached the maximum number of attendees";
+    return "The room you selected has reached the maximum number of attendees";
   }
 
   String uncatchedCode(String code) {
