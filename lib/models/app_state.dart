@@ -68,6 +68,14 @@ class AppState extends Model {
     return AppInitState.LOGGED_IN;
   }
 
+  Future<void> tryEmailLogin({
+    @required String email,
+    @required String password
+  }) async {
+    _loading = true;
+    notifyListeners();
+  }
+
   Future<void> registerDevice() async {
     _loading = true;
     notifyListeners();
