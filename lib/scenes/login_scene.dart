@@ -20,6 +20,8 @@ class LoginScene extends StatelessWidget {
       await showSimpleAlert(context, locales().login.passwordRequired);
       return;
     }
+
+    // TODO: actual login process required
   }
 
   void _onSimpleSignUp(BuildContext context) async {

@@ -37,4 +37,10 @@ Don't worry, even if you start without signing up, you can always add emails lat
     else if (language == 'ja') return 'あなたの性別を選択してください。';
     return 'Please select your gender';
   }
+
+  String get startButtonLabel {
+    if (language == 'ko') return 'Chatpot 시작하기!';
+    else if (language == 'ja') return 'Chatpotを起動';
+    return 'Start the Chatpot!';
+  }
 }
