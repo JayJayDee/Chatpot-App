@@ -86,12 +86,14 @@ class EmailJoinApiResp {
 
 class AuthApiResp {
   String sessionKey;
+  String memberToken;
 
   AuthApiResp();
 
   factory AuthApiResp.fromJson(Map<String, dynamic> map) {
     var res = AuthApiResp();
     res.sessionKey = map['session_key'];
+    res.memberToken = map['member_token'];
     return res;
   }
 

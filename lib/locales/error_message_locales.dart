@@ -12,6 +12,7 @@ class ErrorMessageLocales {
   String messageFromErrorCode(String code) {
     if (code == 'ROOM_MAXIMUM_EXCEED') return this.maximumAttendeeExceeded;
     else if (code == 'ROOM_ALREADY_JOINED') return this.roomAlreadyJoined;
+    else if (code == 'DUPLICATED_ENTRY') return this.duplicatedEmail;
     return uncatchedCode(code);
   }
 
@@ -25,6 +26,12 @@ class ErrorMessageLocales {
     if (language == 'ko') return '이미 채팅방의 최대 인원수에 도달하였습니다.';
     else if (language == 'ja') return 'すでに最大参加人数に達しています。';
     return "The room you selected has reached the maximum number of attendees";
+  }
+
+  String get duplicatedEmail {
+    if (language == 'ko') return '이미 사용중인 이메일 주소입니다';
+    else if (language == 'ja') return '既に使用されている電子メールアドレス';
+    return 'This email address is already in use';
   }
 
   String uncatchedCode(String code) {
