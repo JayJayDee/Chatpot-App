@@ -101,6 +101,26 @@ class AuthApiResp {
   toString() => "AUTH_API_RESP: $sessionKey";
 }
 
+class EmailAuthApiResp {
+  String sessionKey;
+  String memberToken;
+  String passphrase;
+
+  EmailAuthApiResp();
+
+  factory EmailAuthApiResp.fromJson(Map<String, dynamic> map) {
+    var res = EmailAuthApiResp();
+    res.sessionKey = map['session_key'];
+    res.memberToken = map['member_token'];
+    res.passphrase = map['passphrase'];
+    return res;
+  }
+
+  @override
+  toString() => 
+    "EMAIL_AUTH_API_RESP: SESSKEY[$sessionKey] MTOKEN[$memberToken] PASSPHRASE[$passphrase]";
+}
+
 enum RoomQueryOrder {
   REGDATE_DESC, ATTENDEE_DESC
 }
