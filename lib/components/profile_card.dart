@@ -66,7 +66,7 @@ Widget buildProfileCard(BuildContext context, {
                           )
                         ),
                         Padding(padding: EdgeInsets.only(top: 5)),
-                        Text('South Korea, Republic of',
+                        Text(model.member.regionName,
                           style: TextStyle(
                             fontSize: 13,
                             color: Styles.secondaryFontColor

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
 class EmailUpgradeScene extends StatefulWidget {
   @override
@@ -38,6 +39,7 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
         this._status = activationStatus.status;
         _loading = false;
       });
+      print(this._status);
     }
   }
 
@@ -64,6 +66,11 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
   }
 
   Future<void> _onEmailInputed(BuildContext context, String email) async {
+    if (email.trim().length == 0) {
+      await showSimpleAlert(context, locales().emailUpgradeScene.emailRequired);
+      return;
+    }
+
     final state = ScopedModel.of<AppState>(context);
     setState(() {
       this._loading = true;
@@ -76,11 +83,20 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
   }
 
   Future<void> _onCodeInputed(String code) async {
-    final state = ScopedModel.of<AppState>(context);
+    if (code.trim().length == 0) {
+      await showSimpleAlert(context, locales().emailUpgradeScene.emailRequired);
+      return;
+    }
     setState(() {
       this._loading = true;
     });
-    // TODO: call api.
+    final state = ScopedModel.of<AppState>(context);
+
+    await activationApi().requestEmailVerification(
+      memberToken: state.member.token,
+      activationCode: code
+    );
+    _loadAndRefreshStatus();
   }
 
   Future<void> _onCompletedOkClicked() async {

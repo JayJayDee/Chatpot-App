@@ -62,4 +62,10 @@ class EmailUpgradeSceneLocales {
     else if (language == 'ja') return 'Ok';
     return "Ok";
   }
+
+  String get emailRequired {
+    if (language == 'ko') return '이메일을 입력하세요.';
+    else if (language == 'ja') return 'あなたはEメールを入力する必要があります。';
+    return 'You need to enter an email.';
+  }
 }

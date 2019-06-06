@@ -14,6 +14,7 @@ class Member {
     Member member = Member();
     member.nick = Nick.fromJson(map['nick']);
     member.region = map['region'];
+    member.regionName = map['region_name'];
     member.language = map['language'];
     member.token = map['token'];
     member.avatar = Avatar.fromJson(map['avatar']);
