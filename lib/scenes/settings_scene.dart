@@ -134,7 +134,7 @@ Future<dynamic> _showSignoutWarningDialog(BuildContext context, bool isSimple) {
   if (isSimple == true) {
     content = locales().setting.simpleSignoutWarning;
   } else {
-    content = locales().setting.signoutDialogTitle;
+    content = locales().setting.signoutWarning;
   }
   return showCupertinoDialog<String>(
     context: context,

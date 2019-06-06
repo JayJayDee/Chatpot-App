@@ -24,22 +24,35 @@ class LoginScene extends StatelessWidget {
     }
 
     final state = ScopedModel.of<AppState>(context);
-    await state.tryEmailLogin(email: _email, password: _password);
+
+    try {
+      await state.tryEmailLogin(email: _email, password: _password);
+      await state.registerDevice();
+      Navigator.pushReplacementNamed(context, '/container');
+    } catch (err) {
+      // TODO: must be changed to throw appropriate error code.
+      showSimpleAlert(context, locales().error.messageFromErrorCode('UNKNOWN'));
+    }
   }
 
   void _onSimpleSignUp(BuildContext context) async {
+    final model = ScopedModel.of<AppState>(context);
+
     var resp = await Navigator.of(context).push(CupertinoPageRoute<bool>(
       title: locales().login.withoutSignupButtonLabel,
       builder: (BuildContext context) => SimpleSignupScene()
     ));
-    if (resp == true) Navigator.pop(context, true);
+
+    if (resp == true) {
+      await model.registerDevice();
+      Navigator.pushReplacementNamed(context, '/container');
+    }
   }
 
   void _onEmailSignup(BuildContext context) async {
-    bool resp = await Navigator.of(context).push(CupertinoPageRoute<bool>(
+    await Navigator.of(context).push(CupertinoPageRoute<bool>(
       builder: (BuildContext context) => SignupScene()
     ));
-    if (resp == true) Navigator.pop(context, true);
   }
 
   @override

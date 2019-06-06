@@ -13,10 +13,10 @@ class SplashScene extends StatelessWidget {
     AppInitState state = await model.tryAutoLogin();
 
     // request grant access for push notification for iOS
-    pushService().requestNotification();
+    pushService().requestNotification(); // TODO: move another scene required..
     
     if (state == AppInitState.NEWCOMER) {
-      var resp = await Navigator.pushNamed(context, '/login');
+      var resp = await Navigator.pushReplacementNamed(context, '/login');
       if (resp == true) onCreate(context);
 
     } else if (state == AppInitState.LOGGED_IN) {
