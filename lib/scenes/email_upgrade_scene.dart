@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
 class EmailUpgradeScene extends StatefulWidget {
   @override
@@ -64,6 +65,11 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
   }
 
   Future<void> _onEmailInputed(BuildContext context, String email) async {
+    if (email.trim().length == 0) {
+      showSimpleAlert(context, locales().emailUpgradeScene.emailRequired);
+      return;
+    }
+
     final state = ScopedModel.of<AppState>(context);
     setState(() {
       this._loading = true;
