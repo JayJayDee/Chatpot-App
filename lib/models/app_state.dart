@@ -79,7 +79,16 @@ class AppState extends Model {
       email: email,
       password: password
     );
-    print(resp); // TODO: to be implemented
+
+    await authAccessor().setToken(resp.memberToken);
+    await authAccessor().setPassword(resp.passphrase);
+    await authAccessor().setSessionKey(resp.sessionKey);
+
+    var member = await memberApi().fetchMy(resp.memberToken);
+    _member = member;
+
+    _loading = false;
+    notifyListeners();
   }
 
   Future<void> registerDevice() async {
@@ -87,7 +96,6 @@ class AppState extends Model {
     notifyListeners();
 
     String deviceToken = await pushService().accquireDeviceToken();
-    print("DEVICE_TOKEN = $deviceToken");
 
     await messageApi().requestRegister(
       memberToken: _member.token,

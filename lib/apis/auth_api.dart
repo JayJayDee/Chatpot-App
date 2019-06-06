@@ -65,7 +65,7 @@ class AuthApi {
     return AuthApiResp.fromJson(resp);
   }
 
-  Future<AuthApiResp> requestEmailAuth({
+  Future<EmailAuthApiResp> requestEmailAuth({
     @required String email,
     @required String password
   }) async {
@@ -77,6 +77,6 @@ class AuthApi {
         'password': password
       }
     );
-    return AuthApiResp.fromJson(resp);
+    return EmailAuthApiResp.fromJson(resp);
   }
 }
