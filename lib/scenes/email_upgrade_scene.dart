@@ -39,6 +39,7 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
         this._status = activationStatus.status;
         _loading = false;
       });
+      print(this._status);
     }
   }
 
@@ -66,7 +67,7 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
 
   Future<void> _onEmailInputed(BuildContext context, String email) async {
     if (email.trim().length == 0) {
-      showSimpleAlert(context, locales().emailUpgradeScene.emailRequired);
+      await showSimpleAlert(context, locales().emailUpgradeScene.emailRequired);
       return;
     }
 
@@ -82,11 +83,20 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
   }
 
   Future<void> _onCodeInputed(String code) async {
-    final state = ScopedModel.of<AppState>(context);
+    if (code.trim().length == 0) {
+      await showSimpleAlert(context, locales().emailUpgradeScene.emailRequired);
+      return;
+    }
     setState(() {
       this._loading = true;
     });
-    // TODO: call api.
+    final state = ScopedModel.of<AppState>(context);
+
+    await activationApi().requestEmailVerification(
+      memberToken: state.member.token,
+      activationCode: code
+    );
+    _loadAndRefreshStatus();
   }
 
   Future<void> _onCompletedOkClicked() async {

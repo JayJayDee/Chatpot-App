@@ -222,6 +222,7 @@ enum ActivationStatus {
 class ActivationStatusResp {
   String email;
   ActivationStatus status;
+  bool passwordInputed; // TODO: to be implemented
 
   ActivationStatusResp();
 
