@@ -115,6 +115,18 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
       await showSimpleAlert(context, locales().emailUpgradeScene.emailRequired);
       return;
     }
+
+    if (_passwordInputRequired == true) {
+      if (_inputedPassword.trim().length == 0) {
+        await showSimpleAlert(context, locales().emailUpgradeScene.passwordRequired);
+        return;
+      }
+      if (_inputedPasswordConfirm.trim().compareTo(_inputedPassword.trim()) != 0) {
+        await showSimpleAlert(context, locales().emailUpgradeScene.passwordNotMatch);
+        return;
+      }
+    }
+
     setState(() {
       this._loading = true;
     });
@@ -268,11 +280,11 @@ List<Widget> _buildCodeInputWidgets({
             placeholder: locales().emailUpgradeScene.passwordPlaceholder,
             onChanged: paswordChangedCallback,
             padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
+            obscureText: true,
             keyboardType: TextInputType.text,
             decoration: BoxDecoration(
               border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
-            ),
-            controller: controller
+            )
           )
         ),
         Container(
@@ -284,11 +296,11 @@ List<Widget> _buildCodeInputWidgets({
             placeholder: locales().emailUpgradeScene.passwordConfirmPlaceholder,
             onChanged: paswordConfirmChangedCallback,
             padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
+            obscureText: true,
             keyboardType: TextInputType.text,
             decoration: BoxDecoration(
               border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
-            ),
-            controller: controller
+            )
           )
         )
       ]
