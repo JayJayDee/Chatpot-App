@@ -43,9 +43,11 @@ class _RoomDetailCard extends State<RoomDetailCard> {
 
   Future<void> initDetailCard() async {
     var detail = await roomApi().requestRoomDetail(roomToken: _room.roomToken);
-    setState(() {
-      _detail = detail;
-    });
+    if (this.mounted) {
+      setState(() {
+        _detail = detail;
+      });
+    }
   }
 
   @override

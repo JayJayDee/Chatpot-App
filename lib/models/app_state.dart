@@ -72,23 +72,30 @@ class AppState extends Model {
     @required String email,
     @required String password
   }) async {
-    _loading = true;
-    notifyListeners();
+    try {
+      _loading = true;
+      notifyListeners();
 
-    var resp = await authApi().requestEmailAuth(
-      email: email,
-      password: password
-    );
+      var resp = await authApi().requestEmailAuth(
+        email: email,
+        password: password
+      );
 
-    await authAccessor().setToken(resp.memberToken);
-    await authAccessor().setPassword(resp.passphrase);
-    await authAccessor().setSessionKey(resp.sessionKey);
+      await authAccessor().setToken(resp.memberToken);
+      await authAccessor().setPassword(resp.passphrase);
+      await authAccessor().setSessionKey(resp.sessionKey);
 
-    var member = await memberApi().fetchMy(resp.memberToken);
-    _member = member;
+      var member = await memberApi().fetchMy(resp.memberToken);
+      _member = member;
 
-    _loading = false;
-    notifyListeners();
+      _loading = false;
+      notifyListeners();
+
+    } catch (err) {
+      _loading = false;
+      notifyListeners();
+      throw err;
+    }
   }
 
   Future<void> registerDevice() async {

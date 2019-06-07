@@ -35,9 +35,18 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
 
     if (resp == 'SIGNOUT') {
       await model.signout();
-      Navigator.of(parentContext).pushReplacement(CupertinoPageRoute<bool>(
-        builder: (BuildContext context) => LoginScene()
-      ));
+      // Navigator.of(parentContext).pushReplacement(CupertinoPageRoute<bool>(
+      //   builder: (BuildContext context) => LoginScene()
+      // ));
+
+      final PageRouteBuilder loginRoute = new PageRouteBuilder(
+        pageBuilder: (BuildContext context, _, __) {
+          return LoginScene();
+        }, 
+      );
+
+      Navigator.of(parentContext)
+        .pushAndRemoveUntil(loginRoute, (Route<dynamic> r) => false);
     }
   }
 

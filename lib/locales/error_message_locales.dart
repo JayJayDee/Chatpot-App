@@ -13,6 +13,8 @@ class ErrorMessageLocales {
     if (code == 'ROOM_MAXIMUM_EXCEED') return this.maximumAttendeeExceeded;
     else if (code == 'ROOM_ALREADY_JOINED') return this.roomAlreadyJoined;
     else if (code == 'DUPLICATED_ENTRY') return this.duplicatedEmail;
+    else if (code == 'DUPLICATED_EMAIL') return this.duplicatedEmail;
+    else if (code == 'AUTH_FAILED') return this.authFailed;
     return uncatchedCode(code);
   }
 
@@ -32,6 +34,15 @@ class ErrorMessageLocales {
     if (language == 'ko') return '이미 사용중인 이메일 주소입니다';
     else if (language == 'ja') return '既に使用されている電子メールアドレス';
     return 'This email address is already in use';
+  }
+
+  String get authFailed {
+    if (language == 'ko') return '''로그인에 실패하였습니다.
+이메일과 비밀번호를 확인해 주세요.''';
+    else if (language == 'ja') return '''ログインに失敗しました。
+メールアドレスとパスワードを確認してください。''';
+    return '''Login failed.
+Please check your email and password.''';
   }
 
   String uncatchedCode(String code) {
