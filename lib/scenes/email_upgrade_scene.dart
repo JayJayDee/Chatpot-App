@@ -17,10 +17,18 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
 
   bool _loading;
   String _email;
+
+  String _inputedEmail;
+  String _inputedCode;
+
   ActivationStatus _status;
+  TextEditingController _controller;
 
   _EmailUpgradeSceneState() {
     _loading = false;
+    _inputedEmail = '';
+    _inputedCode = '';
+    _controller = new TextEditingController();
   }
 
   Future<void> _loadAndRefreshStatus() async {
@@ -66,8 +74,8 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
     });
   }
 
-  Future<void> _onEmailInputed(BuildContext context, String email) async {
-    if (email.trim().length == 0) {
+  Future<void> _onEmailInputed(BuildContext context) async {
+    if (_inputedEmail.trim().length == 0) {
       await showSimpleAlert(context, locales().emailUpgradeScene.emailRequired);
       return;
     }
@@ -79,7 +87,7 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
 
     try {
       await activationApi().requestEmailActivation(
-        email: email,
+        email: _inputedEmail,
         memberToken: state.member.token
       );
       _loadAndRefreshStatus();
@@ -89,15 +97,16 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
         this._loading = false;
       });
       if (err is ApiFailureError) {
-        email = '';
         await showSimpleAlert(context,
           locales().error.messageFromErrorCode(err.code));
       }
+    } finally {
+      _controller.clear();
     }
   }
 
-  Future<void> _onCodeInputed(String code) async {
-    if (code.trim().length == 0) {
+  Future<void> _onCodeInputed(BuildContext context) async {
+    if (_inputedCode.trim().length == 0) {
       await showSimpleAlert(context, locales().emailUpgradeScene.emailRequired);
       return;
     }
@@ -106,14 +115,26 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
     });
     final state = ScopedModel.of<AppState>(context);
 
-    await activationApi().requestEmailVerification(
-      memberToken: state.member.token,
-      activationCode: code
-    );
-    _loadAndRefreshStatus();
+    try {
+      await activationApi().requestEmailVerification(
+        memberToken: state.member.token,
+        activationCode: _inputedCode
+      );
+      _loadAndRefreshStatus();
+    } catch (err) {
+      setState(() {
+        this._loading = false;
+      });
+      if (err is ApiFailureError) {
+        await showSimpleAlert(context,
+          locales().error.messageFromErrorCode(err.code));
+      }
+    } finally {
+      _controller.clear();
+    }
   }
 
-  Future<void> _onCompletedOkClicked() async {
+  Future<void> _onCompletedOkClicked(BuildContext context) async {
   }
 
   @override
@@ -132,16 +153,20 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
                 this._status == ActivationStatus.IDLE ? 
                   _buildEmailInputWidgets(
                     loading: _loading,
-                    emailInputCallback: (email) => _onEmailInputed(context, email)) :
+                    controller: _controller,
+                    inputChangedCallback: (String inputed) => _inputedEmail = inputed,
+                    emailInputCallback: () => _onEmailInputed(context)) :
                 this._status == ActivationStatus.SENT ?
                   _buildCodeInputWidgets(
                     loading: _loading,
+                    controller: _controller,
                     email: _email,
-                    codeInputCallback: (code) => _onCodeInputed(code)) :
+                    inputChangedCallback: (String inputed) => _inputedCode = inputed,
+                    codeInputCallback: () => _onCodeInputed(context)) :
                 this._status == ActivationStatus.CONFIRMED ?
                   _buildCompletedWidgets(
                     email: _email,
-                    okCallback: () => _onCompletedOkClicked()
+                    okCallback: () => _onCompletedOkClicked(context)
                   ) :
                 []
             ),
@@ -155,13 +180,15 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
   }
 }
 
-typedef StringInputCallback (String content);
+
+typedef StringInputCallback (String inputed);
 
 List<Widget> _buildEmailInputWidgets({
   @required bool loading,
-  @required StringInputCallback emailInputCallback
+  @required VoidCallback emailInputCallback,
+  @required StringInputCallback inputChangedCallback,
+  @required TextEditingController controller
 }) {
-  String inputedText = '';
   return [
     Container(
       margin: EdgeInsets.only(left: 10, top: 10, right: 10),
@@ -179,12 +206,13 @@ List<Widget> _buildEmailInputWidgets({
           size: 28.0,
           color: CupertinoColors.inactiveGray),
         placeholder: locales().signupScene.emailPlaceHolder,
-        onChanged: (String a) => inputedText = a,
+        onChanged: inputChangedCallback,
         padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
         keyboardType: TextInputType.emailAddress,
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
-        )
+        ),
+        controller: controller,
       )
     ),
     Container(
@@ -192,7 +220,7 @@ List<Widget> _buildEmailInputWidgets({
       child: CupertinoButton(
         child: Text(locales().emailUpgradeScene.emailButtonLabel),
         onPressed: loading == true ? null : 
-          () => emailInputCallback(inputedText)
+          () => emailInputCallback()
       )
     )
   ];
@@ -201,9 +229,10 @@ List<Widget> _buildEmailInputWidgets({
 List<Widget> _buildCodeInputWidgets({
   @required String email,
   @required bool loading,
-  @required StringInputCallback codeInputCallback 
+  @required VoidCallback codeInputCallback,
+  @required StringInputCallback inputChangedCallback,
+  @required TextEditingController controller
 }) {
-  String inputedText = '';
   return [
     Container(
       margin: EdgeInsets.only(left: 10, top: 10, right: 10),
@@ -221,12 +250,13 @@ List<Widget> _buildCodeInputWidgets({
           size: 28.0,
           color: CupertinoColors.inactiveGray),
         placeholder: locales().emailUpgradeScene.codePlaceHolder,
-        onChanged: (String a) => inputedText = a,
+        onChanged: inputChangedCallback,
         padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
         keyboardType: TextInputType.text,
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
-        )
+        ),
+        controller: controller
       )
     ),
     Container(
@@ -234,7 +264,7 @@ List<Widget> _buildCodeInputWidgets({
       child: CupertinoButton(
         child: Text(locales().emailUpgradeScene.codeInputButtonLabel),
         onPressed: loading == true ? null : 
-          () => codeInputCallback(inputedText)
+          () => codeInputCallback()
       )
     ),
     Container(
