@@ -135,7 +135,8 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
     try {
       await activationApi().requestEmailVerification(
         memberToken: state.member.token,
-        activationCode: _inputedCode
+        activationCode: _inputedCode,
+        password: _inputedPassword
       );
       _loadAndRefreshStatus();
     } catch (err) {
