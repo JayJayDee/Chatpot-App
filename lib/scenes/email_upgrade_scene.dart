@@ -369,6 +369,15 @@ List<Widget> _buildCompletedWidgets({
       )
     ),
     Container(
+      margin: EdgeInsets.only(left: 10, top: 10, right: 10),
+      child: Text(locales().emailUpgradeScene.completed2,
+        style: TextStyle(
+          color: Styles.primaryFontColor,
+          fontSize: 16
+        )
+      )
+    ),
+    Container(
       margin: EdgeInsets.only(left: 10, top: 15, right: 10),
       child: CupertinoButton(
         child: Text(locales().emailUpgradeScene.completeOkButtonLabel),
