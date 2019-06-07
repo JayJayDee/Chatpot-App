@@ -41,14 +41,16 @@ class ActivationApi {
 
   Future<void> requestEmailVerification({
     @required String memberToken,
-    @required String activationCode
+    @required String activationCode,
+    String password
   }) async {
     await _requester.requestWithAuth(
       url: '/activate/app/email/verify',
       method: HttpMethod.POST,
       body: {
         'member_token': memberToken,
-        'activation_code': activationCode
+        'activation_code': activationCode,
+        'password': password
       }
     );
   }
