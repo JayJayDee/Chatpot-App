@@ -68,4 +68,22 @@ class EmailUpgradeSceneLocales {
     else if (language == 'ja') return 'あなたはEメールを入力する必要があります。';
     return 'You need to enter an email.';
   }
+
+  String get passwordInput {
+    if (language == 'ko') return '앞으로의 로그인에 사용할 비밀번호를 입력하세요.';
+    else if (language == 'ja') return '今後のサインイン用にパスワードを入力してください。';
+    return 'Please enter a password for future sign-in.';
+  }
+
+  String get passwordPlaceholder {
+    if (language == 'ko') return '비밀번호';
+    else if (language == 'ja') return 'パスワード';
+    return 'Password';
+  }
+
+  String get passwordConfirmPlaceholder {
+    if (language == 'ko') return '비밀번호 확인';
+    else if (language == 'ja') return 'パスワード確認';
+    return 'Password confirmation';
+  }
 }

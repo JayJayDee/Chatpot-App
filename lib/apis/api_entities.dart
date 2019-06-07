@@ -222,7 +222,7 @@ enum ActivationStatus {
 class ActivationStatusResp {
   String email;
   ActivationStatus status;
-  bool passwordInputed; // TODO: to be implemented
+  bool passwordRequired;
 
   ActivationStatusResp();
 
@@ -233,6 +233,7 @@ class ActivationStatusResp {
     if (statusExpr == 'IDLE') resp.status = ActivationStatus.IDLE;
     else if (statusExpr == 'SENT') resp.status = ActivationStatus.SENT;
     else if (statusExpr == 'CONFIRMED') resp.status = ActivationStatus.CONFIRMED;
+    resp.passwordRequired = map['password_required'];
     return resp;
   }
 

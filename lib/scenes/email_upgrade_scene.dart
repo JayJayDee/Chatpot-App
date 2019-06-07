@@ -20,14 +20,18 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
 
   String _inputedEmail;
   String _inputedCode;
+  String _inputedPassword;
+  String _inputedPasswordConfirm;
 
   ActivationStatus _status;
+  bool _passwordInputRequired;
   TextEditingController _controller;
 
   _EmailUpgradeSceneState() {
     _loading = false;
     _inputedEmail = '';
     _inputedCode = '';
+    _passwordInputRequired = false;
     _controller = new TextEditingController();
   }
 
@@ -46,6 +50,7 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
       setState(() {
         this._email = activationStatus.email;
         this._status = activationStatus.status;
+        this._passwordInputRequired = activationStatus.passwordRequired;
         _loading = false;
       });
       print(this._status);
@@ -156,13 +161,18 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
                     controller: _controller,
                     inputChangedCallback: (String inputed) => _inputedEmail = inputed,
                     emailInputCallback: () => _onEmailInputed(context)) :
+
                 this._status == ActivationStatus.SENT ?
                   _buildCodeInputWidgets(
                     loading: _loading,
+                    isPasswordInputRequired: _passwordInputRequired,
                     controller: _controller,
                     email: _email,
                     inputChangedCallback: (String inputed) => _inputedCode = inputed,
+                    paswordChangedCallback: (String inputed) => _inputedPassword = inputed,
+                    paswordConfirmChangedCallback: (String inputed) => _inputedPasswordConfirm = inputed,
                     codeInputCallback: () => _onCodeInputed(context)) :
+
                 this._status == ActivationStatus.CONFIRMED ?
                   _buildCompletedWidgets(
                     email: _email,
@@ -228,11 +238,63 @@ List<Widget> _buildEmailInputWidgets({
 
 List<Widget> _buildCodeInputWidgets({
   @required String email,
+  @required bool isPasswordInputRequired,
   @required bool loading,
   @required VoidCallback codeInputCallback,
   @required StringInputCallback inputChangedCallback,
+  @required StringInputCallback paswordChangedCallback,
+  @required StringInputCallback paswordConfirmChangedCallback,
   @required TextEditingController controller
 }) {
+  Widget passwordInputWidget = Container(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: EdgeInsets.only(left: 10, right: 10, top: 30),
+          child: Text(locales().emailUpgradeScene.passwordInput,
+            style: TextStyle(
+              color: Styles.primaryFontColor,
+              fontSize: 16
+            )
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+          child: CupertinoTextField(
+            prefix: Icon(CupertinoIcons.padlock_solid,
+              size: 28.0,
+              color: CupertinoColors.inactiveGray),
+            placeholder: locales().emailUpgradeScene.passwordPlaceholder,
+            onChanged: paswordChangedCallback,
+            padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
+            keyboardType: TextInputType.text,
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
+            ),
+            controller: controller
+          )
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+          child: CupertinoTextField(
+            prefix: Icon(CupertinoIcons.padlock_solid,
+              size: 28.0,
+              color: CupertinoColors.inactiveGray),
+            placeholder: locales().emailUpgradeScene.passwordConfirmPlaceholder,
+            onChanged: paswordConfirmChangedCallback,
+            padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
+            keyboardType: TextInputType.text,
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
+            ),
+            controller: controller
+          )
+        )
+      ]
+    )
+  );
+
   return [
     Container(
       margin: EdgeInsets.only(left: 10, top: 10, right: 10),
@@ -259,6 +321,7 @@ List<Widget> _buildCodeInputWidgets({
         controller: controller
       )
     ),
+    isPasswordInputRequired == true ? passwordInputWidget : Container(),
     Container(
       margin: EdgeInsets.only(left: 10, top: 15, right: 10),
       child: CupertinoButton(
