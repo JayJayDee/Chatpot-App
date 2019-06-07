@@ -62,6 +62,7 @@ class LoginScene extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    locales().selectLanguage(context);
     final state = ScopedModel.of<AppState>(context, rebuildOnChange: true);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
