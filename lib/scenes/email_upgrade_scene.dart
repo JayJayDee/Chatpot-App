@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:chatpot_app/apis/api_entities.dart';
+import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/models/app_state.dart';
@@ -75,11 +76,24 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
     setState(() {
       this._loading = true;
     });
-    await activationApi().requestEmailActivation(
-      email: email,
-      memberToken: state.member.token
-    );
-    _loadAndRefreshStatus();
+
+    try {
+      await activationApi().requestEmailActivation(
+        email: email,
+        memberToken: state.member.token
+      );
+      _loadAndRefreshStatus();
+
+    } catch (err) {
+      setState(() {
+        this._loading = false;
+      });
+      if (err is ApiFailureError) {
+        email = '';
+        await showSimpleAlert(context,
+          locales().error.messageFromErrorCode(err.code));
+      }
+    }
   }
 
   Future<void> _onCodeInputed(String code) async {

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/scenes/signup_simple_scene.dart';
@@ -30,8 +31,12 @@ class LoginScene extends StatelessWidget {
       await state.registerDevice();
       Navigator.pushReplacementNamed(context, '/container');
     } catch (err) {
-      // TODO: must be changed to throw appropriate error code.
-      showSimpleAlert(context, locales().error.messageFromErrorCode('UNKNOWN'));
+      if (err is ApiFailureError) {
+        showSimpleAlert(context,
+          locales().error.messageFromErrorCode(err.code));
+      } else {
+        showSimpleAlert(context, locales().error.messageFromErrorCode('UNKNOWN'));
+      }
     }
   }
 
