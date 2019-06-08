@@ -39,6 +39,12 @@ class SettingSceneLocales {
     return 'Treat a developer to a cup of coffee';
   }
 
+  String get changePassword {
+    if (language == 'ko') return '비밀번호 변경';
+    else if (language == 'ja') return '開発者をコーヒーに捧げる';
+    return 'Treat a developer to a cup of coffee';
+  }
+
   String get linkMail {
     if (language == 'ko') return '메일 계정 연결';
     else if (language == 'ja') return 'メールアカウントを追加する';

@@ -98,6 +98,10 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
       elems.add(_buildMenuItem(locales().setting.linkMail, () => _onEmailAccountClicked() ));
     }
 
+    if (model.member != null && model.member.authType == AuthType.EMAIL) {
+      elems.add(_buildMenuItem(locales().setting.changePassword, () => {} ));
+    }
+
     elems.add(_buildMenuItem(locales().setting.about, _onAboutClicked));
     elems.add(_buildMenuItem(locales().setting.donation, _onDonationClicked));
 
