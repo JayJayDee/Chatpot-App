@@ -98,6 +98,11 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
       elems.add(_buildMenuItem(locales().setting.linkMail, () => _onEmailAccountClicked() ));
     }
 
+    if (model.member != null && model.member.authType == AuthType.EMAIL) {
+      elems.add(_buildEmailLoggedInItem('jindongp@gmail.com')); // TODO: must be changed to login_id
+      elems.add(_buildMenuItem(locales().setting.changePassword, () => {} ));
+    }
+
     elems.add(_buildMenuItem(locales().setting.about, _onAboutClicked));
     elems.add(_buildMenuItem(locales().setting.donation, _onDonationClicked));
 
@@ -113,6 +118,24 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
       )
     );
   }
+}
+
+Widget _buildEmailLoggedInItem(String email) {
+  return Container(
+    padding: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 15),
+    decoration: BoxDecoration(
+      color: Color(0xffffffff),
+      border: Border(
+        top: BorderSide(color: Color(0xFFBCBBC1), width: 0.3),
+        bottom: BorderSide(color: Color(0xFFBCBBC1), width: 0.3)
+      ),
+    ),
+    child: Text("$email",
+      style: TextStyle(
+        color: Styles.secondaryFontColor
+      )
+    )
+  );
 }
 
 Widget _buildMenuItem(String title, VoidCallback pressedCallback) {
