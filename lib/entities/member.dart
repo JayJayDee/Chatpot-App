@@ -7,6 +7,7 @@ class Member {
   Gender gender;
   Avatar avatar;
   AuthType authType;
+  String loginId;
 
   Member();
 
@@ -18,6 +19,7 @@ class Member {
     member.language = map['language'];
     member.token = map['token'];
     member.avatar = Avatar.fromJson(map['avatar']);
+    member.loginId = map['login_id'];
 
     if (map['gender'] == 'F') member.gender = Gender.F;
     else if (map['gender'] == 'M') member.gender = Gender.M;

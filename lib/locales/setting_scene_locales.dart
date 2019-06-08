@@ -76,4 +76,10 @@ Are you sure you want to log out?''';
     else if (language == 'ja') return '取消';
     return 'Cancel';
   }
+
+  String loggedIn(String email) {
+    if (language == 'ko') return "$email 으로 로그인됨";
+    else if (language == 'ja') return "$emailとしてログインしました";
+    return "Signed in as $email";
+  }
 }

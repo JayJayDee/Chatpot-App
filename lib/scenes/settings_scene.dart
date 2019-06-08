@@ -99,7 +99,7 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
     }
 
     if (model.member != null && model.member.authType == AuthType.EMAIL) {
-      elems.add(_buildEmailLoggedInItem('jindongp@gmail.com')); // TODO: must be changed to login_id
+      elems.add(_buildEmailLoggedInItem(model.member.loginId));
       elems.add(_buildMenuItem(locales().setting.changePassword, () => {} ));
     }
 
@@ -130,7 +130,7 @@ Widget _buildEmailLoggedInItem(String email) {
         bottom: BorderSide(color: Color(0xFFBCBBC1), width: 0.3)
       ),
     ),
-    child: Text("$email",
+    child: Text(locales().setting.loggedIn(email),
       style: TextStyle(
         color: Styles.secondaryFontColor
       )
