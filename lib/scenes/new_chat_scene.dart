@@ -1,5 +1,7 @@
+import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/factory.dart';
@@ -22,12 +24,26 @@ class NewChatScene extends StatelessWidget {
       return;
     }
 
-    var parsed = int.parse(_inputedMaxAttendee);
-    String newRoomToken = await model.createNewRoom(
-      roomTitle: _inputedRoomTitle,
-      maxAttendee: parsed
-    );
-    Navigator.of(context).pop(newRoomToken);
+    var parsed; 
+    try {
+      parsed = int.parse(_inputedMaxAttendee);
+    } catch (err) {
+      await showSimpleAlert(context, locales().newchat.invalidMaximumAttendees);
+      return;
+    }
+
+    try {
+      String newRoomToken = await model.createNewRoom(
+        roomTitle: _inputedRoomTitle,
+        maxAttendee: parsed
+      );
+      Navigator.of(context).pop(newRoomToken);
+    } catch (err) {
+      if (err is ApiFailureError) {
+        await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
+        return;
+      }
+    }
   }
 
   @override
@@ -47,7 +63,7 @@ class NewChatScene extends StatelessWidget {
               scrollDirection: Axis.vertical,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.only(left: 10, top: 20, right: 10, bottom: 20),
+                  padding: EdgeInsets.only(left: 10, top: 10, right: 10),
                   child: Text(locales().newchat.header,
                     style: TextStyle(
                       color: Styles.primaryFontColor,
@@ -58,7 +74,7 @@ class NewChatScene extends StatelessWidget {
                 _buildRoomTitleField((String value) => _inputedRoomTitle = value),
                 _buildMaxAttendeefield((String value) => _inputedMaxAttendee = value),
                 Container(
-                  padding: EdgeInsets.only(top: 50, left: 10, right: 10),
+                  margin: EdgeInsets.only(top: 30, left: 10, right: 10),
                   child: _buildNewChatButton(context, () => _onClickNewChat(context))
                 )
               ],
@@ -78,8 +94,8 @@ Widget _buildRoomTitleField(ValueChanged<String> valueChanged) {
     padding: EdgeInsets.only(left: 10, top: 10, right: 10),
     child: CupertinoTextField(
       prefix: Icon(
-        CupertinoIcons.book,
-        color: CupertinoColors.lightBackgroundGray,
+        MdiIcons.pencil,
+        color: CupertinoColors.inactiveGray,
         size: 28.0
       ),
       onChanged: valueChanged,
@@ -98,8 +114,8 @@ Widget _buildMaxAttendeefield(ValueChanged<String> valueChanged) {
     padding: EdgeInsets.only(left: 10, top: 10, right: 10),
     child: CupertinoTextField(
       prefix: Icon(
-        CupertinoIcons.book,
-        color: CupertinoColors.lightBackgroundGray,
+        MdiIcons.accountGroup,
+        color: CupertinoColors.inactiveGray,
         size: 28.0
       ),
       onChanged: valueChanged,

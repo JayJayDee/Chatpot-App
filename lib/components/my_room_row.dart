@@ -165,13 +165,15 @@ Widget _buildTranslationRow(BuildContext context, MyRoom room) {
 
   Widget indicator;
   if (room.titleTranslated != null) {
-    indicator = Text(room.titleTranslated,
-      style: TextStyle(
-        fontSize: 14,
-        color: Styles.primaryFontColor,
-      ),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis
+    indicator = Expanded(
+      child: Text(room.titleTranslated,
+        style: TextStyle(
+          fontSize: 14,
+          color: Styles.primaryFontColor,
+        ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis
+      )
     );
   } else {
     indicator = Container(
@@ -195,9 +197,7 @@ Widget _buildTranslationRow(BuildContext context, MyRoom room) {
           )
         ),
         Padding(padding: EdgeInsets.only(left: 5)),
-        Expanded(
-          child: indicator
-        )
+        indicator
       ],
     )
   );

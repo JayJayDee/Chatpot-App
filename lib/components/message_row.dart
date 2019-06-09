@@ -12,6 +12,24 @@ enum _RowType {
 }
 
 typedef ImageClickCallback (String messageId);
+typedef MemberClickCallback (String memberToken);
+
+class _MatchedColors {
+  Color background;
+  Color font;
+}
+
+_MatchedColors _getMatchedColors(bool isMine) {
+  var colors = _MatchedColors();
+  if (isMine == true) {
+    colors.background = CupertinoColors.activeBlue;
+    colors.font = CupertinoColors.white;
+  } else {
+    colors.background = Styles.listRowHeaderBackground;
+    colors.font = Styles.primaryFontColor;
+  }
+  return colors;
+}
 
 @immutable
 class MessageRow extends StatelessWidget {
@@ -19,11 +37,13 @@ class MessageRow extends StatelessWidget {
   final Message message;
   final AppState state;
   final ImageClickCallback imageClickCallback;
+  final MemberClickCallback profileClickCallback;
 
   MessageRow({
     @required this.message,
     @required this.state,
-    @required this.imageClickCallback
+    @required this.imageClickCallback,
+    @required this.profileClickCallback
   });
 
   Widget build(BuildContext context) {
@@ -41,7 +61,8 @@ class MessageRow extends StatelessWidget {
       widget = _OtherMessageRow(
         message: message,
         appState: state,
-        imageClickCallback: imageClickCallback
+        imageClickCallback: imageClickCallback,
+        profileClickCallback: profileClickCallback
       );
 
     } else if (type ==_RowType.NOTIFICATION) {
@@ -80,7 +101,7 @@ class _NotificationRow extends StatelessWidget {
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(5),
-                color: Styles.thirdFontColor,
+                color: Styles.listRowHeaderBackground,
                 child: Text(text,
                   style: TextStyle(
                     fontSize: 14,
@@ -108,10 +129,10 @@ class _MyMessageRow extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget contentWidget;
     if (message.messageType == MessageType.TEXT) {
-      contentWidget = _getTextContentWidget(message);
+      contentWidget = _getTextContentWidget(message, true);
     } else if (message.messageType == MessageType.IMAGE) {
       if (message.attchedImageStatus == AttchedImageStatus.LOCAL_IMAGE) {
-        contentWidget = _getLoadingImageContentWidget(message);
+        contentWidget = _getLoadingImageContentWidget(message, true);
       } else if (message.attchedImageStatus == AttchedImageStatus.REMOTE_IMAGE) {
         contentWidget = _getRemoteImageContentWidget(message, imageClickCallback);
       }
@@ -144,17 +165,19 @@ class _OtherMessageRow extends StatelessWidget {
   final Message message;
   final AppState appState;
   final ImageClickCallback imageClickCallback;
+  final MemberClickCallback profileClickCallback;
 
   _OtherMessageRow({
     this.message,
     this.appState,
-    this.imageClickCallback
+    this.imageClickCallback,
+    this.profileClickCallback
   });
 
   Widget build(BuildContext context) {
     Widget contentWidget;
     if (message.messageType == MessageType.TEXT) {
-      contentWidget = _getTextContentWidget(message);
+      contentWidget = _getTextContentWidget(message, false);
     } else if (message.messageType == MessageType.IMAGE) {
       contentWidget = _getRemoteImageContentWidget(message, imageClickCallback);
     }
@@ -165,34 +188,39 @@ class _OtherMessageRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Container(
-            width: 50,
-            height: 50,
-            child: Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: CachedNetworkImage(
-                    imageUrl: message.from.avatar.thumb,
-                    placeholder: (context, url) => CupertinoActivityIndicator(),
-                    width: 50,
-                    height: 50
-                  )
-                ),
-                Positioned(
-                  child: Container(
-                    width: 24,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: locales().getFlagImage(message.from.region),
-                        fit: BoxFit.cover
+          CupertinoButton(
+            padding: EdgeInsets.all(0),
+            onPressed: () => this.profileClickCallback(this.message.from.token),
+            child: Container(
+              width: 60,
+              height: 60,
+              child: Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(30.0),
+                    child: CachedNetworkImage(
+                      imageUrl: message.from.avatar.thumb,
+                      placeholder: (context, url) => CupertinoActivityIndicator(),
+                      width: 60,
+                      height: 60
+                    )
+                  ),
+                  Positioned(
+                    child: Container(
+                      width: 30,
+                      height: 15,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Styles.primaryFontColor),
+                        image: DecorationImage(
+                          image: locales().getFlagImage(message.from.region),
+                          fit: BoxFit.cover
+                        )
                       )
                     )
                   )
-                )
-              ]
+                ]
+              )
             )
           ),
           Padding(padding: EdgeInsets.only(left: 10)),
@@ -201,11 +229,14 @@ class _OtherMessageRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text(locales().getNick(message.from.nick),
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Styles.secondaryFontColor
-                  ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 5),
+                  child: Text(locales().getNick(message.from.nick),
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Styles.secondaryFontColor
+                    ),
+                  )
                 ),
                 contentWidget,
                 _translatedTextIndicator(appState, message),
@@ -288,28 +319,30 @@ Widget _receiveTimeIndicator(Message msg) {
   );
 }
 
-Widget _getLoadingImageContentWidget(Message message) =>
-  Container(
-    color: CupertinoColors.activeBlue,
+Widget _getLoadingImageContentWidget(Message message, bool isMine) {
+  var colors = _getMatchedColors(isMine);
+  return Container(
+    color: colors.background,
     width: 120,
     height: 120,
     child: Stack(
       alignment: Alignment.center,
       children: [
         CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(CupertinoColors.white)
+          valueColor: AlwaysStoppedAnimation<Color>(colors.font)
         ),
         Positioned(
           child: Text("${message.attatchmentUploadProgress}%",
             style: TextStyle(
               fontSize: 14,
-              color: CupertinoColors.white
+              color: colors.font
             )
           )
         )
       ]
     )
   );
+}
 
 Widget _getRemoteImageContentWidget(Message message, ImageClickCallback callback) =>
   CupertinoButton(
@@ -326,17 +359,19 @@ Widget _getRemoteImageContentWidget(Message message, ImageClickCallback callback
     onPressed: () => callback(message.messageId)
   );
 
-Widget _getTextContentWidget(Message message) =>
-  ClipRRect(
+Widget _getTextContentWidget(Message message, bool isMine) {
+  var colors = _getMatchedColors(isMine);
+  return ClipRRect(
     borderRadius: BorderRadius.circular(10),
     child: Container(
       padding: EdgeInsets.all(7),
-      color: CupertinoColors.activeBlue,
+      color: colors.background,
       child: Text(message.getTextContent(),
         style: TextStyle(
           fontSize: 16,
-          color: CupertinoColors.white
+          color: colors.font
         )
       )
     ),
   );
+}
