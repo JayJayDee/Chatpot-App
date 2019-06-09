@@ -12,6 +12,7 @@ import 'package:chatpot_app/scenes/login_scene.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/scenes/email_upgrade_scene.dart';
+import 'package:chatpot_app/scenes/password_change_scene.dart';
 
 @immutable
 class SettingsScene extends StatelessWidget implements EventReceivable {
@@ -26,6 +27,12 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
   
   void _onEditProfileClicked() async {
 
+  }
+
+  void _onPasswordChangeClicked(BuildContext context) async {
+    await Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
+      builder: (BuildContext context) => PasswordChangeScene()
+    ));
   }
 
   void _onSignoutClicked(BuildContext context) async {
@@ -63,7 +70,6 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
   }
 
   void _onEmailAccountClicked() async {
-    print('EMAIL_ACCOUNT');
     await Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
       builder: (BuildContext context) => EmailUpgradeScene()
     ));
@@ -97,7 +103,7 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
 
     if (model.member != null && model.member.authType == AuthType.EMAIL) {
       elems.add(_buildEmailLoggedInItem(model.member.loginId));
-      elems.add(_buildMenuItem(locales().setting.changePassword, () => {} ));
+      elems.add(_buildMenuItem(locales().setting.changePassword, () => _onPasswordChangeClicked(context)));
     }
 
     elems.add(_buildMenuItem(locales().setting.about, _onAboutClicked));
