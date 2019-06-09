@@ -56,7 +56,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
   Future<void> _onMessageSend(BuildContext context) async {
     if (_inputedMessage == null || _inputedMessage.trim().length == 0) {
-      await showSimpleAlert(context, 'message was empty.');
+      await showSimpleAlert(context, locales().msgscene.messageEmpty);
       return;
     }
 
@@ -70,7 +70,6 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onSceneShown(BuildContext context) async {
-    print('ON_SCENE_SHOWN');
     final model = ScopedModel.of<AppState>(context);
     _model = model;
     MyRoom room = model.currentRoom;

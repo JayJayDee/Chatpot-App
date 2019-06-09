@@ -32,4 +32,10 @@ class MessageSceneLocales {
     else if (language == 'ja') return 'このチャットを離れますか？';
     return 'Are you sure you want to leave this chat?';
   }
+
+  String get messageEmpty {
+    if (language == 'ko') return '메시지를 작성하셔야 합니다.';
+    else if (language == 'ja') return 'あなたはメッセージを記入する必要があります。';
+    return 'You need to fill out the message.';
+  }
 }
