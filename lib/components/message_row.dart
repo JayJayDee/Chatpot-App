@@ -14,6 +14,23 @@ enum _RowType {
 typedef ImageClickCallback (String messageId);
 typedef MemberClickCallback (String memberToken);
 
+class _MatchedColors {
+  Color background;
+  Color font;
+}
+
+_MatchedColors _getMatchedColors(bool isMine) {
+  var colors = _MatchedColors();
+  if (isMine == true) {
+    colors.background = CupertinoColors.activeBlue;
+    colors.font = CupertinoColors.white;
+  } else {
+    colors.background = Styles.listRowHeaderBackground;
+    colors.font = Styles.primaryFontColor;
+  }
+  return colors;
+}
+
 @immutable
 class MessageRow extends StatelessWidget {
 
@@ -115,7 +132,7 @@ class _MyMessageRow extends StatelessWidget {
       contentWidget = _getTextContentWidget(message, true);
     } else if (message.messageType == MessageType.IMAGE) {
       if (message.attchedImageStatus == AttchedImageStatus.LOCAL_IMAGE) {
-        contentWidget = _getLoadingImageContentWidget(message);
+        contentWidget = _getLoadingImageContentWidget(message, true);
       } else if (message.attchedImageStatus == AttchedImageStatus.REMOTE_IMAGE) {
         contentWidget = _getRemoteImageContentWidget(message, imageClickCallback);
       }
@@ -302,28 +319,30 @@ Widget _receiveTimeIndicator(Message msg) {
   );
 }
 
-Widget _getLoadingImageContentWidget(Message message) =>
-  Container(
-    color: CupertinoColors.activeBlue,
+Widget _getLoadingImageContentWidget(Message message, bool isMine) {
+  var colors = _getMatchedColors(isMine);
+  return Container(
+    color: colors.background,
     width: 120,
     height: 120,
     child: Stack(
       alignment: Alignment.center,
       children: [
         CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(CupertinoColors.white)
+          valueColor: AlwaysStoppedAnimation<Color>(colors.font)
         ),
         Positioned(
           child: Text("${message.attatchmentUploadProgress}%",
             style: TextStyle(
               fontSize: 14,
-              color: CupertinoColors.white
+              color: colors.font
             )
           )
         )
       ]
     )
   );
+}
 
 Widget _getRemoteImageContentWidget(Message message, ImageClickCallback callback) =>
   CupertinoButton(
@@ -341,26 +360,16 @@ Widget _getRemoteImageContentWidget(Message message, ImageClickCallback callback
   );
 
 Widget _getTextContentWidget(Message message, bool isMine) {
-  Color background;
-  Color font;
-
-  if (isMine == true) {
-    background = Styles.thirdFontColor;
-    font = Styles.primaryFontColor;
-  } else {
-    background = CupertinoColors.activeBlue;
-    font = CupertinoColors.white;
-  }
-
+  var colors = _getMatchedColors(isMine);
   return ClipRRect(
     borderRadius: BorderRadius.circular(10),
     child: Container(
       padding: EdgeInsets.all(7),
-      color: background,
+      color: colors.background,
       child: Text(message.getTextContent(),
         style: TextStyle(
           fontSize: 16,
-          color: font
+          color: colors.font
         )
       )
     ),

@@ -26,7 +26,6 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
   Future<void> _onNewChatClicked(BuildContext context) async {
     final model = ScopedModel.of<AppState>(context);
     String roomToken = await Navigator.of(parentContext).push(CupertinoPageRoute<String>(
-      title: 'New chat',
       builder: (BuildContext context) => NewChatScene()
     ));
     if (roomToken == null) return;

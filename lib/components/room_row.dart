@@ -128,24 +128,25 @@ Widget _buildTranslationRow(BuildContext context, Room room) {
 
   Widget indicator;
   if (room.titleTranslated != null) {
-    indicator = Text(room.titleTranslated,
-      style: TextStyle(
-        fontSize: 14,
-        color: Styles.primaryFontColor
-      ),
-      overflow: TextOverflow.ellipsis,
-      maxLines: 1
+    indicator = Flexible(
+      child: Text(room.titleTranslated,
+        style: TextStyle(
+          fontSize: 14,
+          color: Styles.primaryFontColor
+        ),
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1
+      )
     );
   } else {
     indicator = Container(
-      width: 13,
-      height: 13,
+      width: 12,
+      height: 12,
       child: CircularProgressIndicator(
         strokeWidth: 2
       )
     );
   }
-
   return Container(
     padding: EdgeInsets.only(left: 10),
     child: Row(
@@ -158,9 +159,7 @@ Widget _buildTranslationRow(BuildContext context, Room room) {
           )
         ),
         Padding(padding: EdgeInsets.only(left: 5)),
-        Flexible(
-          child: indicator
-        )
+        indicator
       ],
     )
   );
