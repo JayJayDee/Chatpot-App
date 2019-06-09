@@ -15,6 +15,7 @@ import 'package:chatpot_app/scenes/photo_detail_scene.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
 typedef ImageClickCallback (String messageId);
+typedef ProfileClickCallback (String memberToken);
 
 @immutable
 class MessageScene extends StatefulWidget {
@@ -100,6 +101,10 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     ));
   }
 
+  Future<void> _onProfileClicked(BuildContext context, String memberToken) async {
+    print(memberToken);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -161,7 +166,9 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
                   child: _buildListView(context,
                     controller: _scrollController,
                     imageClickCallback: (String messageId) =>
-                      _onImageClicked(context, messageId)
+                      _onImageClicked(context, messageId),
+                    profileClickCallback: (String memberToken) =>
+                      _onProfileClicked(context, memberToken)
                   )
                 ),
                 _buildEditText(context, 
@@ -184,7 +191,8 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
 Widget _buildListView(BuildContext context, {
   @required ScrollController controller,
-  @required ImageClickCallback imageClickCallback
+  @required ImageClickCallback imageClickCallback,
+  @required ProfileClickCallback profileClickCallback
 }) {
   final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
   return ListView.builder(
@@ -199,6 +207,7 @@ Widget _buildListView(BuildContext context, {
         message: msg,
         state: model,
         imageClickCallback: imageClickCallback,
+        profileClickCallback: profileClickCallback,
       );
     }
   );

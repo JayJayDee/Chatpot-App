@@ -12,6 +12,7 @@ enum _RowType {
 }
 
 typedef ImageClickCallback (String messageId);
+typedef MemberClickCallback (String memberToken);
 
 @immutable
 class MessageRow extends StatelessWidget {
@@ -19,11 +20,13 @@ class MessageRow extends StatelessWidget {
   final Message message;
   final AppState state;
   final ImageClickCallback imageClickCallback;
+  final MemberClickCallback profileClickCallback;
 
   MessageRow({
     @required this.message,
     @required this.state,
-    @required this.imageClickCallback
+    @required this.imageClickCallback,
+    @required this.profileClickCallback
   });
 
   Widget build(BuildContext context) {
@@ -41,7 +44,8 @@ class MessageRow extends StatelessWidget {
       widget = _OtherMessageRow(
         message: message,
         appState: state,
-        imageClickCallback: imageClickCallback
+        imageClickCallback: imageClickCallback,
+        profileClickCallback: profileClickCallback
       );
 
     } else if (type ==_RowType.NOTIFICATION) {
@@ -80,7 +84,7 @@ class _NotificationRow extends StatelessWidget {
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(5),
-                color: Styles.thirdFontColor,
+                color: Styles.listRowHeaderBackground,
                 child: Text(text,
                   style: TextStyle(
                     fontSize: 14,
@@ -108,7 +112,7 @@ class _MyMessageRow extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget contentWidget;
     if (message.messageType == MessageType.TEXT) {
-      contentWidget = _getTextContentWidget(message);
+      contentWidget = _getTextContentWidget(message, true);
     } else if (message.messageType == MessageType.IMAGE) {
       if (message.attchedImageStatus == AttchedImageStatus.LOCAL_IMAGE) {
         contentWidget = _getLoadingImageContentWidget(message);
@@ -144,17 +148,19 @@ class _OtherMessageRow extends StatelessWidget {
   final Message message;
   final AppState appState;
   final ImageClickCallback imageClickCallback;
+  final MemberClickCallback profileClickCallback;
 
   _OtherMessageRow({
     this.message,
     this.appState,
-    this.imageClickCallback
+    this.imageClickCallback,
+    this.profileClickCallback
   });
 
   Widget build(BuildContext context) {
     Widget contentWidget;
     if (message.messageType == MessageType.TEXT) {
-      contentWidget = _getTextContentWidget(message);
+      contentWidget = _getTextContentWidget(message, false);
     } else if (message.messageType == MessageType.IMAGE) {
       contentWidget = _getRemoteImageContentWidget(message, imageClickCallback);
     }
@@ -165,34 +171,39 @@ class _OtherMessageRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Container(
-            width: 50,
-            height: 50,
-            child: Stack(
-              alignment: Alignment.bottomRight,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(25.0),
-                  child: CachedNetworkImage(
-                    imageUrl: message.from.avatar.thumb,
-                    placeholder: (context, url) => CupertinoActivityIndicator(),
-                    width: 50,
-                    height: 50
-                  )
-                ),
-                Positioned(
-                  child: Container(
-                    width: 24,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: locales().getFlagImage(message.from.region),
-                        fit: BoxFit.cover
+          CupertinoButton(
+            padding: EdgeInsets.all(0),
+            onPressed: () => this.profileClickCallback(this.message.from.token),
+            child: Container(
+              width: 60,
+              height: 60,
+              child: Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(30.0),
+                    child: CachedNetworkImage(
+                      imageUrl: message.from.avatar.thumb,
+                      placeholder: (context, url) => CupertinoActivityIndicator(),
+                      width: 60,
+                      height: 60
+                    )
+                  ),
+                  Positioned(
+                    child: Container(
+                      width: 30,
+                      height: 15,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Styles.primaryFontColor),
+                        image: DecorationImage(
+                          image: locales().getFlagImage(message.from.region),
+                          fit: BoxFit.cover
+                        )
                       )
                     )
                   )
-                )
-              ]
+                ]
+              )
             )
           ),
           Padding(padding: EdgeInsets.only(left: 10)),
@@ -201,11 +212,14 @@ class _OtherMessageRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text(locales().getNick(message.from.nick),
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Styles.secondaryFontColor
-                  ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 5),
+                  child: Text(locales().getNick(message.from.nick),
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Styles.secondaryFontColor
+                    ),
+                  )
                 ),
                 contentWidget,
                 _translatedTextIndicator(appState, message),
@@ -326,17 +340,29 @@ Widget _getRemoteImageContentWidget(Message message, ImageClickCallback callback
     onPressed: () => callback(message.messageId)
   );
 
-Widget _getTextContentWidget(Message message) =>
-  ClipRRect(
+Widget _getTextContentWidget(Message message, bool isMine) {
+  Color background;
+  Color font;
+
+  if (isMine == true) {
+    background = Styles.thirdFontColor;
+    font = Styles.primaryFontColor;
+  } else {
+    background = CupertinoColors.activeBlue;
+    font = CupertinoColors.white;
+  }
+
+  return ClipRRect(
     borderRadius: BorderRadius.circular(10),
     child: Container(
       padding: EdgeInsets.all(7),
-      color: CupertinoColors.activeBlue,
+      color: background,
       child: Text(message.getTextContent(),
         style: TextStyle(
           fontSize: 16,
-          color: CupertinoColors.white
+          color: font
         )
       )
     ),
   );
+}
