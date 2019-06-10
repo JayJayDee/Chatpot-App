@@ -23,4 +23,22 @@ class PasswordChangeSceneLocales {
     return '''Change the password you use to sign in.
 Please enter your existing password and a new password to use from now on.''';
   }
+
+  String get oldPasswordPlaceholder {
+    if (language == 'ko') return '''기존 비밀번호''';
+    else if (language == 'ja') return '''以前のパスワード''';
+    return '''Previous password''';   
+  }
+
+  String get newPasswordPlaceholder {
+    if (language == 'ko') return '''새 비밀번호''';
+    else if (language == 'ja') return '''新しいパスワード''';
+    return '''New password''';   
+  }
+
+  String get newPasswordConfirmPlaceholder {
+    if (language == 'ko') return '''새 비밀번호 확인''';
+    else if (language == 'ja') return '''新しいパスワード確認''';
+    return '''New password confirmation''';
+  }
 }
