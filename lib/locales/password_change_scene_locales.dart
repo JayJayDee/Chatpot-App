@@ -41,4 +41,10 @@ Please enter your existing password and a new password to use from now on.''';
     else if (language == 'ja') return '''新しいパスワード確認''';
     return '''New password confirmation''';
   }
+
+  String get changeButtonLabel {
+    if (language == 'ko') return '비밀번호 변경';
+    else if (language == 'ja') return 'パスワードを変更する';
+    return 'Change password';
+  }
 }

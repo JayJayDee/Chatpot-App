@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
+import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
 class PasswordChangeScene extends StatefulWidget {
 
@@ -15,6 +16,23 @@ class _PasswordChangeSceneState extends State<PasswordChangeScene> {
   String _oldPassword = '';
   String _newPassword = '';
   String _newPasswordConfirm = '';
+
+  Future<void> _onClickChangeButton(BuildContext context) async {
+    if (_oldPassword.trim().length == 0) {
+      await showSimpleAlert(context, 'old password required'); // TODO: locale
+      return;
+    }
+
+    if (_newPassword.trim().length == 0) {
+      await showSimpleAlert(context, 'new password required'); // TODO: locale
+      return;
+    }
+
+    if (_newPassword.trim().compareTo(_newPasswordConfirm.trim()) != 0) {
+      await showSimpleAlert(context, 'passwords does not matched'); // TODO: locale
+      return;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +73,13 @@ class _PasswordChangeSceneState extends State<PasswordChangeScene> {
                   margin: EdgeInsets.only(left: 10, top: 10, right: 10),
                   child: _buildNewPasswordConfirmField(context,
                     callback: (String text) => setState(() => _newPasswordConfirm = text)
+                  )
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10, top: 10, right: 10),
+                  child: CupertinoButton(
+                    child: Text(locales().passwordChange.changeButtonLabel),
+                    onPressed: () => _onClickChangeButton(context)
                   )
                 )
               ]
