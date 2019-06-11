@@ -34,6 +34,33 @@ class Member {
   toString() => "${nick.ko}:$token";
 }
 
+class MemberPublic {
+  String region;
+  String regionName;
+  String language;
+  Gender gender;
+  Nick nick;
+  Avatar avatar;
+  String token;
+
+  MemberPublic();
+
+  factory MemberPublic.fromJson(Map<String, dynamic> map) {
+    MemberPublic member = MemberPublic();
+    member.nick = Nick.fromJson(map['nick']);
+    member.region = map['region'];
+    member.regionName = map['region_name'];
+    member.language = map['language'];
+    member.token = map['token'];
+    member.avatar = Avatar.fromJson(map['avatar']);
+
+    if (map['gender'] == 'F') member.gender = Gender.F;
+    else if (map['gender'] == 'M') member.gender = Gender.M;
+
+    return member;
+  }
+}
+
 class Nick {
   String ko;
   String ja;
