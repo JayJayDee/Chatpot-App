@@ -47,4 +47,28 @@ Please enter your existing password and a new password to use from now on.''';
     else if (language == 'ja') return 'パスワードを変更する';
     return 'Change password';
   }
+
+  String get passwordRequired {
+    if (language == 'ko') return '비밀번호를 입력해야 합니다.';
+    else if (language == 'ja') return 'パスワードを入力してください。';
+    return 'You must enter your password.';
+  }
+
+  String get previousPasswordRequired {
+    if (language == 'ko') return '기존 비밀번호를 입력해야 합니다.';
+    else if (language == 'ja') return '以前のパスワードを入力してください。';
+    return 'You must enter your previous password.';
+  }
+
+  String get passwordNotMatch {
+    if (language == 'ko') return '두 비밀번호가 일치하지 않습니다.';
+    else if (language == 'ja') return 'パスワードが一致していません。';
+    return 'Passwords do not match.';
+  }
+
+  String get previousPasswordWrong {
+    if (language == 'ko') return '기존 비밀번호가 입력한 비밀번호와 일치하지 않습니다.';
+    else if (language == 'ja') return '以前のパスワードが、入力したパスワードと一致しません。';
+    return 'Previous password does not match the password you entered.';
+  }
 }

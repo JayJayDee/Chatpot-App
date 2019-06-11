@@ -240,3 +240,15 @@ class ActivationStatusResp {
   @override
   toString() => "ActivationStatusResp: $status $email";
 }
+
+class PasswordChangeResp {
+  String passphrase;
+
+  PasswordChangeResp();
+
+  factory PasswordChangeResp.fromJson(Map<String, dynamic> map) {
+    var resp = PasswordChangeResp();
+    resp.passphrase = map['passphrase'];
+    return resp;
+  }
+}

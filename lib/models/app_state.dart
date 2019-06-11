@@ -616,4 +616,30 @@ class AppState extends Model {
 
     notifyListeners();
   }
+
+  Future<void> changePassword({
+    @required String currentPassword,
+    @required String newPassword
+  }) async {
+    _loading = true;
+    notifyListeners();
+
+    // TODO: call apis.
+    try {
+      var resp = await memberApi().changePassword(
+        memberToken: this.member.token,
+        currentPassword: currentPassword,
+        newPassword: newPassword
+      );
+
+      await authAccessor().setPassword(resp.passphrase);
+      _loading = false;
+      notifyListeners();
+
+    } catch (err) {
+      _loading = false;
+      notifyListeners();
+      throw err;  
+    }
+  }
 }

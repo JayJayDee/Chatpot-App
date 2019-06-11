@@ -40,6 +40,7 @@ class DefaultRequester implements Requester {
 
     if (method == HttpMethod.GET) resp = await http.get(wholeUrl);
     else if (method == HttpMethod.POST) resp = await http.post(wholeUrl, body: body);
+    else if (method == HttpMethod.PUT) resp = await http.put(wholeUrl, body: body);
 
     try {
       respMap = jsonDecode(resp.body);
