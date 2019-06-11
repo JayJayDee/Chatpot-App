@@ -33,7 +33,7 @@ class SplashScene extends StatelessWidget {
       _init = true;
     }
     return CupertinoPageScaffold(
-      backgroundColor: Styles.appBackground,
+      backgroundColor: Styles.splashBackground,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -45,9 +45,9 @@ class SplashScene extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Image(
-                    image: AssetImage('assets/chatpot_logo.png'),
-                    width: 150,
-                    height: 150,
+                    image: AssetImage('assets/chatpot-icon.png'),
+                    width: 200,
+                    height: 200,
                   )
                 ],
               ),
