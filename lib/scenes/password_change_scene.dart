@@ -43,12 +43,16 @@ class _PasswordChangeSceneState extends State<PasswordChangeScene> {
         currentPassword: _oldPassword,
         newPassword: _newPassword
       );
+      await showSimpleAlert(context, locales().passwordChange.passwordChangeCompleted,
+        title: locales().successTitle
+      );
+      Navigator.of(context).pop();
     } catch (err) {
       if (err is ApiFailureError) {
         await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
         return;
       }
-    }   
+    }
   }
 
   @override
@@ -94,9 +98,8 @@ class _PasswordChangeSceneState extends State<PasswordChangeScene> {
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 10, top: 10, right: 10),
-                  child: CupertinoButton(
-                    child: Text(locales().passwordChange.changeButtonLabel),
-                    onPressed: () => _onClickChangeButton(context)
+                  child: _buildChangeButton(context,
+                    callback: () => _onClickChangeButton(context)
                   )
                 )
               ]
@@ -162,6 +165,16 @@ Widget _buildNewPasswordConfirmField(BuildContext context, {
     decoration: BoxDecoration(
       border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
     )
+  );
+}
+
+Widget _buildChangeButton(BuildContext context, {
+  @required VoidCallback callback,
+}) {
+  final state = ScopedModel.of<AppState>(context);
+  return CupertinoButton(
+    child: Text(locales().passwordChange.changeButtonLabel),
+    onPressed: state.loading == true ? null : () => callback()
   );
 }
 

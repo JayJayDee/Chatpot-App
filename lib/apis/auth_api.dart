@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:chatpot_app/entities/member.dart';
 import 'package:meta/meta.dart';
 import 'package:chatpot_app/apis/requester.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
@@ -78,5 +79,15 @@ class AuthApi {
       }
     );
     return EmailAuthApiResp.fromJson(resp);
+  }
+
+  Future<MemberPublic> requestMemberPublic({
+    @required String memberToken
+  }) async {
+    Map<String, dynamic> resp = await _requester.requestWithAuth(
+      url: "/member/$memberToken/public",
+      method: HttpMethod.GET
+    );
+    return MemberPublic.fromJson(resp);
   }
 }

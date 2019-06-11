@@ -13,6 +13,7 @@ import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/scenes/photo_detail_scene.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
+import 'package:chatpot_app/components/member_detail_sheet.dart';
 
 typedef ImageClickCallback (String messageId);
 typedef ProfileClickCallback (String memberToken);
@@ -101,7 +102,9 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onProfileClicked(BuildContext context, String memberToken) async {
-    print(memberToken);
+    await showMemberDetailSheet(context, 
+      memberToken: memberToken
+    );
   }
 
   @override

@@ -71,4 +71,10 @@ Please enter your existing password and a new password to use from now on.''';
     else if (language == 'ja') return '以前のパスワードが、入力したパスワードと一致しません。';
     return 'Previous password does not match the password you entered.';
   }
+
+  String get passwordChangeCompleted {
+    if (language == 'ko') return '비밀번호 변경이 완료되었습니다.';
+    else if (language == 'ja') return 'パスワードは正常に変更されました。';
+    return 'Your password changed successfully.';
+  }
 }

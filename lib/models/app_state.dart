@@ -624,7 +624,6 @@ class AppState extends Model {
     _loading = true;
     notifyListeners();
 
-    // TODO: call apis.
     try {
       var resp = await memberApi().changePassword(
         memberToken: this.member.token,
