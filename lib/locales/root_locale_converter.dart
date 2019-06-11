@@ -107,4 +107,10 @@ class RootLocaleConverter {
     else if (_language == 'ja') return 'OK';
     return 'Ok';
   }
+
+  String get successTitle {
+    if (_language == 'ko') return '성공';
+    else if (_language == 'ja') return '成功';
+    return 'Success';
+  }
 }
