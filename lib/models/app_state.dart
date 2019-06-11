@@ -616,4 +616,16 @@ class AppState extends Model {
 
     notifyListeners();
   }
+
+  Future<void> changePassword({
+    @required String currentPassword,
+    @required String newPassword
+  }) async {
+    _loading = true;
+    notifyListeners();
+
+    // TODO: call apis.
+
+    // TODO: case of call success, change private passphrase to
+  }
 }

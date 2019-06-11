@@ -19,17 +19,17 @@ class _PasswordChangeSceneState extends State<PasswordChangeScene> {
 
   Future<void> _onClickChangeButton(BuildContext context) async {
     if (_oldPassword.trim().length == 0) {
-      await showSimpleAlert(context, 'old password required'); // TODO: locale
+      await showSimpleAlert(context, locales().passwordChange.previousPasswordRequired);
       return;
     }
 
     if (_newPassword.trim().length == 0) {
-      await showSimpleAlert(context, 'new password required'); // TODO: locale
+      await showSimpleAlert(context, locales().passwordChange.passwordRequired);
       return;
     }
 
     if (_newPassword.trim().compareTo(_newPasswordConfirm.trim()) != 0) {
-      await showSimpleAlert(context, 'passwords does not matched'); // TODO: locale
+      await showSimpleAlert(context, locales().passwordChange.passwordNotMatch);
       return;
     }
   }

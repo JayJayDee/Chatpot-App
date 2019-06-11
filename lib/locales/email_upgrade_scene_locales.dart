@@ -100,7 +100,7 @@ class EmailUpgradeSceneLocales {
   }
 
   String get passwordNotMatch {
-    if (language == 'ko') return '비밀번호가 일치하지 않습니다.';
+    if (language == 'ko') return '두 비밀번호가 일치하지 않습니다.';
     else if (language == 'ja') return 'パスワードが一致していません。';
     return 'Passwords do not match.';
   }
