@@ -43,6 +43,7 @@ Widget buildProfileCard(BuildContext context, {
                         width: 40,
                         height: 20,
                         decoration: BoxDecoration(
+                          border: Border.all(color: Styles.primaryFontColor),
                           image: DecorationImage(
                             image: _getFlagImage(model.member.region),
                             fit: BoxFit.cover

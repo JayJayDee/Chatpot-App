@@ -56,6 +56,7 @@ class RoomRow extends StatelessWidget {
                       width: 30,
                       height: 15,
                       decoration: BoxDecoration(
+                        border: Border.all(color: Styles.primaryFontColor),
                         image: DecorationImage(
                           image: locales().getFlagImage(room.owner.region),
                           fit: BoxFit.cover

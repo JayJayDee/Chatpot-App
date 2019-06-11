@@ -133,6 +133,7 @@ class _RoomDetailCard extends State<RoomDetailCard> {
                 width: 24,
                 height: 12,
                 decoration: BoxDecoration(
+                  border: Border.all(color: Styles.primaryFontColor),
                   image: DecorationImage(
                     image: locales().getFlagImage(m.region),
                     fit: BoxFit.cover
