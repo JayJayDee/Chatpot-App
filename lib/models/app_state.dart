@@ -625,7 +625,21 @@ class AppState extends Model {
     notifyListeners();
 
     // TODO: call apis.
+    try {
+      var resp = await memberApi().changePassword(
+        memberToken: this.member.token,
+        currentPassword: currentPassword,
+        newPassword: newPassword
+      );
 
-    // TODO: case of call success, change private passphrase to
+      await authAccessor().setPassword(resp.passphrase);
+      _loading = false;
+      notifyListeners();
+
+    } catch (err) {
+      _loading = false;
+      notifyListeners();
+      throw err;  
+    }
   }
 }

@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:meta/meta.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
@@ -18,6 +21,8 @@ class _PasswordChangeSceneState extends State<PasswordChangeScene> {
   String _newPasswordConfirm = '';
 
   Future<void> _onClickChangeButton(BuildContext context) async {
+    final state = ScopedModel.of<AppState>(context);
+
     if (_oldPassword.trim().length == 0) {
       await showSimpleAlert(context, locales().passwordChange.previousPasswordRequired);
       return;
@@ -32,6 +37,18 @@ class _PasswordChangeSceneState extends State<PasswordChangeScene> {
       await showSimpleAlert(context, locales().passwordChange.passwordNotMatch);
       return;
     }
+
+    try {
+      await state.changePassword(
+        currentPassword: _oldPassword,
+        newPassword: _newPassword
+      );
+    } catch (err) {
+      if (err is ApiFailureError) {
+        await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
+        return;
+      }
+    }   
   }
 
   @override
@@ -149,5 +166,7 @@ Widget _buildNewPasswordConfirmField(BuildContext context, {
 }
 
 Widget _buildProgress(BuildContext context) {
-  return Container();
+  final state = ScopedModel.of<AppState>(context, rebuildOnChange: true);
+  if (state.loading == false) return Container();
+  return CupertinoActivityIndicator();
 }

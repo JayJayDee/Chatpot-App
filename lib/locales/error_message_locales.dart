@@ -15,6 +15,9 @@ class ErrorMessageLocales {
     else if (code == 'DUPLICATED_ENTRY') return this.duplicatedEmail;
     else if (code == 'DUPLICATED_EMAIL') return this.duplicatedEmail;
     else if (code == 'AUTH_FAILED') return this.authFailed;
+    else if (code == 'CURRENT_PASSWORD_INVALID') return this.invalidPreviousPassword;
+    else if (code == 'MEMBER_NOT_EXIST') return this.memberNotExist;
+    else if (code == 'SIMPLE_ACCOUNT_PWCHANGE_DENIED') return this.simpleAccountTriesPwChange;
     return uncatchedCode(code);
   }
 
@@ -43,6 +46,24 @@ class ErrorMessageLocales {
 メールアドレスとパスワードを確認してください。''';
     return '''Login failed.
 Please check your email and password.''';
+  }
+
+  String get memberNotExist {
+    if (language == 'ko') return '존재하지 않는 회원입니다.';
+    else if (language == 'ja') return 'このメンバーは存在しません。';
+    return 'This member does not exist.';
+  }
+
+  String get simpleAccountTriesPwChange {
+    if (language == 'ko') return '간편 로그인 타입의 회원은 비밀번호를 변경할 수 없습니다.';
+    else if (language == 'ja') return '単純ログインタイプのメンバーは自分のパスワードを変更できません。';
+    return 'Members of the simple login type can not change their password.';
+  }
+
+  String get invalidPreviousPassword {
+    if (language == 'ko') return '기존 비밀번호가 일치하지 않습니다.';
+    else if (language == 'ja') return '以前のパスワードが一致しません。';
+    return 'Previous passwords do not match.';
   }
 
   String uncatchedCode(String code) {
