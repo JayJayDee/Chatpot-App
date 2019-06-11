@@ -37,4 +37,14 @@ class MemberApi {
     );
     return PasswordChangeResp.fromJson(resp);
   }
+
+  Future<MemberPublic> requestMemberPublic({
+    @required String memberToken
+  }) async {
+    Map<String, dynamic> resp = await _requester.requestWithAuth(
+      url: "/member/$memberToken/public",
+      method: HttpMethod.GET
+    );
+    return MemberPublic.fromJson(resp);
+  }
 }
