@@ -19,15 +19,15 @@ Future<void> showMemberDetailSheet(BuildContext context, {
         message: _MemberDetailSheet(memberToken: memberToken),
         actions: [
           CupertinoActionSheetAction(
-            child: Text('1:1 채팅 시작'),
+            child: Text(locales().memberDetailSheet.menuOneononeChat),
             onPressed: () {},
           ),
           CupertinoActionSheetAction(
-            child: Text('차단하기'),
+            child: Text(locales().memberDetailSheet.menuBlockUser),
             onPressed: () {},
           ),
           CupertinoActionSheetAction(
-            child: Text('신고하기'),
+            child: Text(locales().memberDetailSheet.menuReportUser),
             onPressed: () {},
           )
         ]
