@@ -60,7 +60,6 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
         this._passwordInputRequired = activationStatus.passwordRequired;
         _loading = false;
       });
-      print(this._status);
     }
   }
 
@@ -151,6 +150,8 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
       if (err is ApiFailureError) {
         await showSimpleAlert(context,
           locales().error.messageFromErrorCode(err.code));
+      } else {
+        throw err;
       }
     } finally {
       _controller.clear();
@@ -158,6 +159,7 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
   }
 
   Future<void> _onCompletedOkClicked(BuildContext context) async {
+    Navigator.of(context).pop();
   }
 
   @override

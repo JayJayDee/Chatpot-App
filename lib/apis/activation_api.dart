@@ -44,7 +44,7 @@ class ActivationApi {
     @required String activationCode,
     String password
   }) async {
-    await _requester.requestWithAuth(
+    await _requester.request(
       url: '/activate/app/email/verify',
       method: HttpMethod.POST,
       body: {
