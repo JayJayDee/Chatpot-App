@@ -26,14 +26,34 @@ class DefaultRequester implements Requester {
     _authCrypter = crypter;
   }
 
+  void _preValidateParams({
+    @required Map<String, dynamic> qs,
+    @required Map<String, dynamic> body
+  }) {
+    if (qs != null) {
+      qs.keys.toList().forEach((String key) {
+        if (qs[key] == null) qs.remove(key);
+      });
+    }
+
+    if (body != null) {
+      body.keys.toList().forEach((String key) {
+        if (body[key] == null) body.remove(key);
+      });
+    }
+  }
+
   Future<dynamic> request({
     @required String url,
     @required HttpMethod method,
     Map<String, dynamic> qs,
     Map<String, dynamic> body
   }) async {
+    _preValidateParams(qs: qs, body: body);
+
     String wholeUrl = _buildWholeUrl("$_baseUrl$url", qs: qs);
     print("REQUEST WHOLE URL = $wholeUrl");
+
     var resp;
     Map<String, dynamic> respMap;
     List<dynamic> respList;
@@ -116,6 +136,8 @@ class DefaultRequester implements Requester {
     Map<String, dynamic> qs,
     Map<String, dynamic> body
   }) async {
+    _preValidateParams(qs: qs, body: body);
+
     String sessKey;
     try {
       sessKey = await _authAccessor.getSessionKey();
