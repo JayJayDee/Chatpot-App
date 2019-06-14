@@ -68,7 +68,7 @@ class AppState extends Model {
     return AppInitState.LOGGED_IN;
   }
 
-  Future<void> tryEmailLogin({
+  Future<EmailLoginResp> tryEmailLogin({
     @required String email,
     @required String password
   }) async {
@@ -90,6 +90,9 @@ class AppState extends Model {
 
       _loading = false;
       notifyListeners();
+
+      var ret = EmailLoginResp(memberToken: resp.memberToken);
+      return ret;
 
     } catch (err) {
       _loading = false;

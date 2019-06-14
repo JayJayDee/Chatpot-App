@@ -7,6 +7,7 @@ import 'package:chatpot_app/scenes/signup_scene.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
+import 'package:chatpot_app/scenes/email_upgrade_scene.dart';
 import 'package:chatpot_app/models/app_state.dart';
 
 String _email = '';
@@ -32,10 +33,23 @@ class LoginScene extends StatelessWidget {
       Navigator.pushReplacementNamed(context, '/container');
     } catch (err) {
       if (err is ApiFailureError) {
-        showSimpleAlert(context,
-          locales().error.messageFromErrorCode(err.code));
+
+        // case of inactivated email.
+        if (err.code == 'INACTIVATED_MEMBER') {
+          await Navigator.of(context).push(CupertinoPageRoute<bool>(
+            builder: (BuildContext context) => 
+              EmailUpgradeScene(memberToken: state.member.token)
+          ));
+          return;
+
+        } else {
+          await showSimpleAlert(context,
+            locales().error.messageFromErrorCode(err.code));
+        }
+
       } else {
-        showSimpleAlert(context, locales().error.messageFromErrorCode('UNKNOWN'));
+        await showSimpleAlert(context,
+          locales().error.messageFromErrorCode('UNKNOWN'));
       }
     }
   }

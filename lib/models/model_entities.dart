@@ -29,3 +29,11 @@ class QueuedTranslation {
     this.messageId
   });
 }
+
+class EmailLoginResp {
+  final String memberToken;
+
+  EmailLoginResp({
+    @required this.memberToken
+  });
+}

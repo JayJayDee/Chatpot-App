@@ -69,9 +69,12 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
 
   }
 
-  void _onEmailAccountClicked() async {
+  void _onEmailAccountClicked(BuildContext context) async {
+    final state = ScopedModel.of<AppState>(context);
+
     await Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
-      builder: (BuildContext context) => EmailUpgradeScene()
+      builder: (BuildContext context) =>
+        EmailUpgradeScene(memberToken: state.member.token)
     ));
   }
 
@@ -98,7 +101,7 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
     }
 
     if (model.member != null && model.member.authType == AuthType.SIMPLE) {
-      elems.add(_buildMenuItem(locales().setting.linkMail, () => _onEmailAccountClicked() ));
+      elems.add(_buildMenuItem(locales().setting.linkMail, () => _onEmailAccountClicked(context) ));
     }
 
     if (model.member != null && model.member.authType == AuthType.EMAIL) {
