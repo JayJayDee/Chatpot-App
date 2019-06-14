@@ -105,6 +105,7 @@ class EmailAuthApiResp {
   String sessionKey;
   String memberToken;
   String passphrase;
+  bool activated;
 
   EmailAuthApiResp();
 
@@ -113,12 +114,13 @@ class EmailAuthApiResp {
     res.sessionKey = map['session_key'];
     res.memberToken = map['member_token'];
     res.passphrase = map['passphrase'];
+    res.activated = map['activated'];
     return res;
   }
 
   @override
   toString() => 
-    "EMAIL_AUTH_API_RESP: SESSKEY[$sessionKey] MTOKEN[$memberToken] PASSPHRASE[$passphrase]";
+    "EMAIL_AUTH_API_RESP: SESSKEY[$sessionKey] MTOKEN[$memberToken] PASSPHRASE[$passphrase] ACTIVATED[$activated]";
 }
 
 enum RoomQueryOrder {

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
@@ -53,19 +54,33 @@ class _SignupSceneState extends State<SignupScene> {
     Locale locale = Localizations.localeOf(context);
     String region = locale.countryCode;
     String language = locale.languageCode;
-    
-    var resp = await authApi().requestEmailJoin(
-      email: _email,
-      password: _password,
-      gender: _gender,
-      region: region,
-      language: language
-    );
 
-    setState(() {
-      _loading = false;
-    });
-    // TODO: exception handling required.
+    try {
+      await authApi().requestEmailJoin(
+        email: _email,
+        password: _password,
+        gender: _gender,
+        region: region,
+        language: language
+      );
+      setState(() {
+        _loading = false;
+      });
+
+      await showSimpleAlert(context, locales().signupScene.signupCompleted,
+        title: locales().successTitle
+      );
+      Navigator.of(context).pop();
+
+    } catch (err) {
+      setState(() {
+        _loading = false;
+      });
+      if (err is ApiFailureError) {
+        await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
+        return;
+      }
+    }
   }
 
   @override

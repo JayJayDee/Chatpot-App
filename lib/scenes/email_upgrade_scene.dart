@@ -1,22 +1,28 @@
 import 'dart:async';
 import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/apis/api_errors.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
 class EmailUpgradeScene extends StatefulWidget {
+
+  final String memberToken;
+
+  EmailUpgradeScene({
+    @required this.memberToken
+  });
+
   @override
-  State createState() => _EmailUpgradeSceneState();
+  State createState() => _EmailUpgradeSceneState(memberToken: memberToken);
 }
 
 class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindingObserver {
 
   bool _loading;
   String _email;
+  String _memberToken;
 
   String _inputedEmail;
   String _inputedCode;
@@ -27,7 +33,10 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
   bool _passwordInputRequired;
   TextEditingController _controller;
 
-  _EmailUpgradeSceneState() {
+  _EmailUpgradeSceneState({
+    @required String memberToken
+  }) {
+    _memberToken = memberToken;
     _loading = false;
     _inputedEmail = '';
     _inputedCode = '';
@@ -36,15 +45,13 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
   }
 
   Future<void> _loadAndRefreshStatus() async {
-    final state = ScopedModel.of<AppState>(context);
-    String memberToken = state.member.token;
     setState(() {
       _loading = true;
     });
 
     var activationStatus = 
       await activationApi().requestAcitvationStatus(
-        memberToken: memberToken);
+        memberToken: _memberToken);
 
     if (this.mounted) {
       setState(() {
@@ -85,7 +92,6 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
       return;
     }
 
-    final state = ScopedModel.of<AppState>(context);
     setState(() {
       this._loading = true;
     });
@@ -93,7 +99,7 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
     try {
       await activationApi().requestEmailActivation(
         email: _inputedEmail,
-        memberToken: state.member.token
+        memberToken: _memberToken
       );
       _loadAndRefreshStatus();
 
@@ -130,11 +136,10 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
     setState(() {
       this._loading = true;
     });
-    final state = ScopedModel.of<AppState>(context);
 
     try {
       await activationApi().requestEmailVerification(
-        memberToken: state.member.token,
+        memberToken: _memberToken,
         activationCode: _inputedCode,
         password: _inputedPassword
       );

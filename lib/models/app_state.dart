@@ -68,7 +68,7 @@ class AppState extends Model {
     return AppInitState.LOGGED_IN;
   }
 
-  Future<void> tryEmailLogin({
+  Future<EmailLoginResp> tryEmailLogin({
     @required String email,
     @required String password
   }) async {
@@ -81,6 +81,17 @@ class AppState extends Model {
         password: password
       );
 
+      if (resp.activated == false) {
+        _loading = false;
+        notifyListeners();
+
+        return EmailLoginResp(
+          memberToken: resp.memberToken,
+          activated: resp.activated
+        );
+      }
+
+      // store credentials
       await authAccessor().setToken(resp.memberToken);
       await authAccessor().setPassword(resp.passphrase);
       await authAccessor().setSessionKey(resp.sessionKey);
@@ -90,6 +101,12 @@ class AppState extends Model {
 
       _loading = false;
       notifyListeners();
+
+      var ret = EmailLoginResp(
+        memberToken: resp.memberToken,
+        activated: resp.activated
+      );
+      return ret;
 
     } catch (err) {
       _loading = false;

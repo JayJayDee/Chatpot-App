@@ -92,4 +92,15 @@ class SignupSceneLocales {
     else if (language == 'ja') return '女性';
     return 'Female';
   }
+  
+  String get signupCompleted {
+    if (language == 'ko') return '''회원 가입이 완료되었습니다.
+가입한 이메일로 로그인 해주세요.
+''';
+    else if (language == 'ja') return '''申し込みは完了です。
+メールでサインインしてください。''';
+    return '''Sign up is complete.
+Please sign in with your email.
+''';
+  }
 }

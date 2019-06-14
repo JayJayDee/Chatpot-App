@@ -7,6 +7,7 @@ import 'package:chatpot_app/scenes/signup_scene.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
+import 'package:chatpot_app/scenes/email_upgrade_scene.dart';
 import 'package:chatpot_app/models/app_state.dart';
 
 String _email = '';
@@ -27,15 +28,27 @@ class LoginScene extends StatelessWidget {
     final state = ScopedModel.of<AppState>(context);
 
     try {
-      await state.tryEmailLogin(email: _email, password: _password);
-      await state.registerDevice();
-      Navigator.pushReplacementNamed(context, '/container');
+      var loginResp = await state.tryEmailLogin(email: _email, password: _password);
+
+      if (loginResp.activated == true) {
+        // case of email-activated.
+        await state.registerDevice();
+        Navigator.pushReplacementNamed(context, '/container');
+
+      } else if (loginResp.activated == false) {
+        await Navigator.of(context).push(CupertinoPageRoute<bool>(
+          builder: (BuildContext context) => EmailUpgradeScene(
+            memberToken: loginResp.memberToken
+          )
+        ));
+      }
+
     } catch (err) {
       if (err is ApiFailureError) {
-        showSimpleAlert(context,
-          locales().error.messageFromErrorCode(err.code));
+        await showSimpleAlert(context,
+            locales().error.messageFromErrorCode(err.code));
       } else {
-        showSimpleAlert(context, locales().error.messageFromErrorCode('UNKNOWN'));
+        throw err;
       }
     }
   }
