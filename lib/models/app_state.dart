@@ -81,6 +81,17 @@ class AppState extends Model {
         password: password
       );
 
+      if (resp.activated == false) {
+        _loading = false;
+        notifyListeners();
+
+        return EmailLoginResp(
+          memberToken: resp.memberToken,
+          activated: resp.activated
+        );
+      }
+
+      // store credentials
       await authAccessor().setToken(resp.memberToken);
       await authAccessor().setPassword(resp.passphrase);
       await authAccessor().setSessionKey(resp.sessionKey);
@@ -91,7 +102,10 @@ class AppState extends Model {
       _loading = false;
       notifyListeners();
 
-      var ret = EmailLoginResp(memberToken: resp.memberToken);
+      var ret = EmailLoginResp(
+        memberToken: resp.memberToken,
+        activated: resp.activated
+      );
       return ret;
 
     } catch (err) {

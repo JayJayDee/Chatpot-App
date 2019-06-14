@@ -32,8 +32,10 @@ class QueuedTranslation {
 
 class EmailLoginResp {
   final String memberToken;
+  final bool activated;
 
   EmailLoginResp({
-    @required this.memberToken
+    @required this.memberToken,
+    @required this.activated
   });
 }

@@ -28,28 +28,27 @@ class LoginScene extends StatelessWidget {
     final state = ScopedModel.of<AppState>(context);
 
     try {
-      await state.tryEmailLogin(email: _email, password: _password);
-      await state.registerDevice();
-      Navigator.pushReplacementNamed(context, '/container');
+      var loginResp = await state.tryEmailLogin(email: _email, password: _password);
+
+      if (loginResp.activated == true) {
+        // case of email-activated.
+        await state.registerDevice();
+        Navigator.pushReplacementNamed(context, '/container');
+
+      } else if (loginResp.activated == false) {
+        await Navigator.of(context).push(CupertinoPageRoute<bool>(
+          builder: (BuildContext context) => EmailUpgradeScene(
+            memberToken: loginResp.memberToken
+          )
+        ));
+      }
+
     } catch (err) {
       if (err is ApiFailureError) {
-
-        // case of inactivated email.
-        if (err.code == 'INACTIVATED_MEMBER') {
-          await Navigator.of(context).push(CupertinoPageRoute<bool>(
-            builder: (BuildContext context) => 
-              EmailUpgradeScene(memberToken: state.member.token)
-          ));
-          return;
-
-        } else {
-          await showSimpleAlert(context,
-            locales().error.messageFromErrorCode(err.code));
-        }
-
-      } else {
         await showSimpleAlert(context,
-          locales().error.messageFromErrorCode('UNKNOWN'));
+            locales().error.messageFromErrorCode(err.code));
+      } else {
+        throw err;
       }
     }
   }
