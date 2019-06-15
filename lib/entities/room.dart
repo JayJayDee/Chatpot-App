@@ -1,14 +1,24 @@
 import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/entities/message.dart';
 
+enum RoomType {
+  PUBLIC, ROULETTE, ONEONONE
+}
+
+RoomType _getRoomType(String typeExpr) =>
+  typeExpr == 'PUBLIC' ? RoomType.PUBLIC :
+  typeExpr == 'ROULETTE' ? RoomType.ROULETTE :
+  typeExpr == 'ONEONONE' ? RoomType.ONEONONE : null;
+
 class Room {
-  String roomToken; 
+  String roomToken;
   Member owner;
   String title;
   int numAttendee;
   int maxAttendee;
   DateTime regDate;
   String titleTranslated;
+  RoomType type;
 
   Room() {
     titleTranslated = null;
@@ -22,6 +32,7 @@ class Room {
     room.maxAttendee = map['max_attendee'];
     room.owner = Member.fromJson(map['owner']);
     room.regDate = DateTime.parse(map['reg_date']);
+    room.type = _getRoomType(map['room_type']);
     return room;
   }
 
@@ -37,6 +48,7 @@ class RoomDetail {
   int maxAttendee;
   DateTime regDate;
   List<Member> members;
+  RoomType type;
 
   RoomDetail();
 
@@ -50,6 +62,7 @@ class RoomDetail {
     room.regDate = DateTime.parse(map['reg_date']);
     List<dynamic> memberList = map['members'];
     room.members = memberList.map((elem) => Member.fromJson(elem)).toList();
+    room.type = _getRoomType(map['room_type']);
     return room;
   }
 
@@ -66,6 +79,7 @@ class MyRoom {
   DateTime regDate;
   Message lastMessage;
   String titleTranslated;
+  RoomType type;
 
   RoomMessages messages;
 
@@ -84,6 +98,7 @@ class MyRoom {
     if (map['last_message'] != null) {
       room.lastMessage = Message.fromJson(map['last_message']);
     }
+    room.type = _getRoomType(map['room_type']);
     return room;
   }
 
