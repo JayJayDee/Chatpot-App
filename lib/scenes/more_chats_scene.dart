@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:chatpot_app/entities/room.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/factory.dart';
@@ -37,15 +38,19 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
 
   RoomSearchCondition _condition;
   bool _loading;
+  List<Room> _rooms;
+  int _offset;
 
   TextEditingController _queryEditController;
 
   _MoreChatsSceneState({
     @required RoomSearchCondition condition
   }) {
+    _rooms = List();
     _condition = condition;
     _loading = false;
     _queryEditController = TextEditingController();
+    _offset = 0;
   }
 
   @override
@@ -57,6 +62,12 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
     setState(() {
       _loading = true;
     });
+
+    var searchResp = await roomApi().requestPublicRooms(
+      order: _condition.order,
+      offset: _offset
+    );
+    // TODO: using search_resp, edit values.
   }
 
   Future<void> _onPickerSelected(RoomQueryOrder order) async {
@@ -85,7 +96,7 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
         child: _buildSearchButton(context,
           loading: _loading,
           clickCallback: () {
-            print('search clicked!');
+            print('search clicked!'); // TODO: to be changed to fire call api.
           }
         )
       )

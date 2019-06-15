@@ -35,7 +35,8 @@ class RoomApi {
   Future<RoomListApiResp> requestPublicRooms({
     int offset,
     int size,
-    RoomQueryOrder order
+    RoomQueryOrder order,
+    String keyword
   }) async {
     Map<String, dynamic> qsMap = Map();
     if (offset != null) qsMap['offset'] = offset;
