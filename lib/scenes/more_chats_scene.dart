@@ -80,6 +80,14 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
           controller: _queryEditController,
           textChangeCallback: (String query) => print(query)
         )
+      ),
+      Container(
+        child: _buildSearchButton(context,
+          loading: _loading,
+          clickCallback: () {
+            print('search clicked!');
+          }
+        )
       )
     ];
     return CupertinoPageScaffold(
@@ -132,4 +140,13 @@ Widget _buildQueryInputField(BuildContext context, {
       border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray)),
     ),
     placeholder: locales().morechat.queryEditPlaceholder
+  );
+
+Widget _buildSearchButton(BuildContext context, {
+  @required VoidCallback clickCallback,
+  @required bool loading
+}) =>
+  CupertinoButton(
+    child: Text(locales().morechat.searchButtonLabel),
+    onPressed: loading == true ? null : clickCallback
   );

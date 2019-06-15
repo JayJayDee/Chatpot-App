@@ -32,4 +32,10 @@ class MoreChatSceneLocales {
     else if (language == 'ja') return '検索語';
     return 'Search keyword';
   }
+
+  String get searchButtonLabel {
+    if (language == 'ko') return '검색';
+    else if (language == 'ja') return '検索';
+    return 'Search';
+  }
 }
