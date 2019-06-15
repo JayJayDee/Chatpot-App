@@ -238,20 +238,23 @@ class AppState extends Model {
     _loading = true;
     notifyListeners();
 
-    String roomToken = await roomApi().requestCreateRoom(
-      memberToken: _member.token,
-      title: roomTitle,
-      maxAttendee: maxAttendee
-    );
+    try {
+      String roomToken = await roomApi().requestCreateRoom(
+        memberToken: _member.token,
+        title: roomTitle,
+        maxAttendee: maxAttendee
+      );
 
-    List<MyRoom> myRooms = await roomApi().requestMyRooms(
-      memberToken: _member.token
-    );
-    _myRooms = myRooms;
+      List<MyRoom> myRooms = await roomApi().requestMyRooms(
+        memberToken: _member.token
+      );
+      _myRooms = myRooms;
+      return roomToken;
 
-    _loading = false;
-    notifyListeners();
-    return roomToken;
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> selectRoom({
