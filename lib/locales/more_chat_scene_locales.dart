@@ -26,4 +26,10 @@ class MoreChatSceneLocales {
     else if (language == 'ja') return '最近の並べ替え';
     return 'sort by recent';
   }
+
+  String get queryEditPlaceholder {
+    if (language == 'ko') return '검색어';
+    else if (language == 'ja') return '検索語';
+    return 'Search keyword';
+  }
 }

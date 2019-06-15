@@ -146,7 +146,6 @@ Widget _buildNewChatButton(BuildContext context, VoidCallback callback) {
         fontSize: 15
       )
     ),
-    color: CupertinoColors.activeBlue,
     onPressed: conditionalCallback
   );
 }
