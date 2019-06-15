@@ -18,7 +18,14 @@ class ErrorMessageLocales {
     else if (code == 'CURRENT_PASSWORD_INVALID') return this.invalidPreviousPassword;
     else if (code == 'MEMBER_NOT_EXIST') return this.memberNotExist;
     else if (code == 'SIMPLE_ACCOUNT_PWCHANGE_DENIED') return this.simpleAccountTriesPwChange;
+    else if (code == 'INVALID_MAX_ATTENDEE') return this.invalidMaxAttendee;
     return uncatchedCode(code);
+  }
+
+  String get invalidMaxAttendee {
+    if (language == 'ko') return '채팅방 인원은 최소 2명에서 최대 10명 까지 설정할 수 있습니다.';
+    else if (language == 'ja') return 'チャットルームには2〜10人を設定できます。';
+    return 'You can set 2 to 10 people in your chat room.';
   }
 
   String get roomAlreadyJoined {
