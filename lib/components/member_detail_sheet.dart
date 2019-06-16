@@ -10,6 +10,10 @@ import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
+const popupMenuFontStyle = TextStyle(
+  fontSize: 16.0
+);
+
 Future<void> showMemberDetailSheet(BuildContext context, {
   @required String memberToken 
 }) async {
@@ -20,15 +24,21 @@ Future<void> showMemberDetailSheet(BuildContext context, {
         message: _MemberDetailSheet(memberToken: memberToken),
         actions: [
           CupertinoActionSheetAction(
-            child: Text(locales().memberDetailSheet.menuOneononeChat),
+            child: Text(locales().memberDetailSheet.menuOneononeChat,
+              style: popupMenuFontStyle
+            ),
             onPressed: () {},
           ),
           CupertinoActionSheetAction(
-            child: Text(locales().memberDetailSheet.menuBlockUser),
+            child: Text(locales().memberDetailSheet.menuBlockUser,
+              style: popupMenuFontStyle
+            ),
             onPressed: () {},
           ),
           CupertinoActionSheetAction(
-            child: Text(locales().memberDetailSheet.menuReportUser),
+            child: Text(locales().memberDetailSheet.menuReportUser,
+              style: popupMenuFontStyle
+            ),
             onPressed: () {},
           )
         ]
