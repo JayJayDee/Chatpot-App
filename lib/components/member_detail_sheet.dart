@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -150,10 +151,18 @@ Widget _buildAdditionalInfoField(MemberPublic member) =>
   Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(locales().getNick(member.nick),
-        style: TextStyle(
-          color: Styles.primaryFontColor,
-          fontSize: 17
+      Container(
+        margin: EdgeInsets.only(bottom: 5),
+        child: Row(
+          children: [
+            Text(locales().getNick(member.nick),
+              style: TextStyle(
+                color: Styles.primaryFontColor,
+                fontSize: 17
+              )
+            ),
+            _genderIcon(member.gender)
+          ]
         )
       ),
       Container(
@@ -168,3 +177,15 @@ Widget _buildAdditionalInfoField(MemberPublic member) =>
       )
     ]
   );
+
+Icon _genderIcon(Gender g) =>
+  g == Gender.M ? 
+    Icon(MdiIcons.humanMale,
+      color: Styles.primaryFontColor,
+    ) 
+  :
+  g == Gender.F ?
+    Icon(MdiIcons.humanFemale,
+      color: Styles.primaryFontColor
+    ) 
+  : null;
