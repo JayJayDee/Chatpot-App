@@ -10,7 +10,8 @@ class RoomSearchCondition {
 
   RoomSearchCondition({
     String query,
-    RoomQueryOrder order
+    RoomQueryOrder order,
+    
   }) {
     this.query = query;
     this.order = order;
@@ -40,6 +41,7 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
   bool _loading;
   List<Room> _rooms;
   int _offset;
+  int _numAllRooms;
 
   TextEditingController _queryEditController;
 
@@ -51,11 +53,13 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
     _loading = false;
     _queryEditController = TextEditingController();
     _offset = 0;
+    _numAllRooms = 0;
   }
 
   @override
   initState() {
     super.initState();
+    this._refreshSearch();
   }
 
   Future<void> _refreshSearch() async {
@@ -67,7 +71,28 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
       order: _condition.order,
       offset: _offset
     );
-    // TODO: using search_resp, edit values.
+    setState(() {
+      _rooms = searchResp.list;
+      _numAllRooms = searchResp.all;
+      _loading = false;
+    });
+  }
+
+  Future<void> _moreSearch() async {
+    setState(() {
+      _loading = true;
+      _offset += 10;
+    });
+
+    var searchResp = await roomApi().requestPublicRooms(
+      order: _condition.order,
+      offset: _offset
+    );
+    setState(() {
+      _rooms = searchResp.list;
+      _numAllRooms = searchResp.all;
+      _loading = false;
+    });
   }
 
   Future<void> _onPickerSelected(RoomQueryOrder order) async {
@@ -101,6 +126,16 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
         )
       )
     ];
+
+    // TODO: Rooms Widgets here
+
+    widgets.add(_buildMoreRoomButton(context,
+      clickCallback: () => _moreSearch(),
+      loading: _loading,
+      rooms: _rooms,
+      numAllRooms: _numAllRooms
+    ));
+
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           previousPageTitle: locales().home.title,
@@ -108,8 +143,16 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
           transitionBetweenRoutes: true
         ),
         child: SafeArea(
-          child: ListView(
-            children: widgets
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              ListView(children: widgets),
+              Positioned(
+                child: _buildProgress(context,
+                  loading: _loading
+                )
+              )
+            ]
           )
         )
       );
@@ -161,3 +204,21 @@ Widget _buildSearchButton(BuildContext context, {
     child: Text(locales().morechat.searchButtonLabel),
     onPressed: loading == true ? null : clickCallback
   );
+
+Widget _buildMoreRoomButton(BuildContext context, {
+  @required VoidCallback clickCallback,
+  @required bool loading,
+  @required List<Room> rooms,
+  @required int numAllRooms
+}) {
+  if (rooms.length >= numAllRooms) return Container();
+  return CupertinoButton(
+    child: Text('Load more..'),
+    onPressed: loading == true ? null : clickCallback
+  );
+}
+
+Widget _buildProgress(BuildContext context, {
+  @required bool loading
+}) =>
+  loading == true ? CupertinoActivityIndicator() : Container();
