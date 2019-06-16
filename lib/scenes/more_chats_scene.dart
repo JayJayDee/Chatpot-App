@@ -62,6 +62,7 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
   @override
   initState() {
     super.initState();
+    print(_condition.order);
     this._refreshSearch();
   }
 
@@ -74,7 +75,10 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
     var searchResp = await roomApi().requestPublicRooms(
       order: _condition.order,
       offset: _offset,
-      size: DEFAULT_FETCH_SIZE
+      size: DEFAULT_FETCH_SIZE,
+      keyword: _condition.query != null ?
+                _condition.query.trim().length == 0 ? null : _condition.query 
+              : null
     );
     setState(() {
       _rooms = searchResp.list;
@@ -92,7 +96,10 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
     var searchResp = await roomApi().requestPublicRooms(
       order: _condition.order,
       offset: _offset,
-      size: DEFAULT_FETCH_SIZE
+      size: DEFAULT_FETCH_SIZE,
+      keyword: _condition.query != null ?
+                _condition.query.trim().length == 0 ? null : _condition.query 
+              : null
     );
     setState(() {
       _rooms.addAll(searchResp.list);
@@ -125,7 +132,7 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
         margin: EdgeInsets.only(left: 10, right: 10, top: 10),
         child: _buildQueryInputField(context,
           controller: _queryEditController,
-          textChangeCallback: (String query) => print(query)
+          textChangeCallback: (String query) => _condition.query = query
         )
       ),
       Container(
@@ -228,6 +235,12 @@ Widget _buildMoreRoomButton(BuildContext context, {
   @required int numAllRooms
 }) {
   if (rooms.length >= numAllRooms) return Container();
+  if (loading == true) {
+    return Container(
+      margin: EdgeInsets.only(top: 10, bottom: 10),
+      child: CupertinoActivityIndicator()
+    );
+  }
   return CupertinoButton(
     child: Text(locales().morechat.loadMoreButtonLabel),
     onPressed: loading == true ? null : clickCallback

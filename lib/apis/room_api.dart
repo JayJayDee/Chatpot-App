@@ -38,10 +38,15 @@ class RoomApi {
     RoomQueryOrder order,
     String keyword
   }) async {
+    String orderExpr = '';
+    if (order == RoomQueryOrder.ATTENDEE_DESC) orderExpr = 'ATTENDEE_DESC';
+    else if (order == RoomQueryOrder.REGDATE_DESC) orderExpr = 'REGDATE_DESC';
+
     Map<String, dynamic> qsMap = Map();
     if (offset != null) qsMap['offset'] = offset;
     if (size != null) qsMap['size'] = size;
-    if (order != null) qsMap['order'] = order.toString();
+    if (order != null) qsMap['order'] = orderExpr;
+    if (keyword != null) qsMap['keyword'] = keyword;
 
     Map<String, dynamic> resp = await _requester.request(
       url: '/rooms',
