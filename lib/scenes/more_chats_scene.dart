@@ -3,6 +3,9 @@ import 'package:chatpot_app/entities/room.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/components/room_row.dart';
+
+const DEFAULT_FETCH_SIZE = 7;
 
 class RoomSearchCondition {
   String query;
@@ -10,7 +13,8 @@ class RoomSearchCondition {
 
   RoomSearchCondition({
     String query,
-    RoomQueryOrder order
+    RoomQueryOrder order,
+    
   }) {
     this.query = query;
     this.order = order;
@@ -40,6 +44,7 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
   bool _loading;
   List<Room> _rooms;
   int _offset;
+  int _numAllRooms;
 
   TextEditingController _queryEditController;
 
@@ -51,28 +56,59 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
     _loading = false;
     _queryEditController = TextEditingController();
     _offset = 0;
+    _numAllRooms = 0;
   }
 
   @override
   initState() {
     super.initState();
+    this._refreshSearch();
   }
 
   Future<void> _refreshSearch() async {
     setState(() {
       _loading = true;
+      _offset = 0;
     });
 
     var searchResp = await roomApi().requestPublicRooms(
       order: _condition.order,
-      offset: _offset
+      offset: _offset,
+      size: DEFAULT_FETCH_SIZE
     );
-    // TODO: using search_resp, edit values.
+    setState(() {
+      _rooms = searchResp.list;
+      _numAllRooms = searchResp.all;
+      _loading = false;
+    });
+  }
+
+  Future<void> _moreSearch() async {
+    setState(() {
+      _loading = true;
+      _offset += DEFAULT_FETCH_SIZE;
+    });
+
+    var searchResp = await roomApi().requestPublicRooms(
+      order: _condition.order,
+      offset: _offset,
+      size: DEFAULT_FETCH_SIZE
+    );
+    setState(() {
+      _rooms.addAll(searchResp.list);
+      _numAllRooms = searchResp.all;
+      _loading = false;
+    });
   }
 
   Future<void> _onPickerSelected(RoomQueryOrder order) async {
     _condition.order = order;
+    _offset = 0;
     await _refreshSearch();
+  }
+
+  Future<void> _onRoomSelected(Room r) async {
+    print(r);
   }
   
   @override
@@ -96,11 +132,26 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
         child: _buildSearchButton(context,
           loading: _loading,
           clickCallback: () {
-            print('search clicked!'); // TODO: to be changed to fire call api.
+            this._refreshSearch();
           }
         )
       )
     ];
+
+    List<Widget> roomWidgets = 
+      _rooms.map((r) => RoomRow(
+        room: r,
+        rowClickCallback: _onRoomSelected,
+      )).toList();
+    widgets.addAll(roomWidgets);
+
+    widgets.add(_buildMoreRoomButton(context,
+      clickCallback: () => _moreSearch(),
+      loading: _loading,
+      rooms: _rooms,
+      numAllRooms: _numAllRooms
+    ));
+
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           previousPageTitle: locales().home.title,
@@ -108,8 +159,16 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
           transitionBetweenRoutes: true
         ),
         child: SafeArea(
-          child: ListView(
-            children: widgets
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              ListView(children: widgets),
+              Positioned(
+                child: _buildProgress(context,
+                  loading: _loading
+                )
+              )
+            ]
           )
         )
       );
@@ -161,3 +220,21 @@ Widget _buildSearchButton(BuildContext context, {
     child: Text(locales().morechat.searchButtonLabel),
     onPressed: loading == true ? null : clickCallback
   );
+
+Widget _buildMoreRoomButton(BuildContext context, {
+  @required VoidCallback clickCallback,
+  @required bool loading,
+  @required List<Room> rooms,
+  @required int numAllRooms
+}) {
+  if (rooms.length >= numAllRooms) return Container();
+  return CupertinoButton(
+    child: Text(locales().morechat.loadMoreButtonLabel),
+    onPressed: loading == true ? null : clickCallback
+  );
+}
+
+Widget _buildProgress(BuildContext context, {
+  @required bool loading
+}) =>
+  loading == true ? CupertinoActivityIndicator() : Container();
