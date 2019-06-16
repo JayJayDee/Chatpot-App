@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -8,6 +9,10 @@ import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
+
+const popupMenuFontStyle = TextStyle(
+  fontSize: 16.0
+);
 
 Future<void> showMemberDetailSheet(BuildContext context, {
   @required String memberToken 
@@ -19,15 +24,21 @@ Future<void> showMemberDetailSheet(BuildContext context, {
         message: _MemberDetailSheet(memberToken: memberToken),
         actions: [
           CupertinoActionSheetAction(
-            child: Text(locales().memberDetailSheet.menuOneononeChat),
+            child: Text(locales().memberDetailSheet.menuOneononeChat,
+              style: popupMenuFontStyle
+            ),
             onPressed: () {},
           ),
           CupertinoActionSheetAction(
-            child: Text(locales().memberDetailSheet.menuBlockUser),
+            child: Text(locales().memberDetailSheet.menuBlockUser,
+              style: popupMenuFontStyle
+            ),
             onPressed: () {},
           ),
           CupertinoActionSheetAction(
-            child: Text(locales().memberDetailSheet.menuReportUser),
+            child: Text(locales().memberDetailSheet.menuReportUser,
+              style: popupMenuFontStyle
+            ),
             onPressed: () {},
           )
         ]
@@ -150,10 +161,17 @@ Widget _buildAdditionalInfoField(MemberPublic member) =>
   Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(locales().getNick(member.nick),
-        style: TextStyle(
-          color: Styles.primaryFontColor,
-          fontSize: 17
+      Container(
+        child: Row(
+          children: [
+            Text(locales().getNick(member.nick),
+              style: TextStyle(
+                color: Styles.primaryFontColor,
+                fontSize: 17
+              )
+            ),
+            _genderIcon(member.gender)
+          ]
         )
       ),
       Container(
@@ -168,3 +186,15 @@ Widget _buildAdditionalInfoField(MemberPublic member) =>
       )
     ]
   );
+
+Icon _genderIcon(Gender g) =>
+  g == Gender.M ? 
+    Icon(MdiIcons.humanMale,
+      color: Styles.primaryFontColor,
+    ) 
+  :
+  g == Gender.F ?
+    Icon(MdiIcons.humanFemale,
+      color: Styles.primaryFontColor
+    ) 
+  : null;
