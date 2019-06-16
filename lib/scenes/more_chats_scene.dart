@@ -3,6 +3,9 @@ import 'package:chatpot_app/entities/room.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/components/room_row.dart';
+
+const DEFAULT_FETCH_SIZE = 10;
 
 class RoomSearchCondition {
   String query;
@@ -65,11 +68,13 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
   Future<void> _refreshSearch() async {
     setState(() {
       _loading = true;
+      _offset = 0;
     });
 
     var searchResp = await roomApi().requestPublicRooms(
       order: _condition.order,
-      offset: _offset
+      offset: _offset,
+      size: DEFAULT_FETCH_SIZE
     );
     setState(() {
       _rooms = searchResp.list;
@@ -86,10 +91,11 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
 
     var searchResp = await roomApi().requestPublicRooms(
       order: _condition.order,
-      offset: _offset
+      offset: _offset,
+      size: DEFAULT_FETCH_SIZE
     );
     setState(() {
-      _rooms = searchResp.list;
+      _rooms.addAll(searchResp.list);
       _numAllRooms = searchResp.all;
       _loading = false;
     });
@@ -97,7 +103,12 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
 
   Future<void> _onPickerSelected(RoomQueryOrder order) async {
     _condition.order = order;
+    _offset = 0;
     await _refreshSearch();
+  }
+
+  Future<void> _onRoomSelected(Room r) async {
+    print(r);
   }
   
   @override
@@ -121,13 +132,18 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
         child: _buildSearchButton(context,
           loading: _loading,
           clickCallback: () {
-            print('search clicked!'); // TODO: to be changed to fire call api.
+            this._refreshSearch();
           }
         )
       )
     ];
 
-    // TODO: Rooms Widgets here
+    List<Widget> roomWidgets = 
+      _rooms.map((r) => RoomRow(
+        room: r,
+        rowClickCallback: _onRoomSelected,
+      )).toList();
+    widgets.addAll(roomWidgets);
 
     widgets.add(_buildMoreRoomButton(context,
       clickCallback: () => _moreSearch(),
@@ -213,7 +229,7 @@ Widget _buildMoreRoomButton(BuildContext context, {
 }) {
   if (rooms.length >= numAllRooms) return Container();
   return CupertinoButton(
-    child: Text('Load more..'),
+    child: Text(locales().morechat.loadMoreButtonLabel),
     onPressed: loading == true ? null : clickCallback
   );
 }
