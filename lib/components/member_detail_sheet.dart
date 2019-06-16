@@ -152,7 +152,6 @@ Widget _buildAdditionalInfoField(MemberPublic member) =>
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Container(
-        margin: EdgeInsets.only(bottom: 5),
         child: Row(
           children: [
             Text(locales().getNick(member.nick),
