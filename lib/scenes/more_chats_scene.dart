@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:chatpot_app/entities/room.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/components/room_row.dart';
+import 'package:chatpot_app/storage/translation_cache_accessor.dart';
 
 const DEFAULT_FETCH_SIZE = 7;
 
@@ -80,11 +83,72 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
                 _condition.query.trim().length == 0 ? null : _condition.query 
               : null
     );
+
     setState(() {
       _rooms = searchResp.list;
       _numAllRooms = searchResp.all;
       _loading = false;
     });
+    await _translateRoomTitles();
+  }
+
+  Future<void> _translateRoomTitles() async {
+    final state = ScopedModel.of<AppState>(context);
+    Map<String, TranslateParam> paramMap = Map();
+    this._rooms.forEach((r) {
+      if (r.owner.language == state.member.language) return;
+      paramMap[r.roomToken] = TranslateParam(
+        from: r.owner.language,
+        key: r.roomToken,
+        message: r.title);
+    });
+
+    List<TranslateParam> queries =
+      paramMap.keys.map((k) => paramMap[k]).toList();
+
+    List<String> cacheQueries = queries.map((q) => q.key).toList();
+    List<Translated> cachedTranslations = await
+      translationCacheAccessor().getCachedRoomTitleTranslations(keys: cacheQueries);
+
+    // apply cached translation to room title.
+    cachedTranslations.forEach((t) {
+      List<Room> foundInRooms = _rooms.where((r) => r.roomToken == t.key).toList();
+      if (foundInRooms.length > 0) {
+        setState(() {
+          foundInRooms[0].titleTranslated = t.translated;
+        });
+      }
+    });
+
+    List<TranslateParam> filteredQuery = 
+      queries.where((q) =>
+         cachedTranslations.where((c) => 
+          c.key == q.key).length == 0).toList();
+
+    if (filteredQuery.length > 0) {
+      var apiResp = await translateApi().requestTranslateRooms(
+        toLocale: state.member.language,
+        queries: filteredQuery
+      );
+
+      apiResp.forEach((t) {
+        List<Room> foundInRooms = _rooms.where((r) => r.roomToken == t.key).toList();
+        if (foundInRooms.length > 0) {
+          setState(() {
+            foundInRooms[0].titleTranslated = t.translated;
+          });
+        }
+      });
+      
+      if (apiResp.length > 0) {
+        List<Translated> cacheParams = 
+        apiResp.map((r) => Translated(
+          key: r.key,
+          translated: r.translated
+        )).toList();
+        await translationCacheAccessor().cacheRoomTitleTranslations(translated: cacheParams);
+      }
+    }
   }
 
   Future<void> _moreSearch() async {
@@ -106,6 +170,7 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
       _numAllRooms = searchResp.all;
       _loading = false;
     });
+    await _translateRoomTitles();
   }
 
   Future<void> _onPickerSelected(RoomQueryOrder order) async {
