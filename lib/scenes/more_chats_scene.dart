@@ -6,6 +6,7 @@ import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/components/room_row.dart';
+import 'package:chatpot_app/components/room_detail_sheet.dart';
 import 'package:chatpot_app/storage/translation_cache_accessor.dart';
 
 const DEFAULT_FETCH_SIZE = 7;
@@ -179,8 +180,11 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
     await _refreshSearch();
   }
 
-  Future<void> _onRoomSelected(Room r) async {
-    print(r);
+  Future<void> _onRoomSelected(BuildContext context, Room r) async {
+    bool isJoin = await showRoomDetailSheet(context, r);
+    if (isJoin == true) {
+      // TODO: room join action to be implemented
+    }
   }
   
   @override
@@ -207,7 +211,7 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
     List<Widget> roomWidgets = 
       _rooms.map((r) => RoomRow(
         room: r,
-        rowClickCallback: _onRoomSelected,
+        rowClickCallback: (Room r) => _onRoomSelected(context, r)
       )).toList();
     widgets.addAll(roomWidgets);
 

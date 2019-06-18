@@ -11,6 +11,45 @@ import 'package:chatpot_app/styles.dart';
 
 typedef RoomSelectCallback (Room room);
 
+Future<bool> showRoomDetailSheet(BuildContext context, Room room) async {
+  return await showCupertinoModalPopup<bool>(
+    context: context,
+    builder: (BuildContext context) =>
+      CupertinoActionSheet(
+        message: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            RoomDetailCard(room: room)
+          ],
+        ),
+        actions: [
+          CupertinoActionSheetAction(
+            child: Text(locales().home.joinChat,
+              style: TextStyle(
+                fontSize: 17
+              )
+            ),
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+          ),
+          CupertinoActionSheetAction(
+            child: Text(locales().home.cancelChat,
+              style: TextStyle(
+                fontSize: 17
+              )
+            ),
+            isDestructiveAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ]
+      )
+  );
+}
+
 class RoomDetailCard extends StatefulWidget {
 
   final Room room;
