@@ -10,7 +10,7 @@ import 'package:chatpot_app/components/room_row.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 import 'package:chatpot_app/scenes/more_chats_scene.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
-import 'package:chatpot_app/components/room_detail_card.dart';
+import 'package:chatpot_app/components/room_detail_sheet.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
@@ -27,7 +27,7 @@ class HomeScene extends StatelessWidget implements EventReceivable {
 
   void _onChatRowSelected(BuildContext context, Room room) async {
     final model = ScopedModel.of<AppState>(context);
-    bool isJoin = await _showCupertinoRoomDetailSheet(context, room);
+    bool isJoin = await showRoomDetailSheet(context, room);
     if (isJoin == true) {
       var joinResp = await model.joinToRoom(room.roomToken);
 
@@ -157,44 +157,5 @@ Widget _buildRoomsHeader(BuildContext context, {
         )
       ]
     )
-  );
-}
-
-Future<bool> _showCupertinoRoomDetailSheet(BuildContext context, Room room) async {
-  return await showCupertinoModalPopup<bool>(
-    context: context,
-    builder: (BuildContext context) =>
-      CupertinoActionSheet(
-        message: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            RoomDetailCard(room: room)
-          ],
-        ),
-        actions: [
-          CupertinoActionSheetAction(
-            child: Text(locales().home.joinChat,
-              style: TextStyle(
-                fontSize: 17
-              )
-            ),
-            onPressed: () {
-              Navigator.pop(context, true);
-            },
-          ),
-          CupertinoActionSheetAction(
-            child: Text(locales().home.cancelChat,
-              style: TextStyle(
-                fontSize: 17
-              )
-            ),
-            isDestructiveAction: true,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ]
-      )
   );
 }
