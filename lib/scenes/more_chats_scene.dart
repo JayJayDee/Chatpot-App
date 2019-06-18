@@ -194,18 +194,12 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
         )
       ),
       Container(
-        margin: EdgeInsets.only(left: 10, right: 10, top: 10),
-        child: _buildQueryInputField(context,
+        margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
+        child: _buildCompoundSearchArea(context,
           controller: _queryEditController,
-          textChangeCallback: (String query) => _condition.query = query
-        )
-      ),
-      Container(
-        child: _buildSearchButton(context,
+          textChangeCallback: (String query) => _condition.query = query,
           loading: _loading,
-          clickCallback: () {
-            this._refreshSearch();
-          }
+          clickCallback: () => this._refreshSearch()
         )
       )
     ];
@@ -284,6 +278,26 @@ Widget _buildQueryInputField(BuildContext context, {
     placeholder: locales().morechat.queryEditPlaceholder
   );
 
+Widget _buildCompoundSearchArea(BuildContext context, {
+  @required TextEditingController controller,
+  @required QueryTextChangeCallback textChangeCallback,
+  @required VoidCallback clickCallback,
+  @required bool loading}) =>
+  Row(
+    children: [
+      Expanded(
+        child: _buildQueryInputField(context,
+          controller: controller,
+          textChangeCallback: textChangeCallback
+        )
+      ),
+      _buildSearchButton(context,
+        clickCallback: clickCallback,
+        loading: loading
+      )
+    ]
+  );
+
 Widget _buildSearchButton(BuildContext context, {
   @required VoidCallback clickCallback,
   @required bool loading
@@ -311,6 +325,15 @@ Widget _buildMoreRoomButton(BuildContext context, {
     onPressed: loading == true ? null : clickCallback
   );
 }
+
+Widget _buildConditionIndicator(BuildContext context, {
+  @required bool loading
+}) =>
+  Row(
+    children: [
+
+    ]
+  );
 
 Widget _buildProgress(BuildContext context, {
   @required bool loading
