@@ -19,6 +19,7 @@ class ErrorMessageLocales {
     else if (code == 'MEMBER_NOT_EXIST') return this.memberNotExist;
     else if (code == 'SIMPLE_ACCOUNT_PWCHANGE_DENIED') return this.simpleAccountTriesPwChange;
     else if (code == 'INVALID_MAX_ATTENDEE') return this.invalidMaxAttendee;
+    else if (code == 'NETWORK_ERROR') return this.networkError;
     return uncatchedCode(code);
   }
 
@@ -71,6 +72,12 @@ Please check your email and password.''';
     if (language == 'ko') return '기존 비밀번호가 일치하지 않습니다.';
     else if (language == 'ja') return '以前のパスワードが一致しません。';
     return 'Previous passwords do not match.';
+  }
+
+  String get networkError {
+    if (language == 'ko') return '네트워크 에러가 발생했습니다. 나중에 앱을 다시 시작해 보세요.';
+    else if (language == 'ja') return 'ネットワークエラーが発生しました。 後でアプリを再起動してください。';
+    return 'Network error occured. Please restart the app later.';
   }
 
   String uncatchedCode(String code) {
