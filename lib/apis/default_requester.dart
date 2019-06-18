@@ -58,9 +58,16 @@ class DefaultRequester implements Requester {
     Map<String, dynamic> respMap;
     List<dynamic> respList;
 
-    if (method == HttpMethod.GET) resp = await http.get(wholeUrl);
-    else if (method == HttpMethod.POST) resp = await http.post(wholeUrl, body: body);
-    else if (method == HttpMethod.PUT) resp = await http.put(wholeUrl, body: body);
+    try {
+      if (method == HttpMethod.GET) resp = await http.get(wholeUrl);
+      else if (method == HttpMethod.POST) resp = await http.post(wholeUrl, body: body);
+      else if (method == HttpMethod.PUT) resp = await http.put(wholeUrl, body: body);
+    } catch (err) {
+      if (err is SocketException) {
+        throw new ApiFailureError(err.message, 500, code: 'NETWORK_ERROR');
+      }
+      throw err;
+    }
 
     try {
       respMap = jsonDecode(resp.body);
@@ -115,7 +122,9 @@ class DefaultRequester implements Requester {
       Map<String, dynamic> respMap = jsonDecode(resp.toString());
       return respMap;
     } catch (err) {
-      print(err.toString());
+      if (err is SocketException) {
+        throw new ApiFailureError(err.message, 500, code: 'NETWORK_ERROR');
+      }
       throw err;
     }
   }
@@ -190,6 +199,11 @@ class DefaultRequester implements Requester {
           body: body
         );
       }
+
+      if (err is SocketException) {
+        throw new ApiFailureError(err.message, 500, code: 'NETWORK_ERROR');
+      }
+
       throw err;
     }
   }
