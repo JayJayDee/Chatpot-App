@@ -124,7 +124,9 @@ class MyRoomRow extends StatelessWidget {
               child: Row(
                 children: [
                   _getRoomBadge(myRoom),
-                  Icon(MdiIcons.chevronRight)
+                  Icon(MdiIcons.chevronRight,
+                    color: Styles.secondaryFontColor,
+                  )
                 ]
               )
             )

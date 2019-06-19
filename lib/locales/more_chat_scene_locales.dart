@@ -44,4 +44,10 @@ class MoreChatSceneLocales {
     else if (language == 'ja') return 'もっと読み込む..';
     return 'Load more ..';
   }
+
+  String get roomJoined {
+    if (language == 'ko') return '채팅방에 성공적으로 참가하였습니다.';
+    else if (language == 'ja') return '';
+    return ''; 
+  }
 }
