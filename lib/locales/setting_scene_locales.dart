@@ -30,7 +30,7 @@ class SettingSceneLocales {
   String get about {
     if (language == 'ko') return 'Chatpot에 대하여..';
     else if (language == 'ja') return 'Chatpotについて..';
-    return 'about Chatpot..';
+    return 'About Chatpot..';
   }
 
   String get donation {
