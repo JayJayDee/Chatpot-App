@@ -8,6 +8,7 @@ import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/components/room_row.dart';
 import 'package:chatpot_app/components/room_detail_sheet.dart';
 import 'package:chatpot_app/storage/translation_cache_accessor.dart';
+import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
 const DEFAULT_FETCH_SIZE = 7;
 
@@ -183,7 +184,19 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
   Future<void> _onRoomSelected(BuildContext context, Room r) async {
     bool isJoin = await showRoomDetailSheet(context, r);
     if (isJoin == true) {
-      // TODO: room join action to be implemented
+      setState(() => _loading = true);
+      final state = ScopedModel.of<AppState>(context);
+      var resp = await state.joinToRoom(r.roomToken);
+
+      try {
+        if (resp.success == true) {
+          await showSimpleAlert(context, 'You have successfully joined the chat room.', title: locales().successTitle);
+        } else {
+          await showSimpleAlert(context, locales().error.messageFromErrorCode(resp.cause));
+        }
+      } finally {
+        setState(() => _loading = false);
+      }
     }
   }
   
