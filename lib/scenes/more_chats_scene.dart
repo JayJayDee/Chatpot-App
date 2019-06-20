@@ -67,7 +67,6 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
   @override
   initState() {
     super.initState();
-    print(_condition.order);
     this._refreshSearch();
   }
 
@@ -214,7 +213,9 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
         margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
         child: _buildCompoundSearchArea(context,
           controller: _queryEditController,
-          textChangeCallback: (String query) => _condition.query = query,
+          textChangeCallback: (String query) {
+            _condition.query = query;
+          },
           loading: _loading,
           clickCallback: () => this._refreshSearch()
         )
@@ -286,6 +287,7 @@ Widget _buildQueryInputField(BuildContext context, {
       color: CupertinoColors.lightBackgroundGray,
       size: 28.0,
     ),
+    onChanged: textChangeCallback,
     padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
     clearButtonMode: OverlayVisibilityMode.editing,
     textCapitalization: TextCapitalization.words,
