@@ -28,7 +28,13 @@ class PushService {
   }
 
   void requestNotification() {
-    _messaging.requestNotificationPermissions();
+    _messaging.requestNotificationPermissions(
+      IosNotificationSettings(
+        sound: true,
+        badge: true,
+        alert: true
+      )
+    );
   }
 
   Future<String> accquireDeviceToken() async {
