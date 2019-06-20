@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "430757482947-e7lnebfsf0g9robqdf0pm24bqsner3sd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "chat.chatpot",
+            "certificate_hash": "0eea1f87d47d8985a3c1f9919cc2753316cca454"
+          }
+        },
+        {
+          "client_id": "430757482947-6sn79rdn54ff13ostagv7q283iebu5og.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "chat.chatpot",
+            "certificate_hash": "8e669c0dfde16d035fbc3c3a5e2cfbc78506e672"
+          }
+        },
+        {
           "client_id": "430757482947-1r1o4ls2crot66mn0s83vcbl34n3764v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -33,11 +49,7 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "430757482947-6blc2o7srd6r6b8dfq2cs4r2o4jv5s27.apps.googleusercontent.com",
@@ -51,9 +63,6 @@
               }
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

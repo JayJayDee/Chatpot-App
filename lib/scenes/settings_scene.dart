@@ -13,6 +13,7 @@ import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/scenes/email_upgrade_scene.dart';
 import 'package:chatpot_app/scenes/password_change_scene.dart';
+import 'package:chatpot_app/scenes/about_scene.dart';
 
 @immutable
 class SettingsScene extends StatelessWidget implements EventReceivable {
@@ -61,8 +62,10 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
     ));
   }
 
-  void _onAboutClicked() async {
-
+  void _onAboutClicked(BuildContext context) async {
+    await Navigator.of(context).push(CupertinoPageRoute<bool>(
+      builder: (BuildContext context) => AboutScene()
+    ));
   }
 
   void _onDonationClicked() async {
@@ -109,7 +112,7 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
       elems.add(_buildMenuItem(locales().setting.changePassword, () => _onPasswordChangeClicked(context)));
     }
 
-    elems.add(_buildMenuItem(locales().setting.about, _onAboutClicked));
+    elems.add(_buildMenuItem(locales().setting.about, () => _onAboutClicked(context)));
     elems.add(_buildMenuItem(locales().setting.donation, _onDonationClicked));
 
     return CupertinoPageScaffold(
