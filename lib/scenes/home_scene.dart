@@ -3,12 +3,14 @@ import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/components/room_row.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 import 'package:chatpot_app/scenes/more_chats_scene.dart';
+import 'package:chatpot_app/scenes/new_chat_scene.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/components/room_detail_sheet.dart';
 import 'package:chatpot_app/factory.dart';
@@ -25,15 +27,21 @@ class HomeScene extends StatelessWidget implements EventReceivable {
     this.actor
   });
 
+  void _onNewChatClicked(BuildContext context) async {
+    String roomToken = await Navigator.of(parentContext).push(CupertinoPageRoute<String>(
+      builder: (BuildContext context) => NewChatScene()
+    ));
+    if (roomToken == null) return;
+    Future.delayed(Duration.zero, () => this.actor.changeTab(1));
+  }
+
   void _onChatRowSelected(BuildContext context, Room room) async {
     final model = ScopedModel.of<AppState>(context);
     bool isJoin = await showRoomDetailSheet(context, room);
     if (isJoin == true) {
       var joinResp = await model.joinToRoom(room.roomToken);
-
       if (joinResp.success == true) {
-        // TODO: to be changed to tab changed
-        this.actor.changeTab(1);
+        Future.delayed(Duration.zero, () => this.actor.changeTab(1));
       } else {
         showSimpleAlert(context, locales().error.messageFromErrorCode(joinResp.cause));
       }
@@ -68,7 +76,12 @@ class HomeScene extends StatelessWidget implements EventReceivable {
     return CupertinoPageScaffold(
       backgroundColor: Styles.mainBackground,
       navigationBar: CupertinoNavigationBar(
-        middle: Text(locales().home.title)
+        middle: Text(locales().home.title),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.all(0),
+          child: Icon(MdiIcons.plus),
+          onPressed: () => _onNewChatClicked(context)
+        ),
       ),
       child: SafeArea(
         child: ListView.builder(

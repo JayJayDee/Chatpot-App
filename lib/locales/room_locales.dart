@@ -81,7 +81,7 @@ class RoomLocales {
   }
 
   String emptyMessageInRoom() {
-    if (language == 'ko') return '채팅방 내 대화가  없습니다.';
+    if (language == 'ko') return '채팅방 내 대화가 없습니다.';
     else if (language == 'ja') return '部屋にメッセージはありません';
     return 'no messages in room';
   }
@@ -100,5 +100,30 @@ class RoomLocales {
     if (language == 'ko') return "$numAttendee명";
     else if (language == 'ja') return "$numAttendee人";
     return "$numAttendee people";
+  }
+
+  String roomTypeLabel(RoomType type) {
+    if (type == RoomType.PUBLIC) return publicRoomLabel;
+    else if (type == RoomType.ONEONONE) return oneOnOneRoomLabel;
+    else if (type == RoomType.ROULETTE) return rouletteRoomLabel;
+    return '';
+  }
+
+  String get publicRoomLabel {
+    if (language == 'ko') return '공개 채팅';
+    else if (language == 'ja') return '公開チャットルーム';
+    return 'Public chats';
+  }
+
+  String get oneOnOneRoomLabel {
+    if (language == 'ko') return '1:1 채팅';
+    else if (language == 'ja') return '1：1チャット';
+    return '1:1 chats';
+  }
+
+  String get rouletteRoomLabel {
+    if (language == 'ko') return '랜덤 채팅';
+    else if (language == 'ja') return 'ランダムなチャット';
+    return 'Chat roulettes';
   }
 }

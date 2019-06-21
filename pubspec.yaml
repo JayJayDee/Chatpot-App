@@ -36,6 +36,7 @@ dependencies:
   photo_view: ^0.2.4
   flutter_swiper: ^1.1.6
   flutter_inner_drawer: ^0.2.5
+  collection: ^1.14.11
 
 dev_dependencies:
   flutter_test:
@@ -45,7 +46,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icons/chatpot-icon.png"
+  image_path: "assets/icons/appicon-chatpot-filled-1024.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

@@ -10,19 +10,21 @@ class NewChatSceneLocales {
   });
 
   String get title {
-    if (language == 'ko') return '새 채팅';
-    else if (language == 'ja') return '新しいチャット';
-    return 'New chat';
+    if (language == 'ko') return '새 공개 채팅';
+    else if (language == 'ja') return '新しい公開チャット';
+    return 'New public chat';
   }
 
   String get header {
-    if (language == 'ko') return '''새로운 채팅방을 개설합니다.
+    if (language == 'ko') return '''새로운 공개 채팅방을 개설합니다.
 채팅 제목은 자동으로 번역되므로 모국어로 작성해 주세요.
 다른 사람들이 불쾌감을 느끼지 않을 제목으로 작성 부탁드립니다.''';
-    else if (language == 'ja') return '新しいチャットを開設します。';
-    return '''Open a new chat room.
-Chat titles are automatically translated and should be written in your native language.
-I would appreciate it written in a title that others would not feel offended.''';
+    else if (language == 'ja') return '''新しいパブリックチャットルームを開きます。
+チャットの主題は自動的に翻訳され、あなたの母国語で書かれるべきです。
+他の人が気分を害しないようなタイトルを書いてください。''';
+    return '''Open a new public chat room.
+Subjects of the chat are automatically translated and should be written in your native language.
+Please write a title that others would not feel offended.''';
   }
 
   String get placeHolderTitle {
