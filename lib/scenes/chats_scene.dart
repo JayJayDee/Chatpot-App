@@ -90,16 +90,17 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
 
     groupped.forEach((RoomType rtype, List<MyRoom> rooms) {
       if (rooms.length == 0) return;
+
       widgets.add(_buildRoomTypeHeaderLabel(rtype, rooms.length));
       widgets.addAll(rooms.map((r) => MyRoomRow(
         myRoom: r,
         myRoomSelectCallback: (r) => _onMyRoomSelected(context, r)
-      )));
+      )).toList());
     });
 
     return ListView.builder(
       scrollDirection: Axis.vertical,
-      itemCount: myRooms.length,
+      itemCount: widgets.length,
       itemBuilder: (BuildContext context, int idx) => widgets[idx]
     );
   }
@@ -113,14 +114,29 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
           bottom:BorderSide(color: Styles.listRowDivider, width: 0.3)
         )
       ),
-      padding: EdgeInsets.all(5),
-      child: Container(
-        margin: EdgeInsets.all(2),
-        child: Text(locales().room.roomTypeLabel(type),
-          style: TextStyle(
-            fontSize: 13
+      padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+      child: Row(
+        children: [
+          Text(locales().room.roomTypeLabel(type),
+            style: TextStyle(
+              fontSize: 14
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(7)),
+              color: Styles.secondaryFontColor
+            ),
+            padding: EdgeInsets.only(left: 5, top: 2, bottom: 2, right: 5),
+            child: Text(number.toString(),
+              style: TextStyle(
+                fontSize: 14,
+                color: CupertinoColors.white
+              )
+            )
           )
-        )
+        ]
       )
     );
 

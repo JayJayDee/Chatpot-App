@@ -46,7 +46,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icons/chatpot-icon.png"
+  image_path: "assets/icons/appicon-chatpot-filled-1024.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
