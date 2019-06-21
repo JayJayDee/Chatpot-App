@@ -294,10 +294,13 @@ class AppState extends Model {
       offset: 0,
       size: 20
     );
-    _currentRoom.messages.clearOffset();
-    _currentRoom.messages.clearMessages();
-    _currentRoom.messages.appendMesasges(resp.messages);
-    _currentRoom.messages.dumpQueuedMessagesToMessage();
+
+    if (_currentRoom != null) {
+      _currentRoom.messages.clearOffset();
+      _currentRoom.messages.clearMessages();
+      _currentRoom.messages.appendMesasges(resp.messages);
+      _currentRoom.messages.dumpQueuedMessagesToMessage();
+    }
 
     _loading = false;
     notifyListeners();

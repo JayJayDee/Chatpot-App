@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -84,18 +85,44 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
       return _buildEmptyRoomsView(context);
     }
 
+    Map<RoomType, List<MyRoom>> groupped = groupBy(myRooms, (r) => r.type);
+    List<Widget> widgets = List();
+
+    groupped.forEach((RoomType rtype, List<MyRoom> rooms) {
+      if (rooms.length == 0) return;
+      widgets.add(_buildRoomTypeHeaderLabel(rtype, rooms.length));
+      widgets.addAll(rooms.map((r) => MyRoomRow(
+        myRoom: r,
+        myRoomSelectCallback: (r) => _onMyRoomSelected(context, r)
+      )));
+    });
+
     return ListView.builder(
       scrollDirection: Axis.vertical,
       itemCount: myRooms.length,
-      itemBuilder: (BuildContext context, int idx) {
-        MyRoom room = myRooms[idx];
-        return MyRoomRow(
-          myRoom: room,
-          myRoomSelectCallback: (r) => _onMyRoomSelected(context, r)
-        );
-      }
+      itemBuilder: (BuildContext context, int idx) => widgets[idx]
     );
   }
+
+  Widget _buildRoomTypeHeaderLabel(RoomType type, int number) =>
+    Container(
+      decoration: BoxDecoration(
+        color: CupertinoColors.white,
+        border: Border(
+          top: BorderSide(color: Styles.listRowDivider, width: 0.3),
+          bottom:BorderSide(color: Styles.listRowDivider, width: 0.3)
+        )
+      ),
+      padding: EdgeInsets.all(5),
+      child: Container(
+        margin: EdgeInsets.all(2),
+        child: Text(locales().room.roomTypeLabel(type),
+          style: TextStyle(
+            fontSize: 13
+          )
+        )
+      )
+    );
 
   Widget _buildEmptyRoomsView(BuildContext context) {
     return Center(
