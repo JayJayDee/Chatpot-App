@@ -19,7 +19,18 @@ class ReportApi {
     @required ReportType reportType,
     String comment
   }) async {
-    // TODO: to be implement
+    Map<String, dynamic> resp = await _requester.requestWithAuth(
+      url: '/abuse/report',
+      method: HttpMethod.POST,
+      body: {
+        'member_token': memberToken,
+        'target_token': targetToken,
+        'room_token': roomToken,
+        'report_type': _getReportTypeExpr(reportType),
+        'comment': comment == null ? '' : comment
+      }
+    );
+    print(resp);  
   }
 
   Future<List<ReportStatus>> requestMyReports({
@@ -29,4 +40,10 @@ class ReportApi {
     // TODO: to be implement
     return list;
   }
+}
+
+String _getReportTypeExpr(ReportType type) {
+  if (type == ReportType.HATE) return 'HATE';
+  else if (type == ReportType.SEXUAL) return 'SEXUAL';
+  return 'ETC';
 }
