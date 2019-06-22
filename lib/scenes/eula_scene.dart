@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:chatpot_app/styles.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 class EulaScene extends StatefulWidget {
  
@@ -35,9 +35,11 @@ class _EulaSceneState extends State<EulaScene> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-              child: WebView(
-                initialUrl: 'http://chatpot.chat/eula',
-                javascriptMode: JavascriptMode.unrestricted,
+              child: WebviewScaffold(
+                url: 'http://chatpot.chat/eula',
+                withZoom: false,
+                withJavascript: true,
+                withLocalStorage: false
               )
             ),
             Container(
