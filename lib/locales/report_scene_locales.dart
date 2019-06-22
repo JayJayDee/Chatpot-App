@@ -53,4 +53,28 @@ The review can take up to 24 hours, and the results of processing the report can
     else if (language == 'ja') return '提出';
     return 'Submit';
   }
+
+  String get hateLabel {
+    if (language == 'ko') return '혐오 발언';
+    else if (language == 'ja') return '憎悪発言';
+    return 'Hate speech';
+  }
+
+  String get sexualLabel {
+    if (language == 'ko') return '성희롱';
+    else if (language == 'ja') return 'セクハラ';
+    return 'Sexual harassment';
+  }
+
+  String get etcLabel {
+    if (language == 'ko') return '기타';
+    else if (language == 'ja') return 'その他';
+    return 'Other';
+  }
+
+  String get chooseReportType {
+    if (language == 'ko') return '신고 유형을 선택하세요';
+    else if (language == 'ja') return 'レポートの種類を選択してください。';
+    return 'Please select a report type.';
+  }
 }

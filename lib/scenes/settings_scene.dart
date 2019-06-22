@@ -63,7 +63,7 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
   }
 
   void _onAboutClicked(BuildContext context) async {
-    await Navigator.of(context).push(CupertinoPageRoute<bool>(
+    await Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
       builder: (BuildContext context) => AboutScene()
     ));
   }
