@@ -55,6 +55,12 @@ class LoginScene extends StatelessWidget {
   }
 
   void _onSimpleSignUp(BuildContext context) async {
+    var agreeResp = await Navigator.of(context).push(CupertinoPageRoute<bool>(
+      builder: (BuildContext context) => EulaScene()
+    ));
+
+    if (agreeResp != true) return;
+
     final model = ScopedModel.of<AppState>(context);
 
     var resp = await Navigator.of(context).push(CupertinoPageRoute<bool>(
@@ -73,11 +79,11 @@ class LoginScene extends StatelessWidget {
       builder: (BuildContext context) => EulaScene()
     ));
 
-    if (agreeResp == null) return;
-
-    await Navigator.of(context).push(CupertinoPageRoute<bool>(
-      builder: (BuildContext context) => SignupScene()
-    ));
+    if (agreeResp == true) {
+      await Navigator.of(context).push(CupertinoPageRoute<bool>(
+        builder: (BuildContext context) => SignupScene()
+      ));
+    }
   }
 
   @override
