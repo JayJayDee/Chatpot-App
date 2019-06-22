@@ -46,7 +46,7 @@ class LoginScene extends StatelessWidget {
     } catch (err) {
       if (err is ApiFailureError) {
         await showSimpleAlert(context,
-            locales().error.messageFromErrorCode(err.code));
+            locales().error.messageFromErrorCode(err.code, message: err.msg));
       } else {
         throw err;
       }

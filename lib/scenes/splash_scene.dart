@@ -20,7 +20,8 @@ class SplashScene extends StatelessWidget {
       state = await model.tryAutoLogin();
     } catch (err) {
       if (err is ApiFailureError) {
-        await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
+        await showSimpleAlert(context,
+          locales().error.messageFromErrorCode(err.code, message: err.msg));
         exit(0);
       }
     }
