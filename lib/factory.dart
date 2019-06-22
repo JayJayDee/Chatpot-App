@@ -12,6 +12,7 @@ import 'package:chatpot_app/apis/message_api.dart';
 import 'package:chatpot_app/apis/activation_api.dart';
 import 'package:chatpot_app/apis/asset_api.dart';
 import 'package:chatpot_app/apis/translate_api.dart';
+import 'package:chatpot_app/apis/report_api.dart';
 import 'package:chatpot_app/utils/auth_crypter.dart';
 import 'package:chatpot_app/utils/default_auth_crypter.dart';
 import 'package:chatpot_app/locales/root_locale_converter.dart';
@@ -41,6 +42,7 @@ void initFactory() {
   _instances['TranslateApi'] = TranslateApi(requester: _initTranslateRequester());
   _instances['PushService'] = PushService(msg: _firebaseMessaging());
   _instances['ActivationApi'] = ActivationApi(requester: _memberRequester());
+  _instances['ReportApi'] = ReportApi(requester: _memberRequester());
 }
 
 Requester _initMemberRequester() => DefaultRequester(
@@ -94,3 +96,4 @@ FirebaseMessaging firebaseMessaging() => _instances['FirebaseMessaging'];
 PushService pushService() => _instances['PushService'];
 MessagesAccessor messagesAccessor() => _instances['MessagesAccessor'];
 TranslationCacheAccessor translationCacheAccessor() => _instances['TranslationCacheAccessor'];
+ReportApi reportApi() => _instances['ReportApi'];

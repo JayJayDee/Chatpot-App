@@ -13,7 +13,10 @@ class ReportScene extends StatefulWidget {
   });
 
   @override
-  State createState() => _ReportSceneState();
+  State createState() =>
+    _ReportSceneState(
+      targetToken: targetToken
+    );
 }
 
 class _ReportSceneState extends State<ReportScene> {
@@ -39,6 +42,8 @@ class _ReportSceneState extends State<ReportScene> {
       if (err is ApiFailureError) {
         await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
         return;
+      } else {
+        throw err;
       }
     } finally {
       setState(() {
