@@ -39,6 +39,18 @@ class SettingSceneLocales {
     return 'Treat a developer to a cup of coffee';
   }
 
+  String get myReports {
+    if (language == 'ko') return '내 신고 내역 보기';
+    else if (language == 'ja') return '私申告内訳照会';
+    return 'My reporting history';
+  }
+
+  String get myBlocks {
+    if (language == 'ko') return '내 차단 내역 보기';
+    else if (language == 'ja') return '私遮断した履歴照会';
+    return 'My blocking history';
+  }
+
   String get changePassword {
     if (language == 'ko') return '비밀번호 변경';
     else if (language == 'ja') return '開発者をコーヒーに捧げる';

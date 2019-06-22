@@ -63,13 +63,9 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
   }
 
   void _onAboutClicked(BuildContext context) async {
-    await Navigator.of(context).push(CupertinoPageRoute<bool>(
+    await Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
       builder: (BuildContext context) => AboutScene()
     ));
-  }
-
-  void _onDonationClicked() async {
-
   }
 
   void _onEmailAccountClicked(BuildContext context) async {
@@ -79,6 +75,14 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
       builder: (BuildContext context) =>
         EmailUpgradeScene(memberToken: state.member.token)
     ));
+  }
+
+  void _onMyReportsClicked(BuildContext context) async {
+    // TODO: show my reports scene
+  }
+
+  void _onMyBlocksClicked(BuildContext context) async {
+    // TODO: show my blocks scene
   }
 
   @override
@@ -112,8 +116,9 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
       elems.add(_buildMenuItem(locales().setting.changePassword, () => _onPasswordChangeClicked(context)));
     }
 
+    elems.add(_buildMenuItem(locales().setting.myBlocks, () => _onMyBlocksClicked(context)));
+    elems.add(_buildMenuItem(locales().setting.myReports, () => _onMyReportsClicked(context)));
     elems.add(_buildMenuItem(locales().setting.about, () => _onAboutClicked(context)));
-    elems.add(_buildMenuItem(locales().setting.donation, _onDonationClicked));
 
     return CupertinoPageScaffold(
       backgroundColor: Styles.mainBackground,

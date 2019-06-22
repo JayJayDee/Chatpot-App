@@ -5,6 +5,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 import 'package:chatpot_app/entities/member.dart';
+import 'package:chatpot_app/entities/report.dart';
+import 'package:chatpot_app/components/report_type_selector.dart';
 import 'package:chatpot_app/styles.dart';
 
 class ReportScene extends StatefulWidget {
@@ -28,11 +30,14 @@ class _ReportSceneState extends State<ReportScene> {
   MemberPublic _targetMember;
   bool _loading;
 
+  ReportType _reportType;
+
   _ReportSceneState({
     @required String targetToken
   }) {
     _targetToken = targetToken;
     _loading = false;    
+    _reportType = null;
   }
 
   @override
@@ -112,6 +117,17 @@ class _ReportSceneState extends State<ReportScene> {
                       color: Styles.primaryFontColor,
                       fontSize: 16
                     )
+                  )
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: builReportTypeSeletor(context,
+                    reportType: _reportType,
+                    reportSelectCallback: (ReportType type) {
+                      setState(() {
+                        _reportType = type;
+                      });
+                    }
                   )
                 ),
                 Container(
