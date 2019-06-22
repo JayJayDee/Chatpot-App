@@ -37,13 +37,19 @@ Future<void> showMemberDetailSheet(BuildContext context, {
             child: Text(locales().memberDetailSheet.menuBlockUser,
               style: popupMenuFontStyle
             ),
-            onPressed: () => blockCallback(memberToken),
+            onPressed: () {
+              Navigator.of(context).pop();
+              blockCallback(memberToken);
+            }
           ),
           CupertinoActionSheetAction(
             child: Text(locales().memberDetailSheet.menuReportUser,
               style: popupMenuFontStyle
             ),
-            onPressed: () => reportCallback(memberToken),
+            onPressed: () {
+              Navigator.of(context).pop();
+              reportCallback(memberToken);
+            }
           )
         ]
       )
