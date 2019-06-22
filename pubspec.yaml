@@ -37,7 +37,6 @@ dependencies:
   flutter_swiper: ^1.1.6
   flutter_inner_drawer: ^0.2.5
   collection: ^1.14.11
-  webview_flutter: ^0.2.0
 
 dev_dependencies:
   flutter_test:

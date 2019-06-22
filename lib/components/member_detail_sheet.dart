@@ -14,8 +14,12 @@ const popupMenuFontStyle = TextStyle(
   fontSize: 16.0
 );
 
+typedef MemberTokenCallback (String token);
+
 Future<void> showMemberDetailSheet(BuildContext context, {
-  @required String memberToken 
+  @required String memberToken,
+  @required MemberTokenCallback blockCallback,
+  @required MemberTokenCallback reportCallback
 }) async {
   await showCupertinoModalPopup<bool>(
     context: context,
@@ -23,12 +27,12 @@ Future<void> showMemberDetailSheet(BuildContext context, {
       CupertinoActionSheet(
         message: _MemberDetailSheet(memberToken: memberToken),
         actions: [
-          CupertinoActionSheetAction(
-            child: Text(locales().memberDetailSheet.menuOneononeChat,
-              style: popupMenuFontStyle
-            ),
-            onPressed: () {},
-          ),
+          // CupertinoActionSheetAction(
+          //   child: Text(locales().memberDetailSheet.menuOneononeChat,
+          //     style: popupMenuFontStyle
+          //   ),
+          //   onPressed: () {},
+          // ), // TODO: to be implmented in next time.
           CupertinoActionSheetAction(
             child: Text(locales().memberDetailSheet.menuBlockUser,
               style: popupMenuFontStyle
