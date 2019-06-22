@@ -1,8 +1,11 @@
 import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
+import 'package:chatpot_app/entities/member.dart';
+import 'package:chatpot_app/styles.dart';
 
 class ReportScene extends StatefulWidget {
 
@@ -22,6 +25,7 @@ class ReportScene extends StatefulWidget {
 class _ReportSceneState extends State<ReportScene> {
 
   String _targetToken;
+  MemberPublic _targetMember;
   bool _loading;
 
   _ReportSceneState({
@@ -29,6 +33,27 @@ class _ReportSceneState extends State<ReportScene> {
   }) {
     _targetToken = targetToken;
     _loading = false;    
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this._loadMemberInfo();
+  }
+
+  void _loadMemberInfo() async {
+    setState(() {
+      _loading = true;
+    });
+
+    MemberPublic fetched = await memberApi().requestMemberPublic(
+      memberToken: _targetToken
+    );
+
+    setState(() {
+      _loading = false;
+      _targetMember = fetched;
+    });
   }
 
   void _onSubmitButtonClicked(BuildContext context) async {
@@ -65,9 +90,36 @@ class _ReportSceneState extends State<ReportScene> {
           children: [
             ListView(
               children: [
-                _buildReportButton(context,
-                  loading: _loading,
-                  callback: () => _onSubmitButtonClicked(context)
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: Text(locales().reportScene.description1,
+                    style: TextStyle(
+                      color: Styles.primaryFontColor,
+                      fontSize: 16
+                    )
+                  )
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: _buildTargetMemberWidget(context,
+                    member: _targetMember
+                  )
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: Text(locales().reportScene.description2,
+                    style: TextStyle(
+                      color: Styles.primaryFontColor,
+                      fontSize: 16
+                    )
+                  )
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 20),
+                  child: _buildReportButton(context,
+                    loading: _loading,
+                    callback: () => _onSubmitButtonClicked(context)
+                  )
                 )
               ]
             ),
@@ -82,8 +134,68 @@ class _ReportSceneState extends State<ReportScene> {
 Widget _buildProgress(BuildContext context, {
   @required bool loading
 }) =>
-  loading == true ? Container() :
+  loading == false ? Container() :
     CupertinoActivityIndicator();
+
+Widget _buildTargetMemberWidget(BuildContext context, {
+  @required MemberPublic member
+}) =>
+  member == null ? 
+    Center(child: CupertinoActivityIndicator()) :
+    Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 60,
+          height: 60,
+          margin: EdgeInsets.only(right: 15),
+          child: Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(60),
+                child: CachedNetworkImage(
+                  imageUrl: member.avatar.thumb,
+                  placeholder: (context, url) => CupertinoActivityIndicator(),
+                )
+              ),
+              Positioned(
+                child: Container(
+                  width: 30,
+                  height: 15,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Styles.primaryFontColor),
+                    image: DecorationImage(
+                      image: locales().getFlagImage(member.region),
+                      fit: BoxFit.cover
+                    )
+                  )
+                )
+              )
+            ]
+          )
+        ),
+        Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(locales().getNick(member.nick),
+                style: TextStyle(
+                  color: Styles.primaryFontColor,
+                  fontSize: 17
+                )
+              ),
+              Text(member.regionName,
+                style: TextStyle(
+                  color: Styles.secondaryFontColor,
+                  fontSize: 16
+                )
+              )
+            ]
+          )
+        )
+      ]
+    );
 
 Widget _buildReportButton(BuildContext context, {
   @required bool loading,

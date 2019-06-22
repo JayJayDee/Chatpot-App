@@ -36,7 +36,7 @@ class _EulaSceneState extends State<EulaScene> {
     String eulaContent;
 
     try {
-      eulaContent = await _requestEula('ko');
+      eulaContent = await _requestEula(locales().langauge);
     } catch (err) {
       if (err is EulaFetchError) {
         await showSimpleAlert(context, locales().eulaScene.eulaFetchError);

@@ -12,6 +12,7 @@ import 'package:chatpot_app/components/message_row.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/scenes/photo_detail_scene.dart';
+import 'package:chatpot_app/scenes/report_scene.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 import 'package:chatpot_app/components/member_detail_sheet.dart';
 
@@ -106,7 +107,10 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onMemberReportSelected(BuildContext context, String targetMember) async {
-    print("report! $targetMember");
+    await Navigator.of(context).push(CupertinoPageRoute<void>(
+      builder: (BuildContext context) => 
+        ReportScene(targetToken: targetMember)
+    ));
   }
 
   Future<void> _onProfileClicked(BuildContext context, String memberToken) async {
