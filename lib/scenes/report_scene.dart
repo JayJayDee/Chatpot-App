@@ -3,6 +3,8 @@ import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
+import 'package:chatpot_app/entities/member.dart';
+import 'package:chatpot_app/styles.dart';
 
 class ReportScene extends StatefulWidget {
 
@@ -22,6 +24,7 @@ class ReportScene extends StatefulWidget {
 class _ReportSceneState extends State<ReportScene> {
 
   String _targetToken;
+  MemberPublic _targetMember;
   bool _loading;
 
   _ReportSceneState({
@@ -29,6 +32,27 @@ class _ReportSceneState extends State<ReportScene> {
   }) {
     _targetToken = targetToken;
     _loading = false;    
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this._loadMemberInfo();
+  }
+
+  void _loadMemberInfo() async {
+    setState(() {
+      _loading = true;
+    });
+
+    MemberPublic fetched = await memberApi().requestMemberPublic(
+      memberToken: _targetToken
+    );
+
+    setState(() {
+      _loading = false;
+      _targetMember = fetched;
+    });
   }
 
   void _onSubmitButtonClicked(BuildContext context) async {
@@ -65,9 +89,21 @@ class _ReportSceneState extends State<ReportScene> {
           children: [
             ListView(
               children: [
-                _buildReportButton(context,
-                  loading: _loading,
-                  callback: () => _onSubmitButtonClicked(context)
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: Text(locales().reportScene.description1,
+                    style: TextStyle(
+                      color: Styles.primaryFontColor,
+                      fontSize: 16
+                    )
+                  )
+                ),
+                Container(
+                  margin: EdgeInsets.all(10),
+                  child: _buildReportButton(context,
+                    loading: _loading,
+                    callback: () => _onSubmitButtonClicked(context)
+                  )
                 )
               ]
             ),
@@ -82,7 +118,7 @@ class _ReportSceneState extends State<ReportScene> {
 Widget _buildProgress(BuildContext context, {
   @required bool loading
 }) =>
-  loading == true ? Container() :
+  loading == false ? Container() :
     CupertinoActivityIndicator();
 
 Widget _buildReportButton(BuildContext context, {

@@ -64,6 +64,9 @@ class RootLocaleConverter {
   EulaSceneLocales get eulaScene => _eulaScene;
   ReportSceneLocales get reportScene => _reportScene;
 
+
+  String get langauge => _language;
+
   void selectLanguage(BuildContext context) {
     Locale locale = Localizations.localeOf(context);
     _login = LoginSceneLocales(root: this, language: _language);
