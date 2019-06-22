@@ -101,9 +101,19 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     ));
   }
 
+  Future<void> _onMemberBlockSelected(BuildContext context, String targetMember) async {
+
+  }
+
+  Future<void> _onMemberReportSelected(BuildContext context, String targetMember) async {
+
+  }
+
   Future<void> _onProfileClicked(BuildContext context, String memberToken) async {
     await showMemberDetailSheet(context, 
-      memberToken: memberToken
+      memberToken: memberToken,
+      blockCallback: (String token) => _onMemberBlockSelected(context, token),
+      reportCallback: (String token) => _onMemberReportSelected(context, token)
     );
   }
 
