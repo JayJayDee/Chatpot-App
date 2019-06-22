@@ -102,11 +102,11 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onMemberBlockSelected(BuildContext context, String targetMember) async {
-
+    print("block! $targetMember");
   }
 
   Future<void> _onMemberReportSelected(BuildContext context, String targetMember) async {
-
+    print("report! $targetMember");
   }
 
   Future<void> _onProfileClicked(BuildContext context, String memberToken) async {

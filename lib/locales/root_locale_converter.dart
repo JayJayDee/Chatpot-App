@@ -1,3 +1,4 @@
+import 'package:chatpot_app/locales/report_scene_locales.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/entities/member.dart';
@@ -19,6 +20,7 @@ import 'package:chatpot_app/locales/password_change_scene_locales.dart';
 import 'package:chatpot_app/locales/member_detail_sheet_locales.dart';
 import 'package:chatpot_app/locales/about_scene_locales.dart';
 import 'package:chatpot_app/locales/eula_scene_locales.dart';
+import 'package:chatpot_app/locales/report_scene_locales.dart';
 
 class RootLocaleConverter {
   String _language;
@@ -40,6 +42,7 @@ class RootLocaleConverter {
   MemberDetailSheetLocales _memberDetailSheet;
   AboutSceneLocales _aboutScene;
   EulaSceneLocales _eulaScene;
+  ReportSceneLocales _reportScene;
 
   HomeSceneLocales get home => _home;
   MessageLocales get message => _message;
@@ -59,6 +62,7 @@ class RootLocaleConverter {
   MemberDetailSheetLocales get memberDetailSheet => _memberDetailSheet;
   AboutSceneLocales get aboutScene => _aboutScene;
   EulaSceneLocales get eulaScene => _eulaScene;
+  ReportSceneLocales get reportScene => _reportScene;
 
   void selectLanguage(BuildContext context) {
     Locale locale = Localizations.localeOf(context);
@@ -81,6 +85,7 @@ class RootLocaleConverter {
     _memberDetailSheet = MemberDetailSheetLocales(root: this, language: _language);
     _aboutScene = AboutSceneLocales(root: this, language: _language);
     _eulaScene = EulaSceneLocales(root: this, language: _language);
+    _reportScene = ReportSceneLocales(root: this, language: _language);
   }
 
   String getNick(Nick nick) {
