@@ -8,6 +8,7 @@ import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 import 'package:chatpot_app/scenes/email_upgrade_scene.dart';
+import 'package:chatpot_app/scenes/eula_scene.dart';
 import 'package:chatpot_app/models/app_state.dart';
 
 String _email = '';
@@ -68,6 +69,12 @@ class LoginScene extends StatelessWidget {
   }
 
   void _onEmailSignup(BuildContext context) async {
+    var agreeResp = await Navigator.of(context).push(CupertinoPageRoute<bool>(
+      builder: (BuildContext context) => EulaScene()
+    ));
+
+    if (agreeResp == null) return;
+
     await Navigator.of(context).push(CupertinoPageRoute<bool>(
       builder: (BuildContext context) => SignupScene()
     ));
