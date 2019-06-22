@@ -1,17 +1,30 @@
+import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
 class ReportScene extends StatefulWidget {
+
+  final String targetToken;
+
+  ReportScene({
+    this.targetToken
+  });
+
   @override
   State createState() => _ReportSceneState();
 }
 
 class _ReportSceneState extends State<ReportScene> {
 
+  String _targetToken;
   bool _loading;
 
-  _ReportSceneState() {
+  _ReportSceneState({
+    @required String targetToken
+  }) {
+    _targetToken = targetToken;
     _loading = false;    
   }
 
@@ -20,9 +33,18 @@ class _ReportSceneState extends State<ReportScene> {
       _loading = true;
     });
 
-    setState(() {
-      _loading = false;
-    });
+    try {
+      // TODO: api call & exception handling.
+    } catch (err) {
+      if (err is ApiFailureError) {
+        await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
+        return;
+      }
+    } finally {
+      setState(() {
+        _loading = false;
+      });
+    }
   }
 
   @override

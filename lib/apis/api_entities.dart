@@ -254,3 +254,27 @@ class PasswordChangeResp {
     return resp;
   }
 }
+
+enum ReportType {
+  HATE, SEXUAL, ETC
+}
+
+enum ReportState {
+  REPORTED, IN_PROGRESS, DONE
+}
+
+class ReportStatus {
+  ReportType reportType;
+  ReportState status;
+  String comment;
+  String result;
+  String regDate;
+
+  ReportStatus();
+
+  factory ReportStatus.fromJson(Map<String, dynamic> map) {
+    var resp = ReportStatus();
+    // TODO: json deserialization required.
+    return resp;
+  }
+}
