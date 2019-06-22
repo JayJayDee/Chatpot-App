@@ -9,7 +9,9 @@ class ErrorMessageLocales {
     this.root
   });
 
-  String messageFromErrorCode(String code) {
+  String messageFromErrorCode(String code, {
+    String message
+  }) {
     if (code == 'ROOM_MAXIMUM_EXCEED') return this.maximumAttendeeExceeded;
     else if (code == 'ROOM_ALREADY_JOINED') return this.roomAlreadyJoined;
     else if (code == 'DUPLICATED_ENTRY') return this.duplicatedEmail;
@@ -20,6 +22,7 @@ class ErrorMessageLocales {
     else if (code == 'SIMPLE_ACCOUNT_PWCHANGE_DENIED') return this.simpleAccountTriesPwChange;
     else if (code == 'INVALID_MAX_ATTENDEE') return this.invalidMaxAttendee;
     else if (code == 'NETWORK_ERROR') return this.networkError;
+    else if (code == 'MEMBER_BLOCKED') return this.memberBlocked(message);
     return uncatchedCode(code);
   }
 
@@ -78,6 +81,50 @@ Please check your email and password.''';
     if (language == 'ko') return '네트워크 에러가 발생했습니다. 나중에 앱을 다시 시작해 보세요.';
     else if (language == 'ja') return 'ネットワークエラーが発生しました。 後でアプリを再起動してください。';
     return 'Network error occured. Please restart the app later.';
+  }
+
+  String memberBlocked(String message) {
+    String base;
+    String addition;
+
+    if (language == 'ko') {
+      base = '''죄송합니다. Chatpot을 이용하실 수 없습니다.
+익명의 사용자로부터 신고를 접수하였으며, 신고를 검토한 결과 계정을 정지하기로 결정하였습니다.''';
+      addition = '''
+정지 사유는 다음과 같습니다: ''';
+    } else if (language == 'ja') {
+      base = '''ごめんなさい。 Chatpotは使えません。
+お客様から匿名ユーザーによる報告を受け取りました。お客様の報告を確認したところ、アカウントを停止することにしました。''';
+      addition = '''
+停止の理由は次のとおりです。: ''';
+    } else {
+      base = '''Sorry. You can not use Chatpot.
+We have received a report from you by an anonymous user and after reviewing your report we have decided to suspend your account.''';
+      addition = '''
+The reasons for the suspension are as follows: ''';
+    }
+
+    if (message != null) {
+      String cause = message.split('::')[0];
+      return base + addition + blockCause(cause);
+    }
+    return base;
+  }
+
+  String blockCause(String cause) {
+    if (cause == 'SEXUAL') {
+      if (language == 'ko') return '성희롱';
+      else if (language == 'ja') return 'セクハラ';
+      return 'Sexual harassment';
+    } else if (cause == 'HATE') {
+      if (language == 'ko') return '혐오 발언';
+      else if (language == 'ja') return '嫌悪発言';
+      return 'Hate speech';
+    } else {
+      if (language == 'ko') return '기타 약관 위반';
+      else if (language == 'ja') return 'その他の規約への違反';
+      return 'Other terms violation';
+    }
   }
 
   String uncatchedCode(String code) {

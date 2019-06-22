@@ -8,6 +8,7 @@ import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 import 'package:chatpot_app/scenes/email_upgrade_scene.dart';
+import 'package:chatpot_app/scenes/eula_scene.dart';
 import 'package:chatpot_app/models/app_state.dart';
 
 String _email = '';
@@ -46,7 +47,7 @@ class LoginScene extends StatelessWidget {
     } catch (err) {
       if (err is ApiFailureError) {
         await showSimpleAlert(context,
-            locales().error.messageFromErrorCode(err.code));
+            locales().error.messageFromErrorCode(err.code, message: err.msg));
       } else {
         throw err;
       }
@@ -54,6 +55,12 @@ class LoginScene extends StatelessWidget {
   }
 
   void _onSimpleSignUp(BuildContext context) async {
+    var agreeResp = await Navigator.of(context).push(CupertinoPageRoute<bool>(
+      builder: (BuildContext context) => EulaScene()
+    ));
+
+    if (agreeResp != true) return;
+
     final model = ScopedModel.of<AppState>(context);
 
     var resp = await Navigator.of(context).push(CupertinoPageRoute<bool>(
@@ -68,9 +75,15 @@ class LoginScene extends StatelessWidget {
   }
 
   void _onEmailSignup(BuildContext context) async {
-    await Navigator.of(context).push(CupertinoPageRoute<bool>(
-      builder: (BuildContext context) => SignupScene()
+    var agreeResp = await Navigator.of(context).push(CupertinoPageRoute<bool>(
+      builder: (BuildContext context) => EulaScene()
     ));
+
+    if (agreeResp == true) {
+      await Navigator.of(context).push(CupertinoPageRoute<bool>(
+        builder: (BuildContext context) => SignupScene()
+      ));
+    }
   }
 
   @override
