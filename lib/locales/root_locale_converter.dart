@@ -18,6 +18,7 @@ import 'package:chatpot_app/locales/simple_signup_scene_locales.dart';
 import 'package:chatpot_app/locales/password_change_scene_locales.dart';
 import 'package:chatpot_app/locales/member_detail_sheet_locales.dart';
 import 'package:chatpot_app/locales/about_scene_locales.dart';
+import 'package:chatpot_app/locales/eula_scene_locales.dart';
 
 class RootLocaleConverter {
   String _language;
@@ -38,6 +39,7 @@ class RootLocaleConverter {
   PasswordChangeSceneLocales _passwordChange;
   MemberDetailSheetLocales _memberDetailSheet;
   AboutSceneLocales _aboutScene;
+  EulaSceneLocales _eulaScene;
 
   HomeSceneLocales get home => _home;
   MessageLocales get message => _message;
@@ -56,6 +58,7 @@ class RootLocaleConverter {
   PasswordChangeSceneLocales get passwordChange => _passwordChange;
   MemberDetailSheetLocales get memberDetailSheet => _memberDetailSheet;
   AboutSceneLocales get aboutScene => _aboutScene;
+  EulaSceneLocales get eulaScene => _eulaScene;
 
   void selectLanguage(BuildContext context) {
     Locale locale = Localizations.localeOf(context);
@@ -77,6 +80,7 @@ class RootLocaleConverter {
     _passwordChange = PasswordChangeSceneLocales(root: this, language: _language);
     _memberDetailSheet = MemberDetailSheetLocales(root: this, language: _language);
     _aboutScene = AboutSceneLocales(root: this, language: _language);
+    _eulaScene = EulaSceneLocales(root: this, language: _language);
   }
 
   String getNick(Nick nick) {

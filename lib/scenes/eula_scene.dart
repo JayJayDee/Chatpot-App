@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:chatpot_app/styles.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:chatpot_app/factory.dart';
 
 class EulaScene extends StatefulWidget {
  
@@ -26,8 +26,8 @@ class _EulaSceneState extends State<EulaScene> {
     return CupertinoPageScaffold(
       backgroundColor: Styles.mainBackground,
       navigationBar: CupertinoNavigationBar(
-        previousPageTitle: 'Prev',
-        middle: Text('End User License Agreement'),
+        previousPageTitle: locales().eulaScene.prevButtonLabel,
+        middle: Text(locales().eulaScene.title),
         transitionBetweenRoutes: true
       ),
       child: SafeArea(
@@ -35,12 +35,7 @@ class _EulaSceneState extends State<EulaScene> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-              child: WebviewScaffold(
-                url: 'http://chatpot.chat/eula',
-                withZoom: false,
-                withJavascript: true,
-                withLocalStorage: false
-              )
+              child: Container()
             ),
             Container(
               margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
@@ -61,7 +56,7 @@ Widget _buildAgreeButton(BuildContext context, {
   @required VoidCallback callback
 }) {
   return CupertinoButton(
-    child: Text('Agree'),
+    child: Text(locales().eulaScene.agreeButtonLabel),
     color: CupertinoColors.activeBlue,
     onPressed: loading == true ? null : callback,
   );
