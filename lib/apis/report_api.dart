@@ -39,10 +39,8 @@ class ReportApi {
       url: "/abuse/$memberToken/reports",
       method: HttpMethod.GET
     );
-
-    print(rawList); // TODO: to be fixed.
-    
-    List<ReportStatus> list = List();
+    List<ReportStatus> list = 
+      rawList.toList().map((elem) => ReportStatus.fromJson(elem)).toList();
     return list;
   }
 }

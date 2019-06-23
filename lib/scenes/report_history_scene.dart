@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/report.dart';
+import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
 class ReportHistoryScene extends StatefulWidget {
 
@@ -35,14 +37,25 @@ class _ReportHistorySceneState extends State<ReportHistoryScene> {
     final state = ScopedModel.of<AppState>(context);
     String memberToken = state.member.token;
 
-    List<ReportStatus> reports = await reportApi().requestMyReports(
-      memberToken: memberToken
-    );
-    print(reports);
+    try {
+      List<ReportStatus> reports = await reportApi().requestMyReports(
+        memberToken: memberToken
+      );
+      setState(() => _reports = reports);
+    } catch (err) {
+      if (err is ApiFailureError) {
+        await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
+        Navigator.of(context).pop();
+      } 
+    } finally {
+      setState(() => _loading = false);
+    }
   }
   
   @override
   Widget build(BuildContext context) {
+    List<Widget> widgets = List();
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         previousPageTitle: locales().setting.title,
@@ -54,10 +67,17 @@ class _ReportHistorySceneState extends State<ReportHistoryScene> {
           children: [
             ListView(
               children: []
-            )
+            ),
+            _buildProgress(context, loading: _loading)
           ]
         )
       )
     );
   }
 }
+
+Widget _buildProgress(BuildContext context, {
+  @required bool loading
+}) =>
+  loading == true ? CupertinoActivityIndicator() :
+  Container();

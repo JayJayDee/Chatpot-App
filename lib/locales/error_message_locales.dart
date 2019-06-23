@@ -23,6 +23,7 @@ class ErrorMessageLocales {
     else if (code == 'INVALID_MAX_ATTENDEE') return this.invalidMaxAttendee;
     else if (code == 'NETWORK_ERROR') return this.networkError;
     else if (code == 'ALREADY_REPORTED') return this.alreadyReported;
+    else if (code == 'SELF_REPORT_NOT_ALLOWED') return this.selfReport;
     else if (code == 'MEMBER_BLOCKED') return this.memberBlocked(message);
     return uncatchedCode(code);
   }
@@ -135,6 +136,12 @@ The reasons for the suspension are as follows: ''';
 報告した内容は、[設定]メニュー> [私の報告履歴]メニューで確認できます。''';
     return '''You have already reported this user.
 You can see what you reported in the Settings menu > My Report History menu.''';
+  }
+
+  String get selfReport {
+    if (language == 'ko') return '자기 자신을 신고할 수 없습니다.';
+    else if (language == 'ja') return '自分自身を報告することはできません。';
+    return 'Cannot report yourself.';   
   }
 
   String uncatchedCode(String code) {
