@@ -19,6 +19,8 @@ import 'package:chatpot_app/locales/root_locale_converter.dart';
 import 'package:chatpot_app/services/push_service.dart';
 import 'package:chatpot_app/storage/translation_cache_accessor.dart';
 import 'package:chatpot_app/storage/sqlite_translation_cache_accessor.dart';
+import 'package:chatpot_app/storage/block_accessor.dart';
+import 'package:chatpot_app/storage/sqlite_block_accessor.dart';
 
 Map<String, dynamic> _instances;
 
@@ -30,6 +32,7 @@ void initFactory() {
   _instances['LocaleConverter'] = RootLocaleConverter();
   _instances['MessagesAccessor'] = SqliteMessagesAccessor(dbName: 'messages.db');
   _instances['TranslationCacheAccessor'] = SqliteTranslationCacheAccessor(dbName: 'translation.db');
+  _instances['BlockAccessor'] = SqliteBlockAccessor(dbName: 'blocks.db');
 
   _instances['MemberRequester'] = _initMemberRequester();
   _instances['RoomRequester'] = _initRoomRequseter();
@@ -96,4 +99,5 @@ FirebaseMessaging firebaseMessaging() => _instances['FirebaseMessaging'];
 PushService pushService() => _instances['PushService'];
 MessagesAccessor messagesAccessor() => _instances['MessagesAccessor'];
 TranslationCacheAccessor translationCacheAccessor() => _instances['TranslationCacheAccessor'];
+BlockAccessor blockAccessor() => _instances['BlockAccessor'];
 ReportApi reportApi() => _instances['ReportApi'];

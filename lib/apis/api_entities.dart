@@ -2,7 +2,6 @@ import 'package:meta/meta.dart';
 import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/entities/message.dart';
-import 'package:chatpot_app/entities/report.dart';
 
 class TranslateParam {
   String key;
