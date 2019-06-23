@@ -19,7 +19,7 @@ class ReportApi {
     @required ReportType reportType,
     String comment
   }) async {
-    Map<String, dynamic> resp = await _requester.requestWithAuth(
+    await _requester.requestWithAuth(
       url: '/abuse/report',
       method: HttpMethod.POST,
       body: {
@@ -30,14 +30,17 @@ class ReportApi {
         'comment': comment == null ? '' : comment
       }
     );
-    print(resp);  
   }
 
   Future<List<ReportStatus>> requestMyReports({
     @required String memberToken
   }) async {
-    List<ReportStatus> list = List();
-    // TODO: to be implement
+    List<dynamic> rawList = await _requester.requestWithAuth(
+      url: "/abuse/$memberToken/reports",
+      method: HttpMethod.GET
+    );
+    List<ReportStatus> list = 
+      rawList.toList().map((elem) => ReportStatus.fromJson(elem)).toList();
     return list;
   }
 }

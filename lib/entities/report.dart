@@ -37,4 +37,7 @@ class ReportStatus {
     else if (reportStateExpr == 'DONE') return ReportState.DONE;
     return null;
   }
+
+  @override
+  String toString() => "$reportType $status";
 }

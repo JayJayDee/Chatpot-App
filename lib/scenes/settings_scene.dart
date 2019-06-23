@@ -14,6 +14,8 @@ import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/scenes/email_upgrade_scene.dart';
 import 'package:chatpot_app/scenes/password_change_scene.dart';
 import 'package:chatpot_app/scenes/about_scene.dart';
+import 'package:chatpot_app/scenes/report_history_scene.dart';
+import 'package:chatpot_app/scenes/block_history_scene.dart';
 
 @immutable
 class SettingsScene extends StatelessWidget implements EventReceivable {
@@ -78,11 +80,15 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
   }
 
   void _onMyReportsClicked(BuildContext context) async {
-    // TODO: show my reports scene
+    await Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
+      builder: (BuildContext context) => ReportHistoryScene()
+    ));
   }
 
   void _onMyBlocksClicked(BuildContext context) async {
-    // TODO: show my blocks scene
+    await Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
+      builder: (BuildContext context) => BlockHistoryScene()
+    ));
   }
 
   @override
