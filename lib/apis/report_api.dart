@@ -35,8 +35,14 @@ class ReportApi {
   Future<List<ReportStatus>> requestMyReports({
     @required String memberToken
   }) async {
+    List<dynamic> rawList = await _requester.requestWithAuth(
+      url: "/abuse/$memberToken/reports",
+      method: HttpMethod.GET
+    );
+
+    print(rawList); // TODO: to be fixed.
+    
     List<ReportStatus> list = List();
-    // TODO: to be implement
     return list;
   }
 }
