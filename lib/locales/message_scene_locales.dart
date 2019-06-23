@@ -85,4 +85,13 @@ Do you really want to block it?
     return '''Already blocked user.
 A list of previously blocked users can be found in the Settings menu > My Block History menu.''';   
   }
+
+  String get blockSuccess {
+    if (language == 'ko') return '''지정한 사용자 차단에 성공하였습니다.
+차단 목록은 설정 메뉴 > 내 차단 내역 메뉴에서 확인 할 수 있습니다.''';
+    else if (language == 'ja') return '''指定されたユーザーは正常にブロックされました。
+ブラックリストは、[設定]メニュー> [ブロック履歴]メニューにあります。''';
+    return '''The specified user was successfully blocked.
+The blacklist can be found in the Settings menu > My Block History menu.''';
+  }
 }

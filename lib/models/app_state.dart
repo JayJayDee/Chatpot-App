@@ -673,8 +673,14 @@ class AppState extends Model {
     notifyListeners();
 
     try {
+      var target = await memberApi().requestMemberPublic(
+        memberToken: targetMemberToken
+      );
+
       await blockAccessor().block(
         memberToken: targetMemberToken,
+        nick: target.nick,
+        avatar: target.avatar,
         note: note
       );
     } catch (err) {
