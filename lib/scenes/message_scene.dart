@@ -103,7 +103,11 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onMemberBlockSelected(BuildContext context, String targetMember) async {
-    print("block! $targetMember");
+    var result = await _showBlockConfirmDialog(context);
+
+    if (result == true) {
+      print('BLOCK GO!');
+    }
   }
 
   Future<void> _onMemberReportSelected(BuildContext context, String targetMember) async {
@@ -293,5 +297,25 @@ Future<bool> _showLeaveDialog(BuildContext context) async =>
           isDestructiveAction: true
         )
       ],
+    )
+  );
+
+Future<bool> _showBlockConfirmDialog(BuildContext context) async =>
+  showCupertinoDialog<bool>(
+    context: context,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: Text(locales().msgscene.blockTitle),
+      content: Text(locales().msgscene.blockConfirm),
+      actions: [
+        CupertinoDialogAction(
+          child: Text(locales().msgscene.doBlockButtonLabel),
+          onPressed: () => Navigator.pop(context, true)
+        ),
+        CupertinoDialogAction(
+          child: Text(locales().msgscene.cancelButtonLabel),
+          onPressed: () => Navigator.pop(context, false),
+          isDestructiveAction: true
+        )
+      ]
     )
   );

@@ -664,4 +664,20 @@ class AppState extends Model {
       throw err;  
     }
   }
+
+  Future<void> blockMember({
+    @required String targetMemberToken
+  }) async {
+    _loading = true;
+    notifyListeners();
+
+    try {
+      
+    } catch (err) {
+
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
+  }
 }
