@@ -107,9 +107,13 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onMemberReportSelected(BuildContext context, String targetMember) async {
+    final state = ScopedModel.of<AppState>(context);
     await Navigator.of(context).push(CupertinoPageRoute<void>(
       builder: (BuildContext context) => 
-        ReportScene(targetToken: targetMember)
+        ReportScene(
+          targetToken: targetMember,
+          roomToken: state.currentRoom.roomToken
+        )
     ));
   }
 

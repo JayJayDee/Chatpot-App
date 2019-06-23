@@ -77,4 +77,28 @@ The review can take up to 24 hours, and the results of processing the report can
     else if (language == 'ja') return 'レポートの種類を選択してください。';
     return 'Please select a report type.';
   }
+
+  String get commentFieldPlacholder {
+    if (language == 'ko') return '자세한 내용 (선택 사항)';
+    else if (language == 'ja') return '詳細（オプション）';
+    return 'Details (Optional)';
+  }
+
+  String get reportTypeSelectionRequired {
+    if (language == 'ko') return '신고 유형을 선택하셔야 합니다.';
+    else if (language == 'ja') return 'レポートの種類を選択する必要があります。';
+    return 'You must choice a report type.';
+  }
+
+  String get reportCompleted {
+    if (language == 'ko') return '''지정한 사용자에 대한 신고가 완료되었습니다.
+Chatpot 괸리자가 해당 신고에 대해 24시간 내에 검토하여 조치하고, 결과를 안내할 것입니다.
+내가 한 신고의 상태는 설정 메뉴 > 내 신고 내역 메뉴에서 확인할 수 있습니다.''';
+    else if (language == 'ja') return '''指定されたユーザーに対する報告は完了しました。
+Chatpot管理者は、24時間以内にあなたの苦情を確認して回答し、結果を案内します。
+レポートのステータスは、[設定]メニュー> [マイレポート履歴]メニューから確認できます。''';
+    return '''Your report for the specified user is completed.
+The Chatpot administrator will review and respond to your complaint within 24 hours and guide you through the results.
+You can check the status of your report from the Settings menu > My Report History menu.''';
+  }
 }
