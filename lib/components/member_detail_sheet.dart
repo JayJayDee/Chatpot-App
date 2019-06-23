@@ -172,17 +172,14 @@ Widget _buildAdditionalInfoField(MemberPublic member) =>
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Container(
-        child: Row(
-          children: [
-            Text(locales().getNick(member.nick),
-              style: TextStyle(
-                color: Styles.primaryFontColor,
-                fontSize: 17
-              )
-            ),
-            _genderIcon(member.gender)
-          ]
-        )
+        child: Text(locales().getNick(member.nick),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: Styles.primaryFontColor,
+            fontSize: 17
+          ),
+        ),
       ),
       Container(
         margin: EdgeInsets.only(left: 5),
@@ -193,6 +190,10 @@ Widget _buildAdditionalInfoField(MemberPublic member) =>
             fontWeight: FontWeight.normal
           )
         )
+      ),
+      Container(
+        margin: EdgeInsets.only(left: 5, top: 10),
+        child: _genderIcon(member.gender)
       )
     ]
   );
@@ -200,11 +201,11 @@ Widget _buildAdditionalInfoField(MemberPublic member) =>
 Icon _genderIcon(Gender g) =>
   g == Gender.M ? 
     Icon(MdiIcons.humanMale,
-      color: Styles.primaryFontColor,
+      color: Styles.secondaryFontColor,
     ) 
   :
   g == Gender.F ?
     Icon(MdiIcons.humanFemale,
-      color: Styles.primaryFontColor
+      color: Styles.secondaryFontColor
     ) 
   : null;

@@ -33,7 +33,7 @@ class ReportStatus {
 
   static ReportState _parseReportState(String reportStateExpr) {
     if (reportStateExpr == 'REPORTED') return ReportState.REPORTED;
-    else if (reportStateExpr == 'IN_PROGRES') return ReportState.IN_PROGRESS;
+    else if (reportStateExpr == 'IN_PROGRESS') return ReportState.IN_PROGRESS;
     else if (reportStateExpr == 'DONE') return ReportState.DONE;
     return null;
   }

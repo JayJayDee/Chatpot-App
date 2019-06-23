@@ -36,11 +36,29 @@ class ReportHistorySceneLocales {
   String reportDescription(ReportState state) {
     if (state == ReportState.REPORTED) {
       if (language == 'ko') {
-        return '''신고가 완료되었으며, Chatpot 운영자의 조회를 대기하고 있습니다. 최대 24시간 내에 조회 및 조치 결과를 알려드립니다.''';
+        return '''신고가 완료되었으며, Chatpot 관리자의 조회를 대기하고 있습니다. 최대 24시간 내에 조회 및 조치 결과를 알려드립니다.''';
       } else if (language == 'ja') {
-        return '申告完了';
+        return 'あなたのレポートは完成し、Chatpot管理者がそれを見るのを待っています。 お問い合わせやアクションの結果は24時間以内にお知らせします。';
       }
       return '''Your report has been completed and waiting for Chatpot administrator to view it. We will notify you of inquiries and action results within 24 hours.''';
+    }
+
+    else if (state == ReportState.IN_PROGRESS) {
+      if (language == 'ko') {
+        return '''Chatpot 관리자가 신고를 접수하였으며, 신고를 검토 중입니다. 24시간 내에 조치하고 결과를 알려드립니다.''';
+      } else if (language == 'ja') {
+        return 'Chatpot管理者があなたの苦情を受け取り、あなたの苦情を見直しています。 24時間以内に回答し、結果をお知らせします。';
+      }
+      return '''The Chatpot administrator has received your complaint and is reviewing your complaint. We will respond within 24 hours and inform you of the result.''';
+    }
+
+    else if (state == ReportState.DONE) {
+      if (language == 'ko') {
+        return '''신고에 대한 처리가 완료되었습니다. 앞으로도 적극적인 신고를 부탁드립니다.''';
+      } else if (language == 'ja') {
+        return 'あなたの報告は処理されました。 活発な報告をありがとう。';
+      }
+      return '''Your report has been processed. Thank you for your active reporting.''';
     }
     return '';
   }
