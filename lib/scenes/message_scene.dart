@@ -15,6 +15,7 @@ import 'package:chatpot_app/scenes/photo_detail_scene.dart';
 import 'package:chatpot_app/scenes/report_scene.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 import 'package:chatpot_app/components/member_detail_sheet.dart';
+import 'package:chatpot_app/storage/block_accessor.dart';
 
 typedef ImageClickCallback (String messageId);
 typedef ProfileClickCallback (String memberToken);
@@ -106,7 +107,14 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     var result = await _showBlockConfirmDialog(context);
 
     if (result == true) {
-      print('BLOCK GO!');
+      final state = ScopedModel.of<AppState>(context);
+      try {
+        await state.blockMember(targetMemberToken: targetMember);
+      } catch (err) {
+        if (err is AlreadyBlockedMemberError) {
+          showSimpleAlert(context, locales().msgscene.alreadyBlockedMember);
+        }
+      }
     }
   }
 

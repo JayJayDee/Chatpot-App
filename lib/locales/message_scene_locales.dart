@@ -76,4 +76,13 @@ Do you really want to block it?
     else if (language == 'ja') return 'キャンセル';
     return 'Cancel';
   }
+
+  String get alreadyBlockedMember {
+    if (language == 'ko') return '''이미 차단한 사용자입니다.
+이전에 차단한 사용자 목록은 설정 메뉴 > 내 차단 내역 메뉴에서 확인 할 수 있습니다.''';
+    else if (language == 'ja') return '''既にブロックされているユーザー
+以前にブロックされたユーザーのリストは、[設定]メニュー> [自分のブロック履歴]メニューにあります。''';
+    return '''Already blocked user.
+A list of previously blocked users can be found in the Settings menu > My Block History menu.''';   
+  }
 }
