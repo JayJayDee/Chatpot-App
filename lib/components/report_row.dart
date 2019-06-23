@@ -52,26 +52,39 @@ class ReportRow extends StatelessWidget {
                       fontSize: 15,
                       color: Styles.secondaryFontColor
                     )
-                  )
+                  ),
+                  report.status == ReportState.DONE ? 
+                    Container(
+                      margin: EdgeInsets.only(top: 7),
+                      child: Text(report.result,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Styles.primaryFontColor
+                        )
+                      ), 
+                    ) : Container()
                 ]
               )
             )
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(_buildStatusIcon(report.status),
-                color: Styles.secondaryFontColor,
-                size: 24
-              ),
-              Padding(padding: EdgeInsets.only(left: 5)),
-              Text(locales().reportHistoryScene.reportExpr(report.status),
-                style: TextStyle(
+          Container(
+            margin: EdgeInsets.only(left: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(_buildStatusIcon(report.status),
                   color: Styles.secondaryFontColor,
-                  fontSize: 16
+                  size: 24
                 ),
-              )
-            ]
+                Padding(padding: EdgeInsets.only(left: 5)),
+                Text(locales().reportHistoryScene.reportExpr(report.status),
+                  style: TextStyle(
+                    color: Styles.secondaryFontColor,
+                    fontSize: 16
+                  ),
+                )
+              ]
+            )
           )
         ]
       )
