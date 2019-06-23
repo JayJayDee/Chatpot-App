@@ -77,4 +77,16 @@ The review can take up to 24 hours, and the results of processing the report can
     else if (language == 'ja') return 'レポートの種類を選択してください。';
     return 'Please select a report type.';
   }
+
+  String get commentFieldPlacholder {
+    if (language == 'ko') return '자세한 내용 (선택 사항)';
+    else if (language == 'ja') return '詳細（オプション）';
+    return 'Details (Optional)';
+  }
+
+  String get reportTypeSelectionRequired {
+    if (language == 'ko') return '신고 유형을 선택하셔야 합니다.';
+    else if (language == 'ja') return 'レポートの種類を選択する必要があります。';
+    return 'You must choice a report type.';
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
@@ -31,6 +32,7 @@ class _ReportSceneState extends State<ReportScene> {
   bool _loading;
 
   ReportType _reportType;
+  String _comment;
 
   _ReportSceneState({
     @required String targetToken
@@ -38,6 +40,7 @@ class _ReportSceneState extends State<ReportScene> {
     _targetToken = targetToken;
     _loading = false;    
     _reportType = null;
+    _comment = '';
   }
 
   @override
@@ -131,6 +134,12 @@ class _ReportSceneState extends State<ReportScene> {
                   )
                 ),
                 Container(
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: _buildCommentField(context,
+                    callback: (String inputed) => _comment = inputed
+                  )
+                ),
+                Container(
                   margin: EdgeInsets.only(left: 10, right: 10, top: 20),
                   child: _buildReportButton(context,
                     loading: _loading,
@@ -212,6 +221,28 @@ Widget _buildTargetMemberWidget(BuildContext context, {
         )
       ]
     );
+
+typedef TextChangedCallback (String inputed);
+
+Widget _buildCommentField(BuildContext context, {
+  @required TextChangedCallback callback
+}) => CupertinoTextField(
+  prefix: Icon(
+    MdiIcons.text,
+    color: Styles.secondaryFontColor,
+    size: 28.0
+  ),
+  padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
+  placeholder: locales().reportScene.commentFieldPlacholder,
+  decoration: BoxDecoration(
+    border: Border(
+      bottom: BorderSide(
+        width: 0.0,
+        color: Styles.secondaryFontColor
+      )
+    )
+  )
+);
 
 Widget _buildReportButton(BuildContext context, {
   @required bool loading,
