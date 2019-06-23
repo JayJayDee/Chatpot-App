@@ -20,7 +20,8 @@ import 'package:chatpot_app/locales/password_change_scene_locales.dart';
 import 'package:chatpot_app/locales/member_detail_sheet_locales.dart';
 import 'package:chatpot_app/locales/about_scene_locales.dart';
 import 'package:chatpot_app/locales/eula_scene_locales.dart';
-import 'package:chatpot_app/locales/report_scene_locales.dart';
+import 'package:chatpot_app/locales/report_history_scene_locales.dart';
+import 'package:chatpot_app/locales/block_history_scene_locales.dart';
 
 class RootLocaleConverter {
   String _language;
@@ -43,6 +44,8 @@ class RootLocaleConverter {
   AboutSceneLocales _aboutScene;
   EulaSceneLocales _eulaScene;
   ReportSceneLocales _reportScene;
+  ReportHistorySceneLocales _reportHistoryScene;
+  BlockHistorySceneLocales _blockHistoryScene;
 
   HomeSceneLocales get home => _home;
   MessageLocales get message => _message;
@@ -63,7 +66,8 @@ class RootLocaleConverter {
   AboutSceneLocales get aboutScene => _aboutScene;
   EulaSceneLocales get eulaScene => _eulaScene;
   ReportSceneLocales get reportScene => _reportScene;
-
+  ReportHistorySceneLocales get reportHistoryScene => _reportHistoryScene;
+  BlockHistorySceneLocales get blockHistoryScene => _blockHistoryScene;
 
   String get langauge => _language;
 
@@ -89,6 +93,8 @@ class RootLocaleConverter {
     _aboutScene = AboutSceneLocales(root: this, language: _language);
     _eulaScene = EulaSceneLocales(root: this, language: _language);
     _reportScene = ReportSceneLocales(root: this, language: _language);
+    _reportHistoryScene = ReportHistorySceneLocales(root: this, language: _language);
+    _blockHistoryScene = BlockHistorySceneLocales(root: this, language: _language);
   }
 
   String getNick(Nick nick) {

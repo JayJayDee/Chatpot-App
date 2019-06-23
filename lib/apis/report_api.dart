@@ -19,7 +19,7 @@ class ReportApi {
     @required ReportType reportType,
     String comment
   }) async {
-    Map<String, dynamic> resp = await _requester.requestWithAuth(
+    await _requester.requestWithAuth(
       url: '/abuse/report',
       method: HttpMethod.POST,
       body: {
@@ -30,7 +30,6 @@ class ReportApi {
         'comment': comment == null ? '' : comment
       }
     );
-    print(resp);  
   }
 
   Future<List<ReportStatus>> requestMyReports({
