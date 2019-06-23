@@ -22,6 +22,7 @@ class ErrorMessageLocales {
     else if (code == 'SIMPLE_ACCOUNT_PWCHANGE_DENIED') return this.simpleAccountTriesPwChange;
     else if (code == 'INVALID_MAX_ATTENDEE') return this.invalidMaxAttendee;
     else if (code == 'NETWORK_ERROR') return this.networkError;
+    else if (code == 'ALREADY_REPORTED') return this.alreadyReported;
     else if (code == 'MEMBER_BLOCKED') return this.memberBlocked(message);
     return uncatchedCode(code);
   }
@@ -125,6 +126,15 @@ The reasons for the suspension are as follows: ''';
       else if (language == 'ja') return 'その他の規約への違反';
       return 'Other terms violation';
     }
+  }
+
+  String get alreadyReported {
+    if (language == 'ko') return '''이미 신고한 내용이 존재합니다.
+신고했던 내역은 설정 메뉴 > 내 신고 내역 메뉴에서 확인할 수 있습니다.''';
+    else if (language == 'ja') return '''このユーザーを既に報告しました。
+報告した内容は、[設定]メニュー> [私の報告履歴]メニューで確認できます。''';
+    return '''You have already reported this user.
+You can see what you reported in the Settings menu > My Report History menu.''';
   }
 
   String uncatchedCode(String code) {

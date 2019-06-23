@@ -1,4 +1,5 @@
 import 'package:chatpot_app/apis/api_errors.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -9,24 +10,29 @@ import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/entities/report.dart';
 import 'package:chatpot_app/components/report_type_selector.dart';
 import 'package:chatpot_app/styles.dart';
+import 'package:chatpot_app/models/app_state.dart';
 
 class ReportScene extends StatefulWidget {
 
   final String targetToken;
+  final String roomToken;
 
   ReportScene({
-    this.targetToken
+    @required this.targetToken,
+    @required this.roomToken
   });
 
   @override
   State createState() =>
     _ReportSceneState(
-      targetToken: targetToken
+      targetToken: targetToken,
+      roomToken: roomToken
     );
 }
 
 class _ReportSceneState extends State<ReportScene> {
 
+  String _roomToken;
   String _targetToken;
   MemberPublic _targetMember;
   bool _loading;
@@ -35,9 +41,11 @@ class _ReportSceneState extends State<ReportScene> {
   String _comment;
 
   _ReportSceneState({
-    @required String targetToken
+    @required String targetToken,
+    @required String roomToken
   }) {
     _targetToken = targetToken;
+    _roomToken = roomToken;
     _loading = false;    
     _reportType = null;
     _comment = '';
@@ -65,12 +73,28 @@ class _ReportSceneState extends State<ReportScene> {
   }
 
   void _onSubmitButtonClicked(BuildContext context) async {
+    if (_reportType == null) {
+      await showSimpleAlert(context, locales().reportScene.reportTypeSelectionRequired);
+      return;
+    }
+
     setState(() {
       _loading = true;
     });
 
     try {
-      // TODO: api call & exception handling.
+      final state = ScopedModel.of<AppState>(context);
+      await reportApi().requestReport(
+        memberToken: state.member.token,
+        targetToken: _targetToken,
+        roomToken: _roomToken,
+        reportType: _reportType,
+        comment: _comment
+      );
+      await showSimpleAlert(context, locales().reportScene.reportCompleted,
+        title: locales().successTitle
+      );
+      Navigator.of(context).pop();
     } catch (err) {
       if (err is ApiFailureError) {
         await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
@@ -79,9 +103,11 @@ class _ReportSceneState extends State<ReportScene> {
         throw err;
       }
     } finally {
-      setState(() {
-        _loading = false;
-      });
+      if (this.mounted) {
+        setState(() {
+          _loading = false;
+        });
+      }
     }
   }
 
@@ -241,7 +267,8 @@ Widget _buildCommentField(BuildContext context, {
         color: Styles.secondaryFontColor
       )
     )
-  )
+  ),
+  onChanged: callback,
 );
 
 Widget _buildReportButton(BuildContext context, {
