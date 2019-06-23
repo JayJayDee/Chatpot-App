@@ -8,6 +8,7 @@ import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/report.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 import 'package:chatpot_app/components/report_row.dart';
+import 'package:chatpot_app/styles.dart';
 
 class ReportHistoryScene extends StatefulWidget {
 
@@ -68,7 +69,8 @@ class _ReportHistorySceneState extends State<ReportHistoryScene> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            ListView(children: widgets),
+            _loading == false && _reports.length == 0 ? 
+              _buildEmptyIndicator() : ListView(children: widgets),
             _buildProgress(context, loading: _loading)
           ]
         )
@@ -76,6 +78,28 @@ class _ReportHistorySceneState extends State<ReportHistoryScene> {
     );
   }
 }
+
+Widget _buildEmptyIndicator() =>
+  Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 100,
+          height: 90,
+          child: Image(
+            image: AssetImage('assets/chatpot-logo-only-800-grayscale.png')
+          )
+        ),
+        Text(locales().reportHistoryScene.emptyReports,
+          style: TextStyle(
+            color: Styles.primaryFontColor,
+            fontSize: 16
+          )
+        )
+      ]
+    ),
+  );
 
 List<Widget> _buildReportRows(List<ReportStatus> reports) =>
   reports.map((r) =>

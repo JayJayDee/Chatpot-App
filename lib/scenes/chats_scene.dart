@@ -145,9 +145,12 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(CupertinoIcons.battery_75_percent, // TODO: change icon
-            size: 60.0,
-            color: Styles.secondaryFontColor
+          Container(
+            width: 100,
+            height: 90,
+            child: Image(
+              image: AssetImage('assets/chatpot-logo-only-800-grayscale.png')
+            )
           ),
           Padding(padding: EdgeInsets.only(top: 10)),
           Text(locales().chats.emptyRooms,
