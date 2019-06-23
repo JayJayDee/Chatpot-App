@@ -5,8 +5,6 @@ import 'package:chatpot_app/storage/block_accessor.dart';
 import 'package:chatpot_app/entities/block.dart';
 import 'package:sqflite/sqflite.dart';
 
-class AlreadyBlockedMemberError {}
-
 class SqliteBlockAccessor implements BlockAccessor {
 
   final String dbName;
@@ -48,7 +46,10 @@ class SqliteBlockAccessor implements BlockAccessor {
     return database;
   }
 
-  Future<void> block(BlockEntry entry) async {
+  Future<void> block({
+    @required String memberToken,
+    String note
+  }) async {
     int now = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     String insertQuery = """
       INSERT INTO member_blocks_$dbVersion
@@ -57,8 +58,8 @@ class SqliteBlockAccessor implements BlockAccessor {
         (?, ?, ?)
     """;
     List<dynamic> values = [
-      entry.memberToken,
-      entry.note,
+      memberToken,
+      note,
       now
     ];
     var db = await _getDb();
