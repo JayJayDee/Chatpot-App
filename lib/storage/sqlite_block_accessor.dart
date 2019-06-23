@@ -35,7 +35,7 @@ class SqliteBlockAccessor implements BlockAccessor {
             nick_ja VARCHAR(30) NOT NULL,
             nick_ko VARCHAR(30) NOT NULL,
             avatar_thumbnail VARCHAR(200) NOT NULL,
-            note VARCHAR(200) NOT NULL,
+            note VARCHAR(200) NULL,
             timestamp INTEGER NOT NULL
           );
         """;
@@ -76,7 +76,18 @@ class SqliteBlockAccessor implements BlockAccessor {
       avatar.thumb
     ];
     var db = await _getDb();
-    await db.rawInsert(insertQuery, values);
+    try {
+      await db.rawInsert(insertQuery, values);
+    } catch (err) {
+      if (err is DatabaseException) {
+        if (err.isUniqueConstraintError()) {
+          throw new AlreadyBlockedMemberError();
+        }
+        throw err;
+      } else {
+        throw err;
+      }
+    }
   }
 
   Future<void> unblock(String memberToken) async {

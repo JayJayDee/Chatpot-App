@@ -116,6 +116,8 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
       } catch (err) {
         if (err is AlreadyBlockedMemberError) {
           showSimpleAlert(context, locales().msgscene.alreadyBlockedMember);
+        } else {
+          throw err;
         }
       }
     }
