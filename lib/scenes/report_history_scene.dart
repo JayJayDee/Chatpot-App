@@ -7,6 +7,7 @@ import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/report.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
+import 'package:chatpot_app/components/report_row.dart';
 
 class ReportHistoryScene extends StatefulWidget {
 
@@ -56,6 +57,8 @@ class _ReportHistorySceneState extends State<ReportHistoryScene> {
   Widget build(BuildContext context) {
     List<Widget> widgets = List();
 
+    widgets.addAll(_buildReportRows(this._reports));
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         previousPageTitle: locales().setting.title,
@@ -65,9 +68,7 @@ class _ReportHistorySceneState extends State<ReportHistoryScene> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            ListView(
-              children: []
-            ),
+            ListView(children: widgets),
             _buildProgress(context, loading: _loading)
           ]
         )
@@ -75,6 +76,11 @@ class _ReportHistorySceneState extends State<ReportHistoryScene> {
     );
   }
 }
+
+List<Widget> _buildReportRows(List<ReportStatus> reports) =>
+  reports.map((r) =>
+    ReportRow(report: r)
+  ).toList();
 
 Widget _buildProgress(BuildContext context, {
   @required bool loading
