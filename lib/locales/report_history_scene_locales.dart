@@ -64,4 +64,10 @@ $time""";
     else if (language == 'ja') return "$reportTypeに対する申告";
     return "Report about $reportType";
   }
+
+  String get emptyReports {
+    if (language == 'ko') return '신고내역이 없습니다.';
+    else if (language == 'ja') return '利用可能な報告はありません';
+    return 'No reportings available';
+  }
 }
