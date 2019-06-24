@@ -38,7 +38,9 @@ class _BlockHistorySceneState extends State<BlockHistoryScene> {
   }
 
   void _onClickBlockEntryRow(BuildContext context, BlockEntry entry) async {
-    await _showMenuSheet(context, entry: entry);
+    await _showMenuSheet(context,
+      entry: entry
+    );
   }
   
   @override
@@ -86,10 +88,15 @@ Future<void> _showMenuSheet(BuildContext context, {
     context: context,
     builder: (BuildContext context) =>
       CupertinoActionSheet(
-        message: Text('asf'),
+        message: Text(locales().blockHistoryScene.menuText(entry),
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.normal,
+          )
+        ),
         actions: [
           CupertinoActionSheetAction(
-            child: Text('호옹',
+            child: Text(locales().blockHistoryScene.reportButtonLabel,
               style: TextStyle(
                 fontSize: 16.0
               )
@@ -99,7 +106,7 @@ Future<void> _showMenuSheet(BuildContext context, {
             }
           ),
           CupertinoActionSheetAction(
-            child: Text('호옹',
+            child: Text(locales().blockHistoryScene.unblockButtonLabel,
               style: TextStyle(
                 fontSize: 16.0
               )
