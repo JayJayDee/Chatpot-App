@@ -21,6 +21,7 @@ class AppState extends Model {
   List<Room> _recentRooms;
   List<Room> _crowdedRooms;
   List<MyRoom> _myRooms;
+  List<String> _bannedTokens;
   Member _member;
   bool _loading;
 
@@ -33,6 +34,7 @@ class AppState extends Model {
 
     _recentRooms = <Room>[];
     _crowdedRooms = <Room>[];
+    _bannedTokens = [];
   }
 
   Member get member => _member;
@@ -225,6 +227,10 @@ class AppState extends Model {
     _loading = true;
     notifyListeners();
 
+    _bannedTokens = 
+      (await blockAccessor().fetchAllBlockEntries())
+        .map((b) => b.memberToken).toList();
+
     var resp = await roomApi().requestMyRooms(memberToken: _member.token);
     _myRooms = resp;
     _loading = false;
@@ -261,6 +267,18 @@ class AppState extends Model {
     @required MyRoom room
   }) async {
     _currentRoom = room;
+    _currentRoom.messages.updateBannedTokens(_bannedTokens);
+  }
+
+  Future<void> updateBanList() async {
+    _bannedTokens = 
+      (await blockAccessor().fetchAllBlockEntries())
+        .map((b) => b.memberToken).toList();
+
+    if (_currentRoom != null) {
+      _currentRoom.messages.updateBannedTokens(_bannedTokens);
+    }
+    notifyListeners();
   }
 
   Future<void> fetchMoreMessages({

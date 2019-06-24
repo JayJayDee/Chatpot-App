@@ -117,6 +117,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
           await showSimpleAlert(context, locales().msgscene.blockSuccess,
             title: locales().successTitle
           );
+          state.updateBanList();
         }
       } catch (err) {
         if (err is AlreadyBlockedMemberError) {
