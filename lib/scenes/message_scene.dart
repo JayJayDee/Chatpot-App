@@ -109,10 +109,15 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     if (result == true) {
       final state = ScopedModel.of<AppState>(context);
       try {
-        await state.blockMember(targetMemberToken: targetMember);
-        await showSimpleAlert(context, locales().msgscene.blockSuccess,
-          title: locales().successTitle
-        );
+        if (state.currentRoom != null) {
+          await state.blockMember(
+            roomToken: state.currentRoom.roomToken,
+            targetMemberToken: targetMember,
+          );
+          await showSimpleAlert(context, locales().msgscene.blockSuccess,
+            title: locales().successTitle
+          );
+        }
       } catch (err) {
         if (err is AlreadyBlockedMemberError) {
           showSimpleAlert(context, locales().msgscene.alreadyBlockedMember);

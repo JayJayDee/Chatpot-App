@@ -9,7 +9,7 @@ import 'package:sqflite/sqflite.dart';
 class SqliteBlockAccessor implements BlockAccessor {
 
   final String dbName;
-  final int dbVersion = 3;
+  final int dbVersion = 4;
   Database _db;
 
   SqliteBlockAccessor({
@@ -31,6 +31,7 @@ class SqliteBlockAccessor implements BlockAccessor {
           CREATE TABLE member_blocks_$dbVersion (
             no INTEGER PRIMARY KEY AUTOINCREMENT,
             member_token VARCHAR(80) NOT NULL,
+            room_token VARCHAR(100) NOT NULL,
             region VARCHAR(30) NOT NULL,
             nick_en VARCHAR(30) NOT NULL,
             nick_ja VARCHAR(30) NOT NULL,
@@ -54,6 +55,7 @@ class SqliteBlockAccessor implements BlockAccessor {
 
   Future<void> block({
     @required String memberToken,
+    @required String roomToken,
     @required String region,
     @required Nick nick,
     @required Avatar avatar,
@@ -62,14 +64,15 @@ class SqliteBlockAccessor implements BlockAccessor {
     int now = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     String insertQuery = """
       INSERT INTO member_blocks_$dbVersion
-        (member_token, region, note, timestamp,
+        (member_token, room_token, region, note, timestamp,
           nick_en, nick_ja, nick_ko,
           avatar_thumbnail)
       VALUES
-        (?, ?, ?, ?, ?, ?, ?, ?)
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
     """;
     List<dynamic> values = [
       memberToken,
+      roomToken,
       region,
       note,
       now,
@@ -94,7 +97,15 @@ class SqliteBlockAccessor implements BlockAccessor {
   }
 
   Future<void> unblock(String memberToken) async {
-    // TODO: to be implemented
+    String deleteQuery = """
+      DELETE FROM
+        member_blocks_$dbVersion
+      WHERE
+        member_token=?
+    """;
+    List<dynamic> values = [ memberToken ];
+    var db = await _getDb();
+    await db.rawInsert(deleteQuery, values);
   }
 
   Future<List<BlockEntry>> fetchAllBlockEntries() async {
