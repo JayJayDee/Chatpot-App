@@ -27,12 +27,6 @@ Future<void> showMemberDetailSheet(BuildContext context, {
       CupertinoActionSheet(
         message: _MemberDetailSheet(memberToken: memberToken),
         actions: [
-          // CupertinoActionSheetAction(
-          //   child: Text(locales().memberDetailSheet.menuOneononeChat,
-          //     style: popupMenuFontStyle
-          //   ),
-          //   onPressed: () {},
-          // ), // TODO: to be implmented in next time.
           CupertinoActionSheetAction(
             child: Text(locales().memberDetailSheet.menuBlockUser,
               style: popupMenuFontStyle

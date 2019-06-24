@@ -667,6 +667,7 @@ class AppState extends Model {
 
   Future<void> blockMember({
     @required String targetMemberToken,
+    @required String roomToken,
     String note
   }) async {
     _loading = true;
@@ -679,6 +680,7 @@ class AppState extends Model {
 
       await blockAccessor().block(
         memberToken: targetMemberToken,
+        roomToken: roomToken,
         region: target.region,
         nick: target.nick,
         avatar: target.avatar,

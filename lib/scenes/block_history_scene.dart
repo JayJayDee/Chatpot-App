@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatpot_app/factory.dart';
@@ -35,13 +36,20 @@ class _BlockHistorySceneState extends State<BlockHistoryScene> {
       _entries = entries;
     });
   }
+
+  void _onClickBlockEntryRow(BuildContext context, BlockEntry entry) async {
+    await _showMenuSheet(context, entry: entry);
+  }
   
   @override
   Widget build(BuildContext context) {
     List<Widget> widgets = List();
 
     widgets.addAll(_entries.map((e) =>
-      _buildBlockRow(context, entry: e)
+      _buildBlockRow(context,
+        entry: e,
+        callback: (BlockEntry entry) => _onClickBlockEntryRow(context, entry)
+      )
     ).toList());
 
     return CupertinoPageScaffold(
@@ -71,8 +79,44 @@ Widget _buildProgress(BuildContext context, {
   loading == true ? CupertinoActivityIndicator() :
   Container();
 
-Widget _buildBlockRow(BuildContext conteext, {
+Future<void> _showMenuSheet(BuildContext context, {
   @required BlockEntry entry
+}) async =>
+  showCupertinoModalPopup<void>(
+    context: context,
+    builder: (BuildContext context) =>
+      CupertinoActionSheet(
+        message: Text('asf'),
+        actions: [
+          CupertinoActionSheetAction(
+            child: Text('호옹',
+              style: TextStyle(
+                fontSize: 16.0
+              )
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }
+          ),
+          CupertinoActionSheetAction(
+            child: Text('호옹',
+              style: TextStyle(
+                fontSize: 16.0
+              )
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }
+          )
+        ]
+      )
+  );
+
+typedef BlockEntryCallback (BlockEntry entry);
+
+Widget _buildBlockRow(BuildContext conteext, {
+  @required BlockEntry entry,
+  @required BlockEntryCallback callback
 }) =>
   Container(
     decoration: BoxDecoration(
@@ -84,62 +128,66 @@ Widget _buildBlockRow(BuildContext conteext, {
       )
     ),
     padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-    child: Row(
-      children: [
-        Container(
-          width: 60,
-          height: 60,
-          child: Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(30.0),
-                child: CachedNetworkImage(
-                  imageUrl: entry.avatar.thumb,
-                  placeholder: (context, url) => CupertinoActivityIndicator(),
-                  width: 60,
-                  height: 60,
-                )
-              ),
-              Positioned(
-                child: Container(
-                  width: 30,
-                  height: 15,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Styles.primaryFontColor),
-                    image: DecorationImage(
-                      image: locales().getFlagImage(entry.region),
-                      fit: BoxFit.cover
-                    )
-                  ),
-                )
-              )
-            ]
-          )
-        ),
-        Expanded(
-          child: Container(
-            margin: EdgeInsets.only(left: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    child: CupertinoButton(
+      padding: EdgeInsets.all(0),
+      onPressed: () => callback(entry),
+      child: Row(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            child: Stack(
+              alignment: Alignment.bottomRight,
               children: [
-                Text(locales().getNick(entry.nick),
-                  style: TextStyle(
-                    color: Styles.primaryFontColor,
-                    fontSize: 16
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(30.0),
+                  child: CachedNetworkImage(
+                    imageUrl: entry.avatar.thumb,
+                    placeholder: (context, url) => CupertinoActivityIndicator(),
+                    width: 60,
+                    height: 60,
                   )
                 ),
-                Text(locales().blockHistoryScene.blockDate(entry.blockDate),
-                  style: TextStyle(
-                    color: Styles.secondaryFontColor,
-                    fontSize: 15
+                Positioned(
+                  child: Container(
+                    width: 30,
+                    height: 15,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Styles.primaryFontColor),
+                      image: DecorationImage(
+                        image: locales().getFlagImage(entry.region),
+                        fit: BoxFit.cover
+                      )
+                    ),
                   )
-                ),
+                )
               ]
             )
+          ),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(left: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(locales().getNick(entry.nick),
+                    style: TextStyle(
+                      color: Styles.primaryFontColor,
+                      fontSize: 16
+                    )
+                  ),
+                  Text(locales().blockHistoryScene.blockDate(entry.blockDate),
+                    style: TextStyle(
+                      color: Styles.secondaryFontColor,
+                      fontSize: 15
+                    )
+                  ),
+                ]
+              )
+            )
           )
-        )
-      ]
+        ]
+      )
     )
   );
 

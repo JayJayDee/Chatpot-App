@@ -2,6 +2,7 @@ import 'package:chatpot_app/entities/member.dart';
 
 class BlockEntry {
   String _memberToken;
+  String _roomToken;
   String _note;
   String _region;
   Nick _nick;
@@ -16,6 +17,7 @@ class BlockEntry {
   }
 
   String get memberToken => _memberToken;
+  String get roomToken => _roomToken;
   String get note => _note;
   Nick get nick => _nick;
   Avatar get avatar => _avatar;
@@ -25,6 +27,7 @@ class BlockEntry {
   factory BlockEntry.fromMap(Map<String, dynamic> map) {
     BlockEntry entry = BlockEntry();
     entry._memberToken = map['member_token'];
+    entry._roomToken = map['room_token'];
     entry._note = map['note'];
     entry._nick.en = map['nick_en'];
     entry._nick.ko = map['nick_ko'];
