@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:chatpot_app/entities/member.dart';
 
 class BlockEntry {
@@ -16,6 +15,8 @@ class BlockEntry {
 
   String get memberToken => _memberToken;
   String get note => _note;
+  Nick get nick => _nick;
+  Avatar get avatar => _avatar;
 
   factory BlockEntry.fromMap(Map<String, dynamic> map) {
     BlockEntry entry = BlockEntry();
