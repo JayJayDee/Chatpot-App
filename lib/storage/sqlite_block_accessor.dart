@@ -97,7 +97,15 @@ class SqliteBlockAccessor implements BlockAccessor {
   }
 
   Future<void> unblock(String memberToken) async {
-    // TODO: to be implemented
+    String deleteQuery = """
+      DELETE FROM
+        member_blocks_$dbVersion
+      WHERE
+        member_token=?
+    """;
+    List<dynamic> values = [ memberToken ];
+    var db = await _getDb();
+    await db.rawInsert(deleteQuery, values);
   }
 
   Future<List<BlockEntry>> fetchAllBlockEntries() async {

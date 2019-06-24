@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:chatpot_app/components/simple_alert_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatpot_app/factory.dart';
@@ -55,7 +56,38 @@ class _BlockHistorySceneState extends State<BlockHistoryScene> {
   }
 
   void _onClickUnblockMenu(BuildContext context, BlockEntry entry) async {
+    bool unblock = await showCupertinoDialog<bool>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: Text(locales().blockHistoryScene.unblockDialogTitle),
+        content: Text(locales().blockHistoryScene.unblockDialogContent),
+        actions: [
+          CupertinoDialogAction(
+            child: Text(locales().blockHistoryScene.unblockDialogYes),
+            onPressed: () => Navigator.pop(context, true),
+          ),
+          CupertinoDialogAction(
+            child: Text(locales().blockHistoryScene.unblockDialogCancel),
+            onPressed: () => Navigator.pop(context, false),
+            isDestructiveAction: true,
+          )
+        ]
+      )
+    );
 
+    if (unblock == true) {
+      setState(() => _loading = true);
+      try {
+        await blockAccessor().unblock(entry.memberToken);
+        await showSimpleAlert(context, locales().blockHistoryScene.unblockCompleted,
+          title: locales().successTitle
+        );
+        this._loadBlockHistories();
+      } catch (err) {
+        setState(() => _loading = false);
+        throw err;
+      }
+    }
   }
   
   @override
