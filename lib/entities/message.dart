@@ -187,6 +187,7 @@ class RoomMessages {
   List<Message> _queuedMessages;
   bool moreMessage;
   Map<String, int> _existMap;
+  List<String> _bannedTokens;
 
   RoomMessages() {
     _offset = 0;
@@ -195,11 +196,28 @@ class RoomMessages {
     _queuedMessages = List();
     moreMessage = true;
     _existMap = Map();
+    _bannedTokens = List();
   }
 
-  List<Message> get messages => _messages;
+  List<Message> get messages {
+    List<Message> filtered = _messages.where((m) {
+      if (m.from == null) return true;
+        
+      if (_bannedTokens.where((t) => 
+            t == m.from.token).length == 0) {
+        return true;
+      }
+      return false;
+    }).toList();
+    return filtered;
+  }
+
   int get offset => _offset;
   int get notViewed => _notViewed;
+
+  void updateBannedTokens(List<String> bannedTokens) {
+    _bannedTokens = bannedTokens;
+  }
 
   Message findMessage(messageId) {
     List<Message> found = 
