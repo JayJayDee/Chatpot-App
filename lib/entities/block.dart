@@ -3,8 +3,10 @@ import 'package:chatpot_app/entities/member.dart';
 class BlockEntry {
   String _memberToken;
   String _note;
+  String _region;
   Nick _nick;
   Avatar _avatar;
+  DateTime _blockDate;
 
   BlockEntry() {
     _memberToken = null;
@@ -17,6 +19,8 @@ class BlockEntry {
   String get note => _note;
   Nick get nick => _nick;
   Avatar get avatar => _avatar;
+  String get region => _region;
+  DateTime get blockDate => _blockDate;
 
   factory BlockEntry.fromMap(Map<String, dynamic> map) {
     BlockEntry entry = BlockEntry();
@@ -26,6 +30,8 @@ class BlockEntry {
     entry._nick.ko = map['nick_ko'];
     entry._nick.ja = map['nick_ja'];
     entry._avatar.thumb = map['avatar_thumbnail'];
+    entry._region = map['region'];
+    entry._blockDate = DateTime.fromMillisecondsSinceEpoch(map['timestamp'] * 1000);
     return entry;
   }
 }

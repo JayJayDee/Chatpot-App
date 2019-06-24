@@ -9,7 +9,7 @@ import 'package:sqflite/sqflite.dart';
 class SqliteBlockAccessor implements BlockAccessor {
 
   final String dbName;
-  final int dbVersion = 2;
+  final int dbVersion = 3;
   Database _db;
 
   SqliteBlockAccessor({
@@ -31,6 +31,7 @@ class SqliteBlockAccessor implements BlockAccessor {
           CREATE TABLE member_blocks_$dbVersion (
             no INTEGER PRIMARY KEY AUTOINCREMENT,
             member_token VARCHAR(80) NOT NULL,
+            region VARCHAR(30) NOT NULL,
             nick_en VARCHAR(30) NOT NULL,
             nick_ja VARCHAR(30) NOT NULL,
             nick_ko VARCHAR(30) NOT NULL,
@@ -53,6 +54,7 @@ class SqliteBlockAccessor implements BlockAccessor {
 
   Future<void> block({
     @required String memberToken,
+    @required String region,
     @required Nick nick,
     @required Avatar avatar,
     String note
@@ -60,14 +62,15 @@ class SqliteBlockAccessor implements BlockAccessor {
     int now = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     String insertQuery = """
       INSERT INTO member_blocks_$dbVersion
-        (member_token, note, timestamp,
+        (member_token, region, note, timestamp,
           nick_en, nick_ja, nick_ko,
           avatar_thumbnail)
       VALUES
-        (?, ?, ?, ?, ?, ?, ?)
+        (?, ?, ?, ?, ?, ?, ?, ?)
     """;
     List<dynamic> values = [
       memberToken,
+      region,
       note,
       now,
       nick.en,

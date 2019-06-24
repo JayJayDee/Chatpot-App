@@ -101,20 +101,42 @@ Widget _buildBlockRow(BuildContext conteext, {
                   height: 60,
                 )
               ),
-              // Positioned(
-              //   child: Container(
-              //     width: 30,
-              //     height: 15,
-              //     decoration: BoxDecoration(
-              //       border: Border.all(color: Styles.primaryFontColor),
-              //       image: DecorationImage(
-              //         image: locales().getFlagImage(entry.),
-              //         fit: BoxFit.cover
-              //       )
-              //     ),
-              //   )
-              // )
+              Positioned(
+                child: Container(
+                  width: 30,
+                  height: 15,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Styles.primaryFontColor),
+                    image: DecorationImage(
+                      image: locales().getFlagImage(entry.region),
+                      fit: BoxFit.cover
+                    )
+                  ),
+                )
+              )
             ]
+          )
+        ),
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.only(left: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(locales().getNick(entry.nick),
+                  style: TextStyle(
+                    color: Styles.primaryFontColor,
+                    fontSize: 16
+                  )
+                ),
+                Text(locales().blockHistoryScene.blockDate(entry.blockDate),
+                  style: TextStyle(
+                    color: Styles.secondaryFontColor,
+                    fontSize: 15
+                  )
+                ),
+              ]
+            )
           )
         )
       ]
@@ -133,9 +155,9 @@ Widget _buildEmptyIndicator() =>
             image: AssetImage('assets/chatpot-logo-only-800-grayscale.png')
           )
         ),
-        Text(locales().reportHistoryScene.emptyReports,
+        Text(locales().blockHistoryScene.emptyBlocks,
           style: TextStyle(
-            color: Styles.primaryFontColor,
+            color: Styles.secondaryFontColor,
             fontSize: 16
           )
         )

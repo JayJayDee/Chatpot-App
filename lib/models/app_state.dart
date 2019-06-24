@@ -679,6 +679,7 @@ class AppState extends Model {
 
       await blockAccessor().block(
         memberToken: targetMemberToken,
+        region: target.region,
         nick: target.nick,
         avatar: target.avatar,
         note: note
