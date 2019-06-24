@@ -8,6 +8,7 @@ class AlreadyBlockedMemberError {}
 abstract class BlockAccessor {
   Future<void> block({
     @required String memberToken,
+    @required String region,
     @required Nick nick,
     @required Avatar avatar,
     String note
