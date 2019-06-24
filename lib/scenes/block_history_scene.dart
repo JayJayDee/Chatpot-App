@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/entities/block.dart';
+import 'package:chatpot_app/scenes/report_scene.dart';
 
 class BlockHistoryScene extends StatefulWidget {
 
@@ -37,10 +38,24 @@ class _BlockHistorySceneState extends State<BlockHistoryScene> {
     });
   }
 
-  void _onClickBlockEntryRow(BuildContext context, BlockEntry entry) async {
-    await _showMenuSheet(context,
-      entry: entry
+  void _onClickBlockEntryRow(BuildContext context, BlockEntry entry) =>
+    _showMenuSheet(context,
+      entry: entry,
+      unblockCallback: (BlockEntry entry) => _onClickUnblockMenu(context, entry),
+      reportCallback: (BlockEntry entry) => _onClickReportMenu(context, entry)
     );
+
+  void _onClickReportMenu(BuildContext context, BlockEntry entry) async {
+    await Navigator.of(context).push(CupertinoPageRoute<bool>(
+      builder: (BuildContext context) => ReportScene(
+        roomToken: entry.roomToken,
+        targetToken: entry.memberToken,
+      )
+    ));
+  }
+
+  void _onClickUnblockMenu(BuildContext context, BlockEntry entry) async {
+
   }
   
   @override
@@ -81,8 +96,13 @@ Widget _buildProgress(BuildContext context, {
   loading == true ? CupertinoActivityIndicator() :
   Container();
 
+
+typedef BlockEntryCallback (BlockEntry entry);
+
 Future<void> _showMenuSheet(BuildContext context, {
-  @required BlockEntry entry
+  @required BlockEntry entry,
+  @required BlockEntryCallback reportCallback,
+  @required BlockEntryCallback unblockCallback
 }) async =>
   showCupertinoModalPopup<void>(
     context: context,
@@ -103,6 +123,7 @@ Future<void> _showMenuSheet(BuildContext context, {
             ),
             onPressed: () {
               Navigator.of(context).pop();
+              reportCallback(entry);
             }
           ),
           CupertinoActionSheetAction(
@@ -113,13 +134,12 @@ Future<void> _showMenuSheet(BuildContext context, {
             ),
             onPressed: () {
               Navigator.of(context).pop();
+              unblockCallback(entry);
             }
           )
         ]
       )
   );
-
-typedef BlockEntryCallback (BlockEntry entry);
 
 Widget _buildBlockRow(BuildContext conteext, {
   @required BlockEntry entry,
