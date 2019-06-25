@@ -168,6 +168,7 @@ class AppState extends Model {
     authAccessor().setToken(null);
     authAccessor().setPassword(null);
     authAccessor().setSessionKey(null);
+    blockAccessor().clearAll();
 
     _member = null;
     _loading = false;

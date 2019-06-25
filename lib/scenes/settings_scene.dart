@@ -108,7 +108,7 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
       ];
     } else {
       elems = <Widget> [
-        buildProfileCard(context, editButton: true, editCallback: _onEditProfileClicked),
+        buildProfileCard(context, editButton: false, editCallback: _onEditProfileClicked),
         _buildMenuItem(locales().setting.signout, () => _onSignoutClicked(context)),
       ];
     }

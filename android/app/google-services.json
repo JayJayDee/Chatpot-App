@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "430757482947-0c2obhgrs1qjqqhj06tnj2fcab12bcm5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "chat.chatpot",
+            "certificate_hash": "b270c44754cacb6b633ff5fdc8642f2e1a8ea0e3"
+          }
+        },
+        {
           "client_id": "430757482947-e7lnebfsf0g9robqdf0pm24bqsner3sd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

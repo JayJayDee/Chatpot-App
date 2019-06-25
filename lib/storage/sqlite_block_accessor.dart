@@ -122,4 +122,13 @@ class SqliteBlockAccessor implements BlockAccessor {
     ).toList();
     return list;
   }
+
+  Future<void> clearAll() async {
+    String truncateQuery = """
+      DELETE FROM
+        member_blocks_$dbVersion
+    """;
+    var db = await _getDb();
+    await db.rawQuery(truncateQuery);
+  }
 }
