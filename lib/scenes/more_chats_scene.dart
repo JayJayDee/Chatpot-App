@@ -114,7 +114,7 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
     // apply cached translation to room title.
     cachedTranslations.forEach((t) {
       List<Room> foundInRooms = _rooms.where((r) => r.roomToken == t.key).toList();
-      if (foundInRooms.length > 0) {
+      if (foundInRooms.length > 0 && this.mounted) {
         setState(() {
           foundInRooms[0].titleTranslated = t.translated;
         });
@@ -134,7 +134,7 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
 
       apiResp.forEach((t) {
         List<Room> foundInRooms = _rooms.where((r) => r.roomToken == t.key).toList();
-        if (foundInRooms.length > 0) {
+        if (foundInRooms.length > 0 && this.mounted) {
           setState(() {
             foundInRooms[0].titleTranslated = t.translated;
           });
@@ -166,12 +166,15 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
                 _condition.query.trim().length == 0 ? null : _condition.query 
               : null
     );
-    setState(() {
-      _rooms.addAll(searchResp.list);
-      _numAllRooms = searchResp.all;
-      _loading = false;
-    });
-    await _translateRoomTitles();
+    
+    if (this.mounted) {
+      setState(() {
+        _rooms.addAll(searchResp.list);
+        _numAllRooms = searchResp.all;
+        _loading = false;
+      });
+      await _translateRoomTitles();
+    }
   }
 
   Future<void> _onPickerSelected(RoomQueryOrder order) async {
