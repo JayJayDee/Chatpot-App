@@ -18,4 +18,6 @@ abstract class BlockAccessor {
   Future<void> unblock(String memberToken);
 
   Future<List<BlockEntry>> fetchAllBlockEntries();
+
+  Future<void> clearAll();
 }
