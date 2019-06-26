@@ -133,7 +133,7 @@ class AppState extends Model {
   }
 
   Future<void> simpleSignup({
-    @required String gender,
+    @required Gender gender,
     @required String region,
     @required String language
   }) async {

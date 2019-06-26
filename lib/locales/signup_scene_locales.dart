@@ -76,9 +76,9 @@ class SignupSceneLocales {
   }
 
   String get genderChooserLabel {
-    if (language == 'ko') return '성별을 선택하세요';
-    else if (language == 'ja') return '性別を選択してください。';
-    return 'Select your gender';
+    if (language == 'ko') return '성별을 선택하세요 (옵션)';
+    else if (language == 'ja') return '性別を選択してください（オプション）';
+    return 'Select your gender (Optional)';
   }
 
   String get genderMale {

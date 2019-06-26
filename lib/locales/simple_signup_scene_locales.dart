@@ -33,9 +33,9 @@ Don't worry, even if you start without signing up, you can always add emails lat
   }
 
   String get genderRequired  {
-    if (language == 'ko') return '성별을 선택해 주세요.';
-    else if (language == 'ja') return 'あなたの性別を選択してください。';
-    return 'Please select your gender';
+    if (language == 'ko') return '성별을 선택해 주세요. (옵션)';
+    else if (language == 'ja') return '性別を選んでください。 （オプション）';
+    return 'Please select your gender. (Optional)';
   }
 
   String get startButtonLabel {

@@ -86,6 +86,16 @@ enum Gender {
   M, F, NOT_YET
 }
 
+Gender parseGender(String genderExpr) =>
+  genderExpr == 'M' ? Gender.M :
+  genderExpr == 'F' ? Gender.F :
+  Gender.NOT_YET;
+
+String genderToString(Gender gender) =>
+  gender == Gender.M ? 'M' :
+  gender == Gender.F ? 'F' :
+  null;
+
 enum AuthType {
   SIMPLE, EMAIL
 }
