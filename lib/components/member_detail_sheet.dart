@@ -185,10 +185,12 @@ Widget _buildAdditionalInfoField(MemberPublic member) =>
           )
         )
       ),
-      Container(
-        margin: EdgeInsets.only(left: 5, top: 10),
-        child: _genderIcon(member.gender)
-      )
+      member.gender == Gender.M || member.gender == Gender.F ?
+        Container(
+          margin: EdgeInsets.only(left: 5, top: 10),
+          child: _genderIcon(member.gender)
+        ) :
+        Container()
     ]
   );
 
