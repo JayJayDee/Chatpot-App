@@ -4,8 +4,8 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/styles.dart';
-import 'package:chatpot_app/components/simple_alert_dialog.dart';
 import 'package:chatpot_app/components/gender_selector.dart';
+import 'package:chatpot_app/entities/member.dart';
 
 class SimpleSignupScene extends StatefulWidget {
 
@@ -18,15 +18,12 @@ class _SimpleSignupSceneState extends State<SimpleSignupScene> {
   String _gender;
 
   Future<void> _onSimpleSignUpClicked(BuildContext context) async {
-    if (_gender == null) {
-      await showSimpleAlert(context, locales().simpleSignup.genderRequired);
-      return;
-    }
+    Gender gender = parseGender(_gender);
 
     Locale locale = Localizations.localeOf(context);
     final model = ScopedModel.of<AppState>(context);
     await model.simpleSignup(
-      gender: _gender,
+      gender: gender,
       region: locale.countryCode,
       language: locale.languageCode
     );

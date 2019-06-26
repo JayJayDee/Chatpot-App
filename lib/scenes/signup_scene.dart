@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:chatpot_app/apis/api_errors.dart';
+import 'package:chatpot_app/entities/member.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
@@ -42,10 +43,6 @@ class _SignupSceneState extends State<SignupScene> {
       await showSimpleAlert(context, locales().signupScene.passwordTooShort);
       return;
     }
-    if (_gender == null) {
-      await showSimpleAlert(context, locales().signupScene.genderRequired);
-      return;
-    }
 
     setState(() {
       _loading = true;
@@ -59,7 +56,7 @@ class _SignupSceneState extends State<SignupScene> {
       await authApi().requestEmailJoin(
         email: _email,
         password: _password,
-        gender: _gender,
+        gender: parseGender(_gender),
         region: region,
         language: language
       );

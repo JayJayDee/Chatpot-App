@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:chatpot_app/apis/requester.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
+import 'package:chatpot_app/entities/member.dart';
 
 class AuthApi {
   Requester _requester;
@@ -15,7 +16,7 @@ class AuthApi {
   Future<SimpleJoinApiResp> requestSimpleJoin({
     @required String region,
     @required String language,
-    @required String gender
+    @required Gender gender
   }) async {
     Map<String, dynamic> resp = await _requester.request(
       url: '/member',
@@ -23,7 +24,7 @@ class AuthApi {
       body: {
         'region': region,
         'language': language,
-        'gender': gender
+        'gender': genderToString(gender)
       }
     );
     return SimpleJoinApiResp.fromJson(resp);
@@ -34,7 +35,7 @@ class AuthApi {
     @required String password,
     @required String region,
     @required String language,
-    @required String gender
+    @required Gender gender
   }) async {
     Map<String, dynamic> resp = await _requester.request(
       url: '/member/email',
@@ -44,7 +45,7 @@ class AuthApi {
         'password': password,
         'region': region,
         'language': language,
-        'gender': gender
+        'gender': genderToString(gender)
       }
     );
     return EmailJoinApiResp.fromJson(resp);
