@@ -23,6 +23,7 @@ class Member {
 
     if (map['gender'] == 'F') member.gender = Gender.F;
     else if (map['gender'] == 'M') member.gender = Gender.M;
+    else member.gender = Gender.NOT_YET;
 
     if (map['auth_type'] == 'SIMPLE') member.authType = AuthType.SIMPLE;
     else if (map['auth_type'] == 'EMAIL') member.authType = AuthType.EMAIL;
@@ -56,6 +57,7 @@ class MemberPublic {
 
     if (map['gender'] == 'F') member.gender = Gender.F;
     else if (map['gender'] == 'M') member.gender = Gender.M;
+    else member.gender = Gender.NOT_YET;
 
     return member;
   }
@@ -81,7 +83,7 @@ class Nick {
 }
 
 enum Gender {
-  M, F
+  M, F, NOT_YET
 }
 
 enum AuthType {
