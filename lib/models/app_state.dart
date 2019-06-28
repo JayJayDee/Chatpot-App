@@ -132,6 +132,20 @@ class AppState extends Model {
     notifyListeners();
   }
 
+  Future<void> unregisterDevice() async {
+    _loading = true;
+    notifyListeners();
+
+    String deviceToken = await pushService().accquireDeviceToken();
+    await messageApi().requestUnregister(
+      memberToken: _member.token,
+      deviceToken: deviceToken
+    );
+
+    _loading = false;
+    notifyListeners();
+  }
+
   Future<void> simpleSignup({
     @required Gender gender,
     @required String region,

@@ -44,6 +44,7 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
     var resp = await _showSignoutWarningDialog(context, isSimple);
 
     if (resp == 'SIGNOUT') {
+      await model.unregisterDevice();
       await model.signout();
 
       final PageRouteBuilder loginRoute = new PageRouteBuilder(
