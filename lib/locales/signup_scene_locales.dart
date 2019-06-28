@@ -92,6 +92,12 @@ class SignupSceneLocales {
     else if (language == 'ja') return '女性';
     return 'Female';
   }
+
+  String get genderNothing {
+    if (language == 'ko') return '알려주고 싶지 않습니다.';
+    else if (language == 'ja') return '知らせたくない。';
+    return 'I do not want to let you know.';
+  }
   
   String get signupCompleted {
     if (language == 'ko') return '''회원 가입이 완료되었습니다.

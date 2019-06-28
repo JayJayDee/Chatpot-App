@@ -37,7 +37,8 @@ String _currentGenderExpr(String gender) {
   if (gender == null) return locales().signupScene.genderChooserLabel;
   else if (gender == 'M') return locales().signupScene.genderMale;
   else if (gender == 'F') return locales().signupScene.genderFemale;
-  return null;
+  else if (gender == 'NOT_YET') return locales().signupScene.genderNothing;
+  return '';
 }
 
 Future<String> _showGenderPicker(BuildContext context, {
@@ -45,10 +46,11 @@ Future<String> _showGenderPicker(BuildContext context, {
   @required GenderSelectCallback callback
 }) async {
   List<String> genderLabels = [
+    locales().signupScene.genderNothing,
     locales().signupScene.genderFemale,
     locales().signupScene.genderMale
   ];
-  List<String> genderValues = ['F', 'M'];
+  List<String> genderValues = ['NOT_YET', 'F', 'M'];
 
   int currentIdx = genderValues.indexOf(currentGender);
   if (currentIdx == -1) currentIdx = 0;
