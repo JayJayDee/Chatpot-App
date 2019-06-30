@@ -160,13 +160,16 @@ Widget _buildEmailField(BuildContext context, {
   CupertinoTextField(
     prefix: Icon(CupertinoIcons.mail_solid,
       size: 28.0,
-      color: CupertinoColors.lightBackgroundGray),
+      color: Styles.thirdFontColor),
     placeholder: locales().signupScene.emailPlaceHolder,
+    placeholderStyle: TextStyle(
+      color: Styles.thirdFontColor,
+    ),
     onChanged: changedCallback,
     padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 14.0),
     keyboardType: TextInputType.emailAddress,
     decoration: BoxDecoration(
-      border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.lightBackgroundGray))
+      border: Border(bottom: BorderSide(width: 0.5, color: Styles.inputFieldDevidier))
     )
   );
 
@@ -177,14 +180,22 @@ Widget _buildPasswordField(BuildContext context, {
   CupertinoTextField(
     prefix: Icon(CupertinoIcons.padlock_solid,
       size: 28.0,
-      color: CupertinoColors.lightBackgroundGray),
+      color: Styles.thirdFontColor),
     placeholder: locales().signupScene.passwordPlaceHolder,
+    placeholderStyle: TextStyle(
+      color: Styles.thirdFontColor
+    ),
     onChanged: changedCallback,
     obscureText: true,
     padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 14.0),
     keyboardType: TextInputType.emailAddress,
     decoration: BoxDecoration(
-      border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.lightBackgroundGray))
+      border: Border(
+        bottom: BorderSide(
+          width: 0.5,
+          color: Styles.inputFieldDevidier
+        )
+      )
     )
   );
 
@@ -195,14 +206,22 @@ Widget _buildPasswordConfirmField(BuildContext context, {
   CupertinoTextField(
     prefix: Icon(CupertinoIcons.padlock_solid,
       size: 28.0,
-      color: CupertinoColors.lightBackgroundGray),
+      color: Styles.thirdFontColor),
     placeholder: locales().signupScene.passworConfirmPlaceHolder,
+    placeholderStyle: TextStyle(
+      color: Styles.thirdFontColor
+    ),
     onChanged: changedCallback,
     obscureText: true,
     padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 14.0),
     keyboardType: TextInputType.emailAddress,
     decoration: BoxDecoration(
-      border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.lightBackgroundGray))
+      border: Border(
+        bottom: BorderSide(
+          width: 0.5,
+          color: Styles.inputFieldDevidier
+        )
+      )
     )
   );
 

@@ -159,14 +159,17 @@ class LoginScene extends StatelessWidget {
 Widget _buildLoginField(BuildContext context, ValueChanged<String> valueChange) => CupertinoTextField(
   prefix: Icon(
     CupertinoIcons.mail_solid,
-    color: CupertinoColors.lightBackgroundGray,
+    color: Styles.thirdFontColor,
     size: 28.0
   ),
   padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
   placeholder: locales().login.emailHint,
+  placeholderStyle: TextStyle(
+    color: Styles.thirdFontColor
+  ),
   keyboardType: TextInputType.emailAddress,
   decoration: BoxDecoration(
-    border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
+    border: Border(bottom: BorderSide(width: 0.5, color: Styles.inputFieldDevidier))
   ),
   onChanged: valueChange,
 );
@@ -174,15 +177,18 @@ Widget _buildLoginField(BuildContext context, ValueChanged<String> valueChange) 
 Widget _buildPasswordField(BuildContext context, ValueChanged<String> valueChange) => CupertinoTextField(
   prefix: Icon(
     CupertinoIcons.padlock_solid,
-    color: CupertinoColors.lightBackgroundGray,
+    color: Styles.thirdFontColor,
     size: 28.0
   ),
   padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
   placeholder: locales().login.passwordHint,
+  placeholderStyle: TextStyle(
+    color: Styles.thirdFontColor
+  ),
   keyboardType: TextInputType.text,
   obscureText: true,
   decoration: BoxDecoration(
-    border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
+    border: Border(bottom: BorderSide(width: 0.5, color: Styles.inputFieldDevidier))
   ),
   onChanged: valueChange
 );

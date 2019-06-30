@@ -1,36 +1,46 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/styles.dart';
 
 typedef GenderSelectCallback (String gender);
 Widget buildGenderSeletor(BuildContext context, {
   @required String gender,
   @required GenderSelectCallback genderSelectCallback
 }) =>
-  Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: [
-      Icon(CupertinoIcons.person_solid,
-        size: 28.0,
-        color: CupertinoColors.lightBackgroundGray
-      ),
-      CupertinoButton(
-        padding: EdgeInsets.only(left: 8, right: 0, top: 0, bottom: 0),
-        child: Text(_currentGenderExpr(gender),
-          style: TextStyle(
-            color: CupertinoColors.lightBackgroundGray,
-            fontWeight: FontWeight.w100,
-            fontSize: 18
-          )
+  Container(
+    decoration: BoxDecoration(
+      border: Border(bottom: BorderSide(
+        color: Styles.inputFieldDevidier,
+        width: 0.5
+      ))
+    ),
+    padding: EdgeInsets.only(bottom: 3),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Icon(CupertinoIcons.person_solid,
+          size: 28.0,
+          color: Styles.thirdFontColor
         ),
-        onPressed: () => {
-          _showGenderPicker(context, 
-            callback: genderSelectCallback,
-            currentGender: gender
-          )
-        }
-      )
-    ]
+        CupertinoButton(
+          padding: EdgeInsets.only(left: 8, right: 0, top: 0, bottom: 0),
+          child: Text(_currentGenderExpr(gender),
+            style: TextStyle(
+              color: Styles.thirdFontColor,
+              fontWeight: FontWeight.normal,
+              fontSize: 18
+            )
+          ),
+          onPressed: () => {
+            _showGenderPicker(context, 
+              callback: genderSelectCallback,
+              currentGender: gender
+            )
+          }
+        )
+      ]
+    )
   );
 
 String _currentGenderExpr(String gender) {
