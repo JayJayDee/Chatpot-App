@@ -9,6 +9,7 @@ import 'package:chatpot_app/components/room_row.dart';
 import 'package:chatpot_app/components/room_detail_sheet.dart';
 import 'package:chatpot_app/storage/translation_cache_accessor.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
+import 'package:chatpot_app/styles.dart';
 
 const DEFAULT_FETCH_SIZE = 7;
 
@@ -287,7 +288,7 @@ Widget _buildQueryInputField(BuildContext context, {
     controller: controller,
     prefix: const Icon(
       CupertinoIcons.search,
-      color: CupertinoColors.lightBackgroundGray,
+      color: Styles.thirdFontColor,
       size: 28.0,
     ),
     onChanged: textChangeCallback,
@@ -295,9 +296,12 @@ Widget _buildQueryInputField(BuildContext context, {
     clearButtonMode: OverlayVisibilityMode.editing,
     textCapitalization: TextCapitalization.words,
     decoration: const BoxDecoration(
-      border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray)),
+      border: Border(bottom: BorderSide(width: 0.5, color: Styles.inputFieldDevidier)),
     ),
-    placeholder: locales().morechat.queryEditPlaceholder
+    placeholder: locales().morechat.queryEditPlaceholder,
+    placeholderStyle: TextStyle(
+      color: Styles.thirdFontColor
+    ),
   );
 
 Widget _buildCompoundSearchArea(BuildContext context, {

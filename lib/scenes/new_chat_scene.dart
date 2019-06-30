@@ -95,15 +95,23 @@ Widget _buildRoomTitleField(ValueChanged<String> valueChanged) {
     child: CupertinoTextField(
       prefix: Icon(
         MdiIcons.pencil,
-        color: CupertinoColors.inactiveGray,
+        color: Styles.thirdFontColor,
         size: 28.0
       ),
       onChanged: valueChanged,
       padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
       placeholder: locales().newchat.placeHolderTitle,
+      placeholderStyle: TextStyle(
+        color: Styles.thirdFontColor
+      ),
       keyboardType: TextInputType.emailAddress,
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
+        border: Border(
+          bottom: BorderSide(
+            width: 0.5,
+            color: Styles.inputFieldDevidier
+          )
+        )
       )
     )
   );
@@ -115,15 +123,23 @@ Widget _buildMaxAttendeefield(ValueChanged<String> valueChanged) {
     child: CupertinoTextField(
       prefix: Icon(
         MdiIcons.accountGroup,
-        color: CupertinoColors.inactiveGray,
+        color: Styles.thirdFontColor,
         size: 28.0
       ),
       onChanged: valueChanged,
       padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
       placeholder: locales().newchat.placeHolderMaxAttendee,
+      placeholderStyle: TextStyle(
+        color: Styles.thirdFontColor
+      ),
       keyboardType: TextInputType.number,
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
+        border: Border(
+          bottom: BorderSide(
+            width: 0.5,
+            color: Styles.inputFieldDevidier
+          )
+        )
       )
     )
   );
