@@ -665,7 +665,6 @@ class AppState extends Model {
     } 
 
     cachedTranslations.forEach((t) {
-      print("CACHED_TRANSLATED_MESSAGE: ${t.translated}");
       Message msg = _currentRoom.messages.findMessage(t.key);
       if (msg != null) msg.translated = t.translated;
     });
