@@ -249,21 +249,23 @@ Widget _buildListView(BuildContext context, {
   @required ProfileClickCallback profileClickCallback
 }) {
   final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
-  return ListView.builder(
-    scrollDirection: Axis.vertical,
-    reverse: true,
-    physics: AlwaysScrollableScrollPhysics(),
-    controller: controller,
-    itemCount: model.currentRoom.messages.messages.length,
-    itemBuilder: (BuildContext context, int idx) {
-      Message msg = model.currentRoom.messages.messages[idx];
-      return MessageRow(
-        message: msg,
-        state: model,
-        imageClickCallback: imageClickCallback,
-        profileClickCallback: profileClickCallback,
-      );
-    }
+  return Scrollbar(
+    child: ListView.builder(
+      scrollDirection: Axis.vertical,
+      reverse: true,
+      physics: AlwaysScrollableScrollPhysics(),
+      controller: controller,
+      itemCount: model.currentRoom.messages.messages.length,
+      itemBuilder: (BuildContext context, int idx) {
+        Message msg = model.currentRoom.messages.messages[idx];
+        return MessageRow(
+          message: msg,
+          state: model,
+          imageClickCallback: imageClickCallback,
+          profileClickCallback: profileClickCallback,
+        );
+      }
+    )
   );
 }
 
