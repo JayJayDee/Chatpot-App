@@ -148,12 +148,12 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     );
   }
 
-  void _onScrollEventArrival() {
+  void _onScrollEventArrival() async {
     if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
       final state = ScopedModel.of<AppState>(context);
-      state.fetchMoreMessages(roomToken: state.currentRoom.roomToken);
-      state.translateMessages();
+      await state.fetchMoreMessages(roomToken: state.currentRoom.roomToken);
+      await state.translateMessages();
     }
   }
 
