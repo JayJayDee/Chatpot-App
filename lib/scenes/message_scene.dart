@@ -5,6 +5,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/message.dart';
@@ -19,6 +20,7 @@ import 'package:chatpot_app/storage/block_accessor.dart';
 
 typedef ImageClickCallback (String messageId);
 typedef ProfileClickCallback (String memberToken);
+typedef UrlMoveCallback (String url);
 
 @immutable
 class MessageScene extends StatefulWidget {
@@ -157,9 +159,18 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     }
   }
 
-  void _onTextLongPressed(BuildContext context, String text) {
-    Scaffold.of(context).showSnackBar(
-      SnackBar(content: Text('asdf!'))
+  void _onTextClicked(BuildContext context, String text) async {
+    await _showTextSelectionSheet(context,
+      text: text,
+      copyCallback: () => _onCopySelected(context, text),
+      urlMoveCallback: (String url) => {}
+    );
+  }
+
+  void _onCopySelected(BuildContext context, String text) async {
+    showToast(locales().msgscene.copied, 
+      duration: Duration(milliseconds: 1000),
+      position: ToastPosition(align: Alignment.bottomCenter)
     );
   }
 
@@ -230,7 +241,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
                     profileClickCallback: (String memberToken) =>
                       _onProfileClicked(context, memberToken),
                     textLongPressCallback: (String text) =>
-                      _onTextLongPressed(context, text)
+                      _onTextClicked(context, text)
                   )
                 ),
                 _buildEditText(context, 
@@ -255,7 +266,7 @@ Widget _buildListView(BuildContext context, {
   @required ScrollController controller,
   @required ImageClickCallback imageClickCallback,
   @required ProfileClickCallback profileClickCallback,
-  @required TextLongPressCallback textLongPressCallback
+  @required TextClickCallback textLongPressCallback
 }) {
   final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
   return Scrollbar(
@@ -272,7 +283,7 @@ Widget _buildListView(BuildContext context, {
           state: model,
           imageClickCallback: imageClickCallback,
           profileClickCallback: profileClickCallback,
-          textLongPressCallback: textLongPressCallback
+          textClickCallback: textLongPressCallback
         );
       }
     )
@@ -361,3 +372,56 @@ Future<bool> _showBlockConfirmDialog(BuildContext context) async =>
       ]
     )
   );
+
+Future<void> _showTextSelectionSheet(BuildContext context, {
+  @required String text,
+  @required VoidCallback copyCallback,
+  @required UrlMoveCallback urlMoveCallback,
+}) async {
+  List<Widget> actions = List();
+  actions.add(CupertinoActionSheetAction(
+    child: Text(locales().msgscene.selectedTextMenuCopy,
+      style: TextStyle(
+        fontSize: 16
+      )
+    ),
+    onPressed: () {
+      Navigator.of(context).pop();
+      copyCallback();
+    }
+  ));
+
+  return await showCupertinoModalPopup<void>(
+    context: context,
+    builder: (BuildContext context) =>
+      CupertinoActionSheet(
+        message: Column(
+          children: [
+            Text(locales().msgscene.selectedTextTitle,
+              style: TextStyle(
+                fontSize: 17,
+                color: Styles.primaryFontColor
+              )
+            ),
+            Padding(padding: EdgeInsets.only(top: 5)),
+            Text(text,
+              style: TextStyle(
+                fontSize: 15,
+                color: Styles.secondaryFontColor,
+                fontWeight: FontWeight.normal
+              )
+            )
+          ]
+        ),
+        actions: actions
+          // CupertinoActionSheetAction(
+          //   child: Text(locales().msgscene.selectedTextMenuUrlMove('http://chatpot.chatasdfsaasdfasdfasfsafasfasfsa'),
+          //     style: TextStyle(
+          //       fontSize: 16
+          //     )
+          //   ),
+          //   onPressed: () => urlMoveCallback()
+          // )
+      )
+  );
+}

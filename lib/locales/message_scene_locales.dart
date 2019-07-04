@@ -94,4 +94,31 @@ A list of previously blocked users can be found in the Settings menu > My Block 
     return '''The specified user was successfully blocked.
 The blacklist can be found in the Settings menu > My Block History menu.''';
   }
+
+  String get copied {
+    if (language == 'ko') return '''선택한 메시지가
+클립보드에 복사되었습니다.''';
+    else if (language == 'ja') return '''選択されたメッセージは
+クリップボードにコピーしました。''';
+    return '''The selected message has been
+copied to the clipboard.''';
+  }
+
+  String get selectedTextTitle {
+    if (language == 'ko') return '선택한 메시지';
+    else if (language == 'ja') return '選択したメッセージ';
+    return 'Selected message';
+  }
+
+  String get selectedTextMenuCopy {
+    if (language == 'ko') return '클립보드에 복사';
+    else if (language == 'ja') return 'クリップボードにコピー';
+    return 'Copy to Clipboard';
+  }
+
+  String selectedTextMenuUrlMove(String url) {
+    if (language == 'ko') return "이동: $url";
+    else if (language == 'ja') return "移動：$url";
+    return "Go to: $url";
+  }
 }

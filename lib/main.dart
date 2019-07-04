@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/models/app_state.dart';
@@ -13,27 +14,29 @@ import 'package:chatpot_app/scenes/container_scene.dart';
 void main() {
   initFactory();
   runApp(
-    ScopedModel<AppState>(
-      model: AppState(),
-      child: CupertinoApp(
-        debugShowCheckedModeBanner: false,
-        color: Styles.appBackground,
-        initialRoute: '/',
-        routes: {
-          '/': (context) => SplashScene(),
-          '/login': (context) => LoginScene(),
-          '/container': (context) => ContainerScene(),
-          '/signup/simple': (context) => SimpleSignupScene()
-        },
-        supportedLocales: [
-          const Locale('en', 'US'),
-          const Locale('ko', 'KR'),
-          const Locale('ja', 'JP')
-        ],
-        localizationsDelegates: [
-          const FallbackCupertinoLocalisationsDelegate(),
-          const FallbackMaterialLocalizationDelegate()
-        ]
+    OKToast(
+      child: ScopedModel<AppState>(
+        model: AppState(),
+        child: CupertinoApp(
+          debugShowCheckedModeBanner: false,
+          color: Styles.appBackground,
+          initialRoute: '/',
+          routes: {
+            '/': (context) => SplashScene(),
+            '/login': (context) => LoginScene(),
+            '/container': (context) => ContainerScene(),
+            '/signup/simple': (context) => SimpleSignupScene()
+          },
+          supportedLocales: [
+            const Locale('en', 'US'),
+            const Locale('ko', 'KR'),
+            const Locale('ja', 'JP')
+          ],
+          localizationsDelegates: [
+            const FallbackCupertinoLocalisationsDelegate(),
+            const FallbackMaterialLocalizationDelegate()
+          ]
+        )
       )
     )
   );

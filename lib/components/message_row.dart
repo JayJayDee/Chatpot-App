@@ -13,7 +13,7 @@ enum _RowType {
 
 typedef ImageClickCallback (String messageId);
 typedef MemberClickCallback (String memberToken);
-typedef TextLongPressCallback (String text);
+typedef TextClickCallback (String text);
 
 class _MatchedColors {
   Color background;
@@ -39,14 +39,14 @@ class MessageRow extends StatelessWidget {
   final AppState state;
   final ImageClickCallback imageClickCallback;
   final MemberClickCallback profileClickCallback;
-  final TextLongPressCallback textLongPressCallback;
+  final TextClickCallback textClickCallback;
 
   MessageRow({
     @required this.message,
     @required this.state,
     @required this.imageClickCallback,
     @required this.profileClickCallback,
-    @required this.textLongPressCallback
+    @required this.textClickCallback
   });
 
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class MessageRow extends StatelessWidget {
       widget = _MyMessageRow(
         message: message,
         imageClickCallback: imageClickCallback,
-        textLongPressCallback: textLongPressCallback
+        textClickCallback: textClickCallback
       );
 
     } else if (type == _RowType.OTHER_MSG) {
@@ -67,7 +67,7 @@ class MessageRow extends StatelessWidget {
         appState: state,
         imageClickCallback: imageClickCallback,
         profileClickCallback: profileClickCallback,
-        textLongPressCallback: textLongPressCallback
+        textClickCallback: textClickCallback
       );
 
     } else if (type ==_RowType.NOTIFICATION) {
@@ -125,18 +125,18 @@ class _NotificationRow extends StatelessWidget {
 class _MyMessageRow extends StatelessWidget {
   final Message message;
   final ImageClickCallback imageClickCallback;
-  final TextLongPressCallback textLongPressCallback;
+  final TextClickCallback textClickCallback;
 
   _MyMessageRow({
     @required this.message,
     @required this.imageClickCallback,
-    @required this.textLongPressCallback
+    @required this.textClickCallback
   });
 
   Widget build(BuildContext context) {
     Widget contentWidget;
     if (message.messageType == MessageType.TEXT) {
-      contentWidget = _getTextContentWidget(message, true, textLongPressCallback);
+      contentWidget = _getTextContentWidget(message, true, textClickCallback);
     } else if (message.messageType == MessageType.IMAGE) {
       if (message.attchedImageStatus == AttchedImageStatus.LOCAL_IMAGE) {
         contentWidget = _getLoadingImageContentWidget(message, true);
@@ -173,20 +173,20 @@ class _OtherMessageRow extends StatelessWidget {
   final AppState appState;
   final ImageClickCallback imageClickCallback;
   final MemberClickCallback profileClickCallback;
-  final TextLongPressCallback textLongPressCallback;
+  final TextClickCallback textClickCallback;
 
   _OtherMessageRow({
     @required this.message,
     @required this.appState,
     @required this.imageClickCallback,
     @required this.profileClickCallback,
-    @required this.textLongPressCallback
+    @required this.textClickCallback
   });
 
   Widget build(BuildContext context) {
     Widget contentWidget;
     if (message.messageType == MessageType.TEXT) {
-      contentWidget = _getTextContentWidget(message, false, textLongPressCallback);
+      contentWidget = _getTextContentWidget(message, false, textClickCallback);
     } else if (message.messageType == MessageType.IMAGE) {
       contentWidget = _getRemoteImageContentWidget(message, imageClickCallback);
     }
@@ -368,9 +368,10 @@ Widget _getRemoteImageContentWidget(Message message, ImageClickCallback callback
     onPressed: () => callback(message.messageId)
   );
 
-Widget _getTextContentWidget(Message message, bool isMine, TextLongPressCallback callback) {
+Widget _getTextContentWidget(Message message, bool isMine, TextClickCallback callback) {
   var colors = _getMatchedColors(isMine);
-  return GestureDetector(
+  return CupertinoButton(
+    padding: EdgeInsets.all(0),
     child: ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Container(
@@ -384,7 +385,7 @@ Widget _getTextContentWidget(Message message, bool isMine, TextLongPressCallback
         )
       ),
     ),
-    onLongPress: callback != null ?
+    onPressed: callback != null ?
       () => callback(message.getTextContent()) :
       () => {}
   );
