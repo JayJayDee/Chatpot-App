@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/entities/message.dart';
@@ -19,6 +22,7 @@ import 'package:chatpot_app/storage/block_accessor.dart';
 
 typedef ImageClickCallback (String messageId);
 typedef ProfileClickCallback (String memberToken);
+typedef UrlMoveCallback (String url);
 
 @immutable
 class MessageScene extends StatefulWidget {
@@ -157,6 +161,33 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     }
   }
 
+  void _onTextClicked(BuildContext context, String text) async {
+    await _showTextSelectionSheet(context,
+      text: text,
+      copyCallback: () => _onCopySelected(context, text),
+      urlMoveCallback: (String url) => _onUrlMoveSelected(context, url)
+    );
+  }
+
+  void _onCopySelected(BuildContext context, String text) async {
+    await Clipboard.setData(new ClipboardData(text: text));
+    showToast(locales().msgscene.copied, 
+      duration: Duration(milliseconds: 1000),
+      position: ToastPosition(align: Alignment.bottomCenter)
+    );
+  }
+
+  void _onUrlMoveSelected(BuildContext context, String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      showToast(locales().msgscene.wrongUrl, 
+        duration: Duration(milliseconds: 1000),
+        position: ToastPosition(align: Alignment.bottomCenter)
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -222,7 +253,9 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
                     imageClickCallback: (String messageId) =>
                       _onImageClicked(context, messageId),
                     profileClickCallback: (String memberToken) =>
-                      _onProfileClicked(context, memberToken)
+                      _onProfileClicked(context, memberToken),
+                    textLongPressCallback: (String text) =>
+                      _onTextClicked(context, text)
                   )
                 ),
                 _buildEditText(context, 
@@ -246,7 +279,8 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 Widget _buildListView(BuildContext context, {
   @required ScrollController controller,
   @required ImageClickCallback imageClickCallback,
-  @required ProfileClickCallback profileClickCallback
+  @required ProfileClickCallback profileClickCallback,
+  @required TextClickCallback textLongPressCallback
 }) {
   final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
   return Scrollbar(
@@ -263,6 +297,7 @@ Widget _buildListView(BuildContext context, {
           state: model,
           imageClickCallback: imageClickCallback,
           profileClickCallback: profileClickCallback,
+          textClickCallback: textLongPressCallback
         );
       }
     )
@@ -351,3 +386,71 @@ Future<bool> _showBlockConfirmDialog(BuildContext context) async =>
       ]
     )
   );
+
+Future<void> _showTextSelectionSheet(BuildContext context, {
+  @required String text,
+  @required VoidCallback copyCallback,
+  @required UrlMoveCallback urlMoveCallback,
+}) async {
+  List<Widget> actions = List();
+  actions.add(CupertinoActionSheetAction(
+    child: Text(locales().msgscene.selectedTextMenuCopy,
+      style: TextStyle(
+        fontSize: 16
+      )
+    ),
+    onPressed: () {
+      Navigator.of(context).pop();
+      copyCallback();
+    }
+  ));
+
+  List<String> urls = _getUrlsFromText(text);
+  actions.addAll(urls.map((String url) =>
+    CupertinoActionSheetAction(
+      child: Text(url,
+        style: TextStyle(
+          fontSize: 16
+        )
+      ),
+      onPressed: () {
+        Navigator.of(context).pop();
+        urlMoveCallback(url);
+      }
+    )
+  ).toList());
+  
+  return await showCupertinoModalPopup<void>(
+    context: context,
+    builder: (BuildContext context) =>
+      CupertinoActionSheet(
+        message: Column(
+          children: [
+            Text(locales().msgscene.selectedTextTitle,
+              style: TextStyle(
+                fontSize: 17,
+                color: Styles.primaryFontColor
+              )
+            ),
+            Padding(padding: EdgeInsets.only(top: 5)),
+            Text(text,
+              style: TextStyle(
+                fontSize: 15,
+                color: Styles.secondaryFontColor,
+                fontWeight: FontWeight.normal
+              )
+            )
+          ]
+        ),
+        actions: actions
+      )
+  );
+}
+
+List<String> _getUrlsFromText(String text) {
+  final RegExp exp = RegExp(r"(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.]+");
+  List<Match> matches = exp.allMatches(text).toList();
+  List<String> urls = List();
+  matches.forEach((m) => urls.add(m.group(0)));
+  return urls;
+}
