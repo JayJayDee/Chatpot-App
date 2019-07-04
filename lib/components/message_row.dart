@@ -13,6 +13,7 @@ enum _RowType {
 
 typedef ImageClickCallback (String messageId);
 typedef MemberClickCallback (String memberToken);
+typedef TextLongPressCallback (String text);
 
 class _MatchedColors {
   Color background;
@@ -38,12 +39,14 @@ class MessageRow extends StatelessWidget {
   final AppState state;
   final ImageClickCallback imageClickCallback;
   final MemberClickCallback profileClickCallback;
+  final TextLongPressCallback textLongPressCallback;
 
   MessageRow({
     @required this.message,
     @required this.state,
     @required this.imageClickCallback,
-    @required this.profileClickCallback
+    @required this.profileClickCallback,
+    @required this.textLongPressCallback
   });
 
   Widget build(BuildContext context) {
@@ -54,7 +57,8 @@ class MessageRow extends StatelessWidget {
     if (type == _RowType.MY_MSG) {
       widget = _MyMessageRow(
         message: message,
-        imageClickCallback: imageClickCallback
+        imageClickCallback: imageClickCallback,
+        textLongPressCallback: textLongPressCallback
       );
 
     } else if (type == _RowType.OTHER_MSG) {
@@ -62,7 +66,8 @@ class MessageRow extends StatelessWidget {
         message: message,
         appState: state,
         imageClickCallback: imageClickCallback,
-        profileClickCallback: profileClickCallback
+        profileClickCallback: profileClickCallback,
+        textLongPressCallback: textLongPressCallback
       );
 
     } else if (type ==_RowType.NOTIFICATION) {
@@ -120,16 +125,18 @@ class _NotificationRow extends StatelessWidget {
 class _MyMessageRow extends StatelessWidget {
   final Message message;
   final ImageClickCallback imageClickCallback;
+  final TextLongPressCallback textLongPressCallback;
 
   _MyMessageRow({
-    this.message,
-    this.imageClickCallback
+    @required this.message,
+    @required this.imageClickCallback,
+    @required this.textLongPressCallback
   });
 
   Widget build(BuildContext context) {
     Widget contentWidget;
     if (message.messageType == MessageType.TEXT) {
-      contentWidget = _getTextContentWidget(message, true);
+      contentWidget = _getTextContentWidget(message, true, textLongPressCallback);
     } else if (message.messageType == MessageType.IMAGE) {
       if (message.attchedImageStatus == AttchedImageStatus.LOCAL_IMAGE) {
         contentWidget = _getLoadingImageContentWidget(message, true);
@@ -166,18 +173,20 @@ class _OtherMessageRow extends StatelessWidget {
   final AppState appState;
   final ImageClickCallback imageClickCallback;
   final MemberClickCallback profileClickCallback;
+  final TextLongPressCallback textLongPressCallback;
 
   _OtherMessageRow({
-    this.message,
-    this.appState,
-    this.imageClickCallback,
-    this.profileClickCallback
+    @required this.message,
+    @required this.appState,
+    @required this.imageClickCallback,
+    @required this.profileClickCallback,
+    @required this.textLongPressCallback
   });
 
   Widget build(BuildContext context) {
     Widget contentWidget;
     if (message.messageType == MessageType.TEXT) {
-      contentWidget = _getTextContentWidget(message, false);
+      contentWidget = _getTextContentWidget(message, false, textLongPressCallback);
     } else if (message.messageType == MessageType.IMAGE) {
       contentWidget = _getRemoteImageContentWidget(message, imageClickCallback);
     }
@@ -359,19 +368,24 @@ Widget _getRemoteImageContentWidget(Message message, ImageClickCallback callback
     onPressed: () => callback(message.messageId)
   );
 
-Widget _getTextContentWidget(Message message, bool isMine) {
+Widget _getTextContentWidget(Message message, bool isMine, TextLongPressCallback callback) {
   var colors = _getMatchedColors(isMine);
-  return ClipRRect(
-    borderRadius: BorderRadius.circular(10),
-    child: Container(
-      padding: EdgeInsets.all(7),
-      color: colors.background,
-      child: Text(message.getTextContent(),
-        style: TextStyle(
-          fontSize: 16,
-          color: colors.font
+  return GestureDetector(
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        padding: EdgeInsets.all(7),
+        color: colors.background,
+        child: Text(message.getTextContent(),
+          style: TextStyle(
+            fontSize: 16,
+            color: colors.font
+          )
         )
-      )
+      ),
     ),
+    onLongPress: callback != null ?
+      () => callback(message.getTextContent()) :
+      () => {}
   );
 }

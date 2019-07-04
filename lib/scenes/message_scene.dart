@@ -157,6 +157,12 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     }
   }
 
+  void _onTextLongPressed(BuildContext context, String text) {
+    Scaffold.of(context).showSnackBar(
+      SnackBar(content: Text('asdf!'))
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -222,7 +228,9 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
                     imageClickCallback: (String messageId) =>
                       _onImageClicked(context, messageId),
                     profileClickCallback: (String memberToken) =>
-                      _onProfileClicked(context, memberToken)
+                      _onProfileClicked(context, memberToken),
+                    textLongPressCallback: (String text) =>
+                      _onTextLongPressed(context, text)
                   )
                 ),
                 _buildEditText(context, 
@@ -246,7 +254,8 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 Widget _buildListView(BuildContext context, {
   @required ScrollController controller,
   @required ImageClickCallback imageClickCallback,
-  @required ProfileClickCallback profileClickCallback
+  @required ProfileClickCallback profileClickCallback,
+  @required TextLongPressCallback textLongPressCallback
 }) {
   final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
   return Scrollbar(
@@ -263,6 +272,7 @@ Widget _buildListView(BuildContext context, {
           state: model,
           imageClickCallback: imageClickCallback,
           profileClickCallback: profileClickCallback,
+          textLongPressCallback: textLongPressCallback
         );
       }
     )
