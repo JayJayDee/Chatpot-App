@@ -38,6 +38,7 @@ dependencies:
   flutter_inner_drawer: ^0.2.5
   collection: ^1.14.11
   oktoast: ^2.1.9
+  url_launcher: ^5.0.3
 
 dev_dependencies:
   flutter_test:

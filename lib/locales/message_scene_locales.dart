@@ -116,9 +116,9 @@ copied to the clipboard.''';
     return 'Copy to Clipboard';
   }
 
-  String selectedTextMenuUrlMove(String url) {
-    if (language == 'ko') return "이동: $url";
-    else if (language == 'ja') return "移動：$url";
-    return "Go to: $url";
+  String get wrongUrl {
+    if (language == 'ko') return '잘못된 URL입니다.';
+    else if (language == 'ja') return '無効なURL。';
+    return 'Invalid URL.';
   }
 }

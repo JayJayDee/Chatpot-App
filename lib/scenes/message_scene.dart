@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:chatpot_app/models/app_state.dart';
@@ -163,15 +165,27 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     await _showTextSelectionSheet(context,
       text: text,
       copyCallback: () => _onCopySelected(context, text),
-      urlMoveCallback: (String url) => {}
+      urlMoveCallback: (String url) => _onUrlMoveSelected(context, url)
     );
   }
 
   void _onCopySelected(BuildContext context, String text) async {
+    await Clipboard.setData(new ClipboardData(text: text));
     showToast(locales().msgscene.copied, 
       duration: Duration(milliseconds: 1000),
       position: ToastPosition(align: Alignment.bottomCenter)
     );
+  }
+
+  void _onUrlMoveSelected(BuildContext context, String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      showToast(locales().msgscene.wrongUrl, 
+        duration: Duration(milliseconds: 1000),
+        position: ToastPosition(align: Alignment.bottomCenter)
+      );
+    }
   }
 
   @override
@@ -391,6 +405,21 @@ Future<void> _showTextSelectionSheet(BuildContext context, {
     }
   ));
 
+  List<String> urls = _getUrlsFromText(text);
+  actions.addAll(urls.map((String url) =>
+    CupertinoActionSheetAction(
+      child: Text(url,
+        style: TextStyle(
+          fontSize: 16
+        )
+      ),
+      onPressed: () {
+        Navigator.of(context).pop();
+        urlMoveCallback(url);
+      }
+    )
+  ).toList());
+  
   return await showCupertinoModalPopup<void>(
     context: context,
     builder: (BuildContext context) =>
@@ -414,14 +443,14 @@ Future<void> _showTextSelectionSheet(BuildContext context, {
           ]
         ),
         actions: actions
-          // CupertinoActionSheetAction(
-          //   child: Text(locales().msgscene.selectedTextMenuUrlMove('http://chatpot.chatasdfsaasdfasdfasfsafasfasfsa'),
-          //     style: TextStyle(
-          //       fontSize: 16
-          //     )
-          //   ),
-          //   onPressed: () => urlMoveCallback()
-          // )
       )
   );
+}
+
+List<String> _getUrlsFromText(String text) {
+  final RegExp exp = RegExp(r"(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.]+");
+  List<Match> matches = exp.allMatches(text).toList();
+  List<String> urls = List();
+  matches.forEach((m) => urls.add(m.group(0)));
+  return urls;
 }
