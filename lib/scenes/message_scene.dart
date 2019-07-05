@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:io' show Platform;
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:image_picker/image_picker.dart';
@@ -43,6 +44,12 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   String _generateTemporaryMessageId() =>
     "${DateTime.now().millisecondsSinceEpoch}";
 
+  SentPlatform _getPlatform() {
+    if (Platform.isAndroid) return SentPlatform.ANDROID;
+    else if (Platform.isIOS) return SentPlatform.IOS;
+    return null;
+  }
+
   Future<void> _onImageSentClicked(BuildContext context) async {
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
@@ -57,7 +64,8 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     model.publishMessage(
       content: imageContent,
       type: MessageType.IMAGE,
-      previousMessageId: tempMessageId
+      previousMessageId: tempMessageId,
+      platform: _getPlatform()
     );
   }
 
@@ -70,7 +78,8 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     final model = ScopedModel.of<AppState>(context);
     model.publishMessage(
       content: _inputedMessage,
-      type: MessageType.TEXT
+      type: MessageType.TEXT,
+      platform: _getPlatform()
     );
     _messageInputFieldCtrl.clear();
     _inputedMessage = '';

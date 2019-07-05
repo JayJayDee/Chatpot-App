@@ -405,6 +405,7 @@ class AppState extends Model {
   Future<void> publishMessage({
     @required MessageType type,
     @required dynamic content,
+    @required SentPlatform platform,
     String previousMessageId
   }) async {
     if (_currentRoom == null) return;
@@ -412,7 +413,8 @@ class AppState extends Model {
       roomToken: _currentRoom.roomToken,
       memberToken: _member.token,
       type: type,
-      content: content
+      content: content,
+      platform: platform
     );
     String messageId = publishResult.messageId;
 
