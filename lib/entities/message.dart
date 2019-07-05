@@ -9,6 +9,16 @@ enum NotificationType {
   JOIN_ROOM, LEAVE_ROOM
 }
 
+enum SentPlatform {
+  IOS, ANDROID, WEB
+}
+
+String sentPlatformExpression(SentPlatform platform) {
+  if (platform == SentPlatform.ANDROID) return 'ANDROID';
+  else if (platform == SentPlatform.IOS) return 'IOS';
+  return '';
+}
+
 class Message {
   String messageId;
   String translated;

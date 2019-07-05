@@ -18,7 +18,8 @@ class MessageApi {
     @required String roomToken,
     @required String memberToken,
     @required MessageType type,
-    @required dynamic content
+    @required dynamic content,
+    @required SentPlatform platform
   }) async {
     String contentString;
     String typeExpr;
@@ -38,7 +39,8 @@ class MessageApi {
       body: {
         'member_token': memberToken,
         'type': typeExpr,
-        'content': contentString
+        'content': contentString,
+        'platform': sentPlatformExpression(platform)
       }
     );
     var publishResult = MessagePublishApiResp.fromJson(resp);
