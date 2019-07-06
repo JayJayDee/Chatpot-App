@@ -53,15 +53,14 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
   Future<void> _onImageSentClicked(BuildContext context) async {
     final state = ScopedModel.of<AppState>(context);
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if (image == null) return;
+    // File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    // if (image == null) return;
 
     await Navigator.of(context).push(CupertinoPageRoute<String>(
       title: 'Photo',
       builder: (BuildContext context) => 
         ImageSendConfirmScene(
-          roomTitle: state.currentRoom.title,
-          selectedImageFile: image
+          roomTitle: state.currentRoom.title
         )
     ));
 
