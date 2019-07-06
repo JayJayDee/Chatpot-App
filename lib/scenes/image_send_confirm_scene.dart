@@ -1,10 +1,23 @@
 import 'dart:io';
+import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/factory.dart';
 
 class ImageSendConfirmScene extends StatefulWidget {
+
+  final String roomTitle;
+  final File selectedImageFile;
+
+  ImageSendConfirmScene({
+    @required this.roomTitle,
+    @required this.selectedImageFile
+  });
+
   @override
-  State createState() => _ImageSendConfirmSceneState();
+  State createState() => _ImageSendConfirmSceneState(
+    roomTitle: roomTitle,
+    selectedImageFile: selectedImageFile
+  );
 }
 
 class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
@@ -13,8 +26,8 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
   final File selectedImageFile;
 
   _ImageSendConfirmSceneState({
-    this.roomTitle,
-    this.selectedImageFile
+    @required this.roomTitle,
+    @required this.selectedImageFile
   });
 
   @override
