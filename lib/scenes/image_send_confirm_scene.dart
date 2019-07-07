@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:chatpot_app/styles.dart';
@@ -34,7 +36,7 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
   bool _loading;
   bool _isUploading;
   bool _isZzalSave;
-  Image _selectedImage;
+  Widget _selectedImage;
   int _uploadProgress;
 
   List<MyAssetResp> _myZzals;
@@ -129,11 +131,17 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
         _isUploading = false;
         _loading = false;
       });
+      _loadMyZzals();
     }
   }
 
-  void _onImageSelect(BuildContext context, MyAssetResp asset) async {
-
+  void _onExistZzalClicked(BuildContext context, MyAssetResp asset) async {
+    setState(() {
+      _selectedImage = CachedNetworkImage(
+        imageUrl: asset.orig,
+        placeholder: (conext, url) => CupertinoActivityIndicator()
+      );
+    });
   }
 
   void _onImageDelete(BuildContext context, MyAssetResp asset) async {
@@ -167,9 +175,10 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
                 ),
                 _buildSavedZzalArea(context,
                   loading: _loading,
-                  selectCallback: (MyAssetResp asset) => _onImageSelect(context, asset),
+                  selectCallback: (MyAssetResp asset) => _onExistZzalClicked(context, asset),
                   deleteCallback: (MyAssetResp asset) => _onImageDelete(context, asset),
-                  newZzalCallback: () => _onNewZzalClicked(context)
+                  newZzalCallback: () => _onNewZzalClicked(context),
+                  zzals: _myZzals
                 )
               ]
             ),
@@ -192,37 +201,38 @@ Widget _buildProgress(BuildContext context, {
   @required bool isUploading,
   @required int progress
 }) {
-  return Container(
-    width: 120,
-    height: 120,
-    child: Stack(
-      alignment: Alignment.center,
-      children: [
-        loading == true ? CupertinoActivityIndicator() : Container(),
-        Positioned(
-          child: isUploading == true ?
-            CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(CupertinoColors.activeBlue)
-            ) : Container()
-        ),
-        Positioned(
-          child: isUploading == true ?
-            Text("$progress%",
-              style: TextStyle(
-                color: CupertinoColors.activeBlue,
-                fontSize: 17
-              )
-            ) : Container()
-        )
-      ]
-    )
+  return Stack(
+    alignment: Alignment.center,
+    children: [
+      loading == true ? CupertinoActivityIndicator() : Container(),
+      Positioned(
+        child: isUploading == true ?
+          Container(
+            width: 80,
+            height: 80,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(CupertinoColors.activeBlue),
+              strokeWidth: 8,
+            )
+          ) : Container()
+      ),
+      Positioned(
+        child: isUploading == true ?
+          Text("$progress%",
+            style: TextStyle(
+              color: CupertinoColors.activeBlue,
+              fontSize: 17
+            )
+          ) : Container()
+      )
+    ]
   );
 }
   
 
 Widget _buildImageShownArea(BuildContext context, {
   @required bool loading,
-  @required Image image,
+  @required Widget image,
   @required VoidCallback gallerySelectCallback
 }) =>
   Container(
@@ -236,7 +246,11 @@ Widget _buildImageShownArea(BuildContext context, {
               color: Styles.primaryFontColor,
               size: 50
             ),
-          ) : image,
+          ) : Container(
+            alignment: Alignment.center,
+            color: CupertinoColors.lightBackgroundGray,
+            child: image,
+          ),
         Container(
           margin: EdgeInsets.all(10),
           child: CupertinoButton(
@@ -252,6 +266,7 @@ Widget _buildImageShownArea(BuildContext context, {
 
 Widget _buildSavedZzalArea(BuildContext context, {
   @required bool loading,
+  @required List<MyAssetResp> zzals,
   @required ZzalSelectCallback selectCallback,
   @required ZzalSelectCallback deleteCallback,
   @required VoidCallback newZzalCallback
@@ -275,6 +290,17 @@ Widget _buildSavedZzalArea(BuildContext context, {
       onPressed: loading == true ? null : newZzalCallback
     )
   ));
+
+  if (zzals != null) {
+    List<Widget> zzalRows = zzals.map((z) =>
+      _buildZzalRow(context, 
+        asset: z,
+        loading: loading,
+        selectCallback: selectCallback,
+        deleteCallback: deleteCallback
+      )).toList();
+    widgets.addAll(zzalRows);
+  }
 
   return Container(
     child: Column(
@@ -309,16 +335,26 @@ Widget _buildZzalRow(BuildContext context, {
   @required ZzalSelectCallback selectCallback,
   @required ZzalSelectCallback deleteCallback
 }) =>
-  Stack(
-    alignment: Alignment.topLeft,
-    children: [
-      CupertinoButton(
-        child: Container(
-          width: 70,
-          height: 70
-        ),
-        onPressed: loading == true ? null :
-          () => selectCallback(asset)
-      )
-    ]
+  Container(
+    margin: EdgeInsets.all(2),
+    child: Stack(
+      alignment: Alignment.topLeft,
+      children: [
+        CupertinoButton(
+          padding: EdgeInsets.all(0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: CachedNetworkImage(
+              imageUrl: asset.thumbnail,
+              placeholder: (conext, url) => CupertinoActivityIndicator(),
+              width: 70,
+              height: 70,
+            )
+          ),
+          onPressed: loading == true ? null :
+            () => selectCallback(asset)
+        )
+      ]
+    )
   );
+  

@@ -227,7 +227,7 @@ class MyAssetResp {
     var resp = MyAssetResp();
     resp.orig = map['orig'];
     resp.thumbnail = map['thumbnail'];
-    resp.thumbnail = map['meme_id'];
+    resp.memeId = map['meme_id'];
     return resp;
   } 
 }

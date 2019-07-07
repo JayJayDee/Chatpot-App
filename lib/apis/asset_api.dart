@@ -36,7 +36,7 @@ class AssetApi {
     return images;
   }
 
-  Future<AssetUploadResp> uploadNewMeme(File file, {
+  Future<MyAssetResp> uploadNewMeme(File file, {
     @required String memberToken,
     @required UploadProgressCallback callback
   }) async {
@@ -49,6 +49,7 @@ class AssetApi {
       },
       progress: callback
     );
-    return AssetUploadResp.fromJson(resp);
+    print(resp);
+    return MyAssetResp.fromJson(resp);
   }
 }
