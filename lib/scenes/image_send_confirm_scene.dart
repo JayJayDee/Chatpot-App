@@ -13,7 +13,16 @@ import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/models/app_state.dart';
-import 'package:chatpot_app/components/simple_alert_dialog.dart';
+
+class SelectedImage {
+  final String image;
+  final String thumbnail;
+
+  SelectedImage({
+    @required this.image,
+    @required this.thumbnail
+  });
+}
 
 class ImageSendConfirmScene extends StatefulWidget {
 
@@ -35,9 +44,12 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
 
   bool _loading;
   bool _isUploading;
-  bool _isZzalSave;
+  bool _gallerySelected;
   Widget _selectedImage;
   int _uploadProgress;
+
+  File _selectedGalleryFile;
+  MyAssetResp _selectedPrevZzal;
 
   List<MyAssetResp> _myZzals;
   
@@ -45,8 +57,8 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
     @required this.roomTitle
   }) {
     _loading = false;
-    _isZzalSave = false;
     _isUploading = false;
+    _gallerySelected = false;
     _uploadProgress = 0;
   }
 
@@ -54,6 +66,51 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
     if (_selectedImage == null) {
       await showSimpleAlert(context, locales().imageConfirmScene.imageSelectionRequired);
       return;
+    }
+
+    // case of gallery.
+    if (_gallerySelected == true) {
+      setState(() {
+        _loading = true;
+        _isUploading = true;
+      });
+
+      try {
+        var uploaded = await assetApi().uploadImage(_selectedGalleryFile,
+          callback: (dynamic value) {
+            int progress = value;
+            setState(() {
+              _uploadProgress = progress;
+            });
+          }
+        );
+        SelectedImage resp = SelectedImage(
+          image: uploaded.orig,
+          thumbnail: uploaded.thumbnail
+        );
+        Navigator.of(context).pop(resp);
+
+      } catch (err) {
+        if (err is ApiFailureError) {
+          await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
+        } else {
+          throw err;
+        }
+      } finally {
+        setState(() {
+          _loading = false;
+          _isUploading = false;
+        });
+      }
+    }
+
+    // case of previous zzal
+    else if (_gallerySelected == false) {
+      SelectedImage resp = SelectedImage(
+        image: _selectedPrevZzal.orig,
+        thumbnail: _selectedPrevZzal.thumbnail
+      );
+      Navigator.of(context).pop(resp);
     }
   }
 
@@ -90,6 +147,9 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
       if (file != null) {
         setState(() {
           _selectedImage = Image.file(file);
+          _gallerySelected = true;
+          _selectedPrevZzal = null;
+          _selectedGalleryFile = file;
         });
       }
     } catch (err) {
@@ -141,6 +201,10 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
         imageUrl: asset.orig,
         placeholder: (conext, url) => CupertinoActivityIndicator()
       );
+
+      _selectedPrevZzal = asset;
+      _gallerySelected = false;
+      _selectedGalleryFile = null;
     });
   }
 
@@ -173,12 +237,15 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
                     gallerySelectCallback: () => _onGallerySelectClicked(context)
                   )
                 ),
-                _buildSavedZzalArea(context,
-                  loading: _loading,
-                  selectCallback: (MyAssetResp asset) => _onExistZzalClicked(context, asset),
-                  deleteCallback: (MyAssetResp asset) => _onImageDelete(context, asset),
-                  newZzalCallback: () => _onNewZzalClicked(context),
-                  zzals: _myZzals
+                Container(
+                  margin: EdgeInsets.only(left: 5, right: 5, bottom: 10),
+                  child: _buildSavedZzalArea(context,
+                    loading: _loading,
+                    selectCallback: (MyAssetResp asset) => _onExistZzalClicked(context, asset),
+                    deleteCallback: (MyAssetResp asset) => _onImageDelete(context, asset),
+                    newZzalCallback: () => _onNewZzalClicked(context),
+                    zzals: _myZzals
+                  )
                 )
               ]
             ),
@@ -243,7 +310,7 @@ Widget _buildImageShownArea(BuildContext context, {
         image == null ?
           Center(
             child: Icon(MdiIcons.image,
-              color: Styles.primaryFontColor,
+              color: Styles.secondaryFontColor,
               size: 50
             ),
           ) : Container(
@@ -255,7 +322,7 @@ Widget _buildImageShownArea(BuildContext context, {
           margin: EdgeInsets.all(10),
           child: CupertinoButton(
             padding: EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
-            child: Text('갤러리에서 선택'),
+            child: Text(locales().imageConfirmScene.btnSelectImageFromGallery),
             onPressed: loading == true ? null : gallerySelectCallback,
             color: Styles.primaryFontColor,
           ),

@@ -408,37 +408,46 @@ class AppState extends Model {
     @required SentPlatform platform,
     String previousMessageId
   }) async {
-    if (_currentRoom == null) return;
-    var publishResult = await messageApi().requestPublishToRoom(
-      roomToken: _currentRoom.roomToken,
-      memberToken: _member.token,
-      type: type,
-      content: content,
-      platform: platform
-    );
-    String messageId = publishResult.messageId;
-
-    if (previousMessageId != null) {
-      _currentRoom.messages.changeMessageId(previousMessageId, messageId);
-
-    } else {
-      Message newMsg = Message();
-      var to = MessageTo();
-      to.type = MessageTarget.ROOM;
-      to.token = _currentRoom.roomToken;
-
-      newMsg.messageId = messageId;
-      newMsg.messageType = type;
-      newMsg.content = content;
-      newMsg.sentTime = DateTime.now();
-      newMsg.from = _member;
-      newMsg.to = to;
-      newMsg.changeToSending();
-
-      _currentRoom.messages.appendSingleMessage(newMsg);
-    }
-
+    _loading = true;
     notifyListeners();
+
+    try {
+      if (_currentRoom == null) return;
+      var publishResult = await messageApi().requestPublishToRoom(
+        roomToken: _currentRoom.roomToken,
+        memberToken: _member.token,
+        type: type,
+        content: content,
+        platform: platform
+      );
+      String messageId = publishResult.messageId;
+
+      if (previousMessageId != null) {
+        _currentRoom.messages.changeMessageId(previousMessageId, messageId);
+
+      } else {
+        Message newMsg = Message();
+        var to = MessageTo();
+        to.type = MessageTarget.ROOM;
+        to.token = _currentRoom.roomToken;
+
+        newMsg.messageId = messageId;
+        newMsg.messageType = type;
+        newMsg.content = content;
+        newMsg.sentTime = DateTime.now();
+        newMsg.from = _member;
+        newMsg.to = to;
+        newMsg.changeToSending();
+
+        _currentRoom.messages.appendSingleMessage(newMsg);
+      }
+      notifyListeners();
+    } catch (err) {
+      throw err;
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
   }
 
   Future<ImageContent> uploadImage({
