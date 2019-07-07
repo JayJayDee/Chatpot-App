@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:io' show Platform;
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,8 +41,8 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   TextEditingController _messageInputFieldCtrl = TextEditingController();
   ScrollController _scrollController = ScrollController();
 
-  String _generateTemporaryMessageId() =>
-    "${DateTime.now().millisecondsSinceEpoch}";
+  // String _generateTemporaryMessageId() =>
+  //   "${DateTime.now().millisecondsSinceEpoch}";
 
   SentPlatform _getPlatform() {
     if (Platform.isAndroid) return SentPlatform.ANDROID;
@@ -53,10 +52,8 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
   Future<void> _onImageSentClicked(BuildContext context) async {
     final state = ScopedModel.of<AppState>(context);
-    // File image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    // if (image == null) return;
 
-    await Navigator.of(context).push(CupertinoPageRoute<String>(
+    SelectedImage image = await Navigator.of(context).push(CupertinoPageRoute<SelectedImage>(
       title: 'Photo',
       builder: (BuildContext context) => 
         ImageSendConfirmScene(
@@ -64,19 +61,18 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
         )
     ));
 
-    // final model = ScopedModel.of<AppState>(context);
-    // String tempMessageId = _generateTemporaryMessageId();
+    if (image == null) return;
 
-    // var imageContent = await model.uploadImage(
-    //   image: image,
-    //   tempMessageId: tempMessageId
-    // );
-    // model.publishMessage(
-    //   content: imageContent,
-    //   type: MessageType.IMAGE,
-    //   previousMessageId: tempMessageId,
-    //   platform: _getPlatform()
-    // );
+    ImageContent content = ImageContent(
+      imageUrl: image.image,
+      thumbnailUrl: image.thumbnail
+    );
+
+    await state.publishMessage(
+      content: content,
+      type: MessageType.IMAGE,
+      platform: _getPlatform()
+    );
   }
 
   Future<void> _onMessageSend(BuildContext context) async {
@@ -328,6 +324,7 @@ Widget _buildEditText(BuildContext context, {
   @required VoidCallback imageSelected,
   @required VoidCallback sendClicked
 }) {
+  final state = ScopedModel.of<AppState>(context, rebuildOnChange: true);
   return Container(
     height: 50,
     child: Row(
@@ -335,23 +332,34 @@ Widget _buildEditText(BuildContext context, {
       children: <Widget>[
         CupertinoButton(
           padding: EdgeInsets.all(5),
-          child: Icon(Icons.photo),
+          child: Icon(Icons.photo,
+            size: 27
+          ),
           onPressed: imageSelected
         ),
         Expanded(
           child: CupertinoTextField(
             controller: controller,
-            padding: EdgeInsets.all(5),
+            padding: EdgeInsets.all(8),
             style: TextStyle(
               fontSize: 17,
               color: Styles.primaryFontColor
             ),
             onChanged: valueChanged,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Styles.thirdFontColor,
+                width: 1.0
+              ),
+              borderRadius: BorderRadius.circular(10.0)
+            )
           )
         ),
         CupertinoButton(
           padding: EdgeInsets.all(5),
-          child: Icon(Icons.send),
+          child: Icon(Icons.send,
+            size: 27,
+          ),
           onPressed: sendClicked
         )
       ],
