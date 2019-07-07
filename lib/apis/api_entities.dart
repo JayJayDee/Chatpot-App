@@ -216,6 +216,22 @@ class AssetUploadResp {
   } 
 }
 
+class MyAssetResp {
+  String orig;
+  String thumbnail;
+  int memeId;
+
+  MyAssetResp();
+
+  factory MyAssetResp.fromJson(Map<String, dynamic> map) {
+    var resp = MyAssetResp();
+    resp.orig = map['orig'];
+    resp.thumbnail = map['thumbnail'];
+    resp.thumbnail = map['meme_id'];
+    return resp;
+  } 
+}
+
 
 enum ActivationStatus {
   IDLE, SENT, CONFIRMED

@@ -1,11 +1,16 @@
 import 'dart:io';
+import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/components/simple_alert_dialog.dart';
+import 'package:chatpot_app/apis/api_entities.dart';
+import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
 class ImageSendConfirmScene extends StatefulWidget {
@@ -29,7 +34,8 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
   bool _loading;
   bool _isZzalSave;
   Image _selectedImage;
-
+  List<MyAssetResp> _myZzals;
+  
   _ImageSendConfirmSceneState({
     @required this.roomTitle
   }) {
@@ -41,6 +47,31 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
     if (_selectedImage == null) {
       await showSimpleAlert(context, locales().imageConfirmScene.imageSelectionRequired);
       return;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMyZzals();
+  }
+
+  void _loadMyZzals() async {
+    setState(() => _loading = true);
+    final state = ScopedModel.of<AppState>(context);
+
+    try {
+      List<MyAssetResp> list = await assetApi().getMyMemes(memberToken: state.member.token);
+      setState(() {
+        _myZzals = list;
+      });
+
+    } catch (err) {
+      if (err is ApiFailureError) {
+        await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
+      }
+    } finally {
+      setState(() => _loading = false);
     }
   }
 
@@ -123,8 +154,36 @@ Widget _buildSavedZzalArea(BuildContext context, {
           )
         ),
         Container(
-          height: 70
+          height: 70,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+
+            ]
+          ),
         )
       ]
     )
+  );
+
+typedef ZzalSelectCallback (AssetUploadResp asset);
+
+Widget _buildZzalRow(BuildContext context, {
+  @required AssetUploadResp asset,
+  @required bool loading,
+  @required ZzalSelectCallback callback
+}) =>
+  CupertinoButton(
+    child: Stack(
+      alignment: Alignment.topLeft,
+      children: [
+        Container(
+          width: 70,
+          height: 70,
+          color: CupertinoColors.activeBlue,
+        )
+      ]
+    ),
+    onPressed: loading == true ? null :
+      () => callback(asset)
   );

@@ -24,4 +24,15 @@ class AssetApi {
     );
     return AssetUploadResp.fromJson(resp);
   }
+
+  Future<List<MyAssetResp>> getMyMemes({
+    @required String memberToken
+  }) async {
+    List<dynamic> list = await _requester.requestWithAuth(
+      url: "/meme/$memberToken/memes",
+      method: HttpMethod.GET,
+    );
+    List<MyAssetResp> images = list.map((elem) => MyAssetResp.fromJson(elem)).toList();
+    return images;
+  }
 }
