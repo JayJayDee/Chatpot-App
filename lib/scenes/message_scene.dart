@@ -17,6 +17,7 @@ import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/scenes/photo_detail_scene.dart';
 import 'package:chatpot_app/scenes/report_scene.dart';
+import 'package:chatpot_app/scenes/image_send_confirm_scene.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 import 'package:chatpot_app/components/member_detail_sheet.dart';
 import 'package:chatpot_app/storage/block_accessor.dart';
@@ -51,22 +52,31 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onImageSentClicked(BuildContext context) async {
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if (image == null) return;
+    final state = ScopedModel.of<AppState>(context);
+    // File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    // if (image == null) return;
 
-    final model = ScopedModel.of<AppState>(context);
-    String tempMessageId = _generateTemporaryMessageId();
+    await Navigator.of(context).push(CupertinoPageRoute<String>(
+      title: 'Photo',
+      builder: (BuildContext context) => 
+        ImageSendConfirmScene(
+          roomTitle: state.currentRoom.title
+        )
+    ));
 
-    var imageContent = await model.uploadImage(
-      image: image,
-      tempMessageId: tempMessageId
-    );
-    model.publishMessage(
-      content: imageContent,
-      type: MessageType.IMAGE,
-      previousMessageId: tempMessageId,
-      platform: _getPlatform()
-    );
+    // final model = ScopedModel.of<AppState>(context);
+    // String tempMessageId = _generateTemporaryMessageId();
+
+    // var imageContent = await model.uploadImage(
+    //   image: image,
+    //   tempMessageId: tempMessageId
+    // );
+    // model.publishMessage(
+    //   content: imageContent,
+    //   type: MessageType.IMAGE,
+    //   previousMessageId: tempMessageId,
+    //   platform: _getPlatform()
+    // );
   }
 
   Future<void> _onMessageSend(BuildContext context) async {
@@ -106,7 +116,6 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   Future<void> _onImageClicked(BuildContext context, String messageId) async {
     final model = ScopedModel.of<AppState>(context);
     await Navigator.of(context).push(CupertinoPageRoute<String>(
-      title: 'Photo',
       builder: (BuildContext context) => 
         PhotoDetailScene(
           context,
