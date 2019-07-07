@@ -27,6 +27,7 @@ abstract class Requester {
     @required String url,
     @required HttpMethod method,
     @required File file,
+    Map<String, dynamic> body,
     Map<String, dynamic> qs,
     UploadProgressCallback progress
   });
