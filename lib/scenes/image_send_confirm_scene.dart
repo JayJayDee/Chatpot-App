@@ -32,8 +32,11 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
   final String roomTitle;
 
   bool _loading;
+  bool _isUploading;
   bool _isZzalSave;
   Image _selectedImage;
+  int _uploadProgress;
+
   List<MyAssetResp> _myZzals;
   
   _ImageSendConfirmSceneState({
@@ -41,6 +44,8 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
   }) {
     _loading = false;
     _isZzalSave = false;
+    _isUploading = false;
+    _uploadProgress = 0;
   }
 
   void _onSendClicked() async {
@@ -75,6 +80,66 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
     }
   }
 
+  void _onGallerySelectClicked(BuildContext context) async {
+    setState(() => _loading = true);
+    File file = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    try {
+      if (file != null) {
+        setState(() {
+          _selectedImage = Image.file(file);
+        });
+      }
+    } catch (err) {
+      throw err;
+    } finally {
+      setState(() => _loading = false);
+    }
+  }
+
+  void _onNewZzalClicked(BuildContext context) async {
+    setState(() {
+      _loading = true;
+    });
+    File file = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    try {
+      if (file == null) return;
+      final state = ScopedModel.of<AppState>(context);
+
+      setState(() {
+        _isUploading = true;
+        _uploadProgress = 0;
+      });
+
+      await assetApi().uploadNewMeme(file,
+        memberToken: state.member.token,
+        callback: (dynamic value) {
+          int progress = value;
+          setState(() {
+            _uploadProgress = progress;
+          });
+        }
+      );
+
+    } catch (err) {
+      throw err;
+    } finally {
+      setState(() {
+        _isUploading = false;
+        _loading = false;
+      });
+    }
+  }
+
+  void _onImageSelect(BuildContext context, MyAssetResp asset) async {
+
+  }
+
+  void _onImageDelete(BuildContext context, MyAssetResp asset) async {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -84,7 +149,7 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
         trailing: CupertinoButton(
           padding: EdgeInsets.all(0),
           child: Text(locales().imageConfirmScene.btnSendImage),
-          onPressed: () => _onSendClicked(),
+          onPressed: _loading == true ? null :  () => _onSendClicked(),
         )
       ),
       child: SafeArea(
@@ -95,15 +160,25 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
               children: [
                 Expanded(
                   child: _buildImageShownArea(context,
+                    loading: _loading,
                     image: _selectedImage,
-                    isZzalSave: _isZzalSave
+                    gallerySelectCallback: () => _onGallerySelectClicked(context)
                   )
                 ),
-                _buildSavedZzalArea(context, loading: _loading)
+                _buildSavedZzalArea(context,
+                  loading: _loading,
+                  selectCallback: (MyAssetResp asset) => _onImageSelect(context, asset),
+                  deleteCallback: (MyAssetResp asset) => _onImageDelete(context, asset),
+                  newZzalCallback: () => _onNewZzalClicked(context)
+                )
               ]
             ),
             Positioned(
-              child: _buildProgress(context, loading: _loading)
+              child: _buildProgress(context,
+                loading: _loading,
+                isUploading: _isUploading,
+                progress: _uploadProgress
+              )
             )
           ]
         )
@@ -113,24 +188,62 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
 }
 
 Widget _buildProgress(BuildContext context, {
-  @required bool loading
-}) =>
-  loading == true ? CupertinoActivityIndicator() :
-  Container();
+  @required bool loading,
+  @required bool isUploading,
+  @required int progress
+}) {
+  return Container(
+    width: 120,
+    height: 120,
+    child: Stack(
+      alignment: Alignment.center,
+      children: [
+        loading == true ? CupertinoActivityIndicator() : Container(),
+        Positioned(
+          child: isUploading == true ?
+            CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(CupertinoColors.activeBlue)
+            ) : Container()
+        ),
+        Positioned(
+          child: isUploading == true ?
+            Text("$progress%",
+              style: TextStyle(
+                color: CupertinoColors.activeBlue,
+                fontSize: 17
+              )
+            ) : Container()
+        )
+      ]
+    )
+  );
+}
+  
 
 Widget _buildImageShownArea(BuildContext context, {
+  @required bool loading,
   @required Image image,
-  @required bool isZzalSave
+  @required VoidCallback gallerySelectCallback
 }) =>
   Container(
     color: CupertinoColors.lightBackgroundGray,
     child: Stack(
-      alignment: Alignment.bottomLeft,
+      alignment: Alignment.topLeft,
       children: [
-        Center(
-          child: Icon(MdiIcons.image,
+        image == null ?
+          Center(
+            child: Icon(MdiIcons.image,
+              color: Styles.primaryFontColor,
+              size: 50
+            ),
+          ) : image,
+        Container(
+          margin: EdgeInsets.all(10),
+          child: CupertinoButton(
+            padding: EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
+            child: Text('갤러리에서 선택'),
+            onPressed: loading == true ? null : gallerySelectCallback,
             color: Styles.primaryFontColor,
-            size: 50
           ),
         )
       ]
@@ -138,9 +251,32 @@ Widget _buildImageShownArea(BuildContext context, {
   );
 
 Widget _buildSavedZzalArea(BuildContext context, {
-  @required bool loading
-}) =>
-  Container(
+  @required bool loading,
+  @required ZzalSelectCallback selectCallback,
+  @required ZzalSelectCallback deleteCallback,
+  @required VoidCallback newZzalCallback
+}) {
+  List<Widget> widgets = List();
+  widgets.add(Container(
+    margin: EdgeInsets.all(2),
+    child: CupertinoButton(
+      padding: EdgeInsets.all(0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Styles.secondaryFontColor,
+          borderRadius: BorderRadius.all(Radius.circular(10.0))
+        ),
+        width: 70,
+        height: 70,
+        child: Icon(MdiIcons.plus,
+          color: CupertinoColors.white
+        )
+      ),
+      onPressed: loading == true ? null : newZzalCallback
+    )
+  ));
+
+  return Container(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -157,33 +293,32 @@ Widget _buildSavedZzalArea(BuildContext context, {
           height: 70,
           child: ListView(
             scrollDirection: Axis.horizontal,
-            children: [
-
-            ]
+            children: widgets
           ),
         )
       ]
     )
   );
+}
 
-typedef ZzalSelectCallback (AssetUploadResp asset);
+typedef ZzalSelectCallback (MyAssetResp asset);
 
 Widget _buildZzalRow(BuildContext context, {
-  @required AssetUploadResp asset,
+  @required MyAssetResp asset,
   @required bool loading,
-  @required ZzalSelectCallback callback
+  @required ZzalSelectCallback selectCallback,
+  @required ZzalSelectCallback deleteCallback
 }) =>
-  CupertinoButton(
-    child: Stack(
-      alignment: Alignment.topLeft,
-      children: [
-        Container(
+  Stack(
+    alignment: Alignment.topLeft,
+    children: [
+      CupertinoButton(
+        child: Container(
           width: 70,
-          height: 70,
-          color: CupertinoColors.activeBlue,
-        )
-      ]
-    ),
-    onPressed: loading == true ? null :
-      () => callback(asset)
+          height: 70
+        ),
+        onPressed: loading == true ? null :
+          () => selectCallback(asset)
+      )
+    ]
   );

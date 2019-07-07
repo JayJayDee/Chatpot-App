@@ -35,4 +35,20 @@ class AssetApi {
     List<MyAssetResp> images = list.map((elem) => MyAssetResp.fromJson(elem)).toList();
     return images;
   }
+
+  Future<AssetUploadResp> uploadNewMeme(File file, {
+    @required String memberToken,
+    @required UploadProgressCallback callback
+  }) async {
+    Map<String, dynamic> resp = await _requester.upload(
+      url: "/meme/$memberToken/upload",
+      method: HttpMethod.POST,
+      file: file,
+      body: {
+        'member_token': memberToken
+      },
+      progress: callback
+    );
+    return AssetUploadResp.fromJson(resp);
+  }
 }

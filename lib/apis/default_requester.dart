@@ -103,15 +103,24 @@ class DefaultRequester implements Requester {
     @required String url,
     @required HttpMethod method,
     @required File file,
+    Map<String, dynamic> body,
     Map<String, dynamic> qs,
     UploadProgressCallback progress
   }) async {
     var dio = Dio();
     String wholeUrl = _buildWholeUrl("$_baseUrl$url", qs: qs);
     try {
+      // TODO: refactor required.
       FormData formData = FormData.from({
         "image": UploadFileInfo(file, basename(file.path))
       });
+
+      if (body != null && body.keys.length > 0) {
+        body.keys.forEach((String k) {
+          formData.add(k, body[k]);
+        });
+      }
+
       var resp = await dio.post(wholeUrl,
         data: formData,
         onSendProgress: (received, total) {
