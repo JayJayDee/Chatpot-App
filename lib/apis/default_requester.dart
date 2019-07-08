@@ -52,7 +52,7 @@ class DefaultRequester implements Requester {
     _preValidateParams(qs: qs, body: body);
 
     String wholeUrl = _buildWholeUrl("$_baseUrl$url", qs: qs);
-    print("REQUEST WHOLE URL = $wholeUrl");
+    print("[debug] API REQUEST: $wholeUrl");
 
     var resp;
     Map<String, dynamic> respMap;
@@ -62,6 +62,7 @@ class DefaultRequester implements Requester {
       if (method == HttpMethod.GET) resp = await http.get(wholeUrl);
       else if (method == HttpMethod.POST) resp = await http.post(wholeUrl, body: body);
       else if (method == HttpMethod.PUT) resp = await http.put(wholeUrl, body: body);
+      else if (method == HttpMethod.DELETE) resp = await http.delete(wholeUrl);
     } catch (err) {
       if (err is SocketException) {
         throw new ApiFailureError(err.message, 500, code: 'NETWORK_ERROR');

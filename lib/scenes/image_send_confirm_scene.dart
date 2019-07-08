@@ -209,7 +209,22 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
   }
 
   void _onImageDelete(BuildContext context, MyAssetResp asset) async {
-
+    setState(() => _loading = true);
+    try {
+      final state = ScopedModel.of<AppState>(context);
+      await assetApi().deleteMyMeme(
+        memeId: asset.memeId,
+        memberToken: state.member.token,
+      );
+    } catch (err) {
+      if (err is ApiFailureError) {
+        await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
+        return;
+      }
+    } finally {
+      setState(() => _loading = false);
+      _loadMyZzals();
+    }
   }
 
   @override
@@ -420,6 +435,24 @@ Widget _buildZzalRow(BuildContext context, {
           ),
           onPressed: loading == true ? null :
             () => selectCallback(asset)
+        ),
+        Positioned(
+          child: CupertinoButton(
+            padding: EdgeInsets.all(0),
+            child: Container(
+              color: CupertinoColors.destructiveRed,
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10)
+              ),
+              child: Icon(MdiIcons.minus,
+                color: CupertinoColors.white,
+              )
+            ),
+            onPressed: loading == true ? null :
+              () => deleteCallback(asset)
+          )
         )
       ]
     )

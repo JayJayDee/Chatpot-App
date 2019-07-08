@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:meta/meta.dart';
 
 enum HttpMethod {
-  GET, POST, PUT
+  GET, POST, PUT, DELETE
 }
 
 typedef UploadProgressCallback (int);
