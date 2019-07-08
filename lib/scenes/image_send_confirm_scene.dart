@@ -209,7 +209,22 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
   }
 
   void _onImageDelete(BuildContext context, MyAssetResp asset) async {
-    
+    setState(() => _loading = true);
+    try {
+      final state = ScopedModel.of<AppState>(context);
+      await assetApi().deleteMyMeme(
+        memeId: asset.memeId,
+        memberToken: state.member.token,
+      );
+    } catch (err) {
+      if (err is ApiFailureError) {
+        await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
+        return;
+      }
+    } finally {
+      setState(() => _loading = false);
+      _loadMyZzals();
+    }
   }
 
   @override
