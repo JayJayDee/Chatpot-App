@@ -357,13 +357,22 @@ Widget _buildEditText(BuildContext context, {
             )
           )
         ),
-        CupertinoButton(
-          padding: EdgeInsets.all(5),
-          child: Icon(Icons.send,
-            size: 27,
-          ),
-          onPressed: sendClicked
-        )
+        state.loading == true ?
+          Container(
+            margin: EdgeInsets.all(8),
+            width: 27,
+            height: 27,
+            child: CircularProgressIndicator(
+              strokeWidth: 2.0
+            ),
+          ) :
+          CupertinoButton(
+            padding: EdgeInsets.all(5),
+            child: Icon(Icons.send,
+              size: 27,
+            ),
+            onPressed: sendClicked    
+          )
       ],
     ),
   );   
