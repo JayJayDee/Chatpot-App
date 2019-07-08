@@ -1,10 +1,16 @@
+import 'dart:io';
+import 'package:path/path.dart' as p;
 import 'package:flutter/cupertino.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:meta/meta.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:chatpot_app/entities/message.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
 class PhotoDetailScene extends StatefulWidget {
 
@@ -25,11 +31,33 @@ class PhotoDetailScene extends StatefulWidget {
 class _PhotoDetailSceneState extends State<PhotoDetailScene> {
 
   Message _message;
+  bool _loading;
 
   _PhotoDetailSceneState({
     @required Message message
   }) {
     _message = message;
+    _loading = false;
+  }
+
+  void _onImageDownloadClicked(BuildContext context, String imageUrl) async {
+    setState(() => _loading = true);
+
+    try {
+      var downloadDir = await getApplicationDocumentsDirectory();
+      File file = await DefaultCacheManager().getSingleFile(imageUrl);
+      String ext = p.extension(file.path);
+      await file.copy("${downloadDir.path}/${DateTime.now().toUtc().toIso8601String()}$ext");
+
+      showToast(locales().photoDetail.downloadSuccess, 
+        duration: Duration(milliseconds: 1000),
+        position: ToastPosition(align: Alignment.bottomCenter)
+      );
+    } catch (err) {
+      showSimpleAlert(context, locales().photoDetail.failedToDownload(err.toString()));
+    } finally {
+      setState(() => _loading = false);
+    }
   }
 
   @override
@@ -39,11 +67,12 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
       navigationBar: CupertinoNavigationBar(
         previousPageTitle: locales().photoDetail.previousTitle,
         middle: Text(locales().photoDetail.title),
-        trailing: CupertinoButton(
-          padding: EdgeInsets.all(0),
-          child: Text('Download'),
-          onPressed: () {} // TODO: to be implemented
-        ),
+        // trailing: CupertinoButton(
+        //   padding: EdgeInsets.all(0),
+        //   child: Text(locales().photoDetail.btnDownload),
+        //   onPressed: _loading == true ? null : 
+        //     () => _onImageDownloadClicked(context, _message.getImageContent().imageUrl)
+        // ),
         transitionBetweenRoutes: true
       ),
       child: SafeArea(

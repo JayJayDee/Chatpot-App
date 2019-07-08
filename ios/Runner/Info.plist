@@ -51,7 +51,9 @@
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<string>NO</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>uploads user photo to chat room</string>
+	<string>to upload user photo to chat room, or download photo from chat room</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>to download photo from chat room</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSAppTransportSecurity</key>
