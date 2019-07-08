@@ -49,7 +49,16 @@ class AssetApi {
       },
       progress: callback
     );
-    print(resp);
     return MyAssetResp.fromJson(resp);
+  }
+
+  Future<void> deleteMyMeme({
+    @required String memberToken,
+    @required int memeId
+  }) async {
+    await _requester.requestWithAuth(
+      url: "/meme/$memberToken/meme/$memeId",
+      method: HttpMethod.DELETE
+    );
   }
 }

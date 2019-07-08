@@ -209,7 +209,7 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
   }
 
   void _onImageDelete(BuildContext context, MyAssetResp asset) async {
-
+    
   }
 
   @override
@@ -420,6 +420,24 @@ Widget _buildZzalRow(BuildContext context, {
           ),
           onPressed: loading == true ? null :
             () => selectCallback(asset)
+        ),
+        Positioned(
+          child: CupertinoButton(
+            padding: EdgeInsets.all(0),
+            child: Container(
+              color: CupertinoColors.destructiveRed,
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10)
+              ),
+              child: Icon(MdiIcons.minus,
+                color: CupertinoColors.white,
+              )
+            ),
+            onPressed: loading == true ? null :
+              () => deleteCallback(asset)
+          )
         )
       ]
     )
