@@ -342,6 +342,7 @@ Widget _buildEditText(BuildContext context, {
         Expanded(
           child: CupertinoTextField(
             controller: controller,
+            keyboardType: TextInputType.text,
             padding: EdgeInsets.all(8),
             style: TextStyle(
               fontSize: 17,
