@@ -111,12 +111,14 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
   Future<void> _onImageClicked(BuildContext context, String messageId) async {
     final model = ScopedModel.of<AppState>(context);
+    List<Message> found = model.currentRoom.messages.messages.where((m) =>
+      m.messageId == messageId).toList();
+
     await Navigator.of(context).push(CupertinoPageRoute<String>(
       builder: (BuildContext context) => 
         PhotoDetailScene(
-          context,
-          model.currentRoom.messages.messages,
-          messageId
+          messagesSceneContext: context,
+          message: found[0]
         )
     ));
   }
