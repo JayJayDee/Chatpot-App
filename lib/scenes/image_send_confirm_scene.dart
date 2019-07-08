@@ -337,7 +337,12 @@ Widget _buildImageShownArea(BuildContext context, {
           margin: EdgeInsets.all(10),
           child: CupertinoButton(
             padding: EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
-            child: Text(locales().imageConfirmScene.btnSelectImageFromGallery),
+            child: Text(locales().imageConfirmScene.btnSelectImageFromGallery,
+              style: TextStyle(
+                fontSize: 16,
+                color: CupertinoColors.white
+              )
+            ),
             onPressed: loading == true ? null : gallerySelectCallback,
             color: Styles.primaryFontColor,
           ),
@@ -420,7 +425,7 @@ Widget _buildZzalRow(BuildContext context, {
   Container(
     margin: EdgeInsets.all(2),
     child: Stack(
-      alignment: Alignment.topLeft,
+      alignment: Alignment.bottomRight,
       children: [
         CupertinoButton(
           padding: EdgeInsets.all(0),
@@ -437,21 +442,21 @@ Widget _buildZzalRow(BuildContext context, {
             () => selectCallback(asset)
         ),
         Positioned(
-          child: CupertinoButton(
-            padding: EdgeInsets.all(0),
+          child: GestureDetector(
             child: Container(
-              color: CupertinoColors.destructiveRed,
-              width: 20,
-              height: 20,
+              padding: EdgeInsets.zero,
+              margin: EdgeInsets.zero,
+              width: 25,
+              height: 25,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10)
+                color: CupertinoColors.destructiveRed,
+                borderRadius: BorderRadius.circular(12.5)
               ),
               child: Icon(MdiIcons.minus,
-                color: CupertinoColors.white,
+                color: CupertinoColors.white
               )
             ),
-            onPressed: loading == true ? null :
-              () => deleteCallback(asset)
+            onTapUp: (var dtl) => loading == true ? null : deleteCallback(asset)
           )
         )
       ]

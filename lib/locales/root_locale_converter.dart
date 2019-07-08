@@ -1,4 +1,5 @@
 import 'package:chatpot_app/locales/report_scene_locales.dart';
+import 'package:chatpot_app/locales/room_detail_scene_locales.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/entities/member.dart';
@@ -48,6 +49,7 @@ class RootLocaleConverter {
   ReportHistorySceneLocales _reportHistoryScene;
   BlockHistorySceneLocales _blockHistoryScene;
   ImageSendConfirmSceneLocales _imageConfirmScene;
+  RoomDetailSceneLocales _roomDetailScene;
 
   HomeSceneLocales get home => _home;
   MessageLocales get message => _message;
@@ -71,6 +73,7 @@ class RootLocaleConverter {
   ReportHistorySceneLocales get reportHistoryScene => _reportHistoryScene;
   BlockHistorySceneLocales get blockHistoryScene => _blockHistoryScene;
   ImageSendConfirmSceneLocales get imageConfirmScene => _imageConfirmScene;
+  RoomDetailSceneLocales get roomDetailScene => _roomDetailScene;
 
 
   String get langauge => _language;
@@ -100,6 +103,7 @@ class RootLocaleConverter {
     _reportHistoryScene = ReportHistorySceneLocales(root: this, language: _language);
     _blockHistoryScene = BlockHistorySceneLocales(root: this, language: _language);
     _imageConfirmScene = ImageSendConfirmSceneLocales(root: this, language: _language);
+    _roomDetailScene = RoomDetailSceneLocales(root: this, language: _language);
   }
 
   String getNick(Nick nick) {
