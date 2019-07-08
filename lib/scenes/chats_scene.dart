@@ -92,6 +92,9 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
       if (rooms.length == 0) return;
 
       widgets.add(_buildRoomTypeHeaderLabel(rtype, rooms.length));
+      rooms.sort((var a, var b) =>
+        -1 * a.lastMessage.sentTime.compareTo(b.lastMessage.sentTime));
+
       widgets.addAll(rooms.map((r) => MyRoomRow(
         myRoom: r,
         myRoomSelectCallback: (r) => _onMyRoomSelected(context, r)

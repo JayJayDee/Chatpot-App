@@ -247,6 +247,7 @@ class AppState extends Model {
         .map((b) => b.memberToken).toList();
 
     var resp = await roomApi().requestMyRooms(memberToken: _member.token);
+
     _myRooms = resp;
     _loading = false;
     notifyListeners();

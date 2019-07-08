@@ -111,12 +111,14 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
   Future<void> _onImageClicked(BuildContext context, String messageId) async {
     final model = ScopedModel.of<AppState>(context);
+    List<Message> found = model.currentRoom.messages.messages.where((m) =>
+      m.messageId == messageId).toList();
+
     await Navigator.of(context).push(CupertinoPageRoute<String>(
       builder: (BuildContext context) => 
         PhotoDetailScene(
-          context,
-          model.currentRoom.messages.messages,
-          messageId
+          messagesSceneContext: context,
+          message: found[0]
         )
     ));
   }
@@ -340,6 +342,7 @@ Widget _buildEditText(BuildContext context, {
         Expanded(
           child: CupertinoTextField(
             controller: controller,
+            keyboardType: TextInputType.text,
             padding: EdgeInsets.all(8),
             style: TextStyle(
               fontSize: 17,
@@ -355,13 +358,22 @@ Widget _buildEditText(BuildContext context, {
             )
           )
         ),
-        CupertinoButton(
-          padding: EdgeInsets.all(5),
-          child: Icon(Icons.send,
-            size: 27,
-          ),
-          onPressed: sendClicked
-        )
+        state.loading == true ?
+          Container(
+            margin: EdgeInsets.all(8),
+            width: 27,
+            height: 27,
+            child: CircularProgressIndicator(
+              strokeWidth: 2.0
+            ),
+          ) :
+          CupertinoButton(
+            padding: EdgeInsets.all(5),
+            child: Icon(Icons.send,
+              size: 27,
+            ),
+            onPressed: sendClicked    
+          )
       ],
     ),
   );   
