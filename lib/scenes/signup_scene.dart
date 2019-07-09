@@ -97,7 +97,7 @@ class _SignupSceneState extends State<SignupScene> {
                   child: Text(locales().signupScene.description,
                     style: TextStyle(
                       fontSize: 15,
-                      color: Styles.primaryFontColor
+                      color: styles().primaryFontColor
                     )
                   )
                 ),
@@ -160,16 +160,16 @@ Widget _buildEmailField(BuildContext context, {
   CupertinoTextField(
     prefix: Icon(CupertinoIcons.mail_solid,
       size: 28.0,
-      color: Styles.thirdFontColor),
+      color: styles().thirdFontColor),
     placeholder: locales().signupScene.emailPlaceHolder,
     placeholderStyle: TextStyle(
-      color: Styles.thirdFontColor,
+      color: styles().thirdFontColor,
     ),
     onChanged: changedCallback,
     padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 14.0),
     keyboardType: TextInputType.emailAddress,
     decoration: BoxDecoration(
-      border: Border(bottom: BorderSide(width: 0.5, color: Styles.inputFieldDevidier))
+      border: Border(bottom: BorderSide(width: 0.5, color: styles().inputFieldDevidier))
     )
   );
 
@@ -180,10 +180,10 @@ Widget _buildPasswordField(BuildContext context, {
   CupertinoTextField(
     prefix: Icon(CupertinoIcons.padlock_solid,
       size: 28.0,
-      color: Styles.thirdFontColor),
+      color: styles().thirdFontColor),
     placeholder: locales().signupScene.passwordPlaceHolder,
     placeholderStyle: TextStyle(
-      color: Styles.thirdFontColor
+      color: styles().thirdFontColor
     ),
     onChanged: changedCallback,
     obscureText: true,
@@ -193,7 +193,7 @@ Widget _buildPasswordField(BuildContext context, {
       border: Border(
         bottom: BorderSide(
           width: 0.5,
-          color: Styles.inputFieldDevidier
+          color: styles().inputFieldDevidier
         )
       )
     )
@@ -206,10 +206,10 @@ Widget _buildPasswordConfirmField(BuildContext context, {
   CupertinoTextField(
     prefix: Icon(CupertinoIcons.padlock_solid,
       size: 28.0,
-      color: Styles.thirdFontColor),
+      color: styles().thirdFontColor),
     placeholder: locales().signupScene.passworConfirmPlaceHolder,
     placeholderStyle: TextStyle(
-      color: Styles.thirdFontColor
+      color: styles().thirdFontColor
     ),
     onChanged: changedCallback,
     obscureText: true,
@@ -219,7 +219,7 @@ Widget _buildPasswordConfirmField(BuildContext context, {
       border: Border(
         bottom: BorderSide(
           width: 0.5,
-          color: Styles.inputFieldDevidier
+          color: styles().inputFieldDevidier
         )
       )
     )

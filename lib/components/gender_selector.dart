@@ -11,7 +11,7 @@ Widget buildGenderSeletor(BuildContext context, {
   Container(
     decoration: BoxDecoration(
       border: Border(bottom: BorderSide(
-        color: Styles.inputFieldDevidier,
+        color: styles().inputFieldDevidier,
         width: 0.5
       ))
     ),
@@ -21,13 +21,13 @@ Widget buildGenderSeletor(BuildContext context, {
       children: [
         Icon(CupertinoIcons.person_solid,
           size: 28.0,
-          color: Styles.thirdFontColor
+          color: styles().thirdFontColor
         ),
         CupertinoButton(
           padding: EdgeInsets.only(left: 8, right: 0, top: 0, bottom: 0),
           child: Text(_currentGenderExpr(gender),
             style: TextStyle(
-              color: Styles.thirdFontColor,
+              color: styles().thirdFontColor,
               fontWeight: FontWeight.normal,
               fontSize: 18
             )

@@ -74,7 +74,7 @@ class HomeScene extends StatelessWidget implements EventReceivable {
     );
 
     return CupertinoPageScaffold(
-      backgroundColor: Styles.mainBackground,
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
         middle: Text(locales().home.title),
         trailing: CupertinoButton(
@@ -141,8 +141,8 @@ Widget _buildRoomsHeader(BuildContext context, {
     decoration: BoxDecoration(
       color: CupertinoColors.white,
       border: Border(
-        top: BorderSide(color: Styles.listRowDivider, width: 0.3),
-        bottom:BorderSide(color: Styles.listRowDivider, width: 0.3)
+        top: BorderSide(color: styles().listRowDivider, width: 0.3),
+        bottom:BorderSide(color: styles().listRowDivider, width: 0.3)
       )
     ),
     child: Row(

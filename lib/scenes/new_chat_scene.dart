@@ -49,7 +49,7 @@ class NewChatScene extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: Styles.mainBackground,
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
         previousPageTitle: locales().chats.title,
         middle: Text(locales().newchat.title),
@@ -66,7 +66,7 @@ class NewChatScene extends StatelessWidget {
                   padding: EdgeInsets.only(left: 10, top: 10, right: 10),
                   child: Text(locales().newchat.header,
                     style: TextStyle(
-                      color: Styles.primaryFontColor,
+                      color: styles().primaryFontColor,
                       fontSize: 16
                     )
                   )
@@ -95,21 +95,21 @@ Widget _buildRoomTitleField(ValueChanged<String> valueChanged) {
     child: CupertinoTextField(
       prefix: Icon(
         MdiIcons.pencil,
-        color: Styles.thirdFontColor,
+        color: styles().thirdFontColor,
         size: 28.0
       ),
       onChanged: valueChanged,
       padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
       placeholder: locales().newchat.placeHolderTitle,
       placeholderStyle: TextStyle(
-        color: Styles.thirdFontColor
+        color: styles().thirdFontColor
       ),
       keyboardType: TextInputType.emailAddress,
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
             width: 0.5,
-            color: Styles.inputFieldDevidier
+            color: styles().inputFieldDevidier
           )
         )
       )
@@ -123,21 +123,21 @@ Widget _buildMaxAttendeefield(ValueChanged<String> valueChanged) {
     child: CupertinoTextField(
       prefix: Icon(
         MdiIcons.accountGroup,
-        color: Styles.thirdFontColor,
+        color: styles().thirdFontColor,
         size: 28.0
       ),
       onChanged: valueChanged,
       padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
       placeholder: locales().newchat.placeHolderMaxAttendee,
       placeholderStyle: TextStyle(
-        color: Styles.thirdFontColor
+        color: styles().thirdFontColor
       ),
       keyboardType: TextInputType.number,
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
             width: 0.5,
-            color: Styles.inputFieldDevidier
+            color: styles().inputFieldDevidier
           )
         )
       )

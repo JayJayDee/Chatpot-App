@@ -111,7 +111,7 @@ class _RoomDetailCard extends State<RoomDetailCard> {
         children: [
           Text(_detail.title,
             style: TextStyle(
-              color: Styles.secondaryFontColor,
+              color: styles().secondaryFontColor,
               fontSize: 18,
               fontWeight: FontWeight.normal
             )
@@ -172,7 +172,7 @@ class _RoomDetailCard extends State<RoomDetailCard> {
                 width: 24,
                 height: 12,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Styles.primaryFontColor),
+                  border: Border.all(color: styles().primaryFontColor),
                   image: DecorationImage(
                     image: locales().getFlagImage(m.region),
                     fit: BoxFit.cover
@@ -201,7 +201,7 @@ Widget _buildTranslationRow(BuildContext context, Room room) {
     indicator = Text(room.titleTranslated,
       style: TextStyle(
         fontSize: 14,
-        color: Styles.secondaryFontColor,
+        color: styles().secondaryFontColor,
         fontWeight: FontWeight.normal
       ),
       textAlign: TextAlign.left,
@@ -226,7 +226,7 @@ Widget _buildTranslationRow(BuildContext context, Room room) {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
-            color: Styles.secondaryFontColor
+            color: styles().secondaryFontColor
           )
         ),
         Padding(padding: EdgeInsets.only(left: 7)),

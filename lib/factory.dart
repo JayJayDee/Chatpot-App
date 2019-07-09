@@ -51,31 +51,31 @@ void initFactory() {
 Requester _initMemberRequester() => DefaultRequester(
   crypter: authCrypter(),
   accessor: authAccessor(),
-  baseUrl: 'http://dev-auth.chatpot.chat'
+  baseUrl: 'https://dev-auth.chatpot.chat'
 );
 
 Requester _initRoomRequseter() => DefaultRequester(
   crypter: authCrypter(),
   accessor: authAccessor(),
-  baseUrl: 'http://dev-room.chatpot.chat'
+  baseUrl: 'https://dev-room.chatpot.chat'
 );
 
 Requester _initMessageRequester() => DefaultRequester(
   crypter: authCrypter(),
   accessor: authAccessor(),
-  baseUrl: 'http://dev-message.chatpot.chat'
+  baseUrl: 'https://dev-message.chatpot.chat'
 );
 
 Requester _initAssetRequester() => DefaultRequester(
   crypter: authCrypter(),
   accessor: authAccessor(),
-  baseUrl: 'http://dev-asset.chatpot.chat'
+  baseUrl: 'https://dev-asset.chatpot.chat'
 );
 
 Requester _initTranslateRequester() => DefaultRequester(
   crypter: authCrypter(),
   accessor: authAccessor(),
-  baseUrl: 'http://dev-translate.chatpot.chat'
+  baseUrl: 'https://dev-translate.chatpot.chat'
 );
 
 // internal factory uses.

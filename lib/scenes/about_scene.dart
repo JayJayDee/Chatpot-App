@@ -45,7 +45,7 @@ class AboutScene extends StatelessWidget {
               child: Text(locales().aboutScene.greetings1,
                 style: TextStyle(
                   fontSize: 16,
-                  color: Styles.primaryFontColor
+                  color: styles().primaryFontColor
                 )
               )
             ),
@@ -77,7 +77,7 @@ class AboutScene extends StatelessWidget {
 jindongp@gmail.com''',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Styles.primaryFontColor
+                  color: styles().primaryFontColor
                 )
               )
             )

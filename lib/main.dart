@@ -19,7 +19,7 @@ void main() {
         model: AppState(),
         child: CupertinoApp(
           debugShowCheckedModeBanner: false,
-          color: Styles.appBackground,
+          color: styles().appBackground,
           initialRoute: '/',
           routes: {
             '/': (context) => SplashScene(),

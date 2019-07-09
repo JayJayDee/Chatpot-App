@@ -286,21 +286,21 @@ Widget _buildQueryInputField(BuildContext context, {
 }) =>
   CupertinoTextField(
     controller: controller,
-    prefix: const Icon(
+    prefix: Icon(
       CupertinoIcons.search,
-      color: Styles.thirdFontColor,
+      color: styles().thirdFontColor,
       size: 28.0,
     ),
     onChanged: textChangeCallback,
     padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
     clearButtonMode: OverlayVisibilityMode.editing,
     textCapitalization: TextCapitalization.words,
-    decoration: const BoxDecoration(
-      border: Border(bottom: BorderSide(width: 0.5, color: Styles.inputFieldDevidier)),
+    decoration: BoxDecoration(
+      border: Border(bottom: BorderSide(width: 0.5, color: styles().inputFieldDevidier)),
     ),
     placeholder: locales().morechat.queryEditPlaceholder,
     placeholderStyle: TextStyle(
-      color: Styles.thirdFontColor
+      color: styles().thirdFontColor
     ),
   );
 

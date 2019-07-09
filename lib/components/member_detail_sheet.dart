@@ -150,7 +150,7 @@ Widget _buildProfilePicture(MemberPublic member) =>
           width: 40,
           height: 20,
           decoration: BoxDecoration(
-            border: Border.all(color: Styles.primaryFontColor),
+            border: Border.all(color: styles().primaryFontColor),
             image: DecorationImage(
               image: locales().getFlagImage(member.region),
               fit: BoxFit.cover
@@ -170,7 +170,7 @@ Widget _buildAdditionalInfoField(MemberPublic member) =>
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            color: Styles.primaryFontColor,
+            color: styles().primaryFontColor,
             fontSize: 17
           ),
         ),
@@ -179,7 +179,7 @@ Widget _buildAdditionalInfoField(MemberPublic member) =>
         margin: EdgeInsets.only(left: 5),
         child: Text(member.regionName,
           style: TextStyle(
-            color: Styles.secondaryFontColor,
+            color: styles().secondaryFontColor,
             fontSize: 15,
             fontWeight: FontWeight.normal
           )
@@ -197,11 +197,11 @@ Widget _buildAdditionalInfoField(MemberPublic member) =>
 Icon _genderIcon(Gender g) =>
   g == Gender.M ? 
     Icon(MdiIcons.humanMale,
-      color: Styles.secondaryFontColor,
+      color: styles().secondaryFontColor,
     ) 
   :
   g == Gender.F ?
     Icon(MdiIcons.humanFemale,
-      color: Styles.secondaryFontColor
+      color: styles().secondaryFontColor
     ) 
   : null;

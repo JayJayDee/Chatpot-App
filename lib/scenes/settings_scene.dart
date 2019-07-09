@@ -136,7 +136,7 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
     elems.add(_buildMenuItem(locales().setting.about, () => _onAboutClicked(context)));
 
     return CupertinoPageScaffold(
-      backgroundColor: Styles.mainBackground,
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
         middle: Text(locales().setting.title)
       ),
@@ -161,7 +161,7 @@ Widget _buildEmailLoggedInItem(String email) {
     ),
     child: Text(locales().setting.loggedIn(email),
       style: TextStyle(
-        color: Styles.secondaryFontColor
+        color: styles().secondaryFontColor
       )
     )
   );

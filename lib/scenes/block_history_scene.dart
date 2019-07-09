@@ -212,7 +212,7 @@ Widget _buildBlockRow(BuildContext conteext, {
                     width: 30,
                     height: 15,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Styles.primaryFontColor),
+                      border: Border.all(color: styles().primaryFontColor),
                       image: DecorationImage(
                         image: locales().getFlagImage(entry.region),
                         fit: BoxFit.cover
@@ -231,13 +231,13 @@ Widget _buildBlockRow(BuildContext conteext, {
                 children: [
                   Text(locales().getNick(entry.nick),
                     style: TextStyle(
-                      color: Styles.primaryFontColor,
+                      color: styles().primaryFontColor,
                       fontSize: 16
                     )
                   ),
                   Text(locales().blockHistoryScene.blockDate(entry.blockDate),
                     style: TextStyle(
-                      color: Styles.secondaryFontColor,
+                      color: styles().secondaryFontColor,
                       fontSize: 15
                     )
                   ),
@@ -264,7 +264,7 @@ Widget _buildEmptyIndicator() =>
         ),
         Text(locales().blockHistoryScene.emptyBlocks,
           style: TextStyle(
-            color: Styles.secondaryFontColor,
+            color: styles().secondaryFontColor,
             fontSize: 16
           )
         )

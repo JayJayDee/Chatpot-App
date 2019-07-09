@@ -57,7 +57,7 @@ class MyRoomRow extends StatelessWidget {
                       width: 30,
                       height: 15,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Styles.primaryFontColor),
+                        border: Border.all(color: styles().primaryFontColor),
                         image: DecorationImage(
                           image: locales().getFlagImage(myRoom.owner.region),
                           fit: BoxFit.cover
@@ -78,7 +78,7 @@ class MyRoomRow extends StatelessWidget {
                     child: Text(myRoom.title,
                       style: TextStyle(
                         fontSize: 15,
-                        color: Styles.primaryFontColor,
+                        color: styles().primaryFontColor,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis
@@ -92,7 +92,7 @@ class MyRoomRow extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(4),
                           child: Container(
-                            color: Styles.secondaryFontColor,
+                            color: styles().secondaryFontColor,
                             padding: EdgeInsets.all(3),
                             child: Text(locales().room.numMembersSimple(myRoom.numAttendee),
                               style: TextStyle(
@@ -107,7 +107,7 @@ class MyRoomRow extends StatelessWidget {
                           child: Text(locales().room.myRoomRecentMessage(myRoom.lastMessage),
                             style: TextStyle(
                               fontSize: 14,
-                              color: Styles.secondaryFontColor,
+                              color: styles().secondaryFontColor,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis
@@ -125,7 +125,7 @@ class MyRoomRow extends StatelessWidget {
                 children: [
                   _getRoomBadge(myRoom),
                   Icon(MdiIcons.chevronRight,
-                    color: Styles.secondaryFontColor,
+                    color: styles().secondaryFontColor,
                   )
                 ]
               )
@@ -172,7 +172,7 @@ Widget _buildTranslationRow(BuildContext context, MyRoom room) {
       child: Text(room.titleTranslated,
         style: TextStyle(
           fontSize: 14,
-          color: Styles.primaryFontColor,
+          color: styles().primaryFontColor,
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis
@@ -196,7 +196,7 @@ Widget _buildTranslationRow(BuildContext context, MyRoom room) {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
-            color: Styles.primaryFontColor
+            color: styles().primaryFontColor
           )
         ),
         Padding(padding: EdgeInsets.only(left: 5)),
