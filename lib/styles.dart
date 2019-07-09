@@ -1,18 +1,79 @@
 import 'package:flutter/cupertino.dart';
 
-abstract class Styles {
-  static const appBackground = Color(0xffd0d0d0);
-  static const mainBackground = Color(0xffefefef);
-  static const splashBackground = Color(0xfff4f4f4);
+enum StyleType {
+  LIGHT, DARK
+}
 
-  static const cardActionTextStyle = TextStyle(fontSize: 15.0);
+StyleType _type = StyleType.LIGHT;
 
-  static const primaryFontColor = Color(0xFF505050);
-  static const secondaryFontColor = Color(0xFF929292);
-  static const thirdFontColor = Color(0xFFCCCCCC);
-  static const inputFieldDevidier = thirdFontColor;
+AppStyle styles() {
+  if (_type == StyleType.LIGHT) return _lightTheme();
+  else if (_type == StyleType.DARK) return _darkTheme();
+  return null;
+}
 
-  static const listViewRowBackground = Color(0xffefefef);
-  static const listRowHeaderBackground = Color(0xffefefef);
-  static const listRowDivider = Color(0xffa4a4a4);
+void setStyleType(StyleType type) {
+  _type = type;
+}
+
+AppStyle _lightTheme() {
+  AppStyle style = AppStyle(
+    appBackground: const Color(0xffd0d0d0),
+    mainBackground: const Color(0xffefefef),
+    splashBackground: const Color(0xfff4f4f4),
+    cardActionTextStyle: const TextStyle(fontSize: 15.0),
+    primaryFontColor: const Color(0xFF505050),
+    secondaryFontColor: const Color(0xFF929292),
+    thirdFontColor: const Color(0xFFCCCCCC),
+    inputFieldDevidier: const Color(0xFFCCCCCC),
+    listViewRowBackground: const Color(0xffefefef),
+    listRowHeaderBackground: const Color(0xffefefef),
+    listRowDivider: const Color(0xffa4a4a4));
+  return style;
+}
+
+AppStyle _darkTheme() {
+  AppStyle style = AppStyle(
+    appBackground: const Color(0xffd0d0d0),
+    mainBackground: const Color(0xffefefef),
+    splashBackground: const Color(0xfff4f4f4),
+    cardActionTextStyle: const TextStyle(fontSize: 15.0),
+    primaryFontColor: const Color(0xFF505050),
+    secondaryFontColor: const Color(0xFF929292),
+    thirdFontColor: const Color(0xFFCCCCCC),
+    inputFieldDevidier: const Color(0xFFCCCCCC),
+    listViewRowBackground: const Color(0xffefefef),
+    listRowHeaderBackground: const Color(0xffefefef),
+    listRowDivider: const Color(0xffa4a4a4));
+  return style;
+}
+
+class AppStyle {
+  AppStyle({
+    this.appBackground,
+    this.mainBackground,
+    this.splashBackground,
+    this.cardActionTextStyle,
+    this.primaryFontColor,
+    this.secondaryFontColor,
+    this.thirdFontColor,
+    this.inputFieldDevidier,
+    this.listViewRowBackground,
+    this.listRowHeaderBackground,
+    this.listRowDivider});
+
+  final Color appBackground;
+  final Color mainBackground;
+  final Color splashBackground;
+
+  final TextStyle cardActionTextStyle;
+
+  final Color primaryFontColor;
+  final Color secondaryFontColor;
+  final Color thirdFontColor;
+  final Color inputFieldDevidier;
+
+  final Color listViewRowBackground;
+  final Color listRowHeaderBackground;
+  final Color listRowDivider;
 }

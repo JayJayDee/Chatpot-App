@@ -165,7 +165,7 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: Styles.mainBackground,
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
         middle: Text(locales().emailUpgradeScene.title)
       ),
@@ -224,7 +224,7 @@ List<Widget> _buildEmailInputWidgets({
       margin: EdgeInsets.only(left: 10, top: 10, right: 10),
       child: Text(locales().emailUpgradeScene.emailInput,
         style: TextStyle(
-          color: Styles.primaryFontColor,
+          color: styles().primaryFontColor,
           fontSize: 16
         ),
       )
@@ -274,7 +274,7 @@ List<Widget> _buildCodeInputWidgets({
           margin: EdgeInsets.only(left: 10, right: 10, top: 30),
           child: Text(locales().emailUpgradeScene.passwordInput,
             style: TextStyle(
-              color: Styles.primaryFontColor,
+              color: styles().primaryFontColor,
               fontSize: 16
             )
           ),
@@ -320,7 +320,7 @@ List<Widget> _buildCodeInputWidgets({
       margin: EdgeInsets.only(left: 10, top: 10, right: 10),
       child: Text(locales().emailUpgradeScene.codeInput(email),
         style: TextStyle(
-          color: Styles.primaryFontColor,
+          color: styles().primaryFontColor,
           fontSize: 16
         ),
       )
@@ -370,7 +370,7 @@ List<Widget> _buildCompletedWidgets({
       margin: EdgeInsets.only(left: 10, top: 10, right: 10),
       child: Text(locales().emailUpgradeScene.completed(email),
         style: TextStyle(
-          color: Styles.primaryFontColor,
+          color: styles().primaryFontColor,
           fontSize: 16
         ),
       )
@@ -379,7 +379,7 @@ List<Widget> _buildCompletedWidgets({
       margin: EdgeInsets.only(left: 10, top: 10, right: 10),
       child: Text(locales().emailUpgradeScene.completed2,
         style: TextStyle(
-          color: Styles.primaryFontColor,
+          color: styles().primaryFontColor,
           fontSize: 16
         )
       )

@@ -57,7 +57,7 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: Styles.mainBackground,
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
         middle: Text(locales().chats.title),
         trailing: CupertinoButton(
@@ -113,8 +113,8 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
       decoration: BoxDecoration(
         color: CupertinoColors.white,
         border: Border(
-          top: BorderSide(color: Styles.listRowDivider, width: 0.3),
-          bottom:BorderSide(color: Styles.listRowDivider, width: 0.3)
+          top: BorderSide(color: styles().listRowDivider, width: 0.3),
+          bottom:BorderSide(color: styles().listRowDivider, width: 0.3)
         )
       ),
       padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
@@ -129,7 +129,7 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
             margin: EdgeInsets.only(left: 5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(7)),
-              color: Styles.secondaryFontColor
+              color: styles().secondaryFontColor
             ),
             padding: EdgeInsets.only(left: 5, top: 2, bottom: 2, right: 5),
             child: Text(number.toString(),
@@ -158,7 +158,7 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
           Padding(padding: EdgeInsets.only(top: 10)),
           Text(locales().chats.emptyRooms,
             style: TextStyle(
-              color: Styles.secondaryFontColor,
+              color: styles().secondaryFontColor,
               fontSize: 15
             ),
             textAlign: TextAlign.center,

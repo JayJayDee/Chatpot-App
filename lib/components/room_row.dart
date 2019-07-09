@@ -56,7 +56,7 @@ class RoomRow extends StatelessWidget {
                       width: 30,
                       height: 15,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Styles.primaryFontColor),
+                        border: Border.all(color: styles().primaryFontColor),
                         image: DecorationImage(
                           image: locales().getFlagImage(room.owner.region),
                           fit: BoxFit.cover
@@ -105,7 +105,7 @@ class RoomRow extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.only(right: 5),
                   child: IconTheme(
-                    data: IconThemeData(color: Styles.secondaryFontColor),
+                    data: IconThemeData(color: styles().secondaryFontColor),
                     child: Icon(MdiIcons.chevronRight)
                   )
                 )
@@ -133,7 +133,7 @@ Widget _buildTranslationRow(BuildContext context, Room room) {
       child: Text(room.titleTranslated,
         style: TextStyle(
           fontSize: 14,
-          color: Styles.primaryFontColor
+          color: styles().primaryFontColor
         ),
         overflow: TextOverflow.ellipsis,
         maxLines: 1
@@ -156,7 +156,7 @@ Widget _buildTranslationRow(BuildContext context, Room room) {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
-            color: Styles.primaryFontColor
+            color: styles().primaryFontColor
           )
         ),
         Padding(padding: EdgeInsets.only(left: 5)),

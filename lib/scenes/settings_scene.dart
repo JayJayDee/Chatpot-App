@@ -16,6 +16,7 @@ import 'package:chatpot_app/scenes/password_change_scene.dart';
 import 'package:chatpot_app/scenes/about_scene.dart';
 import 'package:chatpot_app/scenes/report_history_scene.dart';
 import 'package:chatpot_app/scenes/block_history_scene.dart';
+import 'package:chatpot_app/scenes/setting_theme_scene.dart';
 
 @immutable
 class SettingsScene extends StatelessWidget implements EventReceivable {
@@ -92,6 +93,12 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
     ));
   }
 
+  void _onThemeSettingClicked(BuildContext context) async {
+    await Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
+      builder: (BuildContext context) => SettingThemeScene()
+    ));
+  }
+
   @override
   Future<void> onSelected(BuildContext context) async {
     print('SETTINGS_SCENE');
@@ -123,12 +130,13 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
       elems.add(_buildMenuItem(locales().setting.changePassword, () => _onPasswordChangeClicked(context)));
     }
 
+    elems.add(_buildMenuItem(locales().setting.theme, () => _onThemeSettingClicked(context)));
     elems.add(_buildMenuItem(locales().setting.myBlocks, () => _onMyBlocksClicked(context)));
     elems.add(_buildMenuItem(locales().setting.myReports, () => _onMyReportsClicked(context)));
     elems.add(_buildMenuItem(locales().setting.about, () => _onAboutClicked(context)));
 
     return CupertinoPageScaffold(
-      backgroundColor: Styles.mainBackground,
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
         middle: Text(locales().setting.title)
       ),
@@ -153,7 +161,7 @@ Widget _buildEmailLoggedInItem(String email) {
     ),
     child: Text(locales().setting.loggedIn(email),
       style: TextStyle(
-        color: Styles.secondaryFontColor
+        color: styles().secondaryFontColor
       )
     )
   );

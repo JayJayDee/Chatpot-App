@@ -36,21 +36,21 @@ class ReportRow extends StatelessWidget {
                   Text(locales().reportHistoryScene.reportTitle(report),
                     style: TextStyle(
                       fontSize: 17,
-                      color: Styles.primaryFontColor
+                      color: styles().primaryFontColor
                     )
                   ),
                   Padding(padding: EdgeInsets.only(top: 7)),
                   Text(locales().reportHistoryScene.reportDescription(report.status),
                     style: TextStyle(
                       fontSize: 15,
-                      color: Styles.secondaryFontColor
+                      color: styles().secondaryFontColor
                     )
                   ),
                   Padding(padding: EdgeInsets.only(top: 7)),
                   Text(locales().reportHistoryScene.reportTimeUtc(report.regDate),
                     style: TextStyle(
                       fontSize: 15,
-                      color: Styles.secondaryFontColor
+                      color: styles().secondaryFontColor
                     )
                   ),
                   report.status == ReportState.DONE ? 
@@ -59,7 +59,7 @@ class ReportRow extends StatelessWidget {
                       child: Text(report.result,
                         style: TextStyle(
                           fontSize: 15,
-                          color: Styles.primaryFontColor
+                          color: styles().primaryFontColor
                         )
                       ), 
                     ) : Container()
@@ -73,13 +73,13 @@ class ReportRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(_buildStatusIcon(report.status),
-                  color: Styles.secondaryFontColor,
+                  color: styles().secondaryFontColor,
                   size: 24
                 ),
                 Padding(padding: EdgeInsets.only(left: 5)),
                 Text(locales().reportHistoryScene.reportExpr(report.status),
                   style: TextStyle(
-                    color: Styles.secondaryFontColor,
+                    color: styles().secondaryFontColor,
                     fontSize: 16
                   ),
                 )

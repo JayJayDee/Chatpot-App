@@ -26,8 +26,8 @@ _MatchedColors _getMatchedColors(bool isMine) {
     colors.background = CupertinoColors.activeBlue;
     colors.font = CupertinoColors.white;
   } else {
-    colors.background = Styles.listRowHeaderBackground;
-    colors.font = Styles.primaryFontColor;
+    colors.background = styles().listRowHeaderBackground;
+    colors.font = styles().primaryFontColor;
   }
   return colors;
 }
@@ -106,11 +106,11 @@ class _NotificationRow extends StatelessWidget {
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(5),
-                color: Styles.listRowHeaderBackground,
+                color: styles().listRowHeaderBackground,
                 child: Text(text,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Styles.primaryFontColor
+                    color: styles().primaryFontColor
                   )
                 )
               )
@@ -220,7 +220,7 @@ class _OtherMessageRow extends StatelessWidget {
                       width: 30,
                       height: 15,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Styles.primaryFontColor),
+                        border: Border.all(color: styles().primaryFontColor),
                         image: DecorationImage(
                           image: locales().getFlagImage(message.from.region),
                           fit: BoxFit.cover
@@ -243,7 +243,7 @@ class _OtherMessageRow extends StatelessWidget {
                   child: Text(locales().getNick(message.from.nick),
                     style: TextStyle(
                       fontSize: 13,
-                      color: Styles.secondaryFontColor
+                      color: styles().secondaryFontColor
                     ),
                   )
                 ),
@@ -281,7 +281,7 @@ Widget _translatedTextIndicator(AppState state, Message message) {
         child: Text(message.translated,
           style: TextStyle(
             fontSize: 14,
-            color: Styles.secondaryFontColor
+            color: styles().secondaryFontColor
           )
         )
       )  
@@ -298,7 +298,7 @@ Widget _translatedTextIndicator(AppState state, Message message) {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: Styles.secondaryFontColor
+              color: styles().secondaryFontColor
             )
           )
         ),
@@ -323,7 +323,7 @@ Widget _receiveTimeIndicator(Message msg) {
   return Text(locales().message.messageReceiveTime(msg.sentTime),
     style: TextStyle(
       fontSize: 12,
-      color: Styles.secondaryFontColor
+      color: styles().secondaryFontColor
     )
   );
 }

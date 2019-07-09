@@ -53,7 +53,7 @@ class _SimpleSignupSceneState extends State<SimpleSignupScene> {
                   margin: EdgeInsets.only(left: 10, right: 10, top: 10),
                   child: Text(locales().simpleSignup.description,
                     style: TextStyle(
-                      color: Styles.primaryFontColor
+                      color: styles().primaryFontColor
                     )
                   )
                 ),

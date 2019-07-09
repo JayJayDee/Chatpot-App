@@ -63,7 +63,7 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: Styles.mainBackground,
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
         previousPageTitle: locales().photoDetail.previousTitle,
         middle: Text(locales().photoDetail.title),

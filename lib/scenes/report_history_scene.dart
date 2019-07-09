@@ -93,7 +93,7 @@ Widget _buildEmptyIndicator() =>
         ),
         Text(locales().reportHistoryScene.emptyReports,
           style: TextStyle(
-            color: Styles.secondaryFontColor,
+            color: styles().secondaryFontColor,
             fontSize: 16
           )
         )

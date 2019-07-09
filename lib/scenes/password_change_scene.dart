@@ -74,7 +74,7 @@ class _PasswordChangeSceneState extends State<PasswordChangeScene> {
                   child: Text(locales().passwordChange.description,
                     style: TextStyle(
                       fontSize: 16,
-                      color: Styles.primaryFontColor
+                      color: styles().primaryFontColor
                     )
                   )
                 ),
@@ -120,17 +120,17 @@ Widget _buildOldPasswordField(BuildContext context, {
   return CupertinoTextField(
     prefix: Icon(CupertinoIcons.padlock_solid,
       size: 28.0,
-      color: Styles.thirdFontColor),
+      color: styles().thirdFontColor),
     placeholder: locales().passwordChange.oldPasswordPlaceholder,
     placeholderStyle: TextStyle(
-      color: Styles.thirdFontColor
+      color: styles().thirdFontColor
     ),
     onChanged: callback,
     padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
     obscureText: true,
     keyboardType: TextInputType.text,
     decoration: BoxDecoration(
-      border: Border(bottom: BorderSide(width: 0.5, color: Styles.inputFieldDevidier))
+      border: Border(bottom: BorderSide(width: 0.5, color: styles().inputFieldDevidier))
     )
   );
 }
@@ -141,17 +141,17 @@ Widget _buildNewPasswordField(BuildContext context, {
   return CupertinoTextField(
     prefix: Icon(CupertinoIcons.padlock_solid,
       size: 28.0,
-      color: Styles.thirdFontColor),
+      color: styles().thirdFontColor),
     placeholder: locales().passwordChange.newPasswordPlaceholder,
     placeholderStyle: TextStyle(
-      color: Styles.thirdFontColor
+      color: styles().thirdFontColor
     ),
     onChanged: callback,
     padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
     obscureText: true,
     keyboardType: TextInputType.text,
     decoration: BoxDecoration(
-      border: Border(bottom: BorderSide(width: 0.5, color: Styles.inputFieldDevidier))
+      border: Border(bottom: BorderSide(width: 0.5, color: styles().inputFieldDevidier))
     )
   );
 }
@@ -162,17 +162,17 @@ Widget _buildNewPasswordConfirmField(BuildContext context, {
   return CupertinoTextField(
     prefix: Icon(CupertinoIcons.padlock_solid,
       size: 28.0,
-      color: Styles.thirdFontColor),
+      color: styles().thirdFontColor),
     placeholder: locales().passwordChange.newPasswordConfirmPlaceholder,
     placeholderStyle: TextStyle(
-      color: Styles.thirdFontColor
+      color: styles().thirdFontColor
     ),
     onChanged: callback,
     padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
     obscureText: true,
     keyboardType: TextInputType.text,
     decoration: BoxDecoration(
-      border: Border(bottom: BorderSide(width: 0.5, color: Styles.inputFieldDevidier))
+      border: Border(bottom: BorderSide(width: 0.5, color: styles().inputFieldDevidier))
     )
   );
 }

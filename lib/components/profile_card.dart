@@ -43,7 +43,7 @@ Widget buildProfileCard(BuildContext context, {
                         width: 40,
                         height: 20,
                         decoration: BoxDecoration(
-                          border: Border.all(color: Styles.primaryFontColor),
+                          border: Border.all(color: styles().primaryFontColor),
                           image: DecorationImage(
                             image: _getFlagImage(model.member.region),
                             fit: BoxFit.cover
@@ -63,14 +63,14 @@ Widget buildProfileCard(BuildContext context, {
                         Text(nick, 
                           style: TextStyle(
                             fontSize: 20,
-                            color: Styles.primaryFontColor
+                            color: styles().primaryFontColor
                           )
                         ),
                         Padding(padding: EdgeInsets.only(top: 5)),
                         Text(model.member.regionName,
                           style: TextStyle(
                             fontSize: 13,
-                            color: Styles.secondaryFontColor
+                            color: styles().secondaryFontColor
                           )
                         ),
                         Padding(padding: EdgeInsets.only(top: 10)),

@@ -325,7 +325,7 @@ Widget _buildImageShownArea(BuildContext context, {
         image == null ?
           Center(
             child: Icon(MdiIcons.image,
-              color: Styles.secondaryFontColor,
+              color: styles().secondaryFontColor,
               size: 50
             ),
           ) : Container(
@@ -344,7 +344,7 @@ Widget _buildImageShownArea(BuildContext context, {
               )
             ),
             onPressed: loading == true ? null : gallerySelectCallback,
-            color: Styles.primaryFontColor,
+            color: styles().primaryFontColor,
           ),
         )
       ]
@@ -365,7 +365,7 @@ Widget _buildSavedZzalArea(BuildContext context, {
       padding: EdgeInsets.all(0),
       child: Container(
         decoration: BoxDecoration(
-          color: Styles.secondaryFontColor,
+          color: styles().secondaryFontColor,
           borderRadius: BorderRadius.all(Radius.circular(10.0))
         ),
         width: 70,
@@ -397,7 +397,7 @@ Widget _buildSavedZzalArea(BuildContext context, {
           margin: EdgeInsets.all(5),
           child: Text(locales().imageConfirmScene.savedMemesTitle,
             style: TextStyle(
-              color: Styles.primaryFontColor,
+              color: styles().primaryFontColor,
               fontSize: 16
             )
           )

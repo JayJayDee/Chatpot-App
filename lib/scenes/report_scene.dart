@@ -128,7 +128,7 @@ class _ReportSceneState extends State<ReportScene> {
                   margin: EdgeInsets.only(left: 10, right: 10, top: 10),
                   child: Text(locales().reportScene.description1,
                     style: TextStyle(
-                      color: Styles.primaryFontColor,
+                      color: styles().primaryFontColor,
                       fontSize: 16
                     )
                   )
@@ -143,7 +143,7 @@ class _ReportSceneState extends State<ReportScene> {
                   margin: EdgeInsets.only(left: 10, right: 10, top: 10),
                   child: Text(locales().reportScene.description2,
                     style: TextStyle(
-                      color: Styles.primaryFontColor,
+                      color: styles().primaryFontColor,
                       fontSize: 16
                     )
                   )
@@ -215,7 +215,7 @@ Widget _buildTargetMemberWidget(BuildContext context, {
                   width: 30,
                   height: 15,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Styles.primaryFontColor),
+                    border: Border.all(color: styles().primaryFontColor),
                     image: DecorationImage(
                       image: locales().getFlagImage(member.region),
                       fit: BoxFit.cover
@@ -232,13 +232,13 @@ Widget _buildTargetMemberWidget(BuildContext context, {
             children: [
               Text(locales().getNick(member.nick),
                 style: TextStyle(
-                  color: Styles.primaryFontColor,
+                  color: styles().primaryFontColor,
                   fontSize: 17
                 )
               ),
               Text(member.regionName,
                 style: TextStyle(
-                  color: Styles.secondaryFontColor,
+                  color: styles().secondaryFontColor,
                   fontSize: 16
                 )
               )
@@ -255,7 +255,7 @@ Widget _buildCommentField(BuildContext context, {
 }) => CupertinoTextField(
   prefix: Icon(
     MdiIcons.text,
-    color: Styles.secondaryFontColor,
+    color: styles().secondaryFontColor,
     size: 28.0
   ),
   padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
@@ -264,7 +264,7 @@ Widget _buildCommentField(BuildContext context, {
     border: Border(
       bottom: BorderSide(
         width: 0.0,
-        color: Styles.secondaryFontColor
+        color: styles().secondaryFontColor
       )
     )
   ),

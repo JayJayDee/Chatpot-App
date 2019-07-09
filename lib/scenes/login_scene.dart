@@ -106,7 +106,7 @@ class LoginScene extends StatelessWidget {
                   child: Text(locales().login.loginIntroduce,
                     style: TextStyle(
                       fontSize: 17,
-                      color: Styles.primaryFontColor
+                      color: styles().primaryFontColor
                     )
                   )
                 ),
@@ -159,17 +159,17 @@ class LoginScene extends StatelessWidget {
 Widget _buildLoginField(BuildContext context, ValueChanged<String> valueChange) => CupertinoTextField(
   prefix: Icon(
     CupertinoIcons.mail_solid,
-    color: Styles.thirdFontColor,
+    color: styles().thirdFontColor,
     size: 28.0
   ),
   padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
   placeholder: locales().login.emailHint,
   placeholderStyle: TextStyle(
-    color: Styles.thirdFontColor
+    color: styles().thirdFontColor
   ),
   keyboardType: TextInputType.emailAddress,
   decoration: BoxDecoration(
-    border: Border(bottom: BorderSide(width: 0.5, color: Styles.inputFieldDevidier))
+    border: Border(bottom: BorderSide(width: 0.5, color: styles().inputFieldDevidier))
   ),
   onChanged: valueChange,
 );
@@ -177,18 +177,18 @@ Widget _buildLoginField(BuildContext context, ValueChanged<String> valueChange) 
 Widget _buildPasswordField(BuildContext context, ValueChanged<String> valueChange) => CupertinoTextField(
   prefix: Icon(
     CupertinoIcons.padlock_solid,
-    color: Styles.thirdFontColor,
+    color: styles().thirdFontColor,
     size: 28.0
   ),
   padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
   placeholder: locales().login.passwordHint,
   placeholderStyle: TextStyle(
-    color: Styles.thirdFontColor
+    color: styles().thirdFontColor
   ),
   keyboardType: TextInputType.text,
   obscureText: true,
   decoration: BoxDecoration(
-    border: Border(bottom: BorderSide(width: 0.5, color: Styles.inputFieldDevidier))
+    border: Border(bottom: BorderSide(width: 0.5, color: styles().inputFieldDevidier))
   ),
   onChanged: valueChange
 );

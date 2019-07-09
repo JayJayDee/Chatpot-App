@@ -346,12 +346,12 @@ Widget _buildEditText(BuildContext context, {
             padding: EdgeInsets.all(8),
             style: TextStyle(
               fontSize: 17,
-              color: Styles.primaryFontColor
+              color: styles().primaryFontColor
             ),
             onChanged: valueChanged,
             decoration: BoxDecoration(
               border: Border.all(
-                color: Styles.thirdFontColor,
+                color: styles().thirdFontColor,
                 width: 1.0
               ),
               borderRadius: BorderRadius.circular(10.0)
@@ -467,14 +467,14 @@ Future<void> _showTextSelectionSheet(BuildContext context, {
             Text(locales().msgscene.selectedTextTitle,
               style: TextStyle(
                 fontSize: 17,
-                color: Styles.primaryFontColor
+                color: styles().primaryFontColor
               )
             ),
             Padding(padding: EdgeInsets.only(top: 5)),
             Text(text,
               style: TextStyle(
                 fontSize: 15,
-                color: Styles.secondaryFontColor,
+                color: styles().secondaryFontColor,
                 fontWeight: FontWeight.normal
               )
             )

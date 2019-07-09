@@ -47,7 +47,7 @@ class SplashScene extends StatelessWidget {
       _init = true;
     }
     return CupertinoPageScaffold(
-      backgroundColor: Styles.splashBackground,
+      backgroundColor: styles().splashBackground,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[

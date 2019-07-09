@@ -58,7 +58,7 @@ class _EulaSceneState extends State<EulaScene> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: Styles.mainBackground,
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
         previousPageTitle: locales().eulaScene.prevButtonLabel,
         middle: Text(locales().eulaScene.title),
@@ -74,7 +74,7 @@ class _EulaSceneState extends State<EulaScene> {
                   margin: EdgeInsets.all(10),
                   child: Text(_eulaContent,
                     style: TextStyle(
-                      color: Styles.primaryFontColor,
+                      color: styles().primaryFontColor,
                       fontSize: 16
                     )
                   )
@@ -120,7 +120,7 @@ Future<String> _requestEula(String localeCode) async {
   if (localeCode == 'ko' || localeCode == 'en' || localeCode == 'ja') {
     fallbackLocale = localeCode;
   }
-  String uri = "http://chatpot.chat/assets/eula-$fallbackLocale.txt";
+  String uri = "https://chatpot.chat/assets/eula-$fallbackLocale.txt";
   var resp = await http.get(uri);
   if (resp.statusCode != 200) {
     throw new EulaFetchError();
