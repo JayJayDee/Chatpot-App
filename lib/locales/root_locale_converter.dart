@@ -24,6 +24,7 @@ import 'package:chatpot_app/locales/eula_scene_locales.dart';
 import 'package:chatpot_app/locales/report_history_scene_locales.dart';
 import 'package:chatpot_app/locales/block_history_scene_locales.dart';
 import 'package:chatpot_app/locales/image_send_confirm_scene_locales.dart';
+import 'package:chatpot_app/locales/setting_theme_scene_locales.dart';
 
 class RootLocaleConverter {
   String _language;
@@ -50,6 +51,7 @@ class RootLocaleConverter {
   BlockHistorySceneLocales _blockHistoryScene;
   ImageSendConfirmSceneLocales _imageConfirmScene;
   RoomDetailSceneLocales _roomDetailScene;
+  SettingThemeSceneLocales _settingThemeScene;
 
   HomeSceneLocales get home => _home;
   MessageLocales get message => _message;
@@ -74,6 +76,7 @@ class RootLocaleConverter {
   BlockHistorySceneLocales get blockHistoryScene => _blockHistoryScene;
   ImageSendConfirmSceneLocales get imageConfirmScene => _imageConfirmScene;
   RoomDetailSceneLocales get roomDetailScene => _roomDetailScene;
+  SettingThemeSceneLocales get settingThemeScene => _settingThemeScene;
 
 
   String get langauge => _language;
@@ -104,6 +107,7 @@ class RootLocaleConverter {
     _blockHistoryScene = BlockHistorySceneLocales(root: this, language: _language);
     _imageConfirmScene = ImageSendConfirmSceneLocales(root: this, language: _language);
     _roomDetailScene = RoomDetailSceneLocales(root: this, language: _language);
+    _settingThemeScene = SettingThemeSceneLocales(root: this, language: _language);
   }
 
   String getNick(Nick nick) {

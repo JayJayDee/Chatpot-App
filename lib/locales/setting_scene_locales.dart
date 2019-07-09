@@ -39,6 +39,12 @@ class SettingSceneLocales {
     return 'Treat a developer to a cup of coffee';
   }
 
+  String get theme {
+    if (language == 'ko') return '테마 설정';
+    else if (language == 'ja') return 'テーマ設定';
+    return 'Theme setting';
+  }
+
   String get myReports {
     if (language == 'ko') return '내 신고 내역 보기';
     else if (language == 'ja') return '私申告内訳照会';
