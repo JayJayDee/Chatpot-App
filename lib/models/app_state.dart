@@ -55,10 +55,16 @@ class AppState extends Model {
     return _currentRoom.messages.messages;
   }
 
-  Future<void> loadStyle() async {
+  Future<void> loadStyleType() async {
     StyleType styleType = await miscAccessor().getSavedStyleType();
     _styleType = styleType;
     notifyListeners();
+  }
+
+  Future<void> changeStyleType(StyleType type) async {
+    _styleType = styleType;
+    notifyListeners();
+    await miscAccessor().saveStyleType(type);
   }
 
   Future<AppInitState> tryAutoLogin() async {

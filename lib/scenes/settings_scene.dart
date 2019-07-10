@@ -169,8 +169,6 @@ Widget _buildEmailLoggedInItem(String email) {
 
 Widget _buildThemeMenuItem(BuildContext context) {
   final state = ScopedModel.of<AppState>(context, rebuildOnChange: true);
-  bool isDark = state.styleType == StyleType.DARK;
-
   return Container(
     padding: EdgeInsets.only(left: 16, right: 14, top: 6, bottom: 6),
     decoration: BoxDecoration(
@@ -193,9 +191,14 @@ Widget _buildThemeMenuItem(BuildContext context) {
           )
         ),
         CupertinoSwitch(
-          value: isDark,
-          onChanged: (var value) {
-            
+          value: state.styleType == StyleType.DARK,
+          onChanged: (var value) async {
+            print(value);
+            if (value == true) {
+              await state.changeStyleType(StyleType.DARK);
+            } else {
+              await state.changeStyleType(StyleType.LIGHT);
+            }
           }
         )
       ]
