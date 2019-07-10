@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/components/profile_card.dart';
 import 'package:chatpot_app/components/not_login_card.dart';
@@ -16,11 +17,8 @@ import 'package:chatpot_app/scenes/password_change_scene.dart';
 import 'package:chatpot_app/scenes/about_scene.dart';
 import 'package:chatpot_app/scenes/report_history_scene.dart';
 import 'package:chatpot_app/scenes/block_history_scene.dart';
-import 'package:chatpot_app/scenes/setting_theme_scene.dart';
 
-@immutable
-class SettingsScene extends StatelessWidget implements EventReceivable {
-
+class SettingsScene extends StatefulWidget implements EventReceivable {
   final BuildContext parentContext;
   final TabActor actor;
 
@@ -28,6 +26,34 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
     @required this.parentContext,
     @required this.actor
   });
+
+  @override
+  State createState() => _SettingsSceneState(
+    parentContext: parentContext,
+    actor: actor
+  );
+
+  @override
+  Future<void> onSelected(BuildContext context) async {
+    print('SETTINGS_SCENE');
+  }
+}
+
+class _SettingsSceneState extends State<SettingsScene> {
+
+  BuildContext parentContext;
+  TabActor actor;
+  bool _darkMode;
+
+  _SettingsSceneState({
+    @required BuildContext parentContext,
+    @required TabActor actor
+  }) {
+    this.parentContext = parentContext;
+    this.actor = actor;
+    _darkMode =
+      getStyleType() == StyleType.DARK ? true : false;
+  }
   
   void _onEditProfileClicked() async {
 
@@ -93,15 +119,20 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
     ));
   }
 
-  void _onThemeSettingClicked(BuildContext context) async {
-    await Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
-      builder: (BuildContext context) => SettingThemeScene()
-    ));
-  }
+  void _onSwitchChanged(BuildContext context, bool darkMode) async {
+    final state = ScopedModel.of<AppState>(context);
+    setState(() => _darkMode = darkMode);
 
-  @override
-  Future<void> onSelected(BuildContext context) async {
-    print('SETTINGS_SCENE');
+    if (darkMode == true) {
+      await state.changeStyleType(StyleType.DARK);
+    } else {
+      await state.changeStyleType(StyleType.LIGHT);
+    }
+
+    showToast(locales().setting.modeChangedDescription, 
+      duration: Duration(milliseconds: 1500),
+      position: ToastPosition(align: Alignment.bottomCenter)
+    );
   }
 
   @override
@@ -130,7 +161,10 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
       elems.add(_buildMenuItem(locales().setting.changePassword, () => _onPasswordChangeClicked(context)));
     }
 
-    elems.add(_buildMenuItem(locales().setting.theme, () => _onThemeSettingClicked(context)));
+    elems.add(_buildThemeMenuItem(context,
+      darkMode: _darkMode,
+      callback: (bool darkMode) => _onSwitchChanged(context, darkMode)
+    ));
     elems.add(_buildMenuItem(locales().setting.myBlocks, () => _onMyBlocksClicked(context)));
     elems.add(_buildMenuItem(locales().setting.myReports, () => _onMyReportsClicked(context)));
     elems.add(_buildMenuItem(locales().setting.about, () => _onAboutClicked(context)));
@@ -163,6 +197,42 @@ Widget _buildEmailLoggedInItem(String email) {
       style: TextStyle(
         color: styles().secondaryFontColor
       )
+    )
+  );
+}
+
+typedef SwitchChangeCallback (bool darkMode);
+
+Widget _buildThemeMenuItem(BuildContext context, {
+  @required bool darkMode,
+  @required SwitchChangeCallback callback
+}) {
+  return Container(
+    padding: EdgeInsets.only(left: 16, right: 14, top: 6, bottom: 6),
+    decoration: BoxDecoration(
+      color: Color(0xffffffff),
+      border: Border(
+        top: BorderSide(color: Color(0xFFBCBBC1), width: 0.3),
+        bottom: BorderSide(color: Color(0xFFBCBBC1), width: 0.3)
+      ),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(locales().setting.darkMode,
+            style: TextStyle(
+              fontSize: 17,
+              color: styles().secondaryFontColor
+            )
+          )
+        ),
+        CupertinoSwitch(
+          value: darkMode,
+          onChanged: callback
+        )
+      ]
     )
   );
 }

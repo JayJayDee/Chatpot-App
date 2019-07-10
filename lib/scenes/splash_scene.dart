@@ -13,6 +13,15 @@ class SplashScene extends StatelessWidget {
 
   void onCreate(BuildContext context) async {
     final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
+    await model.loadStyleType();
+
+    setStyleType(model.styleType);
+
+    if (model.styleType == StyleType.LIGHT) {
+      print('** STYLETYPE = LIGHT');
+    } else if (model.styleType == StyleType.DARK) {
+      print('** STYLETYPE = DARK');
+    }
 
     AppInitState state;
 

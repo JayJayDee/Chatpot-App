@@ -12,6 +12,8 @@ AppStyle styles() {
   return null;
 }
 
+StyleType getStyleType() => _type;
+
 void setStyleType(StyleType type) {
   _type = type;
 }

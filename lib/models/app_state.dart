@@ -10,6 +10,7 @@ import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:chatpot_app/models/model_entities.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/storage/translation_cache_accessor.dart';
+import 'package:chatpot_app/styles.dart';
 
 delaySec(int sec) => Future.delayed(Duration(milliseconds: sec * 1000));
 
@@ -22,6 +23,7 @@ class AppState extends Model {
   List<Room> _crowdedRooms;
   List<MyRoom> _myRooms;
   List<String> _bannedTokens;
+  StyleType _styleType;
   Member _member;
   bool _loading;
 
@@ -37,6 +39,8 @@ class AppState extends Model {
     _bannedTokens = [];
   }
 
+  StyleType get styleType => _styleType;
+
   Member get member => _member;
   bool get loading => _loading;
   List<Room> get recentRooms => _recentRooms;
@@ -45,9 +49,23 @@ class AppState extends Model {
   MyRoom get currentRoom => _currentRoom;
   List<MyRoom> get myRooms => _myRooms;
 
+
   List<Message> get messages {
     if (_currentRoom == null) return [];
     return _currentRoom.messages.messages;
+  }
+
+  Future<void> loadStyleType() async {
+    StyleType styleType = await miscAccessor().getSavedStyleType();
+    _styleType = styleType;
+    setStyleType(_styleType);
+    notifyListeners();
+  }
+
+  Future<void> changeStyleType(StyleType type) async {
+    _styleType = styleType;
+    setStyleType(_styleType);
+    await miscAccessor().saveStyleType(type);
   }
 
   Future<AppInitState> tryAutoLogin() async {
