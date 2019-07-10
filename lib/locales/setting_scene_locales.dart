@@ -100,4 +100,10 @@ Are you sure you want to log out?''';
     else if (language == 'ja') return "$emailとしてログインしました";
     return "Signed in as $email";
   }
+
+  String get darkMode {
+    if (language == 'ko') return '어두운 화면';
+    else if (language == 'ja') return 'ダークモード';
+    return 'Dark mode';
+  }
 }

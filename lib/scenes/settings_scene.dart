@@ -130,7 +130,7 @@ class SettingsScene extends StatelessWidget implements EventReceivable {
       elems.add(_buildMenuItem(locales().setting.changePassword, () => _onPasswordChangeClicked(context)));
     }
 
-    elems.add(_buildMenuItem(locales().setting.theme, () => _onThemeSettingClicked(context)));
+    elems.add(_buildThemeMenuItem(context));
     elems.add(_buildMenuItem(locales().setting.myBlocks, () => _onMyBlocksClicked(context)));
     elems.add(_buildMenuItem(locales().setting.myReports, () => _onMyReportsClicked(context)));
     elems.add(_buildMenuItem(locales().setting.about, () => _onAboutClicked(context)));
@@ -163,6 +163,42 @@ Widget _buildEmailLoggedInItem(String email) {
       style: TextStyle(
         color: styles().secondaryFontColor
       )
+    )
+  );
+}
+
+Widget _buildThemeMenuItem(BuildContext context) {
+  final state = ScopedModel.of<AppState>(context, rebuildOnChange: true);
+  bool isDark = state.styleType == StyleType.DARK;
+
+  return Container(
+    padding: EdgeInsets.only(left: 16, right: 14, top: 6, bottom: 6),
+    decoration: BoxDecoration(
+      color: Color(0xffffffff),
+      border: Border(
+        top: BorderSide(color: Color(0xFFBCBBC1), width: 0.3),
+        bottom: BorderSide(color: Color(0xFFBCBBC1), width: 0.3)
+      ),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(locales().setting.darkMode,
+            style: TextStyle(
+              fontSize: 17,
+              color: styles().secondaryFontColor
+            )
+          )
+        ),
+        CupertinoSwitch(
+          value: isDark,
+          onChanged: (var value) {
+            
+          }
+        )
+      ]
     )
   );
 }
