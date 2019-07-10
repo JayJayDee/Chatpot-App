@@ -58,12 +58,13 @@ class AppState extends Model {
   Future<void> loadStyleType() async {
     StyleType styleType = await miscAccessor().getSavedStyleType();
     _styleType = styleType;
+    setStyleType(_styleType);
     notifyListeners();
   }
 
   Future<void> changeStyleType(StyleType type) async {
     _styleType = styleType;
-    notifyListeners();
+    setStyleType(_styleType);
     await miscAccessor().saveStyleType(type);
   }
 
