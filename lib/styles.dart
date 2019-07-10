@@ -36,9 +36,9 @@ AppStyle _lightTheme() {
 
 AppStyle _darkTheme() {
   AppStyle style = AppStyle(
-    appBackground: const Color(0xffd0d0d0),
+    appBackground: const Color(0xff000000),
     mainBackground: const Color(0xffefefef),
-    splashBackground: const Color(0xfff4f4f4),
+    splashBackground: const Color(0xff0376ff),
     cardActionTextStyle: const TextStyle(fontSize: 15.0),
     primaryFontColor: const Color(0xFF505050),
     secondaryFontColor: const Color(0xFF929292),
