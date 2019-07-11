@@ -30,7 +30,11 @@ AppStyle _lightTheme() {
     inputFieldDevidier: const Color(0xFFCCCCCC),
     listViewRowBackground: const Color(0xffefefef),
     listRowHeaderBackground: const Color(0xffefefef),
-    listRowDivider: const Color(0xffa4a4a4));
+    listRowDivider: const Color(0xffa4a4a4),
+
+    tabBarBackground: const Color(0xfff6f6f6),
+    tabBarActive: const Color(0xff007aff),
+    tabBarInactive: const Color(0xff8e8e93));
   return style;
 }
 
@@ -46,7 +50,11 @@ AppStyle _darkTheme() {
     inputFieldDevidier: const Color(0xFFCCCCCC),
     listViewRowBackground: const Color(0xffefefef),
     listRowHeaderBackground: const Color(0xffefefef),
-    listRowDivider: const Color(0xffa4a4a4));
+    listRowDivider: const Color(0xffa4a4a4),
+    
+    tabBarBackground: const Color(0xff000000),
+    tabBarActive: const Color(0xff007aff),
+    tabBarInactive: const Color(0xff8e8e93));
   return style;
 }
 
@@ -62,7 +70,10 @@ class AppStyle {
     this.inputFieldDevidier,
     this.listViewRowBackground,
     this.listRowHeaderBackground,
-    this.listRowDivider});
+    this.listRowDivider,
+    this.tabBarBackground,
+    this.tabBarActive,
+    this.tabBarInactive});
 
   final Color appBackground;
   final Color mainBackground;
@@ -78,4 +89,8 @@ class AppStyle {
   final Color listViewRowBackground;
   final Color listRowHeaderBackground;
   final Color listRowDivider;
+
+  final Color tabBarBackground;
+  final Color tabBarActive;
+  final Color tabBarInactive;
 }

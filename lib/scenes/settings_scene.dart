@@ -223,7 +223,7 @@ Widget _buildThemeMenuItem(BuildContext context, {
           alignment: Alignment.centerLeft,
           child: Text(locales().setting.darkMode,
             style: TextStyle(
-              fontSize: 17,
+              fontSize: 16,
               color: styles().secondaryFontColor
             )
           )
