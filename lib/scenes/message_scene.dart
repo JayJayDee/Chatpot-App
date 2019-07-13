@@ -244,15 +244,25 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     MyRoom room = model.currentRoom;
 
     return CupertinoPageScaffold(
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: styles().navigationBarBackground,
         previousPageTitle: locales().chats.title,
+        actionsForegroundColor: styles().link,
         middle: Text(room.title,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: styles().primaryFontColor
+          )
         ), 
         trailing: CupertinoButton(
           padding: EdgeInsets.all(0),
-          child: Text(locales().msgscene.leave),
+          child: Text(locales().msgscene.leave,
+            style: TextStyle(
+              color: styles().link
+            )
+          ),
           onPressed: () => _onRoomLeaveClicked(context)
         ),
         transitionBetweenRoutes: true
@@ -335,7 +345,8 @@ Widget _buildEditText(BuildContext context, {
         CupertinoButton(
           padding: EdgeInsets.all(5),
           child: Icon(Icons.photo,
-            size: 27
+            size: 27,
+            color: styles().link,
           ),
           onPressed: imageSelected
         ),
@@ -371,6 +382,7 @@ Widget _buildEditText(BuildContext context, {
             padding: EdgeInsets.all(5),
             child: Icon(Icons.send,
               size: 27,
+              color: styles().link
             ),
             onPressed: sendClicked    
           )

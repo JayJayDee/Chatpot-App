@@ -76,10 +76,17 @@ class HomeScene extends StatelessWidget implements EventReceivable {
     return CupertinoPageScaffold(
       backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
-        middle: Text(locales().home.title),
+        backgroundColor: styles().navigationBarBackground,
+        middle: Text(locales().home.title,
+          style: TextStyle(
+            color: styles().primaryFontColor
+          )
+        ),
         trailing: CupertinoButton(
           padding: EdgeInsets.all(0),
-          child: Icon(MdiIcons.plus),
+          child: Icon(MdiIcons.plus,
+            color: styles().link,
+          ),
           onPressed: () => _onNewChatClicked(context)
         ),
       ),
@@ -139,10 +146,10 @@ Widget _buildRoomsHeader(BuildContext context, {
 }) {
   return Container(
     decoration: BoxDecoration(
-      color: CupertinoColors.white,
+      color: styles().listRowHeaderBackground,
       border: Border(
         top: BorderSide(color: styles().listRowDivider, width: 0.3),
-        bottom:BorderSide(color: styles().listRowDivider, width: 0.3)
+        bottom: BorderSide(color: styles().listRowDivider, width: 0.3)
       )
     ),
     child: Row(
@@ -153,7 +160,8 @@ Widget _buildRoomsHeader(BuildContext context, {
           padding: EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
           child: Text(title,
             style: TextStyle(
-              fontSize: 13
+              fontSize: 14,
+              color: styles().primaryFontColor
             )
           )
         ),
@@ -162,7 +170,8 @@ Widget _buildRoomsHeader(BuildContext context, {
             padding: EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
             child: Text(locales().home.moreChat,
               style: TextStyle(
-                fontSize: 13
+                fontSize: 13,
+                color: styles().link
               ),
             ),
             onPressed: () => detailButtonCallback(type),

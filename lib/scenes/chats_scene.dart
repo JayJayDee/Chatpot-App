@@ -59,10 +59,17 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
     return CupertinoPageScaffold(
       backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
-        middle: Text(locales().chats.title),
+        backgroundColor: styles().navigationBarBackground,
+        middle: Text(locales().chats.title,
+          style: TextStyle(
+            color: styles().primaryFontColor
+          )
+        ),
         trailing: CupertinoButton(
           padding: EdgeInsets.all(0),
-          child: Icon(MdiIcons.plus),
+          child: Icon(MdiIcons.plus,
+            color: styles().link
+          ),
           onPressed: () => _onNewChatClicked(context)
         ),
       ),
@@ -111,7 +118,7 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
   Widget _buildRoomTypeHeaderLabel(RoomType type, int number) =>
     Container(
       decoration: BoxDecoration(
-        color: CupertinoColors.white,
+        color: styles().listRowHeaderBackground,
         border: Border(
           top: BorderSide(color: styles().listRowDivider, width: 0.3),
           bottom:BorderSide(color: styles().listRowDivider, width: 0.3)
@@ -122,7 +129,8 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
         children: [
           Text(locales().room.roomTypeLabel(type),
             style: TextStyle(
-              fontSize: 14
+              fontSize: 14,
+              color: styles().primaryFontColor
             ),
           ),
           Container(

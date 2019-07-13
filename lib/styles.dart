@@ -21,32 +21,50 @@ void setStyleType(StyleType type) {
 AppStyle _lightTheme() {
   AppStyle style = AppStyle(
     appBackground: const Color(0xffd0d0d0),
-    mainBackground: const Color(0xffefefef),
+    mainBackground: const Color(0xffefe7e3),
     splashBackground: const Color(0xfff4f4f4),
+    link: const Color(0xff007aff),
     cardActionTextStyle: const TextStyle(fontSize: 15.0),
     primaryFontColor: const Color(0xFF505050),
     secondaryFontColor: const Color(0xFF929292),
     thirdFontColor: const Color(0xFFCCCCCC),
     inputFieldDevidier: const Color(0xFFCCCCCC),
-    listViewRowBackground: const Color(0xffefefef),
-    listRowHeaderBackground: const Color(0xffefefef),
-    listRowDivider: const Color(0xffa4a4a4));
+    listViewRowBackground: const Color(0xffffffff),
+    listRowHeaderBackground: const Color(0xfff4f4f4),
+    listRowDivider: const Color(0xffa4a4a4),
+
+    tabBarBackground: const Color(0xfff6f6f6),
+    tabBarActive: const Color(0xff007aff),
+    tabBarInactive: const Color(0xff8e8e93),
+    
+    navigationBarBackground: const Color(0xfff6f6f6),
+    
+    sheetBackground: const Color(0xffd5d9dc));
   return style;
 }
 
 AppStyle _darkTheme() {
   AppStyle style = AppStyle(
-    appBackground: const Color(0xffd0d0d0),
-    mainBackground: const Color(0xffefefef),
-    splashBackground: const Color(0xfff4f4f4),
+    appBackground: const Color(0xff000000),
+    mainBackground: const Color(0xff283b42),
+    splashBackground: const Color(0xff283b42),
+    link: const Color(0xffd1dddb),
     cardActionTextStyle: const TextStyle(fontSize: 15.0),
-    primaryFontColor: const Color(0xFF505050),
-    secondaryFontColor: const Color(0xFF929292),
+    primaryFontColor: const Color(0xffd1dddb),
+    secondaryFontColor: const Color(0xff85b8cb),
     thirdFontColor: const Color(0xFFCCCCCC),
     inputFieldDevidier: const Color(0xFFCCCCCC),
-    listViewRowBackground: const Color(0xffefefef),
-    listRowHeaderBackground: const Color(0xffefefef),
-    listRowDivider: const Color(0xffa4a4a4));
+    listViewRowBackground: const Color(0xff1d6a96),
+    listRowHeaderBackground: const Color(0xff473b42),
+    listRowDivider: const Color(0xff473b42),
+    
+    tabBarBackground: const Color(0xff1d6a96),
+    tabBarActive: const Color(0xffd1dddb),
+    tabBarInactive: const Color(0xff85b8cb),
+    
+    navigationBarBackground: const Color(0xff1d6a96),
+    
+    sheetBackground: const Color(0xffd5d9dc));
   return style;
 }
 
@@ -55,6 +73,7 @@ class AppStyle {
     this.appBackground,
     this.mainBackground,
     this.splashBackground,
+    this.link,
     this.cardActionTextStyle,
     this.primaryFontColor,
     this.secondaryFontColor,
@@ -62,11 +81,18 @@ class AppStyle {
     this.inputFieldDevidier,
     this.listViewRowBackground,
     this.listRowHeaderBackground,
-    this.listRowDivider});
+    this.listRowDivider,
+    this.tabBarBackground,
+    this.tabBarActive,
+    this.tabBarInactive,
+    this.navigationBarBackground,
+    this.profileCardBackground,
+    this.sheetBackground});
 
   final Color appBackground;
   final Color mainBackground;
   final Color splashBackground;
+  final Color link;
 
   final TextStyle cardActionTextStyle;
 
@@ -78,4 +104,13 @@ class AppStyle {
   final Color listViewRowBackground;
   final Color listRowHeaderBackground;
   final Color listRowDivider;
+
+  final Color tabBarBackground;
+  final Color tabBarActive;
+  final Color tabBarInactive;
+
+  final Color navigationBarBackground;
+
+  final Color profileCardBackground;
+  final Color sheetBackground;
 }

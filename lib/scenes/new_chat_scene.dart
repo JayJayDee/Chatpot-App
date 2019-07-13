@@ -51,8 +51,14 @@ class NewChatScene extends StatelessWidget {
     return CupertinoPageScaffold(
       backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: styles().navigationBarBackground,
         previousPageTitle: locales().chats.title,
-        middle: Text(locales().newchat.title),
+        actionsForegroundColor: styles().link,
+        middle: Text(locales().newchat.title,
+          style: TextStyle(
+            color: styles().primaryFontColor
+          )
+        ),
         transitionBetweenRoutes: true
       ),
       child: SafeArea(

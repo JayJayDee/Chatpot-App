@@ -65,8 +65,14 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
     return CupertinoPageScaffold(
       backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: styles().navigationBarBackground,
         previousPageTitle: locales().photoDetail.previousTitle,
-        middle: Text(locales().photoDetail.title),
+        actionsForegroundColor: styles().link,
+        middle: Text(locales().photoDetail.title,
+          style: TextStyle(
+            color: styles().primaryFontColor 
+          )
+        ),
         // trailing: CupertinoButton(
         //   padding: EdgeInsets.all(0),
         //   child: Text(locales().photoDetail.btnDownload),
