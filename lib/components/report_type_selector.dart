@@ -15,13 +15,13 @@ Widget builReportTypeSeletor(BuildContext context, {
     children: [
       Icon(MdiIcons.gavel,
         size: 28.0,
-        color: styles().secondaryFontColor
+        color: styles().editTextHint
       ),
       CupertinoButton(
         padding: EdgeInsets.only(left: 8, right: 0, top: 0, bottom: 0),
         child: Text(_currentReportTypeExpr(reportType),
           style: TextStyle(
-            color: styles().secondaryFontColor,
+            color: styles().editTextHint,
             fontWeight: FontWeight.w100,
             fontSize: 18
           )

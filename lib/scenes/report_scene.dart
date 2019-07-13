@@ -258,11 +258,14 @@ Widget _buildCommentField(BuildContext context, {
 }) => CupertinoTextField(
   prefix: Icon(
     MdiIcons.text,
-    color: styles().secondaryFontColor,
+    color: styles().editTextHint,
     size: 28.0
   ),
   padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
   placeholder: locales().reportScene.commentFieldPlacholder,
+  placeholderStyle: TextStyle(
+    color: styles().editTextHint
+  ),
   decoration: BoxDecoration(
     border: Border(
       bottom: BorderSide(
@@ -272,6 +275,9 @@ Widget _buildCommentField(BuildContext context, {
     )
   ),
   onChanged: callback,
+  style: TextStyle(
+    color: styles().editTextFont
+  )
 );
 
 Widget _buildReportButton(BuildContext context, {

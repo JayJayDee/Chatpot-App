@@ -20,6 +20,8 @@ void setStyleType(StyleType type) {
 
 AppStyle _lightTheme() {
   AppStyle style = AppStyle(
+    logoImageWithTypo: const AssetImage('assets/chatpot-logo-with-typo-medium.png'),
+
     appBackground: const Color(0xffd0d0d0),
     mainBackground: const Color(0xffefe7e3),
     splashBackground: const Color(0xfff4f4f4),
@@ -45,16 +47,20 @@ AppStyle _lightTheme() {
     messageBackgroundOther: const Color(0xffcbc1bd),
     messageBackgroundNotification: const Color(0xffcbc1bd),
     
-    profileCardBackground: const Color(0xffffffff));
+    profileCardBackground: const Color(0xffffffff),
+    editTextFont: const Color(0xFF505050),
+    editTextHint: const Color(0xFF929292));
   return style;
 }
 
 AppStyle _darkTheme() {
   AppStyle style = AppStyle(
+    logoImageWithTypo: const AssetImage('assets/chatpot-logo-with-typo-medium-white.png'),
+
     appBackground: const Color(0xff000000),
     mainBackground: const Color(0xff283b42),
     splashBackground: const Color(0xff283b42),
-    link: const Color(0xffd1dddb),
+    link: const Color(0xff6cb1ff),
     cardActionTextStyle: const TextStyle(fontSize: 15.0),
     primaryFontColor: const Color(0xffd1dddb),
     secondaryFontColor: const Color(0xff85b8cb),
@@ -77,12 +83,16 @@ AppStyle _darkTheme() {
     messageBackgroundOther: const Color(0xff473b42),
     messageBackgroundNotification: const Color(0xff473b42),
     
-    profileCardBackground: const Color(0xff1d6a96));
+    profileCardBackground: const Color(0xff1d6a96),
+
+    editTextFont: const Color(0xffd1dddb),
+    editTextHint: const Color(0xff85b8cb));
   return style;
 }
 
 class AppStyle {
   AppStyle({
+    this.logoImageWithTypo,
     this.appBackground,
     this.mainBackground,
     this.splashBackground,
@@ -104,8 +114,11 @@ class AppStyle {
     this.sheetBackground,
     this.messageBackgroundMine,
     this.messageBackgroundOther,
-    this.messageBackgroundNotification});
+    this.messageBackgroundNotification,
+    this.editTextHint,
+    this.editTextFont});
 
+  final AssetImage logoImageWithTypo;
   final Color appBackground;
   final Color mainBackground;
   final Color splashBackground;
@@ -135,4 +148,7 @@ class AppStyle {
   final Color messageBackgroundMine;
   final Color messageBackgroundOther;
   final Color messageBackgroundNotification;
+
+  final Color editTextHint;
+  final Color editTextFont;
 }

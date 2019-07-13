@@ -83,8 +83,15 @@ class _SignupSceneState extends State<SignupScene> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
-        middle: Text(locales().signupScene.title),
+        backgroundColor: styles().navigationBarBackground,
+        middle: Text(locales().signupScene.title,
+          style: TextStyle(
+            color: styles().primaryFontColor
+          ),
+        ),
+        actionsForegroundColor: styles().link,
         transitionBetweenRoutes: true
       ),
       child: SafeArea(
@@ -160,17 +167,20 @@ Widget _buildEmailField(BuildContext context, {
   CupertinoTextField(
     prefix: Icon(CupertinoIcons.mail_solid,
       size: 28.0,
-      color: styles().thirdFontColor),
+      color: styles().editTextHint),
     placeholder: locales().signupScene.emailPlaceHolder,
     placeholderStyle: TextStyle(
-      color: styles().thirdFontColor,
+      color: styles().editTextHint,
     ),
     onChanged: changedCallback,
     padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 14.0),
     keyboardType: TextInputType.emailAddress,
     decoration: BoxDecoration(
       border: Border(bottom: BorderSide(width: 0.5, color: styles().inputFieldDevidier))
-    )
+    ),
+    style: TextStyle(
+      color: styles().editTextFont
+    ),
   );
 
 
@@ -180,10 +190,10 @@ Widget _buildPasswordField(BuildContext context, {
   CupertinoTextField(
     prefix: Icon(CupertinoIcons.padlock_solid,
       size: 28.0,
-      color: styles().thirdFontColor),
+      color: styles().editTextHint),
     placeholder: locales().signupScene.passwordPlaceHolder,
     placeholderStyle: TextStyle(
-      color: styles().thirdFontColor
+      color: styles().editTextHint
     ),
     onChanged: changedCallback,
     obscureText: true,
@@ -196,6 +206,9 @@ Widget _buildPasswordField(BuildContext context, {
           color: styles().inputFieldDevidier
         )
       )
+    ),
+    style: TextStyle(
+      color: styles().editTextFont
     )
   );
 
@@ -206,10 +219,10 @@ Widget _buildPasswordConfirmField(BuildContext context, {
   CupertinoTextField(
     prefix: Icon(CupertinoIcons.padlock_solid,
       size: 28.0,
-      color: styles().thirdFontColor),
+      color: styles().editTextHint),
     placeholder: locales().signupScene.passworConfirmPlaceHolder,
     placeholderStyle: TextStyle(
-      color: styles().thirdFontColor
+      color: styles().editTextHint
     ),
     onChanged: changedCallback,
     obscureText: true,
@@ -222,7 +235,10 @@ Widget _buildPasswordConfirmField(BuildContext context, {
           color: styles().inputFieldDevidier
         )
       )
-    )
+    ),
+    style: TextStyle(
+      color: styles().editTextFont
+    ),
   );
 
 Widget _buildProgress(BuildContext context, {

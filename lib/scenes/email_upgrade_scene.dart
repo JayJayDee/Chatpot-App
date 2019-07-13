@@ -167,7 +167,13 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
     return CupertinoPageScaffold(
       backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
-        middle: Text(locales().emailUpgradeScene.title)
+        middle: Text(locales().emailUpgradeScene.title,
+          style: TextStyle(
+            color: styles().primaryFontColor
+          )
+        ),
+        actionsForegroundColor: styles().link,
+        backgroundColor: styles().navigationBarBackground,
       ),
       child: SafeArea(
         child: Stack(
@@ -234,8 +240,11 @@ List<Widget> _buildEmailInputWidgets({
       child: CupertinoTextField(
         prefix: Icon(CupertinoIcons.mail_solid,
           size: 28.0,
-          color: CupertinoColors.inactiveGray),
+          color: styles().editTextHint),
         placeholder: locales().signupScene.emailPlaceHolder,
+        placeholderStyle: TextStyle(
+          color: styles().editTextHint
+        ),
         onChanged: inputChangedCallback,
         padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
         keyboardType: TextInputType.emailAddress,
@@ -243,12 +252,19 @@ List<Widget> _buildEmailInputWidgets({
           border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
         ),
         controller: controller,
+        style: TextStyle(
+          color: styles().editTextFont
+        )
       )
     ),
     Container(
       margin: EdgeInsets.only(left: 10, top: 15, right: 10),
       child: CupertinoButton(
-        child: Text(locales().emailUpgradeScene.emailButtonLabel),
+        child: Text(locales().emailUpgradeScene.emailButtonLabel,
+          style: TextStyle(
+            color: styles().link
+          ),
+        ),
         onPressed: loading == true ? null : 
           () => emailInputCallback()
       )
@@ -284,14 +300,20 @@ List<Widget> _buildCodeInputWidgets({
           child: CupertinoTextField(
             prefix: Icon(CupertinoIcons.padlock_solid,
               size: 28.0,
-              color: CupertinoColors.inactiveGray),
+              color: styles().editTextHint),
             placeholder: locales().emailUpgradeScene.passwordPlaceholder,
+            placeholderStyle: TextStyle(
+              color: styles().editTextHint
+            ),
             onChanged: paswordChangedCallback,
             padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
             obscureText: true,
             keyboardType: TextInputType.text,
             decoration: BoxDecoration(
               border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
+            ),
+            style: TextStyle(
+              color: styles().editTextFont
             )
           )
         ),
@@ -300,14 +322,20 @@ List<Widget> _buildCodeInputWidgets({
           child: CupertinoTextField(
             prefix: Icon(CupertinoIcons.padlock_solid,
               size: 28.0,
-              color: CupertinoColors.inactiveGray),
+              color: styles().editTextHint),
             placeholder: locales().emailUpgradeScene.passwordConfirmPlaceholder,
+            placeholderStyle: TextStyle(
+              color: styles().editTextHint
+            ),
             onChanged: paswordConfirmChangedCallback,
             padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
             obscureText: true,
             keyboardType: TextInputType.text,
             decoration: BoxDecoration(
               border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
+            ),
+            style: TextStyle(
+              color: styles().editTextFont
             )
           )
         )
@@ -330,22 +358,32 @@ List<Widget> _buildCodeInputWidgets({
       child: CupertinoTextField(
         prefix: Icon(CupertinoIcons.gear,
           size: 28.0,
-          color: CupertinoColors.inactiveGray),
+          color: styles().editTextHint),
         placeholder: locales().emailUpgradeScene.codePlaceHolder,
+        placeholderStyle: TextStyle(
+          color: styles().editTextHint
+        ),
         onChanged: inputChangedCallback,
         padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
         keyboardType: TextInputType.text,
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(width: 0.0, color: CupertinoColors.inactiveGray))
         ),
-        controller: controller
+        controller: controller,
+        style: TextStyle(
+          color: styles().editTextFont
+        )
       )
     ),
     isPasswordInputRequired == true ? passwordInputWidget : Container(),
     Container(
       margin: EdgeInsets.only(left: 10, top: 15, right: 10),
       child: CupertinoButton(
-        child: Text(locales().emailUpgradeScene.codeInputButtonLabel),
+        child: Text(locales().emailUpgradeScene.codeInputButtonLabel,
+          style: TextStyle(
+            color: styles().link
+          )
+        ),
         onPressed: loading == true ? null : 
           () => codeInputCallback()
       )
@@ -353,7 +391,11 @@ List<Widget> _buildCodeInputWidgets({
     Container(
       margin: EdgeInsets.only(left: 10, top: 0, right: 10),
       child: CupertinoButton(
-        child: Text(locales().emailUpgradeScene.codeResendButtonLabel),
+        child: Text(locales().emailUpgradeScene.codeResendButtonLabel,
+          style: TextStyle(
+            color: styles().link
+          )
+        ),
         onPressed: loading == true ? null : 
           () => {}
       )
@@ -387,7 +429,11 @@ List<Widget> _buildCompletedWidgets({
     Container(
       margin: EdgeInsets.only(left: 10, top: 15, right: 10),
       child: CupertinoButton(
-        child: Text(locales().emailUpgradeScene.completeOkButtonLabel),
+        child: Text(locales().emailUpgradeScene.completeOkButtonLabel,
+          style: TextStyle(
+            color: styles().link
+          )
+        ),
         onPressed: () => okCallback()
       )
     )

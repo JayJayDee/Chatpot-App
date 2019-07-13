@@ -295,7 +295,7 @@ Widget _buildQueryInputField(BuildContext context, {
     controller: controller,
     prefix: Icon(
       CupertinoIcons.search,
-      color: styles().thirdFontColor,
+      color: styles().editTextHint,
       size: 28.0,
     ),
     onChanged: textChangeCallback,
@@ -307,8 +307,11 @@ Widget _buildQueryInputField(BuildContext context, {
     ),
     placeholder: locales().morechat.queryEditPlaceholder,
     placeholderStyle: TextStyle(
-      color: styles().thirdFontColor
+      color: styles().editTextHint
     ),
+    style: TextStyle(
+      color: styles().editTextFont
+    )
   );
 
 Widget _buildCompoundSearchArea(BuildContext context, {

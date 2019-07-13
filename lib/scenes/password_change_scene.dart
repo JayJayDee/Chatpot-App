@@ -127,10 +127,10 @@ Widget _buildOldPasswordField(BuildContext context, {
   return CupertinoTextField(
     prefix: Icon(CupertinoIcons.padlock_solid,
       size: 28.0,
-      color: styles().thirdFontColor),
+      color: styles().editTextHint),
     placeholder: locales().passwordChange.oldPasswordPlaceholder,
     placeholderStyle: TextStyle(
-      color: styles().thirdFontColor
+      color: styles().editTextHint
     ),
     onChanged: callback,
     padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
@@ -138,6 +138,9 @@ Widget _buildOldPasswordField(BuildContext context, {
     keyboardType: TextInputType.text,
     decoration: BoxDecoration(
       border: Border(bottom: BorderSide(width: 0.5, color: styles().inputFieldDevidier))
+    ),
+    style: TextStyle(
+      color: styles().editTextFont
     )
   );
 }
@@ -148,10 +151,10 @@ Widget _buildNewPasswordField(BuildContext context, {
   return CupertinoTextField(
     prefix: Icon(CupertinoIcons.padlock_solid,
       size: 28.0,
-      color: styles().thirdFontColor),
+      color: styles().editTextHint),
     placeholder: locales().passwordChange.newPasswordPlaceholder,
     placeholderStyle: TextStyle(
-      color: styles().thirdFontColor
+      color: styles().editTextHint
     ),
     onChanged: callback,
     padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
@@ -159,6 +162,9 @@ Widget _buildNewPasswordField(BuildContext context, {
     keyboardType: TextInputType.text,
     decoration: BoxDecoration(
       border: Border(bottom: BorderSide(width: 0.5, color: styles().inputFieldDevidier))
+    ),
+    style: TextStyle(
+      color: styles().editTextFont
     )
   );
 }
@@ -169,10 +175,10 @@ Widget _buildNewPasswordConfirmField(BuildContext context, {
   return CupertinoTextField(
     prefix: Icon(CupertinoIcons.padlock_solid,
       size: 28.0,
-      color: styles().thirdFontColor),
+      color: styles().editTextHint),
     placeholder: locales().passwordChange.newPasswordConfirmPlaceholder,
     placeholderStyle: TextStyle(
-      color: styles().thirdFontColor
+      color: styles().editTextHint
     ),
     onChanged: callback,
     padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
@@ -180,6 +186,9 @@ Widget _buildNewPasswordConfirmField(BuildContext context, {
     keyboardType: TextInputType.text,
     decoration: BoxDecoration(
       border: Border(bottom: BorderSide(width: 0.5, color: styles().inputFieldDevidier))
+    ),
+    style: TextStyle(
+      color: styles().editTextFont
     )
   );
 }
