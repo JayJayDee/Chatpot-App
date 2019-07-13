@@ -165,7 +165,8 @@ Widget _buildNewChatButton(BuildContext context, VoidCallback callback) {
   return CupertinoButton(
     child: Text(locales().newchat.buttonCreate,
       style: TextStyle(
-        fontSize: 15
+        fontSize: 17,
+        color: styles().link
       )
     ),
     onPressed: conditionalCallback

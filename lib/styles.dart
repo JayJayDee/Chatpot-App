@@ -39,7 +39,9 @@ AppStyle _lightTheme() {
     
     navigationBarBackground: const Color(0xfff6f6f6),
     
-    sheetBackground: const Color(0xffd5d9dc));
+    sheetBackground: const Color(0xffd5d9dc),
+    messageBackgroundMine: const Color(0xff007aff),
+    messageBackgroundOther: const Color(0xfff4f4f4));
   return style;
 }
 
@@ -64,7 +66,10 @@ AppStyle _darkTheme() {
     
     navigationBarBackground: const Color(0xff1d6a96),
     
-    sheetBackground: const Color(0xffd5d9dc));
+    sheetBackground: const Color(0xffd5d9dc),
+
+    messageBackgroundMine: const Color(0xff222222),
+    messageBackgroundOther: const Color(0xff473b42));
   return style;
 }
 
@@ -87,7 +92,9 @@ class AppStyle {
     this.tabBarInactive,
     this.navigationBarBackground,
     this.profileCardBackground,
-    this.sheetBackground});
+    this.sheetBackground,
+    this.messageBackgroundMine,
+    this.messageBackgroundOther});
 
   final Color appBackground;
   final Color mainBackground;
@@ -113,4 +120,7 @@ class AppStyle {
 
   final Color profileCardBackground;
   final Color sheetBackground;
+
+  final Color messageBackgroundMine;
+  final Color messageBackgroundOther;
 }

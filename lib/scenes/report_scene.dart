@@ -114,8 +114,11 @@ class _ReportSceneState extends State<ReportScene> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: styles().navigationBarBackground,
         previousPageTitle: locales().reportScene.prevButtonLabel,
+        actionsForegroundColor: styles().link,
         middle: Text(locales().reportScene.title),
       ),
       child: SafeArea(
@@ -276,8 +279,11 @@ Widget _buildReportButton(BuildContext context, {
   @required VoidCallback callback
 }) {
   return CupertinoButton(
-    child: Text(locales().reportScene.reportButtonLabel),
-    onPressed: loading == true ? null : callback,
-    color: CupertinoColors.activeBlue
+    child: Text(locales().reportScene.reportButtonLabel,
+      style: TextStyle(
+        color: styles().link
+      )
+    ),
+    onPressed: loading == true ? null : callback
   );
 }

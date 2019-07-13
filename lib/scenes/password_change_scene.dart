@@ -58,9 +58,16 @@ class _PasswordChangeSceneState extends State<PasswordChangeScene> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: styles().navigationBarBackground,
         previousPageTitle: locales().setting.title,
-        middle: Text(locales().passwordChange.title),
+        middle: Text(locales().passwordChange.title,
+          style: TextStyle(
+            color: styles().primaryFontColor
+          )
+        ),
+        actionsForegroundColor: styles().link,
         transitionBetweenRoutes: true
       ),
       child: SafeArea(
@@ -182,7 +189,11 @@ Widget _buildChangeButton(BuildContext context, {
 }) {
   final state = ScopedModel.of<AppState>(context);
   return CupertinoButton(
-    child: Text(locales().passwordChange.changeButtonLabel),
+    child: Text(locales().passwordChange.changeButtonLabel,
+      style: TextStyle(
+        color: styles().link
+      )
+    ),
     onPressed: state.loading == true ? null : () => callback()
   );
 }
