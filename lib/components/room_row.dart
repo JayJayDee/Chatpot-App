@@ -79,7 +79,7 @@ class RoomRow extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 16.0,
-                        color: Color(0xFF505050)
+                        color: styles().primaryFontColor
                       )
                     ),
                   ),

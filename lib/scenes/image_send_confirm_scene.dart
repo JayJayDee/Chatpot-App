@@ -230,12 +230,23 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: styles().navigationBarBackground,
         previousPageTitle: roomTitle,
-        middle: Text(locales().imageConfirmScene.title),
+        actionsForegroundColor: styles().link,
+        middle: Text(locales().imageConfirmScene.title,
+          style: TextStyle(
+            color: styles().link
+          )
+        ),
         trailing: CupertinoButton(
           padding: EdgeInsets.all(0),
-          child: Text(locales().imageConfirmScene.btnSendImage),
+          child: Text(locales().imageConfirmScene.btnSendImage,
+            style: TextStyle(
+              color: styles().link
+            )
+          ),
           onPressed: _loading == true ? null :  () => _onSendClicked(),
         )
       ),

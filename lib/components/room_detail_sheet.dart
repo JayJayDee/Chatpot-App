@@ -16,12 +16,14 @@ Future<bool> showRoomDetailSheet(BuildContext context, Room room) async {
     context: context,
     builder: (BuildContext context) =>
       CupertinoActionSheet(
-        message: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            RoomDetailCard(room: room)
-          ],
+        message: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              RoomDetailCard(room: room)
+            ]
+          )
         ),
         actions: [
           CupertinoActionSheetAction(

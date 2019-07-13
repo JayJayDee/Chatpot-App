@@ -242,10 +242,17 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
 
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
+          backgroundColor: styles().navigationBarBackground,
           previousPageTitle: locales().home.title,
-          middle: Text(locales().morechat.title),
+          actionsForegroundColor: styles().link,
+          middle: Text(locales().morechat.title,
+            style: TextStyle(
+              color: styles().primaryFontColor
+            )
+          ),
           transitionBetweenRoutes: true
         ),
+        backgroundColor: styles().mainBackground,
         child: SafeArea(
           child: Stack(
             alignment: Alignment.center,
@@ -329,7 +336,11 @@ Widget _buildSearchButton(BuildContext context, {
   @required bool loading
 }) =>
   CupertinoButton(
-    child: Text(locales().morechat.searchButtonLabel),
+    child: Text(locales().morechat.searchButtonLabel,
+      style: TextStyle(
+        color: styles().link
+      )
+    ),
     onPressed: loading == true ? null : clickCallback
   );
 
