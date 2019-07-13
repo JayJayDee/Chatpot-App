@@ -44,7 +44,7 @@ class AboutScene extends StatelessWidget {
             Container(
               margin: EdgeInsets.only(left: 15, top: 30, right: 15),
               child: Image(
-                image: AssetImage('assets/chatpot-logo-with-typo-medium.png')
+                image: styles().logoImageWithTypo
               ),
             ),
             Container(

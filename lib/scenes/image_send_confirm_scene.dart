@@ -237,7 +237,7 @@ class _ImageSendConfirmSceneState extends State<ImageSendConfirmScene> {
         actionsForegroundColor: styles().link,
         middle: Text(locales().imageConfirmScene.title,
           style: TextStyle(
-            color: styles().link
+            color: styles().primaryFontColor
           )
         ),
         trailing: CupertinoButton(
