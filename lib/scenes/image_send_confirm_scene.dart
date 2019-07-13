@@ -329,7 +329,7 @@ Widget _buildImageShownArea(BuildContext context, {
   @required VoidCallback gallerySelectCallback
 }) =>
   Container(
-    color: CupertinoColors.lightBackgroundGray,
+    color: styles().messageBackgroundOther,
     child: Stack(
       alignment: Alignment.topLeft,
       children: [
@@ -341,7 +341,7 @@ Widget _buildImageShownArea(BuildContext context, {
             ),
           ) : Container(
             alignment: Alignment.center,
-            color: CupertinoColors.lightBackgroundGray,
+            color: styles().messageBackgroundOther,
             child: image,
           ),
         Container(

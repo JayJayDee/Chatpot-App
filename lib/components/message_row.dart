@@ -23,10 +23,10 @@ class _MatchedColors {
 _MatchedColors _getMatchedColors(bool isMine) {
   var colors = _MatchedColors();
   if (isMine == true) {
-    colors.background = CupertinoColors.activeBlue;
+    colors.background = styles().messageBackgroundMine;
     colors.font = CupertinoColors.white;
   } else {
-    colors.background = styles().listRowHeaderBackground;
+    colors.background = styles().messageBackgroundOther;
     colors.font = styles().primaryFontColor;
   }
   return colors;
@@ -106,7 +106,7 @@ class _NotificationRow extends StatelessWidget {
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(5),
-                color: styles().listRowHeaderBackground,
+                color: styles().messageBackgroundNotification,
                 child: Text(text,
                   style: TextStyle(
                     fontSize: 14,

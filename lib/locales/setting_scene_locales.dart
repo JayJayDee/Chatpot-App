@@ -110,8 +110,7 @@ Are you sure you want to log out?''';
 
   String get modeChangedDescription {
     if (language == 'ko') return '''색상 설정이 변경되었습니다.
-변경된 설정은 앱을 재시작 하면 적용됩니다.
-''';
+변경된 설정은 앱을 재시작 하면 적용됩니다.''';
     else if (language == 'ja') return '''アプリの色設定が変更されました。
 変更した設定はアプリを再起動すると有効になります。''';
     return '''The app color setting has been changed.

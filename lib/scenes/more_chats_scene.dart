@@ -358,7 +358,11 @@ Widget _buildMoreRoomButton(BuildContext context, {
     );
   }
   return CupertinoButton(
-    child: Text(locales().morechat.loadMoreButtonLabel),
+    child: Text(locales().morechat.loadMoreButtonLabel,
+      style: TextStyle(
+        color: styles().link
+      )
+    ),
     onPressed: loading == true ? null : clickCallback
   );
 }

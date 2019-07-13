@@ -102,9 +102,16 @@ class _BlockHistorySceneState extends State<BlockHistoryScene> {
     ).toList());
 
     return CupertinoPageScaffold(
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: styles().navigationBarBackground,
         previousPageTitle: locales().setting.title,
-        middle: Text(locales().blockHistoryScene.title),
+        actionsForegroundColor: styles().link,
+        middle: Text(locales().blockHistoryScene.title,
+          style: TextStyle(
+            color: styles().primaryFontColor
+          )
+        ),
       ),
       child: SafeArea(
         child: Stack(

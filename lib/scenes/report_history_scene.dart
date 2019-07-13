@@ -61,9 +61,16 @@ class _ReportHistorySceneState extends State<ReportHistoryScene> {
     widgets.addAll(_buildReportRows(this._reports));
 
     return CupertinoPageScaffold(
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: styles().navigationBarBackground,
         previousPageTitle: locales().setting.title,
-        middle: Text(locales().reportHistoryScene.title),
+        actionsForegroundColor: styles().link,
+        middle: Text(locales().reportHistoryScene.title,
+          style: TextStyle(
+            color: styles().primaryFontColor
+          )
+        )
       ),
       child: SafeArea(
         child: Stack(
