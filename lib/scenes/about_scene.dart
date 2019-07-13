@@ -27,9 +27,16 @@ class AboutScene extends StatelessWidget {
   @override 
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: styles().navigationBarBackground,
         previousPageTitle: locales().setting.title,
-        middle: Text(locales().aboutScene.title)
+        actionsForegroundColor: styles().link,
+        middle: Text(locales().aboutScene.title,
+          style: TextStyle(
+            color: styles().primaryFontColor
+          )
+        )
       ),
       child: SafeArea(
         child: ListView(
@@ -54,7 +61,8 @@ class AboutScene extends StatelessWidget {
               child: CupertinoButton(
                 child: Text(locales().aboutScene.bitcoinDonateBtnLabel,
                   style: TextStyle(
-                    fontSize: 16
+                    fontSize: 16,
+                    color: styles().link
                   )
                 ),
                 onPressed: () => _onBitcoinClicked(context)
@@ -65,7 +73,8 @@ class AboutScene extends StatelessWidget {
               child: CupertinoButton(
                 child: Text(locales().aboutScene.ethereumDonateBtnLabel,
                   style: TextStyle(
-                    fontSize: 16
+                    fontSize: 16,
+                    color: styles().link
                   )
                 ),
                 onPressed: () => _onEthereumClicked(context)

@@ -21,7 +21,7 @@ void setStyleType(StyleType type) {
 AppStyle _lightTheme() {
   AppStyle style = AppStyle(
     appBackground: const Color(0xffd0d0d0),
-    mainBackground: const Color(0xffefe7e3),
+    mainBackground: const Color(0xffefeeee),
     splashBackground: const Color(0xfff4f4f4),
     link: const Color(0xff007aff),
     cardActionTextStyle: const TextStyle(fontSize: 15.0),
