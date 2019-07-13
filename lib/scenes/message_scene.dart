@@ -339,6 +339,9 @@ Widget _buildEditText(BuildContext context, {
   final state = ScopedModel.of<AppState>(context, rebuildOnChange: true);
   return Container(
     height: 50,
+    margin: EdgeInsets.only(top: 3),
+    padding: EdgeInsets.only(top: 2),
+    color: styles().navigationBarBackground,
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[

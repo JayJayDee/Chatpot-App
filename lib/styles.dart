@@ -30,6 +30,7 @@ AppStyle _lightTheme() {
     thirdFontColor: const Color(0xFFCCCCCC),
     inputFieldDevidier: const Color(0xFFCCCCCC),
     listViewRowBackground: const Color(0xffffffff),
+    listViewRowBackgroundMoreDark: Color(0xffffffff),
     listRowHeaderBackground: const Color(0xfff4f4f4),
     listRowDivider: const Color(0xffa4a4a4),
 
@@ -41,8 +42,10 @@ AppStyle _lightTheme() {
     
     sheetBackground: const Color(0xffd5d9dc),
     messageBackgroundMine: const Color(0xff007aff),
-    messageBackgroundOther: const Color(0xffcccccc),
-    messageBackgroundNotification: const Color(0xffcccccc));
+    messageBackgroundOther: const Color(0xffcbc1bd),
+    messageBackgroundNotification: const Color(0xffcbc1bd),
+    
+    profileCardBackground: const Color(0xffffffff));
   return style;
 }
 
@@ -58,6 +61,7 @@ AppStyle _darkTheme() {
     thirdFontColor: const Color(0xFFCCCCCC),
     inputFieldDevidier: const Color(0xFFCCCCCC),
     listViewRowBackground: const Color(0xff1d6a96),
+    listViewRowBackgroundMoreDark: Color(0xff113d56),
     listRowHeaderBackground: const Color(0xff473b42),
     listRowDivider: const Color(0xff473b42),
     
@@ -71,7 +75,9 @@ AppStyle _darkTheme() {
 
     messageBackgroundMine: const Color(0xff222222),
     messageBackgroundOther: const Color(0xff473b42),
-    messageBackgroundNotification: const Color(0xff473b42));
+    messageBackgroundNotification: const Color(0xff473b42),
+    
+    profileCardBackground: const Color(0xff1d6a96));
   return style;
 }
 
@@ -87,6 +93,7 @@ class AppStyle {
     this.thirdFontColor,
     this.inputFieldDevidier,
     this.listViewRowBackground,
+    this.listViewRowBackgroundMoreDark,
     this.listRowHeaderBackground,
     this.listRowDivider,
     this.tabBarBackground,
@@ -112,6 +119,7 @@ class AppStyle {
   final Color inputFieldDevidier;
 
   final Color listViewRowBackground;
+  final Color listViewRowBackgroundMoreDark;
   final Color listRowHeaderBackground;
   final Color listRowDivider;
 
