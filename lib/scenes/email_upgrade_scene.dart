@@ -260,7 +260,11 @@ List<Widget> _buildEmailInputWidgets({
     Container(
       margin: EdgeInsets.only(left: 10, top: 15, right: 10),
       child: CupertinoButton(
-        child: Text(locales().emailUpgradeScene.emailButtonLabel),
+        child: Text(locales().emailUpgradeScene.emailButtonLabel,
+          style: TextStyle(
+            color: styles().link
+          ),
+        ),
         onPressed: loading == true ? null : 
           () => emailInputCallback()
       )
@@ -375,7 +379,11 @@ List<Widget> _buildCodeInputWidgets({
     Container(
       margin: EdgeInsets.only(left: 10, top: 15, right: 10),
       child: CupertinoButton(
-        child: Text(locales().emailUpgradeScene.codeInputButtonLabel),
+        child: Text(locales().emailUpgradeScene.codeInputButtonLabel,
+          style: TextStyle(
+            color: styles().link
+          )
+        ),
         onPressed: loading == true ? null : 
           () => codeInputCallback()
       )
@@ -383,7 +391,11 @@ List<Widget> _buildCodeInputWidgets({
     Container(
       margin: EdgeInsets.only(left: 10, top: 0, right: 10),
       child: CupertinoButton(
-        child: Text(locales().emailUpgradeScene.codeResendButtonLabel),
+        child: Text(locales().emailUpgradeScene.codeResendButtonLabel,
+          style: TextStyle(
+            color: styles().link
+          )
+        ),
         onPressed: loading == true ? null : 
           () => {}
       )
@@ -417,7 +429,11 @@ List<Widget> _buildCompletedWidgets({
     Container(
       margin: EdgeInsets.only(left: 10, top: 15, right: 10),
       child: CupertinoButton(
-        child: Text(locales().emailUpgradeScene.completeOkButtonLabel),
+        child: Text(locales().emailUpgradeScene.completeOkButtonLabel,
+          style: TextStyle(
+            color: styles().link
+          )
+        ),
         onPressed: () => okCallback()
       )
     )

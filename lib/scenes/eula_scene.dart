@@ -60,8 +60,14 @@ class _EulaSceneState extends State<EulaScene> {
     return CupertinoPageScaffold(
       backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: styles().navigationBarBackground,
         previousPageTitle: locales().eulaScene.prevButtonLabel,
-        middle: Text(locales().eulaScene.title),
+        actionsForegroundColor: styles().link,
+        middle: Text(locales().eulaScene.title,
+          style: TextStyle(
+            color: styles().primaryFontColor
+          ),
+        ),
         transitionBetweenRoutes: true
       ),
       child: SafeArea(

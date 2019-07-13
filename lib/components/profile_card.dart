@@ -83,14 +83,14 @@ Widget buildProfileCard(BuildContext context, {
                     )
                   ]
                 ),
-                Positioned(
+                editButton == true ? Positioned(
                   child: CupertinoButton(
                     child: Icon(MdiIcons.settings,
                       color: styles().link,
                     ),
                     onPressed: () {}
                   )
-                )
+                ) : Container()
               ]
             )
           )

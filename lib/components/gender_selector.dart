@@ -21,13 +21,13 @@ Widget buildGenderSeletor(BuildContext context, {
       children: [
         Icon(CupertinoIcons.person_solid,
           size: 28.0,
-          color: styles().thirdFontColor
+          color: styles().editTextHint
         ),
         CupertinoButton(
           padding: EdgeInsets.only(left: 8, right: 0, top: 0, bottom: 0),
           child: Text(_currentGenderExpr(gender),
             style: TextStyle(
-              color: styles().thirdFontColor,
+              color: styles().editTextHint,
               fontWeight: FontWeight.normal,
               fontSize: 18
             )

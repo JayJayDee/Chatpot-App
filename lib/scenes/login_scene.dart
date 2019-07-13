@@ -91,8 +91,14 @@ class LoginScene extends StatelessWidget {
     locales().selectLanguage(context);
     final state = ScopedModel.of<AppState>(context, rebuildOnChange: true);
     return CupertinoPageScaffold(
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
-        middle: Text(locales().login.title),
+        backgroundColor: styles().navigationBarBackground,
+        middle: Text(locales().login.title,
+          style: TextStyle(
+            color: styles().primaryFontColor
+          )
+        ),
         transitionBetweenRoutes: true
       ),
       child: SafeArea(
@@ -131,7 +137,7 @@ class LoginScene extends StatelessWidget {
                   padding: EdgeInsets.only(left: 10, right: 10, top: 10),
                   child: CupertinoButton(
                     child: Text(locales().login.simpleSignupButton),
-                    color: CupertinoColors.activeGreen,
+                    color: CupertinoColors.activeBlue,
                     onPressed: state.loading == true ? null :
                       () => _onSimpleSignUp(context)
                   )
@@ -139,7 +145,11 @@ class LoginScene extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.only(top: 10),
                   child: CupertinoButton(
-                    child: Text(locales().login.signupButton),
+                    child: Text(locales().login.signupButton,
+                      style: TextStyle(
+                        color: styles().link
+                      ),
+                    ),
                     onPressed: state.loading == true ? null :
                       () => _onEmailSignup(context)
                   )
@@ -159,38 +169,44 @@ class LoginScene extends StatelessWidget {
 Widget _buildLoginField(BuildContext context, ValueChanged<String> valueChange) => CupertinoTextField(
   prefix: Icon(
     CupertinoIcons.mail_solid,
-    color: styles().thirdFontColor,
+    color: styles().editTextHint,
     size: 28.0
   ),
   padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
   placeholder: locales().login.emailHint,
   placeholderStyle: TextStyle(
-    color: styles().thirdFontColor
+    color: styles().editTextHint
   ),
   keyboardType: TextInputType.emailAddress,
   decoration: BoxDecoration(
     border: Border(bottom: BorderSide(width: 0.5, color: styles().inputFieldDevidier))
   ),
   onChanged: valueChange,
+  style: TextStyle(
+    color: styles().editTextFont
+  )
 );
 
 Widget _buildPasswordField(BuildContext context, ValueChanged<String> valueChange) => CupertinoTextField(
   prefix: Icon(
     CupertinoIcons.padlock_solid,
-    color: styles().thirdFontColor,
+    color: styles().editTextHint,
     size: 28.0
   ),
   padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 12.0),
   placeholder: locales().login.passwordHint,
   placeholderStyle: TextStyle(
-    color: styles().thirdFontColor
+    color: styles().editTextHint
   ),
   keyboardType: TextInputType.text,
   obscureText: true,
   decoration: BoxDecoration(
     border: Border(bottom: BorderSide(width: 0.5, color: styles().inputFieldDevidier))
   ),
-  onChanged: valueChange
+  onChanged: valueChange,
+  style: TextStyle(
+    color: styles().editTextFont
+  ),
 );
 
 Widget _buildProgress(BuildContext context) {

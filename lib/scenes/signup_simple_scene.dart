@@ -39,9 +39,16 @@ class _SimpleSignupSceneState extends State<SimpleSignupScene> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: styles().navigationBarBackground,
         previousPageTitle: 'Back',
-        middle: Text(locales().simpleSignup.title),
+        actionsForegroundColor: styles().link,
+        middle: Text(locales().simpleSignup.title,
+          style: TextStyle(
+            color: styles().primaryFontColor
+          )
+        ),
       ),
       child: SafeArea(
         child: Stack(
