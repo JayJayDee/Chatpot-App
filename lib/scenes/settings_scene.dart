@@ -192,7 +192,7 @@ Widget _buildEmailLoggedInItem(String email) {
   return Container(
     padding: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 15),
     decoration: BoxDecoration(
-      color: styles().listViewRowBackground,
+      color: styles().listViewRowBackgroundMoreDark,
       border: Border(
         top: BorderSide(color: Color(0xFFBCBBC1), width: 0.3),
         bottom: BorderSide(color: Color(0xFFBCBBC1), width: 0.3)
@@ -215,7 +215,7 @@ Widget _buildThemeMenuItem(BuildContext context, {
   return Container(
     padding: EdgeInsets.only(left: 16, right: 14, top: 6, bottom: 6),
     decoration: BoxDecoration(
-      color: styles().listViewRowBackground,
+      color: styles().listViewRowBackgroundMoreDark,
       border: Border(
         top: BorderSide(color: Color(0xFFBCBBC1), width: 0.3),
         bottom: BorderSide(color: Color(0xFFBCBBC1), width: 0.3)
@@ -245,7 +245,7 @@ Widget _buildThemeMenuItem(BuildContext context, {
 Widget _buildMenuItem(String title, VoidCallback pressedCallback) {
   return Container(
     decoration: BoxDecoration(
-      color: styles().listViewRowBackground,
+      color: styles().listViewRowBackgroundMoreDark,
       border: Border(
         top: BorderSide(color: Color(0xFFBCBBC1), width: 0.3),
         bottom: BorderSide(color: Color(0xFFBCBBC1), width: 0.3)
