@@ -21,7 +21,7 @@ void setStyleType(StyleType type) {
 AppStyle _lightTheme() {
   AppStyle style = AppStyle(
     appBackground: const Color(0xffd0d0d0),
-    mainBackground: const Color(0xffefeeee),
+    mainBackground: const Color(0xffefe7e3),
     splashBackground: const Color(0xfff4f4f4),
     link: const Color(0xff007aff),
     cardActionTextStyle: const TextStyle(fontSize: 15.0),
@@ -41,7 +41,8 @@ AppStyle _lightTheme() {
     
     sheetBackground: const Color(0xffd5d9dc),
     messageBackgroundMine: const Color(0xff007aff),
-    messageBackgroundOther: const Color(0xfff4f4f4));
+    messageBackgroundOther: const Color(0xffcccccc),
+    messageBackgroundNotification: const Color(0xffcccccc));
   return style;
 }
 
@@ -69,7 +70,8 @@ AppStyle _darkTheme() {
     sheetBackground: const Color(0xffd5d9dc),
 
     messageBackgroundMine: const Color(0xff222222),
-    messageBackgroundOther: const Color(0xff473b42));
+    messageBackgroundOther: const Color(0xff473b42),
+    messageBackgroundNotification: const Color(0xff473b42));
   return style;
 }
 
@@ -94,7 +96,8 @@ class AppStyle {
     this.profileCardBackground,
     this.sheetBackground,
     this.messageBackgroundMine,
-    this.messageBackgroundOther});
+    this.messageBackgroundOther,
+    this.messageBackgroundNotification});
 
   final Color appBackground;
   final Color mainBackground;
@@ -123,4 +126,5 @@ class AppStyle {
 
   final Color messageBackgroundMine;
   final Color messageBackgroundOther;
+  final Color messageBackgroundNotification;
 }

@@ -106,7 +106,7 @@ class _NotificationRow extends StatelessWidget {
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(5),
-                color: styles().listRowHeaderBackground,
+                color: styles().messageBackgroundNotification,
                 child: Text(text,
                   style: TextStyle(
                     fontSize: 14,
