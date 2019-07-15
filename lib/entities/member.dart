@@ -126,4 +126,7 @@ class Gacha {
     gacha.remainNickGacha = map['remain_nick_gacha'];
     return gacha;
   }
+
+  @override
+  String toString() => "REMAIN_NICK=$remainNickGacha, REMAIN_AVATAR=$remainAvatarGacha";
 }
