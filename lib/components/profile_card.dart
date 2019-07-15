@@ -88,7 +88,7 @@ Widget buildProfileCard(BuildContext context, {
                     child: Icon(MdiIcons.settings,
                       color: styles().link,
                     ),
-                    onPressed: () {}
+                    onPressed: () => editCallback()
                   )
                 ) : Container()
               ]
@@ -98,23 +98,4 @@ Widget buildProfileCard(BuildContext context, {
       ]
     )
   );
-}
-
-Widget _buildEditButton(BuildContext context, bool isEditShow, VoidCallback callback) {
-  if (isEditShow == false) return Center();
-  return CupertinoButton(
-    child: Text('Edit my profile',
-      style: TextStyle(
-        fontSize: 15
-      )
-    ),
-    padding: EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
-    onPressed: callback,
-  );
-}
-
-AssetImage _getFlagImage(String regionCode) {
-  String lowered = regionCode.toLowerCase();
-  String path = "assets/$lowered.png";
-  return AssetImage(path);
 }

@@ -113,3 +113,17 @@ class Avatar {
     return avatar;
   }
 }
+
+class Gacha {
+  int remainNickGacha;
+  int remainAvatarGacha;
+
+  Gacha();
+
+  factory Gacha.fromJson(Map<String, dynamic> map) {
+    Gacha gacha = Gacha();
+    gacha.remainAvatarGacha = map['remain_avatar_gacha'];
+    gacha.remainNickGacha = map['remain_nick_gacha'];
+    return gacha;
+  }
+}

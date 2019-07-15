@@ -17,6 +17,7 @@ import 'package:chatpot_app/scenes/password_change_scene.dart';
 import 'package:chatpot_app/scenes/about_scene.dart';
 import 'package:chatpot_app/scenes/report_history_scene.dart';
 import 'package:chatpot_app/scenes/block_history_scene.dart';
+import 'package:chatpot_app/scenes/profile_edit_scene.dart';
 
 class SettingsScene extends StatefulWidget implements EventReceivable {
   final BuildContext parentContext;
@@ -56,7 +57,9 @@ class _SettingsSceneState extends State<SettingsScene> {
   }
   
   void _onEditProfileClicked() async {
-
+    await Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
+      builder: (BuildContext context) => ProfileEditScene()
+    ));
   }
 
   void _onPasswordChangeClicked(BuildContext context) async {
@@ -147,7 +150,7 @@ class _SettingsSceneState extends State<SettingsScene> {
       ];
     } else {
       elems = <Widget> [
-        buildProfileCard(context, editButton: false, editCallback: _onEditProfileClicked),
+        buildProfileCard(context, editButton: true, editCallback: _onEditProfileClicked),
         _buildMenuItem(locales().setting.signout, () => _onSignoutClicked(context)),
       ];
     }
