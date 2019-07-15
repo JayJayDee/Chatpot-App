@@ -13,6 +13,7 @@ import 'package:chatpot_app/apis/activation_api.dart';
 import 'package:chatpot_app/apis/asset_api.dart';
 import 'package:chatpot_app/apis/translate_api.dart';
 import 'package:chatpot_app/apis/report_api.dart';
+import 'package:chatpot_app/apis/gacha_api.dart';
 import 'package:chatpot_app/utils/auth_crypter.dart';
 import 'package:chatpot_app/utils/default_auth_crypter.dart';
 import 'package:chatpot_app/locales/root_locale_converter.dart';
@@ -49,6 +50,7 @@ void initFactory() {
   _instances['PushService'] = PushService(msg: _firebaseMessaging());
   _instances['ActivationApi'] = ActivationApi(requester: _memberRequester());
   _instances['ReportApi'] = ReportApi(requester: _memberRequester());
+  _instances['GachaApi'] = GachaApi(requester: _memberRequester());
 }
 
 Requester _initMemberRequester() => DefaultRequester(
@@ -105,3 +107,4 @@ TranslationCacheAccessor translationCacheAccessor() => _instances['TranslationCa
 BlockAccessor blockAccessor() => _instances['BlockAccessor'];
 ReportApi reportApi() => _instances['ReportApi'];
 MiscAccessor miscAccessor() => _instances['MiscAccessor'];
+GachaApi gachaApi() => _instances['GachaApi'];

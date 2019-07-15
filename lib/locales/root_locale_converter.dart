@@ -1,3 +1,4 @@
+import 'package:chatpot_app/locales/profile_edit_scene_locales.dart';
 import 'package:chatpot_app/locales/report_scene_locales.dart';
 import 'package:chatpot_app/locales/room_detail_scene_locales.dart';
 import 'package:intl/intl.dart';
@@ -52,62 +53,188 @@ class RootLocaleConverter {
   ImageSendConfirmSceneLocales _imageConfirmScene;
   RoomDetailSceneLocales _roomDetailScene;
   SettingThemeSceneLocales _settingThemeScene;
+  ProfileEditSceneLocales _profileEditScene;
 
-  HomeSceneLocales get home => _home;
-  MessageLocales get message => _message;
-  RoomLocales get room => _room;
-  ChatsSceneLocales get chats => _chats;
-  SettingSceneLocales get setting => _settings;
-  MessageSceneLocales get msgscene => _msgscene;
-  MoreChatSceneLocales get morechat => _morechat;
-  NewChatSceneLocales get newchat => _newchat;
-  LoginSceneLocales get login => _login;
-  PhotoDetailSceneLocales get photoDetail =>  _photoDetail;
-  SignupSceneLocales get signupScene => _signupScene;
-  EmailUpgradeSceneLocales get emailUpgradeScene => _emailUpgradeScene;
-  ErrorMessageLocales get error => _errorLocales;
-  SimpleSignupSceneLocales get simpleSignup => _simpleSignup;
-  PasswordChangeSceneLocales get passwordChange => _passwordChange;
-  MemberDetailSheetLocales get memberDetailSheet => _memberDetailSheet;
-  AboutSceneLocales get aboutScene => _aboutScene;
-  EulaSceneLocales get eulaScene => _eulaScene;
-  ReportSceneLocales get reportScene => _reportScene;
-  ReportHistorySceneLocales get reportHistoryScene => _reportHistoryScene;
-  BlockHistorySceneLocales get blockHistoryScene => _blockHistoryScene;
-  ImageSendConfirmSceneLocales get imageConfirmScene => _imageConfirmScene;
-  RoomDetailSceneLocales get roomDetailScene => _roomDetailScene;
-  SettingThemeSceneLocales get settingThemeScene => _settingThemeScene;
+  HomeSceneLocales get home {
+    if (_home == null) {
+      _home = HomeSceneLocales(root: this, language: _language);
+    }
+    return _home;
+  }
 
+  MessageLocales get message {
+    if (_message == null) {
+      _message = MessageLocales(root: this, language: _language);
+    }
+    return _message;
+  }
+
+  RoomLocales get room {
+    if (_room == null) {
+      _room = RoomLocales(root: this, language: _language);
+    }
+    return _room;
+  }
+
+  ChatsSceneLocales get chats {
+    if (_chats == null) {
+      _chats = ChatsSceneLocales(root: this, language: _language);
+    }
+    return _chats;
+  }
+
+  SettingSceneLocales get setting {
+    if (_settings == null) {
+      _settings = SettingSceneLocales(root: this, language: _language);
+    }
+    return _settings;
+  } 
+
+  MessageSceneLocales get msgscene {
+    if (_msgscene == null) {
+      _msgscene = MessageSceneLocales(root: this, language: _language);
+    }
+    return _msgscene;
+  }
+
+  MoreChatSceneLocales get morechat {
+    if (_morechat == null) {
+      _morechat = MoreChatSceneLocales(root: this, language: _language);
+    }
+    return _morechat;
+  }
+
+  NewChatSceneLocales get newchat {
+    if (_newchat == null) {
+      _newchat = NewChatSceneLocales(root: this, language: _language);
+    }
+    return _newchat;
+  }
+
+  LoginSceneLocales get login {
+    if (_login == null) {
+      _login = LoginSceneLocales(root: this, language: _language);
+    }
+    return _login;
+  }
+
+  PhotoDetailSceneLocales get photoDetail {
+    if (_photoDetail == null) {
+      _photoDetail = PhotoDetailSceneLocales(root: this, language: _language);
+    }
+    return _photoDetail;
+  } 
+
+  SignupSceneLocales get signupScene {
+    if (_signupScene == null) {
+      _signupScene = SignupSceneLocales(root: this, language: _language);
+    }
+    return _signupScene;
+  }
+
+  EmailUpgradeSceneLocales get emailUpgradeScene {
+    if (_emailUpgradeScene == null) {
+      _emailUpgradeScene = EmailUpgradeSceneLocales(root: this, language: _language);
+    }
+    return _emailUpgradeScene;
+  }
+
+  ErrorMessageLocales get error {
+    if (_errorLocales == null) {
+      _errorLocales = ErrorMessageLocales(root: this, language: _language);
+    }
+    return _errorLocales;
+  }
+
+  SimpleSignupSceneLocales get simpleSignup {
+    if (_simpleSignup == null) {
+      _simpleSignup = SimpleSignupSceneLocales(root: this, language: _language);
+    }
+    return _simpleSignup;
+  }
+
+  PasswordChangeSceneLocales get passwordChange {
+    if (_passwordChange == null) {
+      _passwordChange = PasswordChangeSceneLocales(root: this, language: _language);
+    }
+    return _passwordChange;
+  }
+
+  MemberDetailSheetLocales get memberDetailSheet {
+    if (_memberDetailSheet == null) {
+      _memberDetailSheet = MemberDetailSheetLocales(root: this, language: _language);
+    }
+    return _memberDetailSheet;
+  }
+
+  AboutSceneLocales get aboutScene {
+    if (_aboutScene == null) {
+      _aboutScene = AboutSceneLocales(root: this, language: _language);
+    }
+    return _aboutScene;
+  }
+
+  EulaSceneLocales get eulaScene {
+    if (_eulaScene == null) {
+      _eulaScene = EulaSceneLocales(root: this, language: _language);
+    }
+    return _eulaScene;
+  }
+
+  ReportSceneLocales get reportScene {
+    if (_reportScene == null) {
+      _reportScene = ReportSceneLocales(root: this, language: _language);
+    }
+    return _reportScene;
+  } 
+
+  ReportHistorySceneLocales get reportHistoryScene {
+    if (_reportHistoryScene == null) {
+      _reportHistoryScene = ReportHistorySceneLocales(root: this, language: _language);
+    }
+    return _reportHistoryScene;
+  }
+
+  BlockHistorySceneLocales get blockHistoryScene {
+    if (_blockHistoryScene == null) {
+      _blockHistoryScene = BlockHistorySceneLocales(root: this, language: _language);
+    }
+    return _blockHistoryScene;
+  }
+
+  ImageSendConfirmSceneLocales get imageConfirmScene {
+    if (_imageConfirmScene == null) {
+      _imageConfirmScene = ImageSendConfirmSceneLocales(root: this, language: _language);
+    }
+    return _imageConfirmScene;
+  }
+
+  RoomDetailSceneLocales get roomDetailScene {
+    if (_roomDetailScene == null) {
+      _roomDetailScene = RoomDetailSceneLocales(root: this, language: _language);
+    }
+    return _roomDetailScene;
+  }
+
+  SettingThemeSceneLocales get settingThemeScene {
+    if (_settingThemeScene == null) {
+      _settingThemeScene = SettingThemeSceneLocales(root: this, language: _language);
+    }
+    return _settingThemeScene;
+  } 
+
+  ProfileEditSceneLocales get profileEditScene {
+    if (_profileEditScene == null) {
+      _profileEditScene = ProfileEditSceneLocales(root: this, language: _language);
+    }
+    return _profileEditScene;
+  }
 
   String get langauge => _language;
 
   void selectLanguage(BuildContext context) {
     Locale locale = Localizations.localeOf(context);
-    _login = LoginSceneLocales(root: this, language: _language);
     _language = locale.languageCode;
-    _home = HomeSceneLocales(root: this, language: _language);
-    _message = MessageLocales(root: this, language: _language);
-    _room = RoomLocales(root: this, language: _language);
-    _chats = ChatsSceneLocales(root: this, language: _language);
-    _settings = SettingSceneLocales(root: this, language: _language);
-    _msgscene = MessageSceneLocales(root: this, language: _language);
-    _morechat = MoreChatSceneLocales(root: this, language: _language);
-    _newchat = NewChatSceneLocales(root: this, language: _language);
-    _photoDetail = PhotoDetailSceneLocales(root: this, language: _language);
-    _signupScene = SignupSceneLocales(root: this, language: _language);
-    _emailUpgradeScene = EmailUpgradeSceneLocales(root: this, language: _language);
-    _errorLocales = ErrorMessageLocales(root: this, language: _language);
-    _simpleSignup = SimpleSignupSceneLocales(root: this, language: _language);
-    _passwordChange = PasswordChangeSceneLocales(root: this, language: _language);
-    _memberDetailSheet = MemberDetailSheetLocales(root: this, language: _language);
-    _aboutScene = AboutSceneLocales(root: this, language: _language);
-    _eulaScene = EulaSceneLocales(root: this, language: _language);
-    _reportScene = ReportSceneLocales(root: this, language: _language);
-    _reportHistoryScene = ReportHistorySceneLocales(root: this, language: _language);
-    _blockHistoryScene = BlockHistorySceneLocales(root: this, language: _language);
-    _imageConfirmScene = ImageSendConfirmSceneLocales(root: this, language: _language);
-    _roomDetailScene = RoomDetailSceneLocales(root: this, language: _language);
-    _settingThemeScene = SettingThemeSceneLocales(root: this, language: _language);
   }
 
   String getNick(Nick nick) {
