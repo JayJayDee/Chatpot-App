@@ -37,7 +37,6 @@ class _WidgetWrapper {
 class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObserver, TabActor {
   Map<String, _WidgetWrapper> _widgetMap;
   Map<String, bool> _initMap;
-  AppState _model;
   CustomTabScaffold _container;
   int _currentIndex;
 
@@ -55,7 +54,10 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
     final model = ScopedModel.of<AppState>(context);
     pushService().attach(
       state: model,
-      context: context
+      context: context,
+      callback: (BackgroundAction action) {
+        _afterProcessAfterBackgroundMessage(context, action);
+      }
     );
   }
 
@@ -83,30 +85,24 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
       if (state == AppLifecycleState.resumed) {
         await model.fetchMyRooms();
         await model.translateMyRooms();
-        _afterProcessAfterBackgroundMessage();
       }
     };
     func();
   }
 
-  void _afterProcessAfterBackgroundMessage() async {
+  void _afterProcessAfterBackgroundMessage(BuildContext context, BackgroundAction action) async {
     final model = ScopedModel.of<AppState>(context);
 
-    if (model.backgroundAction != null) {
-      if (model.backgroundAction.type == BackgroundActionType.ROOM) {
-        String token = model.backgroundAction.payload;
-        model.clearBackgroundAction();
+    if (action.type == BackgroundActionType.ROOM) {
+      String token = action.payload;
 
-        var rooms = model.myRooms.where((r) =>
-          r.roomToken == token).toList();
-        if (rooms.length > 0) {
-          model.selectRoom(room: rooms[0]);
-          await Navigator.of(context).push(CupertinoPageRoute<bool>(
-            builder: (BuildContext context) => MessageScene()
-          ));
-        }
-      } else {
-        model.clearBackgroundAction();
+      var rooms = model.myRooms.where((r) =>
+        r.roomToken == token).toList();
+      if (rooms.length > 0) {
+        model.selectRoom(room: rooms[0]);
+        await Navigator.of(context).push(CupertinoPageRoute<bool>(
+          builder: (BuildContext context) => MessageScene()
+        ));
       }
     }
   }
@@ -155,10 +151,6 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
-    _afterProcessAfterBackgroundMessage();
-
-    final model = ScopedModel.of<AppState>(context);
-    _model = model;
     _container = CustomTabScaffold(
       tabBar: CupertinoTabBar(
         backgroundColor: styles().tabBarBackground,

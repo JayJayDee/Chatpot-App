@@ -28,8 +28,6 @@ class AppState extends Model {
   bool _loading;
   MyRoom _currentRoom;
 
-  BackgroundAction _action;
-
   AppState() {
     _member = null;
     _loading = true;
@@ -49,16 +47,6 @@ class AppState extends Model {
 
   MyRoom get currentRoom => _currentRoom;
   List<MyRoom> get myRooms => _myRooms;
-
-  BackgroundAction get backgroundAction => _action;
-
-
-  void setBackgroundAction(BackgroundAction action) =>
-    _action = action;
-
-  void clearBackgroundAction() =>
-    _action = null;
-
 
   List<Message> get messages {
     if (_currentRoom == null) return [];
