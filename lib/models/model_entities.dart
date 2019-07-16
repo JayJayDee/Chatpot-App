@@ -39,3 +39,20 @@ class EmailLoginResp {
     @required this.activated
   });
 }
+
+enum BackgroundActionType {
+  ROOM, REPORT
+}
+
+class BackgroundAction {
+  final BackgroundActionType type;
+  final String payload;
+
+  BackgroundAction({
+    @required this.type,
+    @required this.payload
+  });
+
+  @override
+  String toString() => "BACKGROUND_ACTION $type $payload";
+}

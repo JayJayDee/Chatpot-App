@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:chatpot_app/models/model_entities.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -7,6 +8,7 @@ import 'package:chatpot_app/scenes/home_scene.dart';
 import 'package:chatpot_app/scenes/chats_scene.dart';
 import 'package:chatpot_app/scenes/settings_scene.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
+import 'package:chatpot_app/scenes/message_scene.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/components/custom_tab_scaffold.dart';
@@ -35,7 +37,6 @@ class _WidgetWrapper {
 class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObserver, TabActor {
   Map<String, _WidgetWrapper> _widgetMap;
   Map<String, bool> _initMap;
-  AppState _model;
   CustomTabScaffold _container;
   int _currentIndex;
 
@@ -49,6 +50,17 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+    final model = ScopedModel.of<AppState>(context);
+    pushService().attach(
+      state: model,
+      context: context,
+      callback: (BackgroundAction action) {
+        Future.delayed(Duration(milliseconds: 1)).then((value) {
+          _afterProcessAfterBackgroundMessage(context, action);
+        });
+      }
+    );
   }
 
   @override
@@ -69,18 +81,37 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    final model = ScopedModel.of<AppState>(context);
+
     var func = () async {
       if (state == AppLifecycleState.resumed) {
-        await _model.fetchMyRooms();
-        await _model.translateMyRooms();
+        await model.fetchMyRooms();
+        await model.translateMyRooms();
       }
     };
     func();
   }
 
-  void _initFcm(BuildContext context) {
+  void _afterProcessAfterBackgroundMessage(BuildContext context, BackgroundAction action) async {
     final model = ScopedModel.of<AppState>(context);
-    pushService().attach(state: model);
+
+    if (model.myRooms.length == 0) {
+      await model.fetchMyRooms();
+      await model.translateMyRooms();
+    }
+
+    if (action.type == BackgroundActionType.ROOM) {
+      String token = action.payload;
+
+      var rooms = model.myRooms.where((r) =>
+        r.roomToken == token).toList();
+      if (rooms.length > 0) {
+        model.selectRoom(room: rooms[0]);
+        await Navigator.of(context).push(CupertinoPageRoute<bool>(
+          builder: (BuildContext context) => MessageScene()
+        ));
+      }
+    }
   }
 
   _WidgetWrapper _inflate(BuildContext context, int index) {
@@ -127,9 +158,6 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
-    _initFcm(context);
-    final model = ScopedModel.of<AppState>(context);
-    _model = model;
     _container = CustomTabScaffold(
       tabBar: CupertinoTabBar(
         backgroundColor: styles().tabBarBackground,

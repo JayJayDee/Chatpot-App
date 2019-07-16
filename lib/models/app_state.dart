@@ -26,7 +26,6 @@ class AppState extends Model {
   StyleType _styleType;
   Member _member;
   bool _loading;
-
   MyRoom _currentRoom;
 
   AppState() {
@@ -48,7 +47,6 @@ class AppState extends Model {
 
   MyRoom get currentRoom => _currentRoom;
   List<MyRoom> get myRooms => _myRooms;
-
 
   List<Message> get messages {
     if (_currentRoom == null) return [];
