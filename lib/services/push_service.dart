@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io' show Platform;
+import 'package:scoped_model/scoped_model.dart';
+import 'package:chatpot_app/models/model_entities.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -70,6 +72,13 @@ class PushService {
   }
   
   void _onBackgroundMessage(Message message) async {
+    final state = ScopedModel.of<AppState>(_context);
+    if (message.to.type == MessageTarget.ROOM) {
+      print('TARGET WAS ROOM');
+      String roomToken = message.to.token;
+      var action = BackgroundAction(payload: roomToken, type: BackgroundActionType.ROOM);
+      state.setBackgroundAction(action);
+    }
   }
 
   Message _parseMessage(Map<String, dynamic> message) {

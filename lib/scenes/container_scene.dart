@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:chatpot_app/models/model_entities.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -7,6 +8,7 @@ import 'package:chatpot_app/scenes/home_scene.dart';
 import 'package:chatpot_app/scenes/chats_scene.dart';
 import 'package:chatpot_app/scenes/settings_scene.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
+import 'package:chatpot_app/scenes/message_scene.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/components/custom_tab_scaffold.dart';
@@ -75,10 +77,30 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    final model = ScopedModel.of<AppState>(context);
+
     var func = () async {
       if (state == AppLifecycleState.resumed) {
-        await _model.fetchMyRooms();
-        await _model.translateMyRooms();
+        await model.fetchMyRooms();
+        await model.translateMyRooms();
+        
+        if (model.backgroundAction != null) {
+          if (model.backgroundAction.type == BackgroundActionType.ROOM) {
+            String token = model.backgroundAction.payload;
+            model.clearBackgroundAction();
+
+            var rooms = model.myRooms.where((r) =>
+              r.roomToken == token).toList();
+            if (rooms.length > 0) {
+              model.selectRoom(room: rooms[0]);
+              await Navigator.of(context).push(CupertinoPageRoute<bool>(
+                builder: (BuildContext context) => MessageScene()
+              ));
+            }
+          } else {
+            model.clearBackgroundAction();
+          }
+        }
       }
     };
     func();
