@@ -48,10 +48,7 @@ class PushService {
   }
 
   Future<dynamic> _onMessage(Map<String, dynamic> message) async {
-    // print('ON_MESSAGE FIRED');
-    // print(message);
     Message msg = _parseMessage(message);
-    print(msg);
     _state.addSingleMessageFromPush(msg: msg);
   }
 
@@ -73,8 +70,8 @@ class PushService {
   
   void _onBackgroundMessage(Message message) async {
     final state = ScopedModel.of<AppState>(_context);
+
     if (message.to.type == MessageTarget.ROOM) {
-      print('TARGET WAS ROOM');
       String roomToken = message.to.token;
       var action = BackgroundAction(payload: roomToken, type: BackgroundActionType.ROOM);
       state.setBackgroundAction(action);

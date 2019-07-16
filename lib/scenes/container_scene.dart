@@ -83,27 +83,32 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
       if (state == AppLifecycleState.resumed) {
         await model.fetchMyRooms();
         await model.translateMyRooms();
-        
-        if (model.backgroundAction != null) {
-          if (model.backgroundAction.type == BackgroundActionType.ROOM) {
-            String token = model.backgroundAction.payload;
-            model.clearBackgroundAction();
-
-            var rooms = model.myRooms.where((r) =>
-              r.roomToken == token).toList();
-            if (rooms.length > 0) {
-              model.selectRoom(room: rooms[0]);
-              await Navigator.of(context).push(CupertinoPageRoute<bool>(
-                builder: (BuildContext context) => MessageScene()
-              ));
-            }
-          } else {
-            model.clearBackgroundAction();
-          }
-        }
+        _afterProcessAfterBackgroundMessage();
       }
     };
     func();
+  }
+
+  void _afterProcessAfterBackgroundMessage() async {
+    final model = ScopedModel.of<AppState>(context);
+
+    if (model.backgroundAction != null) {
+      if (model.backgroundAction.type == BackgroundActionType.ROOM) {
+        String token = model.backgroundAction.payload;
+        model.clearBackgroundAction();
+
+        var rooms = model.myRooms.where((r) =>
+          r.roomToken == token).toList();
+        if (rooms.length > 0) {
+          model.selectRoom(room: rooms[0]);
+          await Navigator.of(context).push(CupertinoPageRoute<bool>(
+            builder: (BuildContext context) => MessageScene()
+          ));
+        }
+      } else {
+        model.clearBackgroundAction();
+      }
+    }
   }
 
   _WidgetWrapper _inflate(BuildContext context, int index) {
@@ -150,6 +155,8 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
+    _afterProcessAfterBackgroundMessage();
+
     final model = ScopedModel.of<AppState>(context);
     _model = model;
     _container = CustomTabScaffold(
