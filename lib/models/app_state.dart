@@ -26,8 +26,9 @@ class AppState extends Model {
   StyleType _styleType;
   Member _member;
   bool _loading;
-
   MyRoom _currentRoom;
+
+  BackgroundAction _action;
 
   AppState() {
     _member = null;
@@ -48,6 +49,15 @@ class AppState extends Model {
 
   MyRoom get currentRoom => _currentRoom;
   List<MyRoom> get myRooms => _myRooms;
+
+  BackgroundAction get backgroundAction => _action;
+
+
+  void setBackgroundAction(BackgroundAction action) =>
+    _action = action;
+
+  void clearBackgroundAction() =>
+    _action = null;
 
 
   List<Message> get messages {

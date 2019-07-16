@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io' show Platform;
+import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:chatpot_app/models/app_state.dart';
@@ -9,6 +10,7 @@ import 'package:chatpot_app/entities/message.dart';
 class PushService {
   FirebaseMessaging _messaging;
   AppState _state;
+  BuildContext _context;
 
   PushService({
     @required FirebaseMessaging msg
@@ -17,9 +19,11 @@ class PushService {
   }
 
   void attach({
-    @required AppState state
+    @required AppState state,
+    @required BuildContext context
   }) {
     _state = state;
+    _context = context;
     _messaging.configure(
       onMessage: _onMessage,
       onResume: _onResume,
@@ -42,7 +46,8 @@ class PushService {
   }
 
   Future<dynamic> _onMessage(Map<String, dynamic> message) async {
-    print('ON_MESSAGE FIRED');
+    // print('ON_MESSAGE FIRED');
+    // print(message);
     Message msg = _parseMessage(message);
     print(msg);
     _state.addSingleMessageFromPush(msg: msg);
@@ -50,14 +55,21 @@ class PushService {
 
   Future<dynamic> _onResume(Map<String, dynamic> message) async {
     print('ON_RESUME FIRED');
+    print(message);
     Message msg = _parseMessage(message);
-    print(msg);
     _state.addSingleMessageFromPush(msg: msg);
+    _onBackgroundMessage(msg);
   }
 
   Future<dynamic> _onLaunch(Map<String, dynamic> message) async {
     print('ON_LAUNCH FIRED');
     print(message);
+
+    Message msg = _parseMessage(message);
+    _onBackgroundMessage(msg);
+  }
+  
+  void _onBackgroundMessage(Message message) async {
   }
 
   Message _parseMessage(Map<String, dynamic> message) {

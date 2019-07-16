@@ -49,6 +49,12 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+    final model = ScopedModel.of<AppState>(context);
+    pushService().attach(
+      state: model,
+      context: context
+    );
   }
 
   @override
@@ -76,11 +82,6 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
       }
     };
     func();
-  }
-
-  void _initFcm(BuildContext context) {
-    final model = ScopedModel.of<AppState>(context);
-    pushService().attach(state: model);
   }
 
   _WidgetWrapper _inflate(BuildContext context, int index) {
@@ -127,7 +128,6 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
-    _initFcm(context);
     final model = ScopedModel.of<AppState>(context);
     _model = model;
     _container = CustomTabScaffold(
