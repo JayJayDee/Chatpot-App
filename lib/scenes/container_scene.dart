@@ -56,7 +56,9 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
       state: model,
       context: context,
       callback: (BackgroundAction action) {
-        _afterProcessAfterBackgroundMessage(context, action);
+        Future.delayed(Duration(milliseconds: 1)).then((value) {
+          _afterProcessAfterBackgroundMessage(context, action);
+        });
       }
     );
   }
@@ -92,6 +94,11 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
 
   void _afterProcessAfterBackgroundMessage(BuildContext context, BackgroundAction action) async {
     final model = ScopedModel.of<AppState>(context);
+
+    if (model.myRooms.length == 0) {
+      await model.fetchMyRooms();
+      await model.translateMyRooms();
+    }
 
     if (action.type == BackgroundActionType.ROOM) {
       String token = action.payload;

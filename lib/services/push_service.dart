@@ -84,8 +84,12 @@ class PushService {
   }
 
   void _pushCallback() async {
-    if (_callback == null) return;
-    if (_backgroundQueue.isEmpty == true) return;
+    if (_callback == null) {
+      return;
+    }
+    if (_backgroundQueue.isEmpty == true) {
+      return;
+    }
     _callback(_backgroundQueue.removeLast());
   }
 
