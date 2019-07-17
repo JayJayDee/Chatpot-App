@@ -86,6 +86,12 @@ class AppState extends Model {
     return AppInitState.LOGGED_IN;
   }
 
+  Future<void> refreshProfile() async {
+    var member = await memberApi().fetchMy(_member.token);
+    _member = member;
+    notifyListeners();
+  }
+
   Future<EmailLoginResp> tryEmailLogin({
     @required String email,
     @required String password

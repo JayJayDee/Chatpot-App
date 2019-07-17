@@ -77,4 +77,16 @@ Do you really want to change your avatar randomly?''';
     else if (language == 'ja') return 'キャンセル';
     return 'Cancel';
   }
+
+  String get resultTitle {
+    if (language == 'ko') return '변경 완료!';
+    else if (language == 'ja') return '変更完了！';
+    return 'Change made!';
+  }
+
+  String get noDiceError {
+    if (language == 'ko') return '주사위가 부족합니다.';
+    else if (language == 'ja') return '十分なサイコロがありません。';
+    return 'There is not enough dice.';
+  }
 }

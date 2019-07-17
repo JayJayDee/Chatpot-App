@@ -1,5 +1,7 @@
+import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:chatpot_app/factory.dart';
@@ -54,12 +56,140 @@ class _ProfileEditSceneState extends State<ProfileEditScene> {
 
   void _onNickGachaClicked() async {
     var isOk = await _showGachaConfirm(context, GachaType.NICK);
-    // TODO: call api & show results
+    if (isOk == false) return;
+
+    setState(() => _loading = true);
+
+    final state = ScopedModel.of<AppState>(context);
+
+    var resp;
+    try {
+      resp = await gachaApi().requestNickGacha(memberToken: state.member.token);
+    } catch (err) {
+      if (err is ApiFailureError) {
+        if (err.code == 'INSUFFICIENT_NUM_GACHA') {
+          await showSimpleAlert(context,
+            locales().profileEditScene.noDiceError);
+          return;
+        } else {
+          await showSimpleAlert(context,
+            locales().error.messageFromErrorCode(err.code));
+          return;
+        }
+      } else {
+        throw err;
+      }
+    } finally {
+      setState(() => _loading = false);
+    }
+
+    await showCupertinoDialog<bool>(
+      context: context,
+      builder: (BuildContext context) =>
+        CupertinoAlertDialog(
+          title: Text(locales().profileEditScene.resultTitle),
+          content: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                child: Text(locales().getNick(resp.prevNick),
+                  style: TextStyle(
+                    color: styles().popupPrimaryFontColor,
+                    fontSize: 17
+                  )
+                )
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 10, bottom: 10),
+                child: Icon(MdiIcons.arrowDown,
+                  color: styles().popupPrimaryFontColor,
+                  size: 30
+                )
+              ),
+              Container(
+                child: Text(locales().getNick(resp.newNick),
+                  style: TextStyle(
+                    color: styles().popupPrimaryFontColor,
+                    fontSize: 17
+                  )
+                )
+              )
+            ]
+          ),
+          actions: [
+            CupertinoDialogAction(
+              child: Text(locales().profileEditScene.okTitle),
+              onPressed: () => Navigator.pop(context, true)
+            ),
+          ]
+        )
+    );
+    _loadGachaStatus();
+    state.refreshProfile();
   }
 
   void _onAvatarGachaClicked() async {
     var isOk = await _showGachaConfirm(context, GachaType.AVATAR);
-    // TODO: call api & show results
+    if (isOk == false) return;
+    
+    setState(() => _loading = true);
+
+    final state = ScopedModel.of<AppState>(context);
+
+    AvatarGachaResp resp;
+    try {
+      resp = await gachaApi().requestAvatarGacha(memberToken: state.member.token);
+    } catch (err) {
+      if (err is ApiFailureError) {
+        if (err.code == 'INSUFFICIENT_NUM_GACHA') {
+          await showSimpleAlert(context,
+            locales().profileEditScene.noDiceError);
+          return;
+        } else {
+          await showSimpleAlert(context,
+            locales().error.messageFromErrorCode(err.code));
+          return;
+        }
+      } else {
+        throw err;
+      }
+    } finally {
+      setState(() => _loading = false);
+    }
+
+    await showCupertinoDialog<bool>(
+      context: context,
+      builder: (BuildContext context) =>
+        CupertinoAlertDialog(
+          title: Text(locales().profileEditScene.resultTitle),
+          content: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                child: _profilePhoto(context, resp.prevAvatar)
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 10, bottom: 10),
+                child: Icon(MdiIcons.arrowDown,
+                  color: styles().popupPrimaryFontColor,
+                  size: 30
+                )
+              ),
+              Container(
+                child: _profilePhoto(context, resp.newAvatar)
+              )
+            ]
+          ),
+          actions: [
+            CupertinoDialogAction(
+              child: Text(locales().profileEditScene.okTitle),
+              onPressed: () => Navigator.pop(context, true)
+            ),
+          ]
+        )
+    );
+    _loadGachaStatus();
+    state.refreshProfile();
   }
 
   @override
@@ -247,5 +377,36 @@ Future<bool> _showGachaConfirm(BuildContext context, GachaType type) async {
           )
         ]
       )
+  );
+}
+
+Widget _profilePhoto(BuildContext context, Avatar avatar) {
+  final state = ScopedModel.of<AppState>(context);
+  return Container(
+    width: 60,
+    height: 60,
+    child: Stack(
+      alignment: Alignment.bottomRight,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: CachedNetworkImage(
+            imageUrl: avatar.thumb,
+            placeholder: (context, url) => CupertinoActivityIndicator(),
+          )
+        ),
+        Container(
+          width: 20,
+          height: 10,
+          decoration: BoxDecoration(
+            border: Border.all(color: styles().primaryFontColor),
+            image: DecorationImage(
+              image: locales().getFlagImage(state.member.region),
+              fit: BoxFit.cover
+            )
+          )
+        )
+      ]
+    )
   );
 }

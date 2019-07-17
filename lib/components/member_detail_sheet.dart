@@ -170,7 +170,7 @@ Widget _buildAdditionalInfoField(MemberPublic member) =>
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            color: styles().primaryFontColor,
+            color: styles().popupPrimaryFontColor,
             fontSize: 17
           ),
         ),
@@ -179,7 +179,7 @@ Widget _buildAdditionalInfoField(MemberPublic member) =>
         margin: EdgeInsets.only(left: 5),
         child: Text(member.regionName,
           style: TextStyle(
-            color: styles().secondaryFontColor,
+            color: styles().popupSecondaryFontColor,
             fontSize: 15,
             fontWeight: FontWeight.normal
           )
