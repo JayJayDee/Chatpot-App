@@ -148,7 +148,7 @@ Widget _buildAvatarGachaArea(BuildContext context, {
         Container(
           margin: EdgeInsets.only(left: 20),
           child: Text(
-              gacha == null ? '...' :
+              gacha == null ? locales().profileEditScene.remainCount('...') :
                 locales().profileEditScene.remainCount(gacha.remainAvatarGacha),
             style: TextStyle(
               color: styles().secondaryFontColor,
@@ -199,7 +199,7 @@ Widget _buildNickGachaArea(BuildContext context, {
         ),
         Container(
           margin: EdgeInsets.only(left: 20),
-          child: Text(gacha == null ? '...' :
+          child: Text(gacha == null ? locales().profileEditScene.remainCount('...') :
               locales().profileEditScene.remainCount(gacha.remainNickGacha),
             style: TextStyle(
               color: styles().secondaryFontColor,

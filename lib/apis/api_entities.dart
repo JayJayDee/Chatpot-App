@@ -270,3 +270,31 @@ class PasswordChangeResp {
     return resp;
   }
 }
+
+class NickGachaResp {
+  Nick prevNick;
+  Nick newNick;
+
+  NickGachaResp();
+  
+  factory NickGachaResp.fromJson(Map<String, dynamic> map) {
+    var resp = NickGachaResp();
+    resp.prevNick = Nick.fromJson(map['previous']);
+    resp.newNick = Nick.fromJson(map['new']);
+    return resp;
+  }
+}
+
+class AvatarGachaResp {
+  Avatar prevAvatar;
+  Avatar newAvatar;
+
+  AvatarGachaResp();
+  
+  factory AvatarGachaResp.fromJson(Map<String, dynamic> map) {
+    var resp = AvatarGachaResp();
+    resp.prevAvatar = Avatar.fromJson(map['previous']);
+    resp.newAvatar = Avatar.fromJson(map['new']);
+    return resp;
+  }
+}

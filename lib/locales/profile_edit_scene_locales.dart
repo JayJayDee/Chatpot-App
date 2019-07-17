@@ -36,7 +36,7 @@ Please note! The number of times you can change is limited.''';
     return 'Nickname';
   }
 
-  String remainCount(int remains) {
+  String remainCount(var remains) {
     if (language == 'ko') return "남은 주사위 $remains개";
     else if (language == 'ja') return "残り$remains個のサイコロ";
     return "$remains remaining dice(s)";
