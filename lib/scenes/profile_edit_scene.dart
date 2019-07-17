@@ -54,11 +54,53 @@ class _ProfileEditSceneState extends State<ProfileEditScene> {
 
   void _onNickGachaClicked() async {
     var isOk = await _showGachaConfirm(context, GachaType.NICK);
-    // TODO: call api & show results
+    if (isOk == false) return;
+
+    final state = ScopedModel.of<AppState>(context);
+    var resp = await gachaApi().requestNickGacha(memberToken: state.member.token);
+
+    await showCupertinoDialog<bool>(
+      context: context,
+      builder: (BuildContext context) =>
+        CupertinoAlertDialog(
+          title: Text('Gacha result'),
+          content: Row(
+            children: [
+              Container(
+                child: Text(locales().getNick(resp.prevNick),
+                  style: TextStyle(
+                    color: styles().primaryFontColor,
+                  )
+                )
+              ),
+              Container(
+                child: Icon(MdiIcons.arrowRightBoldBox,
+                  color: styles().primaryFontColor,
+                  size: 50
+                )
+              ),
+              Container(
+                child: Text(locales().getNick(resp.newNick),
+                  style: TextStyle(
+                    color: styles().primaryFontColor,
+                  )
+                )
+              )
+            ]
+          ),
+          actions: [
+            CupertinoDialogAction(
+              child: Text(locales().profileEditScene.okTitle),
+              onPressed: () => Navigator.pop(context, true)
+            ),
+          ]
+        )
+    );
   }
 
   void _onAvatarGachaClicked() async {
     var isOk = await _showGachaConfirm(context, GachaType.AVATAR);
+    if (isOk == false) return;
     // TODO: call api & show results
   }
 
@@ -244,6 +286,24 @@ Future<bool> _showGachaConfirm(BuildContext context, GachaType type) async {
             child: Text(locales().profileEditScene.cancelTitle),
             onPressed: () => Navigator.pop(context, false),
             isDestructiveAction: true
+          )
+        ]
+      )
+  );
+}
+
+Future<void> _showGachaResultPopup(BuildContext context, Widget content) async {
+  await showCupertinoDialog<void>(
+    context: context,
+    builder: (BuildContext context) =>
+      CupertinoAlertDialog(
+        title: Text(locales().profileEditScene.resultTitle),
+        content: content,
+        actions: [
+          CupertinoDialogAction(
+            child: Text(locales().profileEditScene.okTitle),
+            onPressed: () => Navigator.pop(context),
+            isDefaultAction: true
           )
         ]
       )
