@@ -94,7 +94,7 @@ class _ProfileEditSceneState extends State<ProfileEditScene> {
                 margin: EdgeInsets.only(top: 20),
                 child: Text(locales().getNick(resp.prevNick),
                   style: TextStyle(
-                    color: styles().primaryFontColor,
+                    color: styles().popupPrimaryFontColor,
                     fontSize: 17
                   )
                 )
@@ -102,14 +102,14 @@ class _ProfileEditSceneState extends State<ProfileEditScene> {
               Container(
                 margin: EdgeInsets.only(top: 10, bottom: 10),
                 child: Icon(MdiIcons.arrowDown,
-                  color: styles().primaryFontColor,
+                  color: styles().popupPrimaryFontColor,
                   size: 30
                 )
               ),
               Container(
                 child: Text(locales().getNick(resp.newNick),
                   style: TextStyle(
-                    color: styles().primaryFontColor,
+                    color: styles().popupPrimaryFontColor,
                     fontSize: 17
                   )
                 )
@@ -171,7 +171,7 @@ class _ProfileEditSceneState extends State<ProfileEditScene> {
               Container(
                 margin: EdgeInsets.only(top: 10, bottom: 10),
                 child: Icon(MdiIcons.arrowDown,
-                  color: styles().primaryFontColor,
+                  color: styles().popupPrimaryFontColor,
                   size: 30
                 )
               ),

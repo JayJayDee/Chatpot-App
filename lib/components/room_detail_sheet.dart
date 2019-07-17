@@ -113,7 +113,7 @@ class _RoomDetailCard extends State<RoomDetailCard> {
         children: [
           Text(_detail.title,
             style: TextStyle(
-              color: styles().secondaryFontColor,
+              color: styles().popupSecondaryFontColor,
               fontSize: 18,
               fontWeight: FontWeight.normal
             )
@@ -174,7 +174,7 @@ class _RoomDetailCard extends State<RoomDetailCard> {
                 width: 24,
                 height: 12,
                 decoration: BoxDecoration(
-                  border: Border.all(color: styles().primaryFontColor),
+                  border: Border.all(color: styles().popupPrimaryFontColor),
                   image: DecorationImage(
                     image: locales().getFlagImage(m.region),
                     fit: BoxFit.cover

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 
 enum StyleType {
   LIGHT, DARK
@@ -49,7 +50,10 @@ AppStyle _lightTheme() {
     
     profileCardBackground: const Color(0xffffffff),
     editTextFont: const Color(0xFF505050),
-    editTextHint: const Color(0xFF929292));
+    editTextHint: const Color(0xFF929292),
+    
+    popupPrimaryFontColor: const Color(0xFF505050),
+    popupSecondaryFontColor: const Color(0xFF929292));
   return style;
 }
 
@@ -86,37 +90,42 @@ AppStyle _darkTheme() {
     profileCardBackground: const Color(0xff1d6a96),
 
     editTextFont: const Color(0xffd1dddb),
-    editTextHint: const Color(0xff85b8cb));
+    editTextHint: const Color(0xff85b8cb),
+    
+    popupPrimaryFontColor: const Color(0xFF505050),
+    popupSecondaryFontColor: const Color(0xFF929292));
   return style;
 }
 
 class AppStyle {
   AppStyle({
-    this.logoImageWithTypo,
-    this.appBackground,
-    this.mainBackground,
-    this.splashBackground,
-    this.link,
-    this.cardActionTextStyle,
-    this.primaryFontColor,
-    this.secondaryFontColor,
-    this.thirdFontColor,
-    this.inputFieldDevidier,
-    this.listViewRowBackground,
-    this.listViewRowBackgroundMoreDark,
-    this.listRowHeaderBackground,
-    this.listRowDivider,
-    this.tabBarBackground,
-    this.tabBarActive,
-    this.tabBarInactive,
-    this.navigationBarBackground,
-    this.profileCardBackground,
-    this.sheetBackground,
-    this.messageBackgroundMine,
-    this.messageBackgroundOther,
-    this.messageBackgroundNotification,
-    this.editTextHint,
-    this.editTextFont});
+    @required this.logoImageWithTypo,
+    @required this.appBackground,
+    @required this.mainBackground,
+    @required this.splashBackground,
+    @required this.link,
+    @required this.cardActionTextStyle,
+    @required this.primaryFontColor,
+    @required this.secondaryFontColor,
+    @required this.thirdFontColor,
+    @required this.inputFieldDevidier,
+    @required this.listViewRowBackground,
+    @required this.listViewRowBackgroundMoreDark,
+    @required this.listRowHeaderBackground,
+    @required this.listRowDivider,
+    @required this.tabBarBackground,
+    @required this.tabBarActive,
+    @required this.tabBarInactive,
+    @required this.navigationBarBackground,
+    @required this.profileCardBackground,
+    @required this.sheetBackground,
+    @required this.messageBackgroundMine,
+    @required this.messageBackgroundOther,
+    @required this.messageBackgroundNotification,
+    @required this.editTextHint,
+    @required this.editTextFont,
+    @required this.popupPrimaryFontColor,
+    @required this.popupSecondaryFontColor});
 
   final AssetImage logoImageWithTypo;
   final Color appBackground;
@@ -151,4 +160,7 @@ class AppStyle {
 
   final Color editTextHint;
   final Color editTextFont;
+
+  final Color popupPrimaryFontColor;
+  final Color popupSecondaryFontColor;
 }
