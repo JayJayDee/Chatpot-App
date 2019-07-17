@@ -1,4 +1,5 @@
 import 'package:scoped_model/scoped_model.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:chatpot_app/factory.dart';
@@ -51,6 +52,16 @@ class _ProfileEditSceneState extends State<ProfileEditScene> {
     }
   }
 
+  void _onNickGachaClicked() async {
+    var isOk = await _showGachaConfirm(context, GachaType.NICK);
+    // TODO: call api & show results
+  }
+
+  void _onAvatarGachaClicked() async {
+    var isOk = await _showGachaConfirm(context, GachaType.AVATAR);
+    // TODO: call api & show results
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -79,6 +90,16 @@ class _ProfileEditSceneState extends State<ProfileEditScene> {
                       fontSize: 16
                     )
                   )
+                ),
+                _buildAvatarGachaArea(context,
+                  loading: _loading,
+                  gacha: _status,
+                  rollCallback: () => _onAvatarGachaClicked()
+                ),
+                _buildNickGachaArea(context,
+                  loading: _loading,
+                  gacha: _status,
+                  rollCallback: () => _onNickGachaClicked()
                 )
               ]
             ),
@@ -96,3 +117,135 @@ Widget _buildProgress(BuildContext context, {
   @required bool loading
 }) =>
   loading == true ? CupertinoActivityIndicator() : Container();
+
+Widget _buildAvatarGachaArea(BuildContext context, {
+  @required bool loading,
+  @required Gacha gacha,
+  @required VoidCallback rollCallback
+}) =>
+  Container(
+    margin: EdgeInsets.only(left: 10, right: 10, top: 20),
+    padding: EdgeInsets.all(10),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(10),
+      color: styles().profileCardBackground
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          children: [
+            Icon(MdiIcons.faceProfile,
+              size: 50,
+              color: styles().primaryFontColor
+            ),
+            Text(locales().profileEditScene.avatar,
+              style: TextStyle(
+                color: styles().primaryFontColor,
+                fontSize: 16
+              )
+            )
+          ]
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 20),
+          child: Text(
+              gacha == null ? locales().profileEditScene.remainCount('...') :
+                locales().profileEditScene.remainCount(gacha.remainAvatarGacha),
+            style: TextStyle(
+              color: styles().secondaryFontColor,
+              fontSize: 17
+            )
+          )
+        ),
+        CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: Icon(MdiIcons.diceMultiple,
+            size: 50,
+            color: styles().link,
+          ),
+          onPressed: loading == true ? null : rollCallback
+        )
+      ]
+    )
+  );
+
+Widget _buildNickGachaArea(BuildContext context, {
+  @required bool loading,
+  @required Gacha gacha,
+  @required VoidCallback rollCallback
+}) =>
+  Container(
+    margin: EdgeInsets.only(left: 10, right: 10, top: 20),
+    padding: EdgeInsets.all(10),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(10),
+      color: styles().profileCardBackground
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          children: [
+            Icon(MdiIcons.tagFaces,
+              size: 50,
+              color: styles().primaryFontColor
+            ),
+            Text(locales().profileEditScene.nick,
+              style: TextStyle(
+                color: styles().primaryFontColor,
+                fontSize: 16
+              )
+            )
+          ]
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 20),
+          child: Text(gacha == null ? locales().profileEditScene.remainCount('...') :
+              locales().profileEditScene.remainCount(gacha.remainNickGacha),
+            style: TextStyle(
+              color: styles().secondaryFontColor,
+              fontSize: 17
+            )
+          )
+        ),
+        CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: Icon(MdiIcons.diceMultiple,
+            size: 50,
+            color: styles().link,
+          ),
+          onPressed: loading == true ? null : rollCallback
+        )
+      ]
+    )
+  );
+
+enum GachaType {
+  NICK, AVATAR
+}
+
+Future<bool> _showGachaConfirm(BuildContext context, GachaType type) async {
+  return await showCupertinoDialog<bool>(
+    context: context,
+    builder: (BuildContext context) =>
+      CupertinoAlertDialog(
+        title: Text(locales().profileEditScene.gachaConfirmTitle),
+        content: Text(
+          type == GachaType.AVATAR ? locales().profileEditScene.gachaAvatarDesc :
+            locales().profileEditScene.gachaNickDesc
+        ),
+        actions: [
+          CupertinoDialogAction(
+            child: Text(locales().profileEditScene.okTitle),
+            onPressed: () => Navigator.pop(context, true)
+          ),
+          CupertinoDialogAction(
+            child: Text(locales().profileEditScene.cancelTitle),
+            onPressed: () => Navigator.pop(context, false),
+            isDestructiveAction: true
+          )
+        ]
+      )
+  );
+}
