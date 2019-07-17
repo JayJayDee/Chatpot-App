@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
+import 'package:chatpot_app/models/app_state.dart';
+
 
 class EmailUpgradeScene extends StatefulWidget {
 
@@ -143,6 +146,8 @@ class _EmailUpgradeSceneState extends State<EmailUpgradeScene> with WidgetsBindi
         password: _inputedPassword
       );
       _loadAndRefreshStatus();
+      final state = ScopedModel.of<AppState>(context);
+      await state.refreshProfile();
     } catch (err) {
       setState(() {
         this._loading = false;
