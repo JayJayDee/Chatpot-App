@@ -53,11 +53,13 @@ class _ProfileEditSceneState extends State<ProfileEditScene> {
   }
 
   void _onNickGachaClicked() async {
-
+    var isOk = await _showGachaConfirm(context, GachaType.NICK);
+    // TODO: call api & show results
   }
 
   void _onAvatarGachaClicked() async {
-
+    var isOk = await _showGachaConfirm(context, GachaType.AVATAR);
+    // TODO: call api & show results
   }
 
   @override
@@ -218,3 +220,32 @@ Widget _buildNickGachaArea(BuildContext context, {
       ]
     )
   );
+
+enum GachaType {
+  NICK, AVATAR
+}
+
+Future<bool> _showGachaConfirm(BuildContext context, GachaType type) async {
+  return await showCupertinoDialog<bool>(
+    context: context,
+    builder: (BuildContext context) =>
+      CupertinoAlertDialog(
+        title: Text(locales().profileEditScene.gachaConfirmTitle),
+        content: Text(
+          type == GachaType.AVATAR ? locales().profileEditScene.gachaAvatarDesc :
+            locales().profileEditScene.gachaNickDesc
+        ),
+        actions: [
+          CupertinoDialogAction(
+            child: Text(locales().profileEditScene.okTitle),
+            onPressed: () => Navigator.pop(context, true)
+          ),
+          CupertinoDialogAction(
+            child: Text(locales().profileEditScene.cancelTitle),
+            onPressed: () => Navigator.pop(context, false),
+            isDestructiveAction: true
+          )
+        ]
+      )
+  );
+}

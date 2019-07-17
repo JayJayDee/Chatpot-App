@@ -41,4 +41,40 @@ Please note! The number of times you can change is limited.''';
     else if (language == 'ja') return "残り$remains個のサイコロ";
     return "$remains remaining dice(s)";
   }
+
+  String get gachaConfirmTitle {
+    if (language == 'ko') return '확인';
+    else if (language == 'ja') return '確認';
+    return 'Confirmation';
+  }
+
+  String get gachaNickDesc {
+    if (language == 'ko') return '''확인 버튼을 클릭하면 즉시 랜덤한 닉네임으로 변경되며, 복구 할 수 없습니다.
+정말 닉네임을 랜덤하게 변경하시겠습니까?''';
+    else if (language == 'ja') return '''[OK]ボタンをクリックすると、すぐにランダムなニックネームに変更され、元に戻すことはできません。
+あなたは本当にランダムにあなたのニックネームを変えたいですか？''';
+    return '''If you click the OK button, it will be immediately changed to a random nickname and can not be recovered.
+Do you really want to change your nickname randomly?''';
+  }
+
+  String get gachaAvatarDesc {
+    if (language == 'ko') return '''확인 버튼을 클릭하면 즉시 랜덤한 아바타로 변경되며, 복구할 수 없습니다.
+정말 아바타를 랜덤하게 변경하시겠습니까?''';
+    else if (language == 'ja') return '''OKボタンをクリックすると即座にランダムなアバターに変わりますが、これは元に戻すことはできません。
+あなたは本当にあなたのアバターをランダムに変えたいですか？''';
+    return '''Clicking the OK button will instantly change to a random avatar, which can not be restored.
+Do you really want to change your avatar randomly?''';
+  }
+
+  String get okTitle {
+    if (language == 'ko') return '확인';
+    else if (language == 'ja') return 'OK';
+    return 'OK';
+  }
+
+  String get cancelTitle {
+    if (language == 'ko') return '취소';
+    else if (language == 'ja') return 'キャンセル';
+    return 'Cancel';
+  }
 }
