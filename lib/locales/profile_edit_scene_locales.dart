@@ -23,4 +23,22 @@ class ProfileEditSceneLocales {
     return '''You can change your nickname and avatar pictures to random nicknames and random avatar pictures.
 Please note! The number of times you can change is limited.''';
   }
+
+  String get avatar {
+    if (language == 'ko') return '아바타';
+    else if (language == 'ja') return 'アバター';
+    return 'Avatar';
+  }
+
+  String get nick {
+    if (language == 'ko') return '닉네임';
+    else if (language == 'ja') return 'ニックネーム';
+    return 'Nickname';
+  }
+
+  String remainCount(int remains) {
+    if (language == 'ko') return "남은 주사위 $remains개";
+    else if (language == 'ja') return "残り$remains個のサイコロ";
+    return "$remains remaining dice(s)";
+  }
 }
