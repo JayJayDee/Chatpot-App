@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:io' show Platform;
 import 'package:meta/meta.dart';
+import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,6 +25,8 @@ import 'package:chatpot_app/storage/block_accessor.dart';
 typedef ImageClickCallback (String messageId);
 typedef ProfileClickCallback (String memberToken);
 typedef UrlMoveCallback (String url);
+
+final GlobalKey<InnerDrawerState> _innerDrawerKey = GlobalKey<InnerDrawerState>();
 
 @immutable
 class MessageScene extends StatefulWidget {
@@ -243,59 +246,73 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     final model = ScopedModel.of<AppState>(context);
     MyRoom room = model.currentRoom;
 
-    return CupertinoPageScaffold(
-      backgroundColor: styles().mainBackground,
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: styles().navigationBarBackground,
-        previousPageTitle: locales().chats.title,
-        actionsForegroundColor: styles().link,
-        middle: Text(room.title,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: styles().primaryFontColor
-          )
-        ), 
-        trailing: CupertinoButton(
-          padding: EdgeInsets.all(0),
-          child: Text(locales().msgscene.leave,
-            style: TextStyle(
-              color: styles().link
-            )
-          ),
-          onPressed: () => _onRoomLeaveClicked(context)
+    return InnerDrawer(
+      key: _innerDrawerKey,
+      position: InnerDrawerPosition.end,
+      offset: 0.05,
+      animationType: InnerDrawerAnimation.quadratic,
+      child: Container(
+        color: styles().navigationBarBackground,
+        child: Column(
+          children: [
+
+          ]
         ),
-        transitionBetweenRoutes: true
       ),
-      child: SafeArea(
-        child: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Column(
-              children: [
-                Expanded(
-                  child: _buildListView(context,
-                    controller: _scrollController,
-                    imageClickCallback: (String messageId) =>
-                      _onImageClicked(context, messageId),
-                    profileClickCallback: (String memberToken) =>
-                      _onProfileClicked(context, memberToken),
-                    textLongPressCallback: (String text) =>
-                      _onTextClicked(context, text)
-                  )
-                ),
-                _buildEditText(context, 
-                  controller: _messageInputFieldCtrl,
-                  valueChanged: (String value) => setState(() => _inputedMessage = value),
-                  imageSelected: () => _onImageSentClicked(context),
-                  sendClicked: () => _onMessageSend(context)
-                )
-              ]
-            ),
-            Positioned(
-              child: _buildProgressBar(context)
+      scaffold: CupertinoPageScaffold(
+        backgroundColor: styles().mainBackground,
+        navigationBar: CupertinoNavigationBar(
+          backgroundColor: styles().navigationBarBackground,
+          previousPageTitle: locales().chats.title,
+          actionsForegroundColor: styles().link,
+          middle: Text(room.title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: styles().primaryFontColor
             )
-          ],
+          ), 
+          trailing: CupertinoButton(
+            padding: EdgeInsets.all(0),
+            child: Text(locales().msgscene.leave,
+              style: TextStyle(
+                color: styles().link
+              )
+            ),
+            onPressed: () => _onRoomLeaveClicked(context)
+          ),
+          transitionBetweenRoutes: true
+        ),
+        child: SafeArea(
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Column(
+                children: [
+                  Expanded(
+                    child: _buildListView(context,
+                      controller: _scrollController,
+                      imageClickCallback: (String messageId) =>
+                        _onImageClicked(context, messageId),
+                      profileClickCallback: (String memberToken) =>
+                        _onProfileClicked(context, memberToken),
+                      textLongPressCallback: (String text) =>
+                        _onTextClicked(context, text)
+                    )
+                  ),
+                  _buildEditText(context, 
+                    controller: _messageInputFieldCtrl,
+                    valueChanged: (String value) => setState(() => _inputedMessage = value),
+                    imageSelected: () => _onImageSentClicked(context),
+                    sendClicked: () => _onMessageSend(context)
+                  )
+                ]
+              ),
+              Positioned(
+                child: _buildProgressBar(context)
+              )
+            ],
+          )
         )
       )
     );
