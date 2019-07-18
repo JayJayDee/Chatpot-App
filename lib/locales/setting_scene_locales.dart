@@ -102,6 +102,12 @@ Are you sure you want to log out?''';
     return "Signed in as $email";
   }
 
+  String currentVersion(String version) {
+    if (language == 'ko') return "Chatpot version dev-$version";
+    else if (language == 'ja') return "Chatpot version dev-$version";
+    return "Chatpot version dev-$version";
+  }
+
   String get darkMode {
     if (language == 'ko') return '어두운 화면';
     else if (language == 'ja') return 'ダークモード';

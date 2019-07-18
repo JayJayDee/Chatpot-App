@@ -40,6 +40,7 @@ dependencies:
   oktoast: ^2.1.9
   url_launcher: ^5.0.3
   flutter_cache_manager: ^0.3.1
+  package_info: ^0.4.0+5
 
 dev_dependencies:
   flutter_test:

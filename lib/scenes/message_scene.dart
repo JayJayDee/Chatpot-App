@@ -44,9 +44,6 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   TextEditingController _messageInputFieldCtrl = TextEditingController();
   ScrollController _scrollController = ScrollController();
 
-  // String _generateTemporaryMessageId() =>
-  //   "${DateTime.now().millisecondsSinceEpoch}";
-
   SentPlatform _getPlatform() {
     if (Platform.isAndroid) return SentPlatform.ANDROID;
     else if (Platform.isIOS) return SentPlatform.IOS;
@@ -57,7 +54,6 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     final state = ScopedModel.of<AppState>(context);
 
     SelectedImage image = await Navigator.of(context).push(CupertinoPageRoute<SelectedImage>(
-      title: 'Photo',
       builder: (BuildContext context) => 
         ImageSendConfirmScene(
           roomTitle: state.currentRoom.title

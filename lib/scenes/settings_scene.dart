@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
+import 'package:package_info/package_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -45,6 +46,7 @@ class _SettingsSceneState extends State<SettingsScene> {
   BuildContext parentContext;
   TabActor actor;
   bool _darkMode;
+  String _version;
 
   _SettingsSceneState({
     @required BuildContext parentContext,
@@ -52,8 +54,20 @@ class _SettingsSceneState extends State<SettingsScene> {
   }) {
     this.parentContext = parentContext;
     this.actor = actor;
+    this._version = '...';
     _darkMode =
       getStyleType() == StyleType.DARK ? true : false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchVersionInfo();
+  }
+
+  void _fetchVersionInfo() async {
+    PackageInfo info = await PackageInfo.fromPlatform();
+    setState(() => _version = "${info.version}+${info.buildNumber}");
   }
   
   void _onEditProfileClicked() async {
@@ -171,6 +185,7 @@ class _SettingsSceneState extends State<SettingsScene> {
     elems.add(_buildMenuItem(locales().setting.myBlocks, () => _onMyBlocksClicked(context)));
     elems.add(_buildMenuItem(locales().setting.myReports, () => _onMyReportsClicked(context)));
     elems.add(_buildMenuItem(locales().setting.about, () => _onAboutClicked(context)));
+    elems.add(_buildVersionItem(version: _version));
 
     return CupertinoPageScaffold(
       backgroundColor: styles().mainBackground,
@@ -268,6 +283,25 @@ Widget _buildMenuItem(String title, VoidCallback pressedCallback) {
     ),
   );
 }
+
+Widget _buildVersionItem({
+  @required String version
+}) =>
+  Container(
+    padding: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 15),
+    decoration: BoxDecoration(
+      color: styles().listViewRowBackgroundMoreDark,
+      border: Border(
+        top: BorderSide(color: Color(0xFFBCBBC1), width: 0.3),
+        bottom: BorderSide(color: Color(0xFFBCBBC1), width: 0.3)
+      ),
+    ),
+    child: Text(locales().setting.currentVersion(version),
+      style: TextStyle(
+        color: styles().secondaryFontColor
+      )
+    )
+  );
 
 Future<dynamic> _showSignoutWarningDialog(BuildContext context, bool isSimple) {
   String content = '';
