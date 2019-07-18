@@ -39,6 +39,12 @@ If you like the Chatpot, please donate a cup of coffee or beer :)''';
     return 'Donate via Ethereum';
   }
 
+  String get homePageBtnLabel {
+    if (language == 'ko') return 'https://chatpot.chat';
+    else if (language == 'ja') return 'https://chatpot.chat';
+    return 'https://chatpot.chat';
+  }
+
   String get bitcoinAddrCopyCompleted {
     if (language == 'ko') return '''비트코인 지갑 주소가 클립보드에 복사되었습니다.
 기부에 감사드립니다!''';
