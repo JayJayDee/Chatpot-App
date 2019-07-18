@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutScene extends StatelessWidget {
 
@@ -22,6 +23,10 @@ class AboutScene extends StatelessWidget {
     await showSimpleAlert(context, locales().aboutScene.ethereumAddrCopyCompleted,
       title: locales().successTitle
     );
+  }
+
+  void _onHomePageClicked(BuildContext context) async {
+    await launch('https://chatpot.chat');
   }
 
   @override 
@@ -78,6 +83,18 @@ class AboutScene extends StatelessWidget {
                   )
                 ),
                 onPressed: () => _onEthereumClicked(context)
+              )
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10),
+              child: CupertinoButton(
+                child: Text(locales().aboutScene.homePageBtnLabel,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: styles().link
+                  )
+                ),
+                onPressed: () => _onHomePageClicked(context)
               )
             ),
             Container(
