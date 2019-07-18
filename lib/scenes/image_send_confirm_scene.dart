@@ -297,15 +297,23 @@ Widget _buildProgress(BuildContext context, {
   return Stack(
     alignment: Alignment.center,
     children: [
-      loading == true ? CupertinoActivityIndicator() : Container(),
       Positioned(
         child: isUploading == true ?
           Container(
-            width: 80,
-            height: 80,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(CupertinoColors.activeBlue),
-              strokeWidth: 8,
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: styles().navigationBarBackground
+            ),
+            alignment: Alignment.center,
+            child: Container(
+              width: 70,
+              height: 70,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(styles().primaryFontColor),
+                strokeWidth: 8,
+              )
             )
           ) : Container()
       ),
@@ -313,11 +321,12 @@ Widget _buildProgress(BuildContext context, {
         child: isUploading == true ?
           Text("$progress%",
             style: TextStyle(
-              color: CupertinoColors.activeBlue,
+              color: styles().primaryFontColor,
               fontSize: 17
             )
           ) : Container()
-      )
+      ),
+      loading == true && isUploading == false ? CupertinoActivityIndicator() : Container()
     ]
   );
 }
@@ -335,29 +344,18 @@ Widget _buildImageShownArea(BuildContext context, {
       children: [
         image == null ?
           Center(
-            child: Icon(MdiIcons.image,
-              color: styles().secondaryFontColor,
-              size: 50
+            child: CupertinoButton(
+              child: Icon(MdiIcons.imagePlus,
+                color: styles().link,
+                size: 70
+              ),
+              onPressed: loading == true ? null : gallerySelectCallback
             ),
           ) : Container(
             alignment: Alignment.center,
             color: styles().messageBackgroundOther,
             child: image,
-          ),
-        Container(
-          margin: EdgeInsets.all(10),
-          child: CupertinoButton(
-            padding: EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
-            child: Text(locales().imageConfirmScene.btnSelectImageFromGallery,
-              style: TextStyle(
-                fontSize: 16,
-                color: CupertinoColors.white
-              )
-            ),
-            onPressed: loading == true ? null : gallerySelectCallback,
-            color: styles().primaryFontColor,
-          ),
-        )
+          )
       ]
     )
   );

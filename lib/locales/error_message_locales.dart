@@ -25,6 +25,7 @@ class ErrorMessageLocales {
     else if (code == 'ALREADY_REPORTED') return this.alreadyReported;
     else if (code == 'SELF_REPORT_NOT_ALLOWED') return this.selfReport;
     else if (code == 'MEMBER_BLOCKED') return this.memberBlocked(message);
+    else if (code == 'SIZE_TOO_LARGE') return this.tooLargeUpload;
     return uncatchedCode(code);
   }
 
@@ -142,6 +143,15 @@ You can see what you reported in the Settings menu > My Report History menu.''';
     if (language == 'ko') return '자기 자신을 신고할 수 없습니다.';
     else if (language == 'ja') return '自分自身を報告することはできません。';
     return 'Cannot report yourself.';   
+  }
+
+  String get tooLargeUpload {
+    if (language == 'ko') return '''사진의 크기가 너무 큽니다.
+(최대 사이즈: 10Mb)''';
+    else if (language == 'ja') return '''写真の容量が大きすぎます。
+（最大サイズ：10Mb）''';
+    return '''The photo is too large.
+(Maximum size: 10Mb)''';
   }
 
   String uncatchedCode(String code) {
