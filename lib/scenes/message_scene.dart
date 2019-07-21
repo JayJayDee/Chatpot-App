@@ -26,18 +26,27 @@ typedef ImageClickCallback (String messageId);
 typedef ProfileClickCallback (String memberToken);
 typedef UrlMoveCallback (String url);
 
-final GlobalKey<InnerDrawerState> _innerDrawerKey = GlobalKey<InnerDrawerState>();
-
 @immutable
 class MessageScene extends StatefulWidget {
 
-  MessageScene();
+  final MyRoom room;
+
+  MessageScene({
+    @required this.room
+  });
 
   @override
-  _MessageSceneState createState() => _MessageSceneState();
+  _MessageSceneState createState() => _MessageSceneState(room: room);
 }
 
 class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver {
+
+  final MyRoom room;
+
+  _MessageSceneState({
+    @required this.room
+  });
+
   bool _inited = false;
   AppState _model;
   String _inputedMessage;
@@ -56,7 +65,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     SelectedImage image = await Navigator.of(context).push(CupertinoPageRoute<SelectedImage>(
       builder: (BuildContext context) => 
         ImageSendConfirmScene(
-          roomTitle: state.currentRoom.title
+          roomTitle: room.title
         )
     ));
 
@@ -208,11 +217,13 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _scrollController.addListener(_onScrollEventArrival);
+    print('ROOM_UPRISE');
   }
 
   @override
   void dispose() {
     _inited = false;
+    print('ROOM_DISPOSE');
     _model.outFromRoom();
     WidgetsBinding.instance.removeObserver(this);
     _scrollController.removeListener(_onScrollEventArrival);
@@ -223,6 +234,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   void didChangeAppLifecycleState(AppLifecycleState state) {
     var func = () async {
       if (state == AppLifecycleState.resumed) {
+        print('ROOM_UPRISE');
         if (_model.currentRoom != null) {
           _model.currentRoom.messages.clearNotViewed();
           await _model.fetchMessagesWhenResume(roomToken: _model.currentRoom.roomToken);
@@ -243,7 +255,6 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     MyRoom room = model.currentRoom;
 
     return InnerDrawer(
-      key: _innerDrawerKey,
       position: InnerDrawerPosition.end,
       offset: 0.05,
       animationType: InnerDrawerAnimation.quadratic,

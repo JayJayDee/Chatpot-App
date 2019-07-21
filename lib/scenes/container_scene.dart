@@ -108,7 +108,9 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
       if (rooms.length > 0) {
         model.selectRoom(room: rooms[0]);
         await Navigator.of(context).push(CupertinoPageRoute<bool>(
-          builder: (BuildContext context) => MessageScene()
+          builder: (BuildContext context) => MessageScene(
+            room: rooms[0]
+          )
         ));
       }
     }
