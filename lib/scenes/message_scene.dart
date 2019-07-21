@@ -76,6 +76,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     );
 
     await state.publishMessage(
+      roomToken: room.roomToken,
       content: content,
       type: MessageType.IMAGE,
       platform: _getPlatform()
@@ -90,6 +91,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
     final model = ScopedModel.of<AppState>(context);
     model.publishMessage(
+      roomToken: room.roomToken,
       content: _inputedMessage,
       type: MessageType.TEXT,
       platform: _getPlatform()
@@ -118,13 +120,13 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
   Future<void> _onScenePaused(BuildContext context) async {
     print('ON_SCENE_PAUSE');
-    _model.outFromRoom(); // TODO: TO BE DELETED
     _model.pauseMyRoom(roomToken: room.roomToken);
   }
 
   Future<void> _onRoomLeaveClicked(BuildContext context) async {
     final model = ScopedModel.of<AppState>(context);
     bool isLeave = await _showLeaveDialog(context);
+
     if (isLeave == true) {
       await model.leaveFromRoom(model.currentRoom.roomToken);
       Navigator.of(context).pop();
@@ -257,7 +259,6 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   Widget build(BuildContext context) {
     final model = ScopedModel.of<AppState>(context);
     _model = model; // FOR widget disposing.
-    MyRoom room = model.currentRoom;
 
     return CupertinoPageScaffold(
       backgroundColor: styles().mainBackground,
@@ -291,6 +292,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
               children: [
                 Expanded(
                   child: _buildListView(context,
+                    room: room,
                     controller: _scrollController,
                     imageClickCallback: (String messageId) =>
                       _onImageClicked(context, messageId),
@@ -319,21 +321,23 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 }
 
 Widget _buildListView(BuildContext context, {
+  @required MyRoom room,
   @required ScrollController controller,
   @required ImageClickCallback imageClickCallback,
   @required ProfileClickCallback profileClickCallback,
   @required TextClickCallback textLongPressCallback
 }) {
   final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
+
   return Scrollbar(
     child: ListView.builder(
       scrollDirection: Axis.vertical,
       reverse: true,
       physics: AlwaysScrollableScrollPhysics(),
       controller: controller,
-      itemCount: model.currentRoom.messages.messages.length,
+      itemCount: model.roomMessages(roomToken: room.roomToken).length,
       itemBuilder: (BuildContext context, int idx) {
-        Message msg = model.currentRoom.messages.messages[idx];
+        Message msg = model.roomMessages(roomToken: room.roomToken)[idx];
         return MessageRow(
           message: msg,
           state: model,

@@ -53,6 +53,14 @@ class AppState extends Model {
     return _currentRoom.messages.messages;
   }
 
+  List<Message> roomMessages({
+    @required String roomToken
+  }) {
+    MyRoom room = _queryMyRoom(roomToken);
+    if (room == null) return List();
+    return room.messages.messages;
+  }
+
   Future<void> loadStyleType() async {
     StyleType styleType = await miscAccessor().getSavedStyleType();
     _styleType = styleType;
@@ -395,6 +403,7 @@ class AppState extends Model {
     if (rooms.length == 0) return;
 
     MyRoom myRoom = rooms.toList()[0];
+
     if (_currentRoom != null && myRoom.roomToken == _currentRoom.roomToken) {
       _currentRoom.messages.appendSingleMessage(msg);
       _currentRoom.lastMessage = msg;
@@ -413,9 +422,11 @@ class AppState extends Model {
     if (rooms.length == 0) return;
 
     MyRoom myRoom = rooms.toList()[0];
-    if (_currentRoom != null && myRoom.roomToken == _currentRoom.roomToken) {
-      _currentRoom.messages.appendSingleMessage(msg);
-      _currentRoom.lastMessage = msg;
+    if (myRoom == null) return;
+
+    if (myRoom.shown == true && myRoom.roomToken == _currentRoom.roomToken) {
+      myRoom.messages.appendSingleMessage(msg);
+      myRoom.lastMessage = msg;
 
       if (msg.messageType == MessageType.TEXT &&
             msg.from.token != _member.token &&
@@ -434,7 +445,7 @@ class AppState extends Model {
         if (translated.length > 0) {
           msg.translated = translated[0].translated;
           translationCacheAccessor().cacheTranslations(
-            roomToken: _currentRoom.roomToken,
+            roomToken: myRoom.roomToken,
             translated: [Translated(
               key: msg.messageId,
               translated: translated[0].translated
@@ -451,6 +462,7 @@ class AppState extends Model {
   }
 
   Future<void> publishMessage({
+    @required String roomToken,
     @required MessageType type,
     @required dynamic content,
     @required SentPlatform platform,
@@ -459,10 +471,12 @@ class AppState extends Model {
     _loading = true;
     notifyListeners();
 
+    MyRoom currentRoom = _queryMyRoom(roomToken);
+
     try {
-      if (_currentRoom == null) return;
+      if (currentRoom == null) return;
       var publishResult = await messageApi().requestPublishToRoom(
-        roomToken: _currentRoom.roomToken,
+        roomToken: currentRoom.roomToken,
         memberToken: _member.token,
         type: type,
         content: content,
@@ -471,7 +485,7 @@ class AppState extends Model {
       String messageId = publishResult.messageId;
 
       if (previousMessageId != null) {
-        _currentRoom.messages.changeMessageId(previousMessageId, messageId);
+        currentRoom.messages.changeMessageId(previousMessageId, messageId);
 
       } else {
         Message newMsg = Message();
@@ -487,7 +501,7 @@ class AppState extends Model {
         newMsg.to = to;
         newMsg.changeToSending();
 
-        _currentRoom.messages.appendSingleMessage(newMsg);
+        currentRoom.messages.appendSingleMessage(newMsg);
       }
       notifyListeners();
     } catch (err) {
