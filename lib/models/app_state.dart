@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/entities/member.dart';
@@ -343,9 +342,9 @@ class AppState extends Model {
       (await blockAccessor().fetchAllBlockEntries())
         .map((b) => b.memberToken).toList();
 
-    if (_currentRoom != null) {
-      _currentRoom.messages.updateBannedTokens(_bannedTokens);
-    }
+    _myRooms.forEach((r) {
+      r.messages.updateBannedTokens(_bannedTokens);
+    });
     notifyListeners();
   }
 
@@ -364,7 +363,7 @@ class AppState extends Model {
       offset: currentRoom.messages.offset,
       size: 20
     );
-    _currentRoom.messages.appendMesasges(resp.messages);
+    currentRoom.messages.appendMesasges(resp.messages);
 
     _loading = false;
     notifyListeners();
@@ -404,9 +403,11 @@ class AppState extends Model {
 
     MyRoom myRoom = rooms.toList()[0];
 
-    if (_currentRoom != null && myRoom.roomToken == _currentRoom.roomToken) {
-      _currentRoom.messages.appendSingleMessage(msg);
-      _currentRoom.lastMessage = msg;
+    if (myRoom == null) return;
+
+    if (myRoom.shown == true) {
+      myRoom.messages.appendSingleMessage(msg);
+      myRoom.lastMessage = msg;
     } else {
       myRoom.lastMessage = msg;
       myRoom.messages.increaseNotViewed();
@@ -424,7 +425,7 @@ class AppState extends Model {
     MyRoom myRoom = rooms.toList()[0];
     if (myRoom == null) return;
 
-    if (myRoom.shown == true && myRoom.roomToken == _currentRoom.roomToken) {
+    if (myRoom.shown == true) {
       myRoom.messages.appendSingleMessage(msg);
       myRoom.lastMessage = msg;
 
@@ -472,9 +473,9 @@ class AppState extends Model {
     notifyListeners();
 
     MyRoom currentRoom = _queryMyRoom(roomToken);
+    if (currentRoom == null) return;
 
     try {
-      if (currentRoom == null) return;
       var publishResult = await messageApi().requestPublishToRoom(
         roomToken: currentRoom.roomToken,
         memberToken: _member.token,
@@ -484,25 +485,20 @@ class AppState extends Model {
       );
       String messageId = publishResult.messageId;
 
-      if (previousMessageId != null) {
-        currentRoom.messages.changeMessageId(previousMessageId, messageId);
+      Message newMsg = Message();
+      var to = MessageTo();
+      to.type = MessageTarget.ROOM;
+      to.token = roomToken;
 
-      } else {
-        Message newMsg = Message();
-        var to = MessageTo();
-        to.type = MessageTarget.ROOM;
-        to.token = _currentRoom.roomToken;
+      newMsg.messageId = messageId;
+      newMsg.messageType = type;
+      newMsg.content = content;
+      newMsg.sentTime = DateTime.now();
+      newMsg.from = _member;
+      newMsg.to = to;
+      newMsg.changeToSending();
 
-        newMsg.messageId = messageId;
-        newMsg.messageType = type;
-        newMsg.content = content;
-        newMsg.sentTime = DateTime.now();
-        newMsg.from = _member;
-        newMsg.to = to;
-        newMsg.changeToSending();
-
-        currentRoom.messages.appendSingleMessage(newMsg);
-      }
+      currentRoom.messages.appendSingleMessage(newMsg);
       notifyListeners();
     } catch (err) {
       throw err;
@@ -510,51 +506,6 @@ class AppState extends Model {
       _loading = false;
       notifyListeners();
     }
-  }
-
-  Future<ImageContent> uploadImage({
-    @required File image,
-    @required String tempMessageId
-  }) async {
-    Message msg = Message();
-    
-    MessageTo to = MessageTo();
-    to.type = MessageTarget.ROOM;
-    to.token = _currentRoom.roomToken;
-    msg.to = to;
-    msg.changeToSending();
-
-    msg.messageId = tempMessageId;
-    msg.messageType = MessageType.IMAGE;
-    msg.from = member;
-    msg.changeToLocalImage(image.path);
-    msg.sentTime = DateTime.now();
-
-    currentRoom.messages.appendQueuedMessage(msg);
-    if (currentRoom == null) return null;
-    notifyListeners();
-
-    var resp = await assetApi().uploadImage(image,
-      callback: (prog) {
-        msg.changeUploadProgress(prog);
-        notifyListeners();
-      }
-    );
-
-    msg.changeToRemoteImage(
-      imageUrl: resp.orig,
-      thumbUrl: resp.thumbnail
-    );
-
-    if (currentRoom == null) return null;
-    currentRoom.messages.dumpQueuedMessagesToMessage();
-
-    notifyListeners();
-    ImageContent content = ImageContent(
-      imageUrl: resp.orig,
-      thumbnailUrl: resp.thumbnail
-    );
-    return content;
   }
 
   Future<void> translatePublicRooms() async {

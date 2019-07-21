@@ -128,14 +128,13 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     bool isLeave = await _showLeaveDialog(context);
 
     if (isLeave == true) {
-      await model.leaveFromRoom(model.currentRoom.roomToken);
+      await model.leaveFromRoom(room.roomToken);
       Navigator.of(context).pop();
     }
   }
 
   Future<void> _onImageClicked(BuildContext context, String messageId) async {
-    final model = ScopedModel.of<AppState>(context);
-    List<Message> found = model.currentRoom.messages.messages.where((m) =>
+    List<Message> found = room.messages.messages.where((m) =>
       m.messageId == messageId).toList();
 
     await Navigator.of(context).push(CupertinoPageRoute<String>(
@@ -153,16 +152,14 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     if (result == true) {
       final state = ScopedModel.of<AppState>(context);
       try {
-        if (state.currentRoom != null) {
-          await state.blockMember(
-            roomToken: state.currentRoom.roomToken,
-            targetMemberToken: targetMember,
-          );
-          await showSimpleAlert(context, locales().msgscene.blockSuccess,
-            title: locales().successTitle
-          );
-          state.updateBanList();
-        }
+        await state.blockMember(
+          roomToken: room.roomToken,
+          targetMemberToken: targetMember,
+        );
+        await showSimpleAlert(context, locales().msgscene.blockSuccess,
+          title: locales().successTitle
+        );
+        state.updateBanList();
       } catch (err) {
         if (err is AlreadyBlockedMemberError) {
           showSimpleAlert(context, locales().msgscene.alreadyBlockedMember);
@@ -174,12 +171,11 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onMemberReportSelected(BuildContext context, String targetMember) async {
-    final state = ScopedModel.of<AppState>(context);
     await Navigator.of(context).push(CupertinoPageRoute<void>(
       builder: (BuildContext context) => 
         ReportScene(
           targetToken: targetMember,
-          roomToken: state.currentRoom.roomToken
+          roomToken: room.roomToken
         )
     ));
   }
