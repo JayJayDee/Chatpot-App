@@ -304,8 +304,30 @@ class AppState extends Model {
   Future<void> selectRoom({
     @required MyRoom room
   }) async {
+    // previous logics
     _currentRoom = room;
     _currentRoom.messages.updateBannedTokens(_bannedTokens);
+  }
+
+  void resumeMyRoom({
+    @required String roomToken
+  }) {
+    MyRoom room = _queryMyRoom(roomToken);
+    if (room == null) return;
+
+    room.shown = true;
+    room.messages.clearNotViewed();
+    notifyListeners();
+  }
+
+  void pauseMyRoom({
+    @required String roomToken
+  }) {
+    MyRoom room = _queryMyRoom(roomToken);
+    if (room == null) return;
+
+    room.shown = false;
+    notifyListeners();
   }
 
   Future<void> updateBanList() async {
@@ -322,14 +344,16 @@ class AppState extends Model {
   Future<void> fetchMoreMessages({
     @required String roomToken
   }) async {
-    if (_currentRoom == null) return;
+    MyRoom currentRoom = _queryMyRoom(roomToken);
+
+    if (currentRoom == null) return;
 
     _loading = true;
     notifyListeners();
 
     var resp = await messageApi().requestMessages(
       roomToken: roomToken,
-      offset: _currentRoom.messages.offset,
+      offset: currentRoom.messages.offset,
       size: 20
     );
     _currentRoom.messages.appendMesasges(resp.messages);
@@ -341,7 +365,6 @@ class AppState extends Model {
   Future<void> fetchMessagesWhenResume({
     @required String roomToken
   }) async {
-    if (_currentRoom == null) return;
     _loading = true;
     notifyListeners();
 
@@ -351,11 +374,13 @@ class AppState extends Model {
       size: 20
     );
 
-    if (_currentRoom != null) {
-      _currentRoom.messages.clearOffset();
-      _currentRoom.messages.clearMessages();
-      _currentRoom.messages.appendMesasges(resp.messages);
-      _currentRoom.messages.dumpQueuedMessagesToMessage();
+    MyRoom currentRoom = _queryMyRoom(roomToken);
+
+    if (currentRoom != null) {
+      currentRoom.messages.clearOffset();
+      currentRoom.messages.clearMessages();
+      currentRoom.messages.appendMesasges(resp.messages);
+      currentRoom.messages.dumpQueuedMessagesToMessage();
     }
 
     _loading = false;
@@ -635,15 +660,23 @@ class AppState extends Model {
         await translationCacheAccessor().cacheRoomTitleTranslations(translated: cacheParams);
       }
     }    
-
     notifyListeners();
   }
 
-  Future<void> translateMessages() async {
-    if (_currentRoom == null) return;
+  MyRoom _queryMyRoom(String roomToken) {
+    List<MyRoom> found = _myRooms.where((r) => r.roomToken == roomToken).toList();
+    if (found.length == 0) return null;
+    return found[0];
+  }
+
+  Future<void> translateMessages({
+    @required String roomToken
+  }) async {
+    MyRoom currentRoom = _queryMyRoom(roomToken);
+    if (currentRoom == null) return;
 
     List<Message> translationTargets =
-      _currentRoom.messages.messages.where((m) {
+      currentRoom.messages.messages.where((m) {
         if (m.from == null) return false;
         if (m.from.language == _member.language) return false;
         if (m.messageType != MessageType.TEXT) return false;
@@ -652,7 +685,7 @@ class AppState extends Model {
 
     List<Translated> cachedTranslations =
       await translationCacheAccessor().getCachedTranslations(
-        roomToken: _currentRoom.roomToken,
+        roomToken: currentRoom.roomToken,
         keys: translationTargets.map((m) => m.messageId).toList()
       );
 
@@ -675,11 +708,11 @@ class AppState extends Model {
         toLocale: _member.language
       );
 
-      if (_currentRoom == null) return;
+      if (currentRoom == null) return;
 
       resp.forEach((t) {
         print("API_CALL_TRANSLATED_MESSAGE: ${t.translated}");
-        Message m = _currentRoom.messages.findMessage(t.key);
+        Message m = currentRoom.messages.findMessage(t.key);
         if (m != null) m.translated = t.translated;
       });
 
@@ -691,15 +724,15 @@ class AppState extends Model {
           )
         ).toList();
 
-      if (_currentRoom == null) return;
+      if (currentRoom == null) return;
 
       translationCacheAccessor().cacheTranslations(
-        roomToken: _currentRoom.roomToken,
+        roomToken: currentRoom.roomToken,
         translated: cacheElems);
     } 
 
     cachedTranslations.forEach((t) {
-      Message msg = _currentRoom.messages.findMessage(t.key);
+      Message msg = currentRoom.messages.findMessage(t.key);
       if (msg != null) msg.translated = t.translated;
     });
 

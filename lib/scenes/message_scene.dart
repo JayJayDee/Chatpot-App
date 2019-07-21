@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:io' show Platform;
 import 'package:meta/meta.dart';
-import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,10 +47,10 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   });
 
   bool _inited = false;
-  AppState _model;
   String _inputedMessage;
   TextEditingController _messageInputFieldCtrl = TextEditingController();
   ScrollController _scrollController = ScrollController();
+  AppState _model;
 
   SentPlatform _getPlatform() {
     if (Platform.isAndroid) return SentPlatform.ANDROID;
@@ -99,13 +98,28 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     _inputedMessage = '';
   }
 
-  Future<void> _onSceneShown(BuildContext context) async {
+  Future<void> _onSceneInitial(BuildContext context) async {
     final model = ScopedModel.of<AppState>(context);
-    _model = model;
-    MyRoom room = model.currentRoom;
-    room.messages.clearNotViewed();
-    await model.fetchMoreMessages(roomToken: room.roomToken);
-    await model.translateMessages();
+    print('ON_SCENE_INITIAL');
+
+    model.resumeMyRoom(roomToken: room.roomToken);
+    await model.fetchMessagesWhenResume(roomToken: room.roomToken);
+    await model.translateMessages(roomToken: room.roomToken);
+  }
+
+  Future<void> _onSceneResumed(BuildContext context) async {
+    print('ON_SCENE_RESUME');
+
+    final model = ScopedModel.of<AppState>(context);
+    model.resumeMyRoom(roomToken: room.roomToken);
+    await model.fetchMessagesWhenResume(roomToken: room.roomToken);
+    await model.translateMessages(roomToken: room.roomToken);
+  }
+
+  Future<void> _onScenePaused(BuildContext context) async {
+    print('ON_SCENE_PAUSE');
+    _model.outFromRoom(); // TODO: TO BE DELETED
+    _model.pauseMyRoom(roomToken: room.roomToken);
   }
 
   Future<void> _onRoomLeaveClicked(BuildContext context) async {
@@ -180,8 +194,8 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
       final state = ScopedModel.of<AppState>(context);
-      await state.fetchMoreMessages(roomToken: state.currentRoom.roomToken);
-      await state.translateMessages();
+      await state.fetchMoreMessages(roomToken: room.roomToken);
+      await state.translateMessages(roomToken: room.roomToken);
     }
   }
 
@@ -217,14 +231,13 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _scrollController.addListener(_onScrollEventArrival);
-    print('ROOM_UPRISE');
+    _onSceneInitial(context);
   }
 
   @override
   void dispose() {
     _inited = false;
-    print('ROOM_DISPOSE');
-    _model.outFromRoom();
+    _onScenePaused(context);
     WidgetsBinding.instance.removeObserver(this);
     _scrollController.removeListener(_onScrollEventArrival);
     super.dispose();
@@ -234,12 +247,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   void didChangeAppLifecycleState(AppLifecycleState state) {
     var func = () async {
       if (state == AppLifecycleState.resumed) {
-        print('ROOM_UPRISE');
-        if (_model.currentRoom != null) {
-          _model.currentRoom.messages.clearNotViewed();
-          await _model.fetchMessagesWhenResume(roomToken: _model.currentRoom.roomToken);
-          await _model.translateMessages();
-        }
+        _onSceneResumed(context);
       }
     };
     func();
@@ -247,79 +255,63 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
   @override
   Widget build(BuildContext context) {
-    if (_inited == false) {
-      _inited = true;
-      _onSceneShown(context);
-    }
     final model = ScopedModel.of<AppState>(context);
+    _model = model; // FOR widget disposing.
     MyRoom room = model.currentRoom;
 
-    return InnerDrawer(
-      position: InnerDrawerPosition.end,
-      offset: 0.05,
-      animationType: InnerDrawerAnimation.quadratic,
-      child: Container(
-        color: styles().navigationBarBackground,
-        child: Column(
-          children: [
-
-          ]
-        ),
-      ),
-      scaffold: CupertinoPageScaffold(
-        backgroundColor: styles().mainBackground,
-        navigationBar: CupertinoNavigationBar(
-          backgroundColor: styles().navigationBarBackground,
-          previousPageTitle: locales().chats.title,
-          actionsForegroundColor: styles().link,
-          middle: Text(room.title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: styles().primaryFontColor
-            )
-          ), 
-          trailing: CupertinoButton(
-            padding: EdgeInsets.all(0),
-            child: Text(locales().msgscene.leave,
-              style: TextStyle(
-                color: styles().link
-              )
-            ),
-            onPressed: () => _onRoomLeaveClicked(context)
-          ),
-          transitionBetweenRoutes: true
-        ),
-        child: SafeArea(
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Column(
-                children: [
-                  Expanded(
-                    child: _buildListView(context,
-                      controller: _scrollController,
-                      imageClickCallback: (String messageId) =>
-                        _onImageClicked(context, messageId),
-                      profileClickCallback: (String memberToken) =>
-                        _onProfileClicked(context, memberToken),
-                      textLongPressCallback: (String text) =>
-                        _onTextClicked(context, text)
-                    )
-                  ),
-                  _buildEditText(context, 
-                    controller: _messageInputFieldCtrl,
-                    valueChanged: (String value) => setState(() => _inputedMessage = value),
-                    imageSelected: () => _onImageSentClicked(context),
-                    sendClicked: () => _onMessageSend(context)
-                  )
-                ]
-              ),
-              Positioned(
-                child: _buildProgressBar(context)
-              )
-            ],
+    return CupertinoPageScaffold(
+      backgroundColor: styles().mainBackground,
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: styles().navigationBarBackground,
+        previousPageTitle: locales().chats.title,
+        actionsForegroundColor: styles().link,
+        middle: Text(room.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: styles().primaryFontColor
           )
+        ), 
+        trailing: CupertinoButton(
+          padding: EdgeInsets.all(0),
+          child: Text(locales().msgscene.leave,
+            style: TextStyle(
+              color: styles().link
+            )
+          ),
+          onPressed: () => _onRoomLeaveClicked(context)
+        ),
+        transitionBetweenRoutes: true
+      ),
+      child: SafeArea(
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Column(
+              children: [
+                Expanded(
+                  child: _buildListView(context,
+                    controller: _scrollController,
+                    imageClickCallback: (String messageId) =>
+                      _onImageClicked(context, messageId),
+                    profileClickCallback: (String memberToken) =>
+                      _onProfileClicked(context, memberToken),
+                    textLongPressCallback: (String text) =>
+                      _onTextClicked(context, text)
+                  )
+                ),
+                _buildEditText(context, 
+                  controller: _messageInputFieldCtrl,
+                  valueChanged: (String value) => setState(() => _inputedMessage = value),
+                  imageSelected: () => _onImageSentClicked(context),
+                  sendClicked: () => _onMessageSend(context)
+                )
+              ]
+            ),
+            Positioned(
+              child: _buildProgressBar(context)
+            )
+          ],
         )
       )
     );

@@ -80,11 +80,12 @@ class MyRoom {
   Message lastMessage;
   String titleTranslated;
   RoomType type;
-
   RoomMessages messages;
+  bool shown;
 
   MyRoom() {
     messages = RoomMessages();
+    this.shown = false;
   }
 
   factory MyRoom.fromJson(Map<String, dynamic> map) {
