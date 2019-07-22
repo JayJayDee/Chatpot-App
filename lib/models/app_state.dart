@@ -249,11 +249,6 @@ class AppState extends Model {
     return JoinRoomResp(success: true);
   }
 
-  void outFromRoom() {
-    _currentRoom.messages.clearOffset();
-    _currentRoom = null;
-  }
-
   Future<void> leaveFromRoom(String roomToken) async {
     _loading = true;
     notifyListeners();
@@ -275,9 +270,22 @@ class AppState extends Model {
       (await blockAccessor().fetchAllBlockEntries())
         .map((b) => b.memberToken).toList();
 
-    var resp = await roomApi().requestMyRooms(memberToken: _member.token);
+    List<MyRoom> resp = await roomApi().requestMyRooms(
+      memberToken: _member.token
+    );
+  
+    resp.forEach((myroom) {
+      List<MyRoom> foundInLocal = _myRooms.where((r) => r.roomToken == myroom.roomToken).toList();
+      if (foundInLocal.length == 0) {
+        _myRooms.add(myroom);
+      } else {
+        foundInLocal[0].title = myroom.title;
+        foundInLocal[0].owner = myroom.owner;
+        foundInLocal[0].numAttendee = myroom.numAttendee;
+        foundInLocal[0].maxAttendee = myroom.maxAttendee;
+      }
+    });
 
-    _myRooms = resp;
     _loading = false;
     notifyListeners();
   }
@@ -306,14 +314,6 @@ class AppState extends Model {
       _loading = false;
       notifyListeners();
     }
-  }
-
-  Future<void> selectRoom({
-    @required MyRoom room
-  }) async {
-    // previous logics
-    _currentRoom = room;
-    _currentRoom.messages.updateBannedTokens(_bannedTokens);
   }
 
   void resumeMyRoom({
