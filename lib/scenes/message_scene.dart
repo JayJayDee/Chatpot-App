@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:io' show Platform;
 import 'package:meta/meta.dart';
-import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,23 +25,32 @@ typedef ImageClickCallback (String messageId);
 typedef ProfileClickCallback (String memberToken);
 typedef UrlMoveCallback (String url);
 
-final GlobalKey<InnerDrawerState> _innerDrawerKey = GlobalKey<InnerDrawerState>();
-
 @immutable
 class MessageScene extends StatefulWidget {
 
-  MessageScene();
+  final MyRoom room;
+
+  MessageScene({
+    @required this.room
+  });
 
   @override
-  _MessageSceneState createState() => _MessageSceneState();
+  _MessageSceneState createState() => _MessageSceneState(room: room);
 }
 
 class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver {
+
+  final MyRoom room;
+
+  _MessageSceneState({
+    @required this.room
+  });
+
   bool _inited = false;
-  AppState _model;
   String _inputedMessage;
   TextEditingController _messageInputFieldCtrl = TextEditingController();
   ScrollController _scrollController = ScrollController();
+  AppState _model;
 
   SentPlatform _getPlatform() {
     if (Platform.isAndroid) return SentPlatform.ANDROID;
@@ -56,7 +64,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     SelectedImage image = await Navigator.of(context).push(CupertinoPageRoute<SelectedImage>(
       builder: (BuildContext context) => 
         ImageSendConfirmScene(
-          roomTitle: state.currentRoom.title
+          roomTitle: room.title
         )
     ));
 
@@ -68,6 +76,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     );
 
     await state.publishMessage(
+      roomToken: room.roomToken,
       content: content,
       type: MessageType.IMAGE,
       platform: _getPlatform()
@@ -82,6 +91,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
     final model = ScopedModel.of<AppState>(context);
     model.publishMessage(
+      roomToken: room.roomToken,
       content: _inputedMessage,
       type: MessageType.TEXT,
       platform: _getPlatform()
@@ -90,27 +100,41 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     _inputedMessage = '';
   }
 
-  Future<void> _onSceneShown(BuildContext context) async {
+  Future<void> _onSceneInitial(BuildContext context) async {
     final model = ScopedModel.of<AppState>(context);
-    _model = model;
-    MyRoom room = model.currentRoom;
-    room.messages.clearNotViewed();
-    await model.fetchMoreMessages(roomToken: room.roomToken);
-    await model.translateMessages();
+    print('ON_SCENE_INITIAL');
+
+    model.resumeMyRoom(roomToken: room.roomToken);
+    await model.fetchMessagesWhenResume(roomToken: room.roomToken);
+    await model.translateMessages(roomToken: room.roomToken);
+  }
+
+  Future<void> _onSceneResumed(BuildContext context) async {
+    print('ON_SCENE_RESUME');
+
+    final model = ScopedModel.of<AppState>(context);
+    model.resumeMyRoom(roomToken: room.roomToken);
+    await model.fetchMessagesWhenResume(roomToken: room.roomToken);
+    await model.translateMessages(roomToken: room.roomToken);
+  }
+
+  Future<void> _onScenePaused(BuildContext context) async {
+    print('ON_SCENE_PAUSE');
+    _model.pauseMyRoom(roomToken: room.roomToken);
   }
 
   Future<void> _onRoomLeaveClicked(BuildContext context) async {
     final model = ScopedModel.of<AppState>(context);
     bool isLeave = await _showLeaveDialog(context);
+
     if (isLeave == true) {
-      await model.leaveFromRoom(model.currentRoom.roomToken);
+      await model.leaveFromRoom(room.roomToken);
       Navigator.of(context).pop();
     }
   }
 
   Future<void> _onImageClicked(BuildContext context, String messageId) async {
-    final model = ScopedModel.of<AppState>(context);
-    List<Message> found = model.currentRoom.messages.messages.where((m) =>
+    List<Message> found = room.messages.messages.where((m) =>
       m.messageId == messageId).toList();
 
     await Navigator.of(context).push(CupertinoPageRoute<String>(
@@ -128,16 +152,14 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     if (result == true) {
       final state = ScopedModel.of<AppState>(context);
       try {
-        if (state.currentRoom != null) {
-          await state.blockMember(
-            roomToken: state.currentRoom.roomToken,
-            targetMemberToken: targetMember,
-          );
-          await showSimpleAlert(context, locales().msgscene.blockSuccess,
-            title: locales().successTitle
-          );
-          state.updateBanList();
-        }
+        await state.blockMember(
+          roomToken: room.roomToken,
+          targetMemberToken: targetMember,
+        );
+        await showSimpleAlert(context, locales().msgscene.blockSuccess,
+          title: locales().successTitle
+        );
+        state.updateBanList();
       } catch (err) {
         if (err is AlreadyBlockedMemberError) {
           showSimpleAlert(context, locales().msgscene.alreadyBlockedMember);
@@ -149,12 +171,11 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onMemberReportSelected(BuildContext context, String targetMember) async {
-    final state = ScopedModel.of<AppState>(context);
     await Navigator.of(context).push(CupertinoPageRoute<void>(
       builder: (BuildContext context) => 
         ReportScene(
           targetToken: targetMember,
-          roomToken: state.currentRoom.roomToken
+          roomToken: room.roomToken
         )
     ));
   }
@@ -171,8 +192,8 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     if (_scrollController.offset >= _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
       final state = ScopedModel.of<AppState>(context);
-      await state.fetchMoreMessages(roomToken: state.currentRoom.roomToken);
-      await state.translateMessages();
+      await state.fetchMoreMessages(roomToken: room.roomToken);
+      await state.translateMessages(roomToken: room.roomToken);
     }
   }
 
@@ -208,12 +229,13 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _scrollController.addListener(_onScrollEventArrival);
+    _onSceneInitial(context);
   }
 
   @override
   void dispose() {
     _inited = false;
-    _model.outFromRoom();
+    _onScenePaused(context);
     WidgetsBinding.instance.removeObserver(this);
     _scrollController.removeListener(_onScrollEventArrival);
     super.dispose();
@@ -223,11 +245,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   void didChangeAppLifecycleState(AppLifecycleState state) {
     var func = () async {
       if (state == AppLifecycleState.resumed) {
-        if (_model.currentRoom != null) {
-          _model.currentRoom.messages.clearNotViewed();
-          await _model.fetchMessagesWhenResume(roomToken: _model.currentRoom.roomToken);
-          await _model.translateMessages();
-        }
+        _onSceneResumed(context);
       }
     };
     func();
@@ -235,80 +253,63 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
   @override
   Widget build(BuildContext context) {
-    if (_inited == false) {
-      _inited = true;
-      _onSceneShown(context);
-    }
     final model = ScopedModel.of<AppState>(context);
-    MyRoom room = model.currentRoom;
+    _model = model; // FOR widget disposing.
 
-    return InnerDrawer(
-      key: _innerDrawerKey,
-      position: InnerDrawerPosition.end,
-      offset: 0.05,
-      animationType: InnerDrawerAnimation.quadratic,
-      child: Container(
-        color: styles().navigationBarBackground,
-        child: Column(
-          children: [
-
-          ]
-        ),
-      ),
-      scaffold: CupertinoPageScaffold(
-        backgroundColor: styles().mainBackground,
-        navigationBar: CupertinoNavigationBar(
-          backgroundColor: styles().navigationBarBackground,
-          previousPageTitle: locales().chats.title,
-          actionsForegroundColor: styles().link,
-          middle: Text(room.title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: styles().primaryFontColor
-            )
-          ), 
-          trailing: CupertinoButton(
-            padding: EdgeInsets.all(0),
-            child: Text(locales().msgscene.leave,
-              style: TextStyle(
-                color: styles().link
-              )
-            ),
-            onPressed: () => _onRoomLeaveClicked(context)
-          ),
-          transitionBetweenRoutes: true
-        ),
-        child: SafeArea(
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Column(
-                children: [
-                  Expanded(
-                    child: _buildListView(context,
-                      controller: _scrollController,
-                      imageClickCallback: (String messageId) =>
-                        _onImageClicked(context, messageId),
-                      profileClickCallback: (String memberToken) =>
-                        _onProfileClicked(context, memberToken),
-                      textLongPressCallback: (String text) =>
-                        _onTextClicked(context, text)
-                    )
-                  ),
-                  _buildEditText(context, 
-                    controller: _messageInputFieldCtrl,
-                    valueChanged: (String value) => setState(() => _inputedMessage = value),
-                    imageSelected: () => _onImageSentClicked(context),
-                    sendClicked: () => _onMessageSend(context)
-                  )
-                ]
-              ),
-              Positioned(
-                child: _buildProgressBar(context)
-              )
-            ],
+    return CupertinoPageScaffold(
+      backgroundColor: styles().mainBackground,
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: styles().navigationBarBackground,
+        previousPageTitle: locales().chats.title,
+        actionsForegroundColor: styles().link,
+        middle: Text(room.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: styles().primaryFontColor
           )
+        ), 
+        trailing: CupertinoButton(
+          padding: EdgeInsets.all(0),
+          child: Text(locales().msgscene.leave,
+            style: TextStyle(
+              color: styles().link
+            )
+          ),
+          onPressed: () => _onRoomLeaveClicked(context)
+        ),
+        transitionBetweenRoutes: true
+      ),
+      child: SafeArea(
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Column(
+              children: [
+                Expanded(
+                  child: _buildListView(context,
+                    room: room,
+                    controller: _scrollController,
+                    imageClickCallback: (String messageId) =>
+                      _onImageClicked(context, messageId),
+                    profileClickCallback: (String memberToken) =>
+                      _onProfileClicked(context, memberToken),
+                    textLongPressCallback: (String text) =>
+                      _onTextClicked(context, text)
+                  )
+                ),
+                _buildEditText(context, 
+                  controller: _messageInputFieldCtrl,
+                  valueChanged: (String value) => setState(() => _inputedMessage = value),
+                  imageSelected: () => _onImageSentClicked(context),
+                  sendClicked: () => _onMessageSend(context)
+                )
+              ]
+            ),
+            Positioned(
+              child: _buildProgressBar(context)
+            )
+          ],
         )
       )
     );
@@ -316,21 +317,23 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 }
 
 Widget _buildListView(BuildContext context, {
+  @required MyRoom room,
   @required ScrollController controller,
   @required ImageClickCallback imageClickCallback,
   @required ProfileClickCallback profileClickCallback,
   @required TextClickCallback textLongPressCallback
 }) {
   final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
+
   return Scrollbar(
     child: ListView.builder(
       scrollDirection: Axis.vertical,
       reverse: true,
       physics: AlwaysScrollableScrollPhysics(),
       controller: controller,
-      itemCount: model.currentRoom.messages.messages.length,
+      itemCount: model.roomMessages(roomToken: room.roomToken).length,
       itemBuilder: (BuildContext context, int idx) {
-        Message msg = model.currentRoom.messages.messages[idx];
+        Message msg = model.roomMessages(roomToken: room.roomToken)[idx];
         return MessageRow(
           message: msg,
           state: model,

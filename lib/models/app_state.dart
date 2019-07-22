@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/entities/member.dart';
@@ -51,6 +50,14 @@ class AppState extends Model {
   List<Message> get messages {
     if (_currentRoom == null) return [];
     return _currentRoom.messages.messages;
+  }
+
+  List<Message> roomMessages({
+    @required String roomToken
+  }) {
+    MyRoom room = _queryMyRoom(roomToken);
+    if (room == null) return List();
+    return room.messages.messages;
   }
 
   Future<void> loadStyleType() async {
@@ -242,11 +249,6 @@ class AppState extends Model {
     return JoinRoomResp(success: true);
   }
 
-  void outFromRoom() {
-    _currentRoom.messages.clearOffset();
-    _currentRoom = null;
-  }
-
   Future<void> leaveFromRoom(String roomToken) async {
     _loading = true;
     notifyListeners();
@@ -268,9 +270,22 @@ class AppState extends Model {
       (await blockAccessor().fetchAllBlockEntries())
         .map((b) => b.memberToken).toList();
 
-    var resp = await roomApi().requestMyRooms(memberToken: _member.token);
+    List<MyRoom> resp = await roomApi().requestMyRooms(
+      memberToken: _member.token
+    );
+  
+    resp.forEach((myroom) {
+      List<MyRoom> foundInLocal = _myRooms.where((r) => r.roomToken == myroom.roomToken).toList();
+      if (foundInLocal.length == 0) {
+        _myRooms.add(myroom);
+      } else {
+        foundInLocal[0].title = myroom.title;
+        foundInLocal[0].owner = myroom.owner;
+        foundInLocal[0].numAttendee = myroom.numAttendee;
+        foundInLocal[0].maxAttendee = myroom.maxAttendee;
+      }
+    });
 
-    _myRooms = resp;
     _loading = false;
     notifyListeners();
   }
@@ -301,11 +316,25 @@ class AppState extends Model {
     }
   }
 
-  Future<void> selectRoom({
-    @required MyRoom room
-  }) async {
-    _currentRoom = room;
-    _currentRoom.messages.updateBannedTokens(_bannedTokens);
+  void resumeMyRoom({
+    @required String roomToken
+  }) {
+    MyRoom room = _queryMyRoom(roomToken);
+    if (room == null) return;
+
+    room.shown = true;
+    room.messages.clearNotViewed();
+    notifyListeners();
+  }
+
+  void pauseMyRoom({
+    @required String roomToken
+  }) {
+    MyRoom room = _queryMyRoom(roomToken);
+    if (room == null) return;
+
+    room.shown = false;
+    notifyListeners();
   }
 
   Future<void> updateBanList() async {
@@ -313,26 +342,28 @@ class AppState extends Model {
       (await blockAccessor().fetchAllBlockEntries())
         .map((b) => b.memberToken).toList();
 
-    if (_currentRoom != null) {
-      _currentRoom.messages.updateBannedTokens(_bannedTokens);
-    }
+    _myRooms.forEach((r) {
+      r.messages.updateBannedTokens(_bannedTokens);
+    });
     notifyListeners();
   }
 
   Future<void> fetchMoreMessages({
     @required String roomToken
   }) async {
-    if (_currentRoom == null) return;
+    MyRoom currentRoom = _queryMyRoom(roomToken);
+
+    if (currentRoom == null) return;
 
     _loading = true;
     notifyListeners();
 
     var resp = await messageApi().requestMessages(
       roomToken: roomToken,
-      offset: _currentRoom.messages.offset,
+      offset: currentRoom.messages.offset,
       size: 20
     );
-    _currentRoom.messages.appendMesasges(resp.messages);
+    currentRoom.messages.appendMesasges(resp.messages);
 
     _loading = false;
     notifyListeners();
@@ -341,7 +372,6 @@ class AppState extends Model {
   Future<void> fetchMessagesWhenResume({
     @required String roomToken
   }) async {
-    if (_currentRoom == null) return;
     _loading = true;
     notifyListeners();
 
@@ -351,11 +381,13 @@ class AppState extends Model {
       size: 20
     );
 
-    if (_currentRoom != null) {
-      _currentRoom.messages.clearOffset();
-      _currentRoom.messages.clearMessages();
-      _currentRoom.messages.appendMesasges(resp.messages);
-      _currentRoom.messages.dumpQueuedMessagesToMessage();
+    MyRoom currentRoom = _queryMyRoom(roomToken);
+
+    if (currentRoom != null) {
+      currentRoom.messages.clearOffset();
+      currentRoom.messages.clearMessages();
+      currentRoom.messages.appendMesasges(resp.messages);
+      currentRoom.messages.dumpQueuedMessagesToMessage();
     }
 
     _loading = false;
@@ -370,9 +402,12 @@ class AppState extends Model {
     if (rooms.length == 0) return;
 
     MyRoom myRoom = rooms.toList()[0];
-    if (_currentRoom != null && myRoom.roomToken == _currentRoom.roomToken) {
-      _currentRoom.messages.appendSingleMessage(msg);
-      _currentRoom.lastMessage = msg;
+
+    if (myRoom == null) return;
+
+    if (myRoom.shown == true) {
+      myRoom.messages.appendSingleMessage(msg);
+      myRoom.lastMessage = msg;
     } else {
       myRoom.lastMessage = msg;
       myRoom.messages.increaseNotViewed();
@@ -388,9 +423,11 @@ class AppState extends Model {
     if (rooms.length == 0) return;
 
     MyRoom myRoom = rooms.toList()[0];
-    if (_currentRoom != null && myRoom.roomToken == _currentRoom.roomToken) {
-      _currentRoom.messages.appendSingleMessage(msg);
-      _currentRoom.lastMessage = msg;
+    if (myRoom == null) return;
+
+    if (myRoom.shown == true) {
+      myRoom.messages.appendSingleMessage(msg);
+      myRoom.lastMessage = msg;
 
       if (msg.messageType == MessageType.TEXT &&
             msg.from.token != _member.token &&
@@ -409,7 +446,7 @@ class AppState extends Model {
         if (translated.length > 0) {
           msg.translated = translated[0].translated;
           translationCacheAccessor().cacheTranslations(
-            roomToken: _currentRoom.roomToken,
+            roomToken: myRoom.roomToken,
             translated: [Translated(
               key: msg.messageId,
               translated: translated[0].translated
@@ -426,6 +463,7 @@ class AppState extends Model {
   }
 
   Future<void> publishMessage({
+    @required String roomToken,
     @required MessageType type,
     @required dynamic content,
     @required SentPlatform platform,
@@ -434,10 +472,12 @@ class AppState extends Model {
     _loading = true;
     notifyListeners();
 
+    MyRoom currentRoom = _queryMyRoom(roomToken);
+    if (currentRoom == null) return;
+
     try {
-      if (_currentRoom == null) return;
       var publishResult = await messageApi().requestPublishToRoom(
-        roomToken: _currentRoom.roomToken,
+        roomToken: currentRoom.roomToken,
         memberToken: _member.token,
         type: type,
         content: content,
@@ -445,25 +485,20 @@ class AppState extends Model {
       );
       String messageId = publishResult.messageId;
 
-      if (previousMessageId != null) {
-        _currentRoom.messages.changeMessageId(previousMessageId, messageId);
+      Message newMsg = Message();
+      var to = MessageTo();
+      to.type = MessageTarget.ROOM;
+      to.token = roomToken;
 
-      } else {
-        Message newMsg = Message();
-        var to = MessageTo();
-        to.type = MessageTarget.ROOM;
-        to.token = _currentRoom.roomToken;
+      newMsg.messageId = messageId;
+      newMsg.messageType = type;
+      newMsg.content = content;
+      newMsg.sentTime = DateTime.now();
+      newMsg.from = _member;
+      newMsg.to = to;
+      newMsg.changeToSending();
 
-        newMsg.messageId = messageId;
-        newMsg.messageType = type;
-        newMsg.content = content;
-        newMsg.sentTime = DateTime.now();
-        newMsg.from = _member;
-        newMsg.to = to;
-        newMsg.changeToSending();
-
-        _currentRoom.messages.appendSingleMessage(newMsg);
-      }
+      currentRoom.messages.appendSingleMessage(newMsg);
       notifyListeners();
     } catch (err) {
       throw err;
@@ -471,51 +506,6 @@ class AppState extends Model {
       _loading = false;
       notifyListeners();
     }
-  }
-
-  Future<ImageContent> uploadImage({
-    @required File image,
-    @required String tempMessageId
-  }) async {
-    Message msg = Message();
-    
-    MessageTo to = MessageTo();
-    to.type = MessageTarget.ROOM;
-    to.token = _currentRoom.roomToken;
-    msg.to = to;
-    msg.changeToSending();
-
-    msg.messageId = tempMessageId;
-    msg.messageType = MessageType.IMAGE;
-    msg.from = member;
-    msg.changeToLocalImage(image.path);
-    msg.sentTime = DateTime.now();
-
-    currentRoom.messages.appendQueuedMessage(msg);
-    if (currentRoom == null) return null;
-    notifyListeners();
-
-    var resp = await assetApi().uploadImage(image,
-      callback: (prog) {
-        msg.changeUploadProgress(prog);
-        notifyListeners();
-      }
-    );
-
-    msg.changeToRemoteImage(
-      imageUrl: resp.orig,
-      thumbUrl: resp.thumbnail
-    );
-
-    if (currentRoom == null) return null;
-    currentRoom.messages.dumpQueuedMessagesToMessage();
-
-    notifyListeners();
-    ImageContent content = ImageContent(
-      imageUrl: resp.orig,
-      thumbnailUrl: resp.thumbnail
-    );
-    return content;
   }
 
   Future<void> translatePublicRooms() async {
@@ -635,15 +625,23 @@ class AppState extends Model {
         await translationCacheAccessor().cacheRoomTitleTranslations(translated: cacheParams);
       }
     }    
-
     notifyListeners();
   }
 
-  Future<void> translateMessages() async {
-    if (_currentRoom == null) return;
+  MyRoom _queryMyRoom(String roomToken) {
+    List<MyRoom> found = _myRooms.where((r) => r.roomToken == roomToken).toList();
+    if (found.length == 0) return null;
+    return found[0];
+  }
+
+  Future<void> translateMessages({
+    @required String roomToken
+  }) async {
+    MyRoom currentRoom = _queryMyRoom(roomToken);
+    if (currentRoom == null) return;
 
     List<Message> translationTargets =
-      _currentRoom.messages.messages.where((m) {
+      currentRoom.messages.messages.where((m) {
         if (m.from == null) return false;
         if (m.from.language == _member.language) return false;
         if (m.messageType != MessageType.TEXT) return false;
@@ -652,7 +650,7 @@ class AppState extends Model {
 
     List<Translated> cachedTranslations =
       await translationCacheAccessor().getCachedTranslations(
-        roomToken: _currentRoom.roomToken,
+        roomToken: currentRoom.roomToken,
         keys: translationTargets.map((m) => m.messageId).toList()
       );
 
@@ -675,11 +673,11 @@ class AppState extends Model {
         toLocale: _member.language
       );
 
-      if (_currentRoom == null) return;
+      if (currentRoom == null) return;
 
       resp.forEach((t) {
         print("API_CALL_TRANSLATED_MESSAGE: ${t.translated}");
-        Message m = _currentRoom.messages.findMessage(t.key);
+        Message m = currentRoom.messages.findMessage(t.key);
         if (m != null) m.translated = t.translated;
       });
 
@@ -691,15 +689,15 @@ class AppState extends Model {
           )
         ).toList();
 
-      if (_currentRoom == null) return;
+      if (currentRoom == null) return;
 
       translationCacheAccessor().cacheTranslations(
-        roomToken: _currentRoom.roomToken,
+        roomToken: currentRoom.roomToken,
         translated: cacheElems);
     } 
 
     cachedTranslations.forEach((t) {
-      Message msg = _currentRoom.messages.findMessage(t.key);
+      Message msg = currentRoom.messages.findMessage(t.key);
       if (msg != null) msg.translated = t.translated;
     });
 

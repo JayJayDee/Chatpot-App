@@ -1,5 +1,4 @@
 import 'package:chatpot_app/locales/root_locale_converter.dart';
-import 'package:chatpot_app/styles.dart';
 
 class SettingSceneLocales {
   String language;
