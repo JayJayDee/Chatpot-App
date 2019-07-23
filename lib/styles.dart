@@ -53,7 +53,9 @@ AppStyle _lightTheme() {
     editTextHint: const Color(0xFF929292),
     
     popupPrimaryFontColor: const Color(0xFF505050),
-    popupSecondaryFontColor: const Color(0xFF929292));
+    popupSecondaryFontColor: const Color(0xFF929292),
+
+    innerDrawerBackground: const Color(0xfff4f4f4));
   return style;
 }
 
@@ -93,7 +95,8 @@ AppStyle _darkTheme() {
     editTextHint: const Color(0xff85b8cb),
     
     popupPrimaryFontColor: const Color(0xFF505050),
-    popupSecondaryFontColor: const Color(0xFF929292));
+    popupSecondaryFontColor: const Color(0xFF929292),
+    innerDrawerBackground: const Color(0xff473b42));
   return style;
 }
 
@@ -125,7 +128,8 @@ class AppStyle {
     @required this.editTextHint,
     @required this.editTextFont,
     @required this.popupPrimaryFontColor,
-    @required this.popupSecondaryFontColor});
+    @required this.popupSecondaryFontColor,
+    @required this.innerDrawerBackground});
 
   final AssetImage logoImageWithTypo;
   final Color appBackground;
@@ -163,4 +167,6 @@ class AppStyle {
 
   final Color popupPrimaryFontColor;
   final Color popupSecondaryFontColor;
+
+  final Color innerDrawerBackground;
 }
