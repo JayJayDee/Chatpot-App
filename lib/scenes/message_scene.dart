@@ -109,7 +109,6 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
   Future<void> _onSceneInitial(BuildContext context) async {
     final model = ScopedModel.of<AppState>(context);
-    print('ON_SCENE_INITIAL');
 
     model.resumeMyRoom(roomToken: room.roomToken);
     await model.fetchMessagesWhenResume(roomToken: room.roomToken);
@@ -117,7 +116,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onSceneResumed(BuildContext context) async {
-    print('ON_SCENE_RESUME');
+    _controller.notifyMemberChanged();
 
     final model = ScopedModel.of<AppState>(context);
     model.resumeMyRoom(roomToken: room.roomToken);
@@ -126,7 +125,6 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onScenePaused(BuildContext context) async {
-    print('ON_SCENE_PAUSE');
     _model.pauseMyRoom(roomToken: room.roomToken);
   }
 
