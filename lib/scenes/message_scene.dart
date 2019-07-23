@@ -129,6 +129,8 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onRoomLeaveClicked(BuildContext context) async {
+    _key.currentState.close();
+
     final model = ScopedModel.of<AppState>(context);
     bool isLeave = await _showLeaveDialog(context);
 
@@ -273,6 +275,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
       child: MessageInnerDrawer(
         room: room,
         memberSelectCallback: (String memberToken) {},
+        roomLeaveCallback: () => _onRoomLeaveClicked(context),
         controller: _controller
       ),
       scaffold: CupertinoPageScaffold(

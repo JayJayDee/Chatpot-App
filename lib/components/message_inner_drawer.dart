@@ -19,17 +19,20 @@ class MessageInnerDrawer extends StatefulWidget {
 
   final MyRoom room;
   final MemberSelectCallback memberSelectCallback;
+  final VoidCallback roomLeaveCallback;
   final MemberInnerDrawerController controller;
 
   MessageInnerDrawer({
     @required this.room,
     @required this.memberSelectCallback,
+    @required this.roomLeaveCallback,
     @required this.controller
   });
 
   @override
   State createState() => _MessageInnerDrawerState(
     room: room,
+    roomLeaveCallback: roomLeaveCallback,
     memberSelectCallback: memberSelectCallback,
     controller: controller
   );
@@ -55,6 +58,7 @@ class _MessageInnerDrawerState extends State<MessageInnerDrawer> {
 
   final MyRoom room;
   final MemberSelectCallback memberSelectCallback;
+  final VoidCallback roomLeaveCallback;
   final MemberInnerDrawerController controller;
 
   RoomDetail _roomDetail;
@@ -63,6 +67,7 @@ class _MessageInnerDrawerState extends State<MessageInnerDrawer> {
   _MessageInnerDrawerState({
     @required this.room,
     @required this.memberSelectCallback,
+    @required this.roomLeaveCallback,
     @required this.controller
   }) {
     controller.setChangeCallback(() => _loadRoomDetails());
@@ -76,9 +81,7 @@ class _MessageInnerDrawerState extends State<MessageInnerDrawer> {
   }
 
   void _loadRoomDetails() async {
-    print('* LOAD_ROOM_DETEAILS');
     setState(() => _loading = true);
-
     try {
       var roomDetail = await roomApi().requestRoomDetail(
         roomToken: room.roomToken
@@ -105,12 +108,23 @@ class _MessageInnerDrawerState extends State<MessageInnerDrawer> {
           child: SafeArea(
             child: ListView(
               children: [
-                _buildHeader('My profile'),
                 Container(
                   margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 15),
                   child: _buildProfileArea(context)
                 ),
-                _buildHeader('Members'),
+                Container(
+                  child: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    child: Text(locales().msgscene.leave,
+                      style: TextStyle(
+                        color: styles().link
+                      ),
+                    ),
+                    onPressed: () {
+                      roomLeaveCallback();
+                    }
+                  ),
+                )
               ]
             )          
           )
@@ -145,19 +159,30 @@ Widget _buildProfileArea(BuildContext context) {
   final state = ScopedModel.of<AppState>(context, rebuildOnChange: true);
 
   return Container(
-    child: Row(
+    child: Column(
       children: [
         Container(
-          margin: EdgeInsets.only(right: 10),
           child: _buildAvatarArea(state.member)
         ),
-        Expanded(
+        Container(
+          margin: EdgeInsets.only(top: 10),
           child: Text(locales().getNick(state.member.nick),
             style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
               color: styles().primaryFontColor
             )
           ),
-        )
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 5),
+          child: Text(state.member.regionName,
+            style: TextStyle(
+              fontSize: 15,
+              color: styles().secondaryFontColor
+            )
+          ),
+        ),
       ]
     )  
   );
@@ -165,18 +190,18 @@ Widget _buildProfileArea(BuildContext context) {
 
 Widget _buildAvatarArea(Member member) {
   return Container(
-    width: 60,
-    height: 60,
+    width: 100,
+    height: 100,
     child: Stack(
       alignment: Alignment.bottomRight,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(30.0),
+          borderRadius: BorderRadius.circular(50.0),
           child: CachedNetworkImage(
             imageUrl: member.avatar.thumb,
             placeholder: (context, url) => CupertinoActivityIndicator(),
-            width: 60,
-            height: 60
+            width: 100,
+            height: 100
           )
         ),
         Positioned(
