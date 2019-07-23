@@ -35,7 +35,7 @@ dependencies:
   dio: ^2.1.0
   photo_view: ^0.2.4
   flutter_swiper: ^1.1.6
-  flutter_inner_drawer: ^0.2.5
+  flutter_inner_drawer: ^0.3.0
   collection: ^1.14.11
   oktoast: ^2.1.9
   url_launcher: ^5.0.3
