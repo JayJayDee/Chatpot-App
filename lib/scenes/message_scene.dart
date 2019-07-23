@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:io' show Platform;
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,6 +21,7 @@ import 'package:chatpot_app/scenes/report_scene.dart';
 import 'package:chatpot_app/scenes/image_send_confirm_scene.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 import 'package:chatpot_app/components/member_detail_sheet.dart';
+import 'package:chatpot_app/components/message_inner_drawer.dart';
 import 'package:chatpot_app/storage/block_accessor.dart';
 
 typedef ImageClickCallback (String messageId);
@@ -45,13 +47,17 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
   _MessageSceneState({
     @required this.room
-  });
+  }) {
+    _key = GlobalKey<InnerDrawerState>();
+    _controller = MemberInnerDrawerController();
+  }
 
-  bool _inited = false;
   String _inputedMessage;
   TextEditingController _messageInputFieldCtrl = TextEditingController();
   ScrollController _scrollController = ScrollController();
   AppState _model;
+  GlobalKey<InnerDrawerState> _key;
+  MemberInnerDrawerController _controller;
 
   SentPlatform _getPlatform() {
     if (Platform.isAndroid) return SentPlatform.ANDROID;
@@ -103,7 +109,6 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
   Future<void> _onSceneInitial(BuildContext context) async {
     final model = ScopedModel.of<AppState>(context);
-    print('ON_SCENE_INITIAL');
 
     model.resumeMyRoom(roomToken: room.roomToken);
     await model.fetchMessagesWhenResume(roomToken: room.roomToken);
@@ -111,7 +116,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onSceneResumed(BuildContext context) async {
-    print('ON_SCENE_RESUME');
+    _controller.notifyMemberChanged();
 
     final model = ScopedModel.of<AppState>(context);
     model.resumeMyRoom(roomToken: room.roomToken);
@@ -120,7 +125,6 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onScenePaused(BuildContext context) async {
-    print('ON_SCENE_PAUSE');
     _model.pauseMyRoom(roomToken: room.roomToken);
   }
 
@@ -132,6 +136,10 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
       await model.leaveFromRoom(room.roomToken);
       Navigator.of(context).pop();
     }
+  }
+
+  Future<void> _onHamburgerClicked(BuildContext context) async {
+    _key.currentState.toggle();
   }
 
   Future<void> _onImageClicked(BuildContext context, String messageId) async {
@@ -235,7 +243,6 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
 
   @override
   void dispose() {
-    _inited = false;
     _onScenePaused(context);
     WidgetsBinding.instance.removeObserver(this);
     _scrollController.removeListener(_onScrollEventArrival);
@@ -262,11 +269,16 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
       swipe: true,
       offset: 0.05,
       animationType: InnerDrawerAnimation.linear,
-      child: Container(),
+      key: _key,
+      child: MessageInnerDrawer(
+        room: room,
+        memberSelectCallback: (String memberToken) {},
+        controller: _controller
+      ),
       scaffold: CupertinoPageScaffold(
         backgroundColor: styles().mainBackground,
         navigationBar: CupertinoNavigationBar(
-          automaticallyImplyLeading: false,
+          padding: EdgeInsetsDirectional.only(start: 10, end: 5),
           backgroundColor: styles().navigationBarBackground,
           previousPageTitle: locales().chats.title,
           actionsForegroundColor: styles().link,
@@ -279,12 +291,11 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
           ), 
           trailing: CupertinoButton(
             padding: EdgeInsets.all(0),
-            child: Text(locales().msgscene.leave,
-              style: TextStyle(
-                color: styles().link
-              )
+            child: Icon(MdiIcons.menu,
+              color: styles().primaryFontColor,
+              size: 32
             ),
-            onPressed: () => _onRoomLeaveClicked(context)
+            onPressed: () => _onHamburgerClicked(context)
           ),
           transitionBetweenRoutes: true
         ),

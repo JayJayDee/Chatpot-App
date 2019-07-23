@@ -24,7 +24,7 @@ AppStyle _lightTheme() {
     logoImageWithTypo: const AssetImage('assets/chatpot-logo-with-typo-medium.png'),
 
     appBackground: const Color(0xffd0d0d0),
-    mainBackground: const Color(0xffefe7e3),
+    mainBackground: const Color(0xfff0eff4),
     splashBackground: const Color(0xfff4f4f4),
     link: const Color(0xff007aff),
     cardActionTextStyle: const TextStyle(fontSize: 15.0),
@@ -45,15 +45,17 @@ AppStyle _lightTheme() {
     
     sheetBackground: const Color(0xffd5d9dc),
     messageBackgroundMine: const Color(0xff007aff),
-    messageBackgroundOther: const Color(0xffcbc1bd),
-    messageBackgroundNotification: const Color(0xffcbc1bd),
+    messageBackgroundOther: const Color(0xffdddddd),
+    messageBackgroundNotification: const Color(0xffdddddd),
     
     profileCardBackground: const Color(0xffffffff),
     editTextFont: const Color(0xFF505050),
     editTextHint: const Color(0xFF929292),
     
     popupPrimaryFontColor: const Color(0xFF505050),
-    popupSecondaryFontColor: const Color(0xFF929292));
+    popupSecondaryFontColor: const Color(0xFF929292),
+
+    innerDrawerBackground: const Color(0xffdddddd));
   return style;
 }
 
@@ -93,7 +95,8 @@ AppStyle _darkTheme() {
     editTextHint: const Color(0xff85b8cb),
     
     popupPrimaryFontColor: const Color(0xFF505050),
-    popupSecondaryFontColor: const Color(0xFF929292));
+    popupSecondaryFontColor: const Color(0xFF929292),
+    innerDrawerBackground: const Color(0xff473b42));
   return style;
 }
 
@@ -125,7 +128,8 @@ class AppStyle {
     @required this.editTextHint,
     @required this.editTextFont,
     @required this.popupPrimaryFontColor,
-    @required this.popupSecondaryFontColor});
+    @required this.popupSecondaryFontColor,
+    @required this.innerDrawerBackground});
 
   final AssetImage logoImageWithTypo;
   final Color appBackground;
@@ -163,4 +167,6 @@ class AppStyle {
 
   final Color popupPrimaryFontColor;
   final Color popupSecondaryFontColor;
+
+  final Color innerDrawerBackground;
 }
