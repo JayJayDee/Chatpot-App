@@ -141,7 +141,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onHamburgerClicked(BuildContext context) async {
-    _key.currentState.toggle();
+    _key.currentState.open();
   }
 
   Future<void> _onImageClicked(BuildContext context, String messageId) async {
@@ -283,7 +283,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
       scaffold: CupertinoPageScaffold(
         backgroundColor: styles().mainBackground,
         navigationBar: CupertinoNavigationBar(
-          padding: EdgeInsetsDirectional.only(start: 10, end: 5),
+          padding: EdgeInsetsDirectional.only(start: 5, end: 5),
           backgroundColor: styles().navigationBarBackground,
           previousPageTitle: locales().chats.title,
           actionsForegroundColor: styles().link,
@@ -297,7 +297,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
           trailing: CupertinoButton(
             padding: EdgeInsets.all(0),
             child: Icon(MdiIcons.menu,
-              color: styles().primaryFontColor,
+              color: styles().link,
               size: 32
             ),
             onPressed: () => _onHamburgerClicked(context)

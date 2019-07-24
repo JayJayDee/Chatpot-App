@@ -102,7 +102,7 @@ class _MessageInnerDrawerState extends State<MessageInnerDrawer> {
   Widget build(BuildContext context) {
     List<Widget> widgets = [
       Container(
-        margin: EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20),
+        margin: EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 25),
         child: _buildProfileArea(context)
       ),
       _buildLine(),
@@ -125,12 +125,12 @@ class _MessageInnerDrawerState extends State<MessageInnerDrawer> {
       _buildLine(),
       Container(
         alignment: Alignment.centerLeft,
-        margin: EdgeInsets.only(bottom: 5, top: 15),
+        margin: EdgeInsets.only(bottom: 5, top: 25),
         padding: EdgeInsets.only(left: 15, right: 15),
         child: Text(locales().msgscene.members(_roomDetail),
           style: TextStyle(
             color: styles().primaryFontColor,
-            fontSize: 17,
+            fontSize: 15,
             fontWeight: FontWeight.bold
           )
         )
@@ -183,7 +183,7 @@ List<Widget> _buildMembersRow({
         child: Row(
           children: [
             Container(
-              margin: EdgeInsets.only(right: 5),
+              margin: EdgeInsets.only(right: 7),
               child: _buildAvatarArea(m, 50)
             ),
             Expanded(
@@ -258,8 +258,8 @@ Widget _buildAvatarArea(Member member, double size) {
         ),
         Positioned(
           child: Container(
-            width: size / 3,
-            height: (size / 3) / 2,
+            width: size / 2.7,
+            height: (size / 2.7) / 2,
             decoration: BoxDecoration(
               border: Border.all(color: styles().primaryFontColor),
               image: DecorationImage(
