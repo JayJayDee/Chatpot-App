@@ -100,33 +100,55 @@ class _MessageInnerDrawerState extends State<MessageInnerDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> widgets = [
+      Container(
+        margin: EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20),
+        child: _buildProfileArea(context)
+      ),
+      _buildLine(),
+      Container(
+        alignment: Alignment.centerLeft,
+        margin: EdgeInsets.only(bottom: 5, top: 5),
+        padding: EdgeInsets.only(left: 15, right: 15),
+        child: CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: Text(locales().msgscene.leave,
+            style: TextStyle(
+              color: styles().link
+            ),
+          ),
+          onPressed: () {
+            roomLeaveCallback();
+          }
+        ),
+      ),
+      _buildLine(),
+      Container(
+        alignment: Alignment.centerLeft,
+        margin: EdgeInsets.only(bottom: 5, top: 15),
+        padding: EdgeInsets.only(left: 15, right: 15),
+        child: Text(locales().msgscene.members(_roomDetail),
+          style: TextStyle(
+            color: styles().primaryFontColor,
+            fontSize: 17,
+            fontWeight: FontWeight.bold
+          )
+        )
+      )
+    ];
+
+    widgets.addAll(_buildMembersRow(
+      memberSelectCallback: memberSelectCallback,
+      roomDetail: _roomDetail
+    ));
+
     return Stack(
       alignment: Alignment.center,
       children: [
         Container(
           color: styles().innerDrawerBackground,
           child: SafeArea(
-            child: ListView(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 15),
-                  child: _buildProfileArea(context)
-                ),
-                Container(
-                  child: CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    child: Text(locales().msgscene.leave,
-                      style: TextStyle(
-                        color: styles().link
-                      ),
-                    ),
-                    onPressed: () {
-                      roomLeaveCallback();
-                    }
-                  ),
-                )
-              ]
-            )          
+            child: ListView(children: widgets)          
           )
         ),
         Positioned(
@@ -137,17 +159,47 @@ class _MessageInnerDrawerState extends State<MessageInnerDrawer> {
   }
 }
 
-Widget _buildHeader(String text) {
-  return Container(
-    padding: EdgeInsets.only(left: 10, top: 5, bottom: 5, right: 10),
-    color: styles().listRowHeaderBackground,
-    child: Text(text,
-      style: TextStyle(
-        color: styles().primaryFontColor,
-        fontSize: 15
+Widget _buildLine() =>
+  Container(
+    margin: EdgeInsets.only(left: 10, right: 10),
+    decoration: BoxDecoration(
+      border: Border(
+        bottom: BorderSide(width: 0.5, color: styles().secondaryFontColor)
       )
     )
   );
+
+List<Widget> _buildMembersRow({
+  @required MemberSelectCallback memberSelectCallback,
+  @required RoomDetail roomDetail
+}) {
+  if (roomDetail == null) return List();
+  return roomDetail.members.map((m) => 
+    Container(
+      padding: EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
+      alignment: Alignment.centerLeft,
+      child: CupertinoButton(
+        padding: EdgeInsets.zero,
+        child: Row(
+          children: [
+            Container(
+              margin: EdgeInsets.only(right: 5),
+              child: _buildAvatarArea(m, 50)
+            ),
+            Expanded(
+              child: Text(locales().getNick(m.nick),
+                style: TextStyle(
+                  color: styles().primaryFontColor,
+                  fontSize: 15
+                ),
+              )
+            )
+          ]
+        ),
+        onPressed: () => memberSelectCallback(m.token)
+      )
+    )
+  ).toList();
 }
 
 Widget _buildProgress({
@@ -162,7 +214,7 @@ Widget _buildProfileArea(BuildContext context) {
     child: Column(
       children: [
         Container(
-          child: _buildAvatarArea(state.member)
+          child: _buildAvatarArea(state.member, 100)
         ),
         Container(
           margin: EdgeInsets.only(top: 10),
@@ -188,26 +240,26 @@ Widget _buildProfileArea(BuildContext context) {
   );
 }
 
-Widget _buildAvatarArea(Member member) {
+Widget _buildAvatarArea(Member member, double size) {
   return Container(
-    width: 100,
-    height: 100,
+    width: size,
+    height: size,
     child: Stack(
       alignment: Alignment.bottomRight,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(50.0),
+          borderRadius: BorderRadius.circular(size / 2),
           child: CachedNetworkImage(
             imageUrl: member.avatar.thumb,
             placeholder: (context, url) => CupertinoActivityIndicator(),
-            width: 100,
-            height: 100
+            width: size,
+            height: size
           )
         ),
         Positioned(
           child: Container(
-            width: 30,
-            height: 15,
+            width: size / 3,
+            height: (size / 3) / 2,
             decoration: BoxDecoration(
               border: Border.all(color: styles().primaryFontColor),
               image: DecorationImage(

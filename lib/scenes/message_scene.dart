@@ -182,6 +182,8 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
   }
 
   Future<void> _onMemberReportSelected(BuildContext context, String targetMember) async {
+    _key.currentState.close();
+
     await Navigator.of(context).push(CupertinoPageRoute<void>(
       builder: (BuildContext context) => 
         ReportScene(
@@ -274,7 +276,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
       key: _key,
       child: MessageInnerDrawer(
         room: room,
-        memberSelectCallback: (String memberToken) {},
+        memberSelectCallback: (String memberToken) => _onProfileClicked(context, memberToken),
         roomLeaveCallback: () => _onRoomLeaveClicked(context),
         controller: _controller
       ),

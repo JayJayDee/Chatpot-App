@@ -1,4 +1,5 @@
 import 'package:chatpot_app/locales/root_locale_converter.dart';
+import 'package:chatpot_app/entities/room.dart';
 
 class MessageSceneLocales {
   String language;
@@ -120,5 +121,15 @@ copied to the clipboard.''';
     if (language == 'ko') return '잘못된 URL입니다.';
     else if (language == 'ja') return '無効なURL。';
     return 'Invalid URL.';
+  }
+
+  String members(RoomDetail detail) {
+    String expr = '...';
+    if (detail != null) {
+      expr = "${detail.members.length}";
+    }
+    if (language == 'ko') return "채팅 참여자들 $expr명";
+    else if (language == 'ja') return "チャットのメンバー: $expr";
+    return "$expr Member(s)";
   }
 }
