@@ -76,6 +76,7 @@ class HomeScene extends StatelessWidget implements EventReceivable {
     return CupertinoPageScaffold(
       backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
+        padding: EdgeInsetsDirectional.only(start: 5, end: 5),
         backgroundColor: styles().navigationBarBackground,
         middle: Text(locales().home.title,
           style: TextStyle(
