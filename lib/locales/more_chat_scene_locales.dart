@@ -40,9 +40,9 @@ class MoreChatSceneLocales {
   }
 
   String get loadMoreButtonLabel {
-    if (language == 'ko') return '더 보기 ..';
-    else if (language == 'ja') return 'もっと読み込む..';
-    return 'Load more ..';
+    if (language == 'ko') return '더 보기';
+    else if (language == 'ja') return 'もっと読み込む';
+    return 'Load more';
   }
 
   String get roomJoined {
