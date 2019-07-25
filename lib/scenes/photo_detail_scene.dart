@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:meta/meta.dart';
@@ -70,15 +71,9 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
         actionsForegroundColor: styles().link,
         middle: Text(locales().photoDetail.title,
           style: TextStyle(
-            color: styles().primaryFontColor 
+            color: styles().primaryFontColor
           )
         ),
-        // trailing: CupertinoButton(
-        //   padding: EdgeInsets.all(0),
-        //   child: Text(locales().photoDetail.btnDownload),
-        //   onPressed: _loading == true ? null : 
-        //     () => _onImageDownloadClicked(context, _message.getImageContent().imageUrl)
-        // ),
         transitionBetweenRoutes: true
       ),
       child: SafeArea(
@@ -93,7 +88,22 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  _overlayIndicator(_message)
+                  Container(
+                    alignment: Alignment.bottomLeft,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: [0.0, 1.0],
+                        colors: [
+                          Colors.black.withOpacity(0.0),
+                          Colors.black.withOpacity(0.8)
+                        ]
+                      )
+                    ),
+                    height: 140,
+                    child: _overlayIndicator(_message)
+                  )
                 ]
               )
             )
@@ -135,11 +145,12 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
               )
             ]
           ),
-          Padding(padding: EdgeInsets.only(left: 10)),
+          Padding(padding: EdgeInsets.only(left: 15)),
           Text(locales().getNick(selected.from.nick),
             style: TextStyle(
               color: CupertinoColors.white,
-              fontSize: 16
+              fontSize: 17,
+              fontWeight: FontWeight.bold
             )
           )
         ]

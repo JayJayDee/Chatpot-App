@@ -119,7 +119,11 @@ class _ReportSceneState extends State<ReportScene> {
         backgroundColor: styles().navigationBarBackground,
         previousPageTitle: locales().reportScene.prevButtonLabel,
         actionsForegroundColor: styles().link,
-        middle: Text(locales().reportScene.title),
+        middle: Text(locales().reportScene.title,
+          style: TextStyle(
+            color: styles().primaryFontColor
+          )
+        ),
       ),
       child: SafeArea(
         child: Stack(
