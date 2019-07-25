@@ -55,7 +55,8 @@ AppStyle _lightTheme() {
     popupPrimaryFontColor: const Color(0xFF505050),
     popupSecondaryFontColor: const Color(0xFF929292),
 
-    innerDrawerBackground: const Color(0xffdddddd));
+    innerDrawerBackground: const Color(0xffdddddd),
+    editTextBackground: const Color(0xfff2f9f8));
   return style;
 }
 
@@ -70,7 +71,7 @@ AppStyle _darkTheme() {
     cardActionTextStyle: const TextStyle(fontSize: 15.0),
     primaryFontColor: const Color(0xffd1dddb),
     secondaryFontColor: const Color(0xff85b8cb),
-    thirdFontColor: const Color(0xFFCCCCCC),
+    thirdFontColor: const Color(0xff547d8c),
     inputFieldDevidier: const Color(0xFFCCCCCC),
     listViewRowBackground: const Color(0xff1d6a96),
     listViewRowBackgroundMoreDark: Color(0xff113d56),
@@ -96,7 +97,8 @@ AppStyle _darkTheme() {
     
     popupPrimaryFontColor: const Color(0xFF505050),
     popupSecondaryFontColor: const Color(0xFF929292),
-    innerDrawerBackground: const Color(0xff473b42));
+    innerDrawerBackground: const Color(0xff473b42),
+    editTextBackground: const Color(0xff283b42));
   return style;
 }
 
@@ -129,7 +131,8 @@ class AppStyle {
     @required this.editTextFont,
     @required this.popupPrimaryFontColor,
     @required this.popupSecondaryFontColor,
-    @required this.innerDrawerBackground});
+    @required this.innerDrawerBackground, 
+    @required this.editTextBackground });
 
   final AssetImage logoImageWithTypo;
   final Color appBackground;
@@ -169,4 +172,5 @@ class AppStyle {
   final Color popupSecondaryFontColor;
 
   final Color innerDrawerBackground;
+  final Color editTextBackground;
 }

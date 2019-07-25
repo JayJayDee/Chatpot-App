@@ -194,9 +194,16 @@ class _MoreChatsSceneState extends State<MoreChatsScene> {
 
       try {
         if (resp.success == true) {
-          await showSimpleAlert(context, 'You have successfully joined the chat room.', title: locales().successTitle);
+          Navigator.of(context).pop(r.roomToken);
+
         } else {
-          await showSimpleAlert(context, locales().error.messageFromErrorCode(resp.cause));
+          String errorCode = resp.cause;
+          if (errorCode == 'ROOM_ALREADY_JOINED') {
+            Navigator.of(context).pop(r.roomToken);
+            
+          } else {
+            await showSimpleAlert(context, locales().error.messageFromErrorCode(errorCode));
+          }
         }
       } finally {
         setState(() => _loading = false);

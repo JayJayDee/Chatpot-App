@@ -401,10 +401,11 @@ Widget _buildEditText(BuildContext context, {
             padding: EdgeInsets.all(8),
             style: TextStyle(
               fontSize: 17,
-              color: styles().primaryFontColor
+              color: styles().editTextFont
             ),
             onChanged: valueChanged,
             decoration: BoxDecoration(
+              color: styles().editTextBackground,
               border: Border.all(
                 color: styles().thirdFontColor,
                 width: 1.0
