@@ -15,6 +15,7 @@ import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/components/room_detail_sheet.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
+import 'package:chatpot_app/scenes/message_scene.dart';
 
 @immutable
 class HomeScene extends StatelessWidget implements EventReceivable {
@@ -27,12 +28,26 @@ class HomeScene extends StatelessWidget implements EventReceivable {
     this.actor
   });
 
+  void _showMessageScene(BuildContext context, String roomToken) async {
+    final model = ScopedModel.of<AppState>(context);
+    List<MyRoom> rooms = model.myRooms.where((r) => r.roomToken == roomToken).toList();
+
+    if (rooms.length > 0) {
+      await Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
+        builder: (BuildContext context) => MessageScene(
+          room: rooms[0]
+        )
+      ));
+    }
+  }
+
   void _onNewChatClicked(BuildContext context) async {
     String roomToken = await Navigator.of(parentContext).push(CupertinoPageRoute<String>(
       builder: (BuildContext context) => NewChatScene()
     ));
     if (roomToken == null) return;
-    Future.delayed(Duration.zero, () => this.actor.changeTab(1));
+
+    _showMessageScene(context, roomToken);
   }
 
   void _onChatRowSelected(BuildContext context, Room room) async {
@@ -40,20 +55,28 @@ class HomeScene extends StatelessWidget implements EventReceivable {
     bool isJoin = await showRoomDetailSheet(context, room);
     if (isJoin == true) {
       var joinResp = await model.joinToRoom(room.roomToken);
+
       if (joinResp.success == true) {
-        Future.delayed(Duration.zero, () => this.actor.changeTab(1));
+        await model.fetchMyRooms();
+        _showMessageScene(context, room.roomToken);
+
       } else {
-        showSimpleAlert(context, locales().error.messageFromErrorCode(joinResp.cause));
+        String errorCode = joinResp.cause;
+        if (errorCode == 'ROOM_ALREADY_JOINED') {
+          _showMessageScene(context, room.roomToken);
+        } else {
+          await showSimpleAlert(context, locales().error.messageFromErrorCode(errorCode));
+        }
       }
     }
   }
 
-  void _onMoreRoomsClicked(BuildContext context, String type) {
+  void _onMoreRoomsClicked(BuildContext context, String type) async {
     RoomQueryOrder order;
     if (type == 'crowded') order = RoomQueryOrder.ATTENDEE_DESC;
     if (type == 'recent') order = RoomQueryOrder.REGDATE_DESC;
 
-    Navigator.of(parentContext).push(
+    String joinedRoomToken = await Navigator.of(parentContext).push<String>(
       CupertinoPageRoute<String>(
         title: 'More chats',
         builder: (BuildContext context) =>
@@ -64,6 +87,12 @@ class HomeScene extends StatelessWidget implements EventReceivable {
           )
       )
     );
+
+    if (joinedRoomToken != null) {
+      final model = ScopedModel.of<AppState>(context);
+      await model.fetchMyRooms();
+      _showMessageScene(context, joinedRoomToken);
+    }
   }
 
   @override
