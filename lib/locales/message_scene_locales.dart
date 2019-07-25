@@ -128,7 +128,7 @@ copied to the clipboard.''';
     if (detail != null) {
       expr = "${detail.members.length}";
     }
-    if (language == 'ko') return "채팅 참여자들 $expr명";
+    if (language == 'ko') return "$expr명 채팅중";
     else if (language == 'ja') return "チャットのメンバー: $expr";
     return "$expr Member(s)";
   }
