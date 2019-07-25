@@ -80,7 +80,7 @@ class NewChatScene extends StatelessWidget {
                 _buildRoomTitleField((String value) => _inputedRoomTitle = value),
                 _buildMaxAttendeefield((String value) => _inputedMaxAttendee = value),
                 Container(
-                  margin: EdgeInsets.only(top: 30, left: 10, right: 10),
+                  margin: EdgeInsets.only(top: 20, left: 10, right: 10),
                   child: _buildNewChatButton(context, () => _onClickNewChat(context))
                 )
               ],
