@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:chatpot_app/entities/room.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -360,13 +361,31 @@ Widget _buildMoreRoomButton(BuildContext context, {
       child: CupertinoActivityIndicator()
     );
   }
-  return CupertinoButton(
-    child: Text(locales().morechat.loadMoreButtonLabel,
-      style: TextStyle(
-        color: styles().link
-      )
-    ),
-    onPressed: loading == true ? null : clickCallback
+  return Container(
+    margin: EdgeInsets.only(top: 10, bottom: 20),
+    child: CupertinoButton(
+      padding: EdgeInsets.zero,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 5),
+            child: Icon(MdiIcons.refresh,
+              color: styles().link,
+              size: 26
+            )
+          ),
+          Text(locales().morechat.loadMoreButtonLabel,
+            style: TextStyle(
+              fontSize: 16,
+              color: styles().link
+            )
+          )
+        ]
+      ),
+      onPressed: loading == true ? null : clickCallback
+    )
   );
 }
 
