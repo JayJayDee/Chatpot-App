@@ -71,7 +71,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     SelectedImage image = await Navigator.of(context).push(CupertinoPageRoute<SelectedImage>(
       builder: (BuildContext context) => 
         ImageSendConfirmScene(
-          roomTitle: room.title
+          roomTitle: _fetchTitle(room)
         )
     ));
 
@@ -287,7 +287,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
           backgroundColor: styles().navigationBarBackground,
           previousPageTitle: locales().chats.title,
           actionsForegroundColor: styles().link,
-          middle: Text(room.title,
+          middle: Text(_fetchTitle(room),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
@@ -434,6 +434,11 @@ Widget _buildEditText(BuildContext context, {
       ],
     ),
   );   
+}
+
+String _fetchTitle(MyRoom room) {
+  if (room.type == RoomType.PUBLIC) return room.title;
+  return locales().chats.rouletteTitle(room.rouletteOpponent.nick);
 }
 
 Widget _buildProgressBar(BuildContext context) {

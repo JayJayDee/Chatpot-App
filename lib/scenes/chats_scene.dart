@@ -69,10 +69,11 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
         trailing: CupertinoButton(
           padding: EdgeInsets.all(0),
           child: Icon(MdiIcons.plus,
+            size: 27,
             color: styles().link
           ),
           onPressed: () => _onNewChatClicked(context)
-        ),
+        )
       ),
       child: SafeArea(
         child: _buildMyRoomsView(context)
