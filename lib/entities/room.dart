@@ -82,6 +82,7 @@ class MyRoom {
   RoomType type;
   RoomMessages messages;
   bool shown;
+  Member rouletteOpponent;
 
   MyRoom() {
     messages = RoomMessages();
@@ -100,7 +101,17 @@ class MyRoom {
       room.lastMessage = Message.fromJson(map['last_message']);
     }
     room.type = _getRoomType(map['room_type']);
+
+    if (map['roulette_opponent'] != null) {
+      room.rouletteOpponent = Member.fromJson(map['roulette_opponent']);
+    }
     return room;
+  }
+
+  String get rouletteNumber {
+    String sub = this.roomToken.substring(0, 6);
+    int number = int.parse("0x$sub");
+    return "#$number";
   }
 
   @override

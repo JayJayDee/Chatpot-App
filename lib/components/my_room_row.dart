@@ -48,7 +48,7 @@ class MyRoomRow extends StatelessWidget {
                       width: 60,
                       height: 60,
                       child: CachedNetworkImage(
-                        imageUrl: myRoom.owner.avatar.thumb
+                        imageUrl: _getOwnerImage(myRoom)
                       )
                     )
                   ),
@@ -74,8 +74,9 @@ class MyRoomRow extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
+                    margin: EdgeInsets.only(bottom: 3),
                     padding: EdgeInsets.only(left: 7),
-                    child: Text(myRoom.title,
+                    child: Text(_fetchTitle(myRoom),
                       style: TextStyle(
                         fontSize: 15,
                         color: styles().primaryFontColor,
@@ -84,7 +85,9 @@ class MyRoomRow extends StatelessWidget {
                       overflow: TextOverflow.ellipsis
                     )
                   ),
-                  _buildTranslationRow(context, myRoom),
+                  myRoom.type == RoomType.PUBLIC ? 
+                    _buildTranslationRow(context, myRoom) :
+                    Container(),
                   Container(
                     padding: EdgeInsets.only(left: 10),
                     child: Row(
@@ -135,6 +138,16 @@ class MyRoomRow extends StatelessWidget {
       )
     );
   }
+}
+
+String _fetchTitle(MyRoom room) {
+  if (room.type == RoomType.PUBLIC) return room.title;
+  return locales().chats.rouletteTitle(room.rouletteOpponent.nick);
+}
+
+String _getOwnerImage(MyRoom room) {
+  if (room.type == RoomType.PUBLIC) return room.owner.avatar.thumb;
+  return room.rouletteOpponent.avatar.thumb;
 }
 
 Widget _getRoomBadge(MyRoom room) {
