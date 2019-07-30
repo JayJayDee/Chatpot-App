@@ -15,7 +15,9 @@ import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/components/room_detail_sheet.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
+import 'package:chatpot_app/components/chat_type_choose_dialog.dart';
 import 'package:chatpot_app/scenes/message_scene.dart';
+import 'package:chatpot_app/scenes/new_roulette_scene.dart';
 
 @immutable
 class HomeScene extends StatelessWidget implements EventReceivable {
@@ -42,12 +44,22 @@ class HomeScene extends StatelessWidget implements EventReceivable {
   }
 
   void _onNewChatClicked(BuildContext context) async {
-    String roomToken = await Navigator.of(parentContext).push(CupertinoPageRoute<String>(
-      builder: (BuildContext context) => NewChatScene()
-    ));
-    if (roomToken == null) return;
+    var type = await showChatTypeChooseDialog(context);
+    if (type == null) return;
 
-    _showMessageScene(context, roomToken);
+    if (type == SelectedChatType.PUBLIC) {
+      String roomToken = await Navigator.of(parentContext).push(CupertinoPageRoute<String>(
+        builder: (BuildContext context) => NewChatScene()
+      ));
+      if (roomToken == null) return;
+      _showMessageScene(context, roomToken);
+    }
+
+    else if (type == SelectedChatType.ROULETTE) {
+      await Navigator.of(parentContext).push(CupertinoPageRoute<String>(
+        builder: (BuildContext context) => NewRouletteScene()
+      ));
+    }
   }
 
   void _onChatRowSelected(BuildContext context, Room room) async {

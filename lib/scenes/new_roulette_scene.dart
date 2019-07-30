@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:chatpot_app/styles.dart';
+import 'package:chatpot_app/factory.dart';
 
 class NewRouletteScene extends StatefulWidget {
   @override
@@ -8,6 +10,23 @@ class NewRouletteScene extends StatefulWidget {
 class _NewRouletteSceneState extends State<NewRouletteScene> {
   @override
   Widget build(BuildContext context) {
-    return Center();
+    return CupertinoPageScaffold(
+      backgroundColor: styles().mainBackground,
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: styles().navigationBarBackground,
+        previousPageTitle: locales().roulettechat.previous,
+        actionsForegroundColor: styles().link,
+        middle: Text(locales().roulettechat.title,
+          style: TextStyle(
+            color: styles().primaryFontColor
+          )
+        ),
+        transitionBetweenRoutes: true
+      ),
+      child: SafeArea(
+        child: Stack(
+        )
+      )
+    );
   }
 }

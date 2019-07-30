@@ -44,4 +44,40 @@ class HomeSceneLocales {
     else if (language == 'ja') return '取消';
     return 'Cancel';
   }
+
+  String get newChatChooserTitle {
+    if (language == 'ko') return '새 채팅 종류 선택';
+    else if (language == 'ja') return 'チャットの種類を選択';
+    return 'Choose a chat type';
+  }
+
+  String get publicTitle {
+    if (language == 'ko') return '공개 채팅';
+    else if (language == 'ja') return '公開チャット';
+    return 'Public chat';
+  }
+
+  String get publicDesc {
+    if (language == 'ko') return '대화 주제를 가지고 여러 사람과 채팅합니다.';
+    else if (language == 'ja') return '会話をテーマにしている多くの人とチャットしましょう。';
+    return 'Chat with many people who have a conversation theme.';
+  }
+
+  String get ranchatTitle {
+    if (language == 'ko') return '랜덤 채팅';
+    else if (language == 'ja') return 'ランダムチャット';
+    return 'Chat roulette';
+  }
+
+  String get ranchatDesc {
+    if (language == 'ko') return '''랜덤한 사람과 1:1 채팅을 시작합니다.''';
+    else if (language == 'ja') return 'ランダムな人と1：1のチャットを始めます。';
+    return '''Start a 1: 1 chat with a random person.''';
+  }
+
+  String get cancel {
+    if (language == 'ko') return '취소';
+    else if (language == 'ja') return '取消';
+    return 'Cancel';
+  }
 }
