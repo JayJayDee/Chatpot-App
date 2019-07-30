@@ -26,6 +26,7 @@ import 'package:chatpot_app/locales/report_history_scene_locales.dart';
 import 'package:chatpot_app/locales/block_history_scene_locales.dart';
 import 'package:chatpot_app/locales/image_send_confirm_scene_locales.dart';
 import 'package:chatpot_app/locales/setting_theme_scene_locales.dart';
+import 'package:chatpot_app/locales/new_roulette_scene_locales.dart';
 
 class RootLocaleConverter {
   String _language;
@@ -54,6 +55,7 @@ class RootLocaleConverter {
   RoomDetailSceneLocales _roomDetailScene;
   SettingThemeSceneLocales _settingThemeScene;
   ProfileEditSceneLocales _profileEditScene;
+  NewRouletteSceneLocales _newRouletteSceneLocales;
 
   HomeSceneLocales get home {
     if (_home == null) {
@@ -109,6 +111,13 @@ class RootLocaleConverter {
       _newchat = NewChatSceneLocales(root: this, language: _language);
     }
     return _newchat;
+  }
+
+  NewRouletteSceneLocales get roulettechat {
+    if (_newRouletteSceneLocales == null) {
+      _newRouletteSceneLocales = NewRouletteSceneLocales(root: this, language: _language);
+    }
+    return _newRouletteSceneLocales;
   }
 
   LoginSceneLocales get login {

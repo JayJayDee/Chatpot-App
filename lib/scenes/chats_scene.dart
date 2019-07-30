@@ -12,6 +12,8 @@ import 'package:chatpot_app/components/my_room_row.dart';
 import 'package:chatpot_app/scenes/new_chat_scene.dart';
 import 'package:chatpot_app/scenes/message_scene.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/components/chat_type_choose_dialog.dart';
+import 'package:chatpot_app/scenes/new_roulette_scene.dart';
 
 @immutable
 class ChatsScene extends StatelessWidget implements EventReceivable {
@@ -25,23 +27,34 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
   });
 
   Future<void> _onNewChatClicked(BuildContext context) async {
-    final model = ScopedModel.of<AppState>(context);
-    String roomToken = await Navigator.of(parentContext).push(CupertinoPageRoute<String>(
-      builder: (BuildContext context) => NewChatScene()
-    ));
-    if (roomToken == null) return;
+    var type = await showChatTypeChooseDialog(context);
+    if (type == null) return;
 
-    // if room was created, move to new room
-    if (roomToken != null) {
-      List<MyRoom> rooms = model.myRooms.where((elem) => elem.roomToken == roomToken).toList();
-      if (rooms.length > 0) {
-        MyRoom room = rooms[0];
-        Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
-          builder: (BuildContext context) => MessageScene(
-            room: room
-          )
-        ));
+    if (type == SelectedChatType.PUBLIC) {
+      final model = ScopedModel.of<AppState>(context);
+      String roomToken = await Navigator.of(parentContext).push(CupertinoPageRoute<String>(
+        builder: (BuildContext context) => NewChatScene()
+      ));
+      if (roomToken == null) return;
+
+      // if room was created, move to new room
+      if (roomToken != null) {
+        List<MyRoom> rooms = model.myRooms.where((elem) => elem.roomToken == roomToken).toList();
+        if (rooms.length > 0) {
+          MyRoom room = rooms[0];
+          Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
+            builder: (BuildContext context) => MessageScene(
+              room: room
+            )
+          ));
+        }
       }
+    }
+
+    else if (type == SelectedChatType.ROULETTE) {
+      await Navigator.of(parentContext).push(CupertinoPageRoute<String>(
+        builder: (BuildContext context) => NewRouletteScene()
+      ));
     }
   }
 
