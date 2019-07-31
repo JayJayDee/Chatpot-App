@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
+import 'package:chatpot_app/apis/api_entities.dart';
 
 class NewRouletteScene extends StatefulWidget {
   @override
@@ -11,14 +14,30 @@ class NewRouletteScene extends StatefulWidget {
 class _NewRouletteSceneState extends State<NewRouletteScene> {
 
   bool _loading;
+  List<RouletteStatus> _statuses;
 
   _NewRouletteSceneState() {
     _loading = false;
+    _statuses = [];
   }
 
   @override
   void initState() {
     super.initState();
+    _requestStatuses();
+  }
+
+  void _requestStatuses() async {
+    final state = ScopedModel.of<AppState>(context);
+    setState(() => _loading = true);
+
+    try {
+      _statuses = await roomApi().requestRouletteStatuses(memberToken: state.member.token);
+    } catch (err) {
+      throw err;
+    } finally {
+      setState(() => _loading = false);
+    }
   }
 
   @override
@@ -84,3 +103,7 @@ Widget _buildHeader({
       )
     )
   );
+
+Widget _buildStatusesWidget({
+  @required bool loading
+}) => Container(); // TODO: to be implemented
