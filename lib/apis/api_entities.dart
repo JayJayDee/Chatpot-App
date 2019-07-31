@@ -298,3 +298,46 @@ class AvatarGachaResp {
     return resp;
   }
 }
+
+
+enum RegionType {
+  FOREIGNER, ALL
+}
+enum RouletteMatchStatus {
+  WAITING, MATCHED
+}
+
+class RouletteStatus {
+  String requestId;
+  RegionType regionType;
+  RouletteMatchStatus matchStatus;
+  String roomToken;
+  DateTime regDate;
+
+  RouletteStatus();
+
+  factory RouletteStatus.fromJson(Map<String, dynamic> map) {
+    var resp = RouletteStatus();
+    resp.requestId = map['request_id'];
+    
+    if (map['region_type'] == 'FOREIGNER') {
+      resp.regionType = RegionType.FOREIGNER;
+    } else {
+      resp.regionType = RegionType.ALL;
+    }
+
+    if (map['match_status'] == 'WAITING') {
+      resp.matchStatus = RouletteMatchStatus.WAITING;
+    } else {
+      resp.matchStatus = RouletteMatchStatus.MATCHED;
+    }
+
+    if (map['room_token'] != null) {
+      resp.roomToken = map['room_token'];
+    }
+
+    int timestamp = map['reg_date'];
+    resp.regDate = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    return resp;
+  }
+}

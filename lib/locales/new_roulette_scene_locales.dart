@@ -20,4 +20,10 @@ class NewRouletteSceneLocales {
     else if (language == 'ja') return '前';
     return 'Prev';
   }
+
+  String get description {
+    if (language == 'ko') return '새로운 랜덤채팅을 신청하거나, 기존 신청을 취소합니다.';
+    else if (language == 'ja') return '新しいチャットルーレットを申請するか、既存の申請をキャンセルします。';
+    return 'Applying for a new chat roulette or cancel your existing application.';
+  }
 }

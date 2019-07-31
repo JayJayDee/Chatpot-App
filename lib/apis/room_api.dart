@@ -111,4 +111,18 @@ class RoomApi {
     Map<String, dynamic> respMap = resp;
     return respMap['room_token'];
   }
+
+  Future<List<RouletteStatus>> requestRouletteStatuses({
+    @required String memberToken
+  }) async {
+    var resp = await _requester.requestWithAuth(
+      url: "/roulette/$memberToken/status",
+      method: HttpMethod.GET
+    );
+    List<dynamic> list = resp;
+    List<RouletteStatus> statuses =
+      list.toList().map((elem) =>
+        RouletteStatus.fromJson(elem)).toList();
+    return statuses;
+  }
 }
