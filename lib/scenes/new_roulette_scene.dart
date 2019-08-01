@@ -55,13 +55,18 @@ class _NewRouletteSceneState extends State<NewRouletteScene> {
         )
       ),
       _statuses.length > 0 ? _buildHeader(title: 'My roulette chats') :
-        Container()
+        Container(),
     ];
 
     widgets.addAll(_buildStatuses(
       loading: _loading,
       statuses: _statuses
     ));
+
+    widgets.addAll([
+      _buildHeader(title: 'New chat roulette'),
+      _buildNewChatArea(loading: _loading)
+    ]);
 
     return CupertinoPageScaffold(
       backgroundColor: styles().mainBackground,
@@ -119,6 +124,80 @@ Widget _buildHeader({
     )
   );
 
+Widget _buildNewChatArea({
+  @required bool loading
+}) =>
+  Container(
+    margin: EdgeInsets.all(10),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        CupertinoButton(
+          padding: EdgeInsets.all(0),
+          onPressed: () {},
+          child: Container(
+            padding: EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: styles().profileCardBackground,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  child: Icon(MdiIcons.flagVariant,
+                    size: 30,
+                    color: styles().primaryFontColor
+                  )
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 5),
+                  child: Text("With\nForeigner",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: styles().primaryFontColor,
+                      fontSize: 16
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        ),
+        CupertinoButton(
+          padding: EdgeInsets.all(0),
+          onPressed: () {},
+          child: Container(
+            padding: EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: styles().profileCardBackground,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  child: Icon(MdiIcons.flagVariant,
+                    size: 30,
+                    color: styles().primaryFontColor
+                  )
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 5),
+                  child: Text("I Don't",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: styles().primaryFontColor,
+                      fontSize: 16
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        )
+      ]
+    )
+  );
+
 List<Widget> _buildStatuses({
   @required bool loading,
   @required List<RouletteStatus> statuses
@@ -130,7 +209,7 @@ Widget _buildStatusWidget({
   @required RouletteStatus status
 }) =>
   Container(
-    padding: EdgeInsets.all(12),
+    padding: EdgeInsets.only(left: 12, right: 8, top: 12, bottom: 12),
     child: Row(
       children: [
         Container(
@@ -139,10 +218,12 @@ Widget _buildStatusWidget({
               color: styles().primaryFontColor,
               size: 28,
             ) :
-            CircularProgressIndicator()
+            CircularProgressIndicator(
+              strokeWidth: 2.0
+            )
         ),
         Container(
-          margin: EdgeInsets.only(left: 5),
+          margin: EdgeInsets.only(left: 10),
           child: Text(status.matchStatus == RouletteMatchStatus.MATCHED ? locales().roulettechat.indicatorMatched : locales().roulettechat.indicatorWaiting,
             style: TextStyle(
               color: styles().primaryFontColor,
@@ -150,13 +231,25 @@ Widget _buildStatusWidget({
             )
           )
         ),
-        Container(
-          margin: EdgeInsets.only(left: 15),
-          child: Text('15 minutes ago',
-            style: TextStyle(
-              color: styles().secondaryFontColor,
-              fontSize: 15
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.only(left: 15),
+            child: Text('15 minutes ago',
+              style: TextStyle(
+                color: styles().secondaryFontColor,
+                fontSize: 15
+              )
             )
+          )
+        ),
+        Container(
+          child: CupertinoButton(
+            padding: EdgeInsets.all(0),
+            child: Icon(MdiIcons.cancel,
+              size: 27,
+              color: styles().link
+            ),
+            onPressed: () {}
           )
         )
       ]

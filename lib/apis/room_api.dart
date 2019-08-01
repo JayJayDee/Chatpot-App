@@ -116,7 +116,7 @@ class RoomApi {
     @required String memberToken
   }) async {
     var resp = await _requester.requestWithAuth(
-      url: "/roulette/$memberToken/status",
+      url: "/roulette/$memberToken/requests",
       method: HttpMethod.GET
     );
     List<dynamic> list = resp;
