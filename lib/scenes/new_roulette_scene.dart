@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/models/app_state.dart';
@@ -42,6 +44,25 @@ class _NewRouletteSceneState extends State<NewRouletteScene> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> widgets = [
+      Container(
+        margin: EdgeInsets.all(10),
+        child: Text(locales().roulettechat.description,
+          style: TextStyle(
+            color: styles().primaryFontColor,
+            fontSize: 16
+          )
+        )
+      ),
+      _statuses.length > 0 ? _buildHeader(title: 'My roulette chats') :
+        Container()
+    ];
+
+    widgets.addAll(_buildStatuses(
+      loading: _loading,
+      statuses: _statuses
+    ));
+
     return CupertinoPageScaffold(
       backgroundColor: styles().mainBackground,
       navigationBar: CupertinoNavigationBar(
@@ -60,18 +81,7 @@ class _NewRouletteSceneState extends State<NewRouletteScene> {
           alignment: Alignment.center,
           children: [
             ListView(
-              children: [
-                Container(
-                  margin: EdgeInsets.all(10),
-                  child: Text(locales().roulettechat.description,
-                    style: TextStyle(
-                      color: styles().primaryFontColor,
-                      fontSize: 16
-                    )
-                  )
-                ),
-                _buildHeader(title: 'My roulette chats')
-              ]
+              children: widgets
             ),
             Positioned(
               child: _buildProgress(loading: _loading)
@@ -92,9 +102,14 @@ Widget _buildHeader({
   @required String title
 }) =>
   Container(
-    padding: EdgeInsets.all(7),
+    margin: EdgeInsets.only(top: 10),
+    padding: EdgeInsets.all(10),
     decoration: BoxDecoration(
-      color: styles().listRowHeaderBackground
+      color: styles().listRowHeaderBackground,
+      border: Border(
+        top: BorderSide(color: styles().listRowDivider, width: 0.3),
+        bottom:BorderSide(color: styles().listRowDivider, width: 0.3)
+      )
     ),
     child: Text(title,
       style: TextStyle(
@@ -104,6 +119,46 @@ Widget _buildHeader({
     )
   );
 
-Widget _buildStatusesWidget({
-  @required bool loading
-}) => Container(); // TODO: to be implemented
+List<Widget> _buildStatuses({
+  @required bool loading,
+  @required List<RouletteStatus> statuses
+}) =>
+  statuses.map((s) => _buildStatusWidget(loading: loading, status: s)).toList();
+
+Widget _buildStatusWidget({
+  @required bool loading,
+  @required RouletteStatus status
+}) =>
+  Container(
+    padding: EdgeInsets.all(12),
+    child: Row(
+      children: [
+        Container(
+          child: status.matchStatus == RouletteMatchStatus.MATCHED ?
+            Icon(MdiIcons.check,
+              color: styles().primaryFontColor,
+              size: 28,
+            ) :
+            CircularProgressIndicator()
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 5),
+          child: Text(status.matchStatus == RouletteMatchStatus.MATCHED ? locales().roulettechat.indicatorMatched : locales().roulettechat.indicatorWaiting,
+            style: TextStyle(
+              color: styles().primaryFontColor,
+              fontSize: 17
+            )
+          )
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 15),
+          child: Text('15 minutes ago',
+            style: TextStyle(
+              color: styles().secondaryFontColor,
+              fontSize: 15
+            )
+          )
+        )
+      ]
+    )
+  );

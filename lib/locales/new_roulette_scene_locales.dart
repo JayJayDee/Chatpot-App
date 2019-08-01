@@ -26,4 +26,16 @@ class NewRouletteSceneLocales {
     else if (language == 'ja') return '新しいチャットルーレットを申請するか、既存の申請をキャンセルします。';
     return 'Applying for a new chat roulette or cancel your existing application.';
   }
+
+  String get indicatorMatched {
+    if (language == 'ko') return '매칭 완료';
+    else if (language == 'ja') return '一致しました';
+    return 'Matched';
+  }
+
+  String get indicatorWaiting {
+    if (language == 'ko') return '매칭 대기중..';
+    else if (language == 'ja') return '待機中';
+    return 'Waiting..';
+  }
 }
