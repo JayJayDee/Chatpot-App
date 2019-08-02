@@ -139,6 +139,16 @@ class RoomApi {
       }
     );
   }
+
+  Future<void> requestCancelRoulette({
+    @required String memberToken,
+    @required String requestId
+  }) async {
+    await _requester.requestWithAuth(
+      url: "/roulette/$memberToken/request/$requestId",
+      method: HttpMethod.DELETE
+    );
+  }
 }
 
 String _getRegionTypeExpr(RegionType type) =>
