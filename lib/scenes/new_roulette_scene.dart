@@ -385,9 +385,9 @@ Widget _buildStatusWidget({
             padding: EdgeInsets.all(0),
             child: 
               status.matchStatus == RouletteMatchStatus.WAITING ?
-                Icon(MdiIcons.cancel,
+                Icon(MdiIcons.closeCircle,
                   size: 27,
-                  color: styles().link
+                  color: styles().secondaryFontColor
                 ) :
               Text(locales().roulettechat.enterBtnLabel,
                 style: TextStyle(
