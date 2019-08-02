@@ -36,7 +36,7 @@ class NewRouletteSceneLocales {
   String get indicatorWaiting {
     if (language == 'ko') return '매칭 대기중..';
     else if (language == 'ja') return '待機中';
-    return 'Waiting..';
+    return 'Waiting for peer..';
   }
 
   String get newChatDescription {
@@ -85,5 +85,11 @@ class NewRouletteSceneLocales {
     if (language == 'ko') return '새 랜덤채팅';
     else if (language == 'ja') return '新しいランダムチャット';
     return 'New chat roulette';
+  }
+
+  String get enterBtnLabel {
+    if (language == 'ko') return '입장';
+    else if (language == 'ja') return '入場';
+    return 'Enter';
   }
 }

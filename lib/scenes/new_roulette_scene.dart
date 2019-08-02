@@ -9,6 +9,7 @@ import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
+import 'package:chatpot_app/scenes/message_scene.dart';
 
 class NewRouletteScene extends StatefulWidget {
   @override
@@ -68,11 +69,49 @@ class _NewRouletteSceneState extends State<NewRouletteScene> {
   }
 
   void _onRouletteCancel(RouletteStatus status) async {
-    // TODO: implementation
+    setState(() => _loading = true);
+    final state = ScopedModel.of<AppState>(context);
+
+    try {
+      await roomApi().requestCancelRoulette(
+        memberToken: state.member.token,
+        requestId: status.requestId
+      );
+    } catch (err) {
+      if (err is ApiFailureError) {
+        await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
+        return;
+      }
+    } finally {
+      setState(() => _loading = false);
+    }
+    _requestStatuses();
   }
 
   void _onGoToChatting(RouletteStatus status) async {
-    // TODO: implementation
+    setState(() => _loading = true);
+    final state = ScopedModel.of<AppState>(context);
+
+    try {
+      await state.fetchMyRooms();
+
+      var rooms = state.myRooms.where((r) =>
+          r.roomToken == status.roomToken).toList();
+
+      if (rooms.length > 0) {
+        await Navigator.of(context).push(CupertinoPageRoute<bool>(
+          builder: (BuildContext context) => MessageScene(
+            room: rooms[0]
+          )
+        ));
+      }
+    } finally {
+      setState(() {
+        if (mounted == true) {
+          _loading = false;
+        }
+      });
+    }
   }
 
   @override
@@ -278,7 +317,7 @@ Widget _buildStatusWidget({
   @required RouletteSelectCallback gotoCallback
 }) =>
   Container(
-    padding: EdgeInsets.only(left: 12, right: 8, top: 12, bottom: 12),
+    padding: EdgeInsets.only(left: 12, right: 12, top: 12, bottom: 12),
     child: Row(
       children: [
         Container(
@@ -291,34 +330,55 @@ Widget _buildStatusWidget({
               strokeWidth: 2.0
             )
         ),
-        Container(
-          margin: EdgeInsets.only(left: 10),
-          child: Text(status.matchStatus == RouletteMatchStatus.MATCHED ? locales().roulettechat.indicatorMatched : locales().roulettechat.indicatorWaiting,
-            style: TextStyle(
-              color: styles().primaryFontColor,
-              fontSize: 17
-            )
-          )
-        ),
         Expanded(
           child: Container(
             margin: EdgeInsets.only(left: 15),
-            child: Text('15 minutes ago',
-              style: TextStyle(
-                color: styles().secondaryFontColor,
-                fontSize: 15
-              )
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(status.matchStatus == RouletteMatchStatus.MATCHED ?
+                      locales().roulettechat.indicatorMatched :
+                      locales().roulettechat.indicatorWaiting,
+                  style: TextStyle(
+                    color: styles().primaryFontColor,
+                    fontSize: 17
+                  )
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 3),
+                  child: Text(locales().message.messageReceiveTime(status.regDate),
+                    style: TextStyle(
+                      color: styles().secondaryFontColor,
+                      fontSize: 15
+                    )
+                  )
+                )
+              ]
             )
           )
         ),
         Container(
           child: CupertinoButton(
             padding: EdgeInsets.all(0),
-            child: Icon(MdiIcons.cancel,
-              size: 27,
-              color: styles().link
-            ),
-            onPressed: () {}
+            child: 
+              status.matchStatus == RouletteMatchStatus.WAITING ?
+                Icon(MdiIcons.cancel,
+                  size: 27,
+                  color: styles().link
+                ) :
+              Text(locales().roulettechat.enterBtnLabel,
+                style: TextStyle(
+                  color: styles().link,
+                  fontSize: 17
+                )
+              ),
+            onPressed: loading == true ? null : () {
+              if (status.matchStatus == RouletteMatchStatus.WAITING) {
+                cancelCallback(status);
+              } else if (status.matchStatus == RouletteMatchStatus.MATCHED) {
+                gotoCallback(status);
+              }
+            }
           )
         )
       ]
