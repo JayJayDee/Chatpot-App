@@ -125,4 +125,21 @@ class RoomApi {
         RouletteStatus.fromJson(elem)).toList();
     return statuses;
   }
+
+  Future<void> requestNewRoulette({
+    @required String memberToken,
+    @required RegionType regionType
+  }) async {
+    await _requester.requestWithAuth(
+      url: "/roulette/$memberToken/request",
+      method: HttpMethod.POST,
+      body: {
+        'member_token': memberToken,
+        'region_type': _getRegionTypeExpr(regionType)
+      }
+    );
+  }
 }
+
+String _getRegionTypeExpr(RegionType type) =>
+  type == RegionType.ALL ? 'ALL' : 'FOREIGNER';

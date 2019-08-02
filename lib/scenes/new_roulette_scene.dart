@@ -1,12 +1,14 @@
+import 'package:chatpot_app/apis/api_errors.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:meta/meta.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
+import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
 class NewRouletteScene extends StatefulWidget {
   @override
@@ -47,14 +49,30 @@ class _NewRouletteSceneState extends State<NewRouletteScene> {
     if (result != true) return;
 
     setState(() => _loading = true);
+    final state = ScopedModel.of<AppState>(context);
+
+    try {
+      await roomApi().requestNewRoulette(
+        memberToken: state.member.token,
+        regionType: type == _RouletteType.FOREIGNER ? RegionType.FOREIGNER : RegionType.ALL
+      );
+    } catch (err) {
+      if (err is ApiFailureError) {
+        await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
+        return;
+      }
+    } finally {
+      setState(() => _loading = false);
+    }
+    _requestStatuses();
   }
 
   void _onRouletteCancel(RouletteStatus status) async {
-
+    // TODO: implementation
   }
 
   void _onGoToChatting(RouletteStatus status) async {
-    
+    // TODO: implementation
   }
 
   @override
@@ -75,7 +93,9 @@ class _NewRouletteSceneState extends State<NewRouletteScene> {
 
     widgets.addAll(_buildStatuses(
       loading: _loading,
-      statuses: _statuses
+      statuses: _statuses,
+      cancelCallback: _onRouletteCancel,
+      gotoCallback: _onGoToChatting
     ));
 
     widgets.addAll([
@@ -237,15 +257,25 @@ Widget _buildNewChatArea({
     )
   );
 
+typedef RouletteSelectCallback (RouletteStatus roulette);
+
 List<Widget> _buildStatuses({
   @required bool loading,
-  @required List<RouletteStatus> statuses
+  @required List<RouletteStatus> statuses,
+  @required RouletteSelectCallback cancelCallback,
+  @required RouletteSelectCallback gotoCallback
 }) =>
-  statuses.map((s) => _buildStatusWidget(loading: loading, status: s)).toList();
+  statuses.map((s) => _buildStatusWidget(
+    loading: loading,
+    status: s,
+    cancelCallback: cancelCallback,
+    gotoCallback: gotoCallback)).toList();
 
 Widget _buildStatusWidget({
   @required bool loading,
-  @required RouletteStatus status
+  @required RouletteStatus status,
+  @required RouletteSelectCallback cancelCallback,
+  @required RouletteSelectCallback gotoCallback
 }) =>
   Container(
     padding: EdgeInsets.only(left: 12, right: 8, top: 12, bottom: 12),
