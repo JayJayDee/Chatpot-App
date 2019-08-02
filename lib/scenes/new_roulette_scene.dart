@@ -239,8 +239,8 @@ Widget _buildNewChatArea({
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  child: Icon(Icons.flight,
-                    size: 30,
+                  child: Icon(MdiIcons.earth,
+                    size: 35,
                     color: styles().primaryFontColor
                   )
                 ),
@@ -274,7 +274,7 @@ Widget _buildNewChatArea({
               children: [
                 Container(
                   child: Icon(Icons.accessibility_new,
-                    size: 30,
+                    size: 35,
                     color: styles().primaryFontColor
                   )
                 ),
@@ -321,20 +321,43 @@ Widget _buildStatusWidget({
     child: Row(
       children: [
         Container(
-          child: status.matchStatus == RouletteMatchStatus.MATCHED ?
-            Icon(MdiIcons.check,
-              color: styles().primaryFontColor,
-              size: 28,
-            ) :
-            CircularProgressIndicator(
-              strokeWidth: 2.0
-            )
+          width: 50,
+          height: 50,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              status.regionType == RegionType.ALL ?
+                Icon(Icons.accessibility_new,
+                  size: 30,
+                  color: styles().secondaryFontColor
+                ) :
+                Icon(MdiIcons.earth,
+                  size: 30,
+                  color: styles().secondaryFontColor
+                ),
+
+              status.matchStatus == RouletteMatchStatus.MATCHED ?
+                Icon(MdiIcons.check,
+                  color: styles().primaryFontColor,
+                  size: 28,
+                ) :
+                SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.0
+                  )
+                )
+            ]
+          )
         ),
         Expanded(
           child: Container(
+            alignment: Alignment.centerLeft,
             margin: EdgeInsets.only(left: 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(status.matchStatus == RouletteMatchStatus.MATCHED ?
                       locales().roulettechat.indicatorMatched :

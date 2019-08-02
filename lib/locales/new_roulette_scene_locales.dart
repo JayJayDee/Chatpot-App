@@ -46,14 +46,14 @@ class NewRouletteSceneLocales {
   }
 
   String get btnLabelForeigner {
-    if (language == 'ko') return '외국인과';
-    else if (language == 'ja') return '待機中';
+    if (language == 'ko') return "외국인과\n매칭";
+    else if (language == 'ja') return '外国人とは';
     return "With\nForeigner";
   }
 
   String get btnLabelAnybody {
-    if (language == 'ko') return '아무나';
-    else if (language == 'ja') return '待機中';
+    if (language == 'ko') return "아무나\n매칭";
+    else if (language == 'ja') return '誰とでも';
     return "With\nAnybody";
   }
 
