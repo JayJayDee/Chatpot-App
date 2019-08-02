@@ -68,11 +68,11 @@ class _NewRouletteSceneState extends State<NewRouletteScene> {
   }
 
   void _onRouletteCancel(RouletteStatus status) async {
-
+    // TODO: implementation
   }
 
   void _onGoToChatting(RouletteStatus status) async {
-    
+    // TODO: implementation
   }
 
   @override
@@ -93,7 +93,9 @@ class _NewRouletteSceneState extends State<NewRouletteScene> {
 
     widgets.addAll(_buildStatuses(
       loading: _loading,
-      statuses: _statuses
+      statuses: _statuses,
+      cancelCallback: _onRouletteCancel,
+      gotoCallback: _onGoToChatting
     ));
 
     widgets.addAll([
@@ -255,15 +257,25 @@ Widget _buildNewChatArea({
     )
   );
 
+typedef RouletteSelectCallback (RouletteStatus roulette);
+
 List<Widget> _buildStatuses({
   @required bool loading,
-  @required List<RouletteStatus> statuses
+  @required List<RouletteStatus> statuses,
+  @required RouletteSelectCallback cancelCallback,
+  @required RouletteSelectCallback gotoCallback
 }) =>
-  statuses.map((s) => _buildStatusWidget(loading: loading, status: s)).toList();
+  statuses.map((s) => _buildStatusWidget(
+    loading: loading,
+    status: s,
+    cancelCallback: cancelCallback,
+    gotoCallback: gotoCallback)).toList();
 
 Widget _buildStatusWidget({
   @required bool loading,
-  @required RouletteStatus status
+  @required RouletteStatus status,
+  @required RouletteSelectCallback cancelCallback,
+  @required RouletteSelectCallback gotoCallback
 }) =>
   Container(
     padding: EdgeInsets.only(left: 12, right: 8, top: 12, bottom: 12),
