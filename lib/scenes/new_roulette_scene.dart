@@ -42,6 +42,21 @@ class _NewRouletteSceneState extends State<NewRouletteScene> {
     }
   }
 
+  void _onNewChatSelect(_RouletteType type) async {
+    var result = await _showNewRouletteConfirm(context, type);
+    if (result != true) return;
+
+    setState(() => _loading = true);
+  }
+
+  void _onRouletteCancel(RouletteStatus status) async {
+
+  }
+
+  void _onGoToChatting(RouletteStatus status) async {
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> widgets = [
@@ -54,7 +69,7 @@ class _NewRouletteSceneState extends State<NewRouletteScene> {
           )
         )
       ),
-      _statuses.length > 0 ? _buildHeader(title: 'My roulette chats') :
+      _statuses.length > 0 ? _buildHeader(title: locales().roulettechat.myRouletteChat) :
         Container(),
     ];
 
@@ -64,8 +79,20 @@ class _NewRouletteSceneState extends State<NewRouletteScene> {
     ));
 
     widgets.addAll([
-      _buildHeader(title: 'New chat roulette'),
-      _buildNewChatArea(loading: _loading)
+      _buildHeader(title: locales().roulettechat.newRouletteChat),
+      Container(
+        margin: EdgeInsets.all(10),
+        child: Text(locales().roulettechat.newChatDescription,
+          style: TextStyle(
+            fontSize: 16,
+            color: styles().primaryFontColor
+          ),
+        )
+      ),
+      _buildNewChatArea(
+        loading: _loading,
+        callback: _onNewChatSelect
+      )
     ]);
 
     return CupertinoPageScaffold(
@@ -124,8 +151,14 @@ Widget _buildHeader({
     )
   );
 
+enum _RouletteType {
+  FOREIGNER, ALL
+}
+typedef TypeSelectCallback (_RouletteType type);
+
 Widget _buildNewChatArea({
-  @required bool loading
+  @required bool loading,
+  @required TypeSelectCallback callback
 }) =>
   Container(
     margin: EdgeInsets.all(10),
@@ -134,24 +167,27 @@ Widget _buildNewChatArea({
       children: [
         CupertinoButton(
           padding: EdgeInsets.all(0),
-          onPressed: () {},
+          onPressed: loading == true ? null : () => callback(_RouletteType.FOREIGNER),
           child: Container(
+            width: 120,
+            height: 120,
             padding: EdgeInsets.all(15),
             decoration: BoxDecoration(
               color: styles().profileCardBackground,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  child: Icon(MdiIcons.flagVariant,
+                  child: Icon(Icons.flight,
                     size: 30,
                     color: styles().primaryFontColor
                   )
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 5),
-                  child: Text("With\nForeigner",
+                  child: Text(locales().roulettechat.btnLabelForeigner,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: styles().primaryFontColor,
@@ -165,24 +201,27 @@ Widget _buildNewChatArea({
         ),
         CupertinoButton(
           padding: EdgeInsets.all(0),
-          onPressed: () {},
+          onPressed: loading == true ? null : () => callback(_RouletteType.ALL),
           child: Container(
+            width: 120,
+            height: 120,
             padding: EdgeInsets.all(15),
             decoration: BoxDecoration(
               color: styles().profileCardBackground,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  child: Icon(MdiIcons.flagVariant,
+                  child: Icon(Icons.accessibility_new,
                     size: 30,
                     color: styles().primaryFontColor
                   )
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 5),
-                  child: Text("I Don't",
+                  child: Text(locales().roulettechat.btnLabelAnybody,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: styles().primaryFontColor,
@@ -255,3 +294,27 @@ Widget _buildStatusWidget({
       ]
     )
   );
+
+Future<bool> _showNewRouletteConfirm(BuildContext context, _RouletteType type) async {
+  return await showCupertinoDialog<bool>(
+    context: context,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: Text(locales().roulettechat.confirmTitle),
+      content: Text(
+        type == _RouletteType.ALL ? locales().roulettechat.anybodyConfirm :
+        locales().roulettechat.foreignerConfirm),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          child: Text(locales().okButtonLabel),
+          onPressed: () => Navigator.pop(context, true)
+        ),
+        CupertinoDialogAction(
+          child: Text(locales().setting.cancel),
+          onPressed: () => Navigator.pop(context, null),
+          isDefaultAction: true,
+          isDestructiveAction: true,
+        )
+      ]
+    )
+  );
+}
