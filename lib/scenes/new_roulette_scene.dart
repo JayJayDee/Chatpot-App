@@ -1,12 +1,14 @@
+import 'package:chatpot_app/apis/api_errors.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:meta/meta.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
+import 'package:chatpot_app/components/simple_alert_dialog.dart';
 
 class NewRouletteScene extends StatefulWidget {
   @override
@@ -47,6 +49,22 @@ class _NewRouletteSceneState extends State<NewRouletteScene> {
     if (result != true) return;
 
     setState(() => _loading = true);
+    final state = ScopedModel.of<AppState>(context);
+
+    try {
+      await roomApi().requestNewRoulette(
+        memberToken: state.member.token,
+        regionType: type == _RouletteType.FOREIGNER ? RegionType.FOREIGNER : RegionType.ALL
+      );
+    } catch (err) {
+      if (err is ApiFailureError) {
+        await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
+        return;
+      }
+    } finally {
+      setState(() => _loading = false);
+    }
+    _requestStatuses();
   }
 
   void _onRouletteCancel(RouletteStatus status) async {

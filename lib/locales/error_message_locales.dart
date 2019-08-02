@@ -26,6 +26,7 @@ class ErrorMessageLocales {
     else if (code == 'SELF_REPORT_NOT_ALLOWED') return this.selfReport;
     else if (code == 'MEMBER_BLOCKED') return this.memberBlocked(message);
     else if (code == 'SIZE_TOO_LARGE') return this.tooLargeUpload;
+    else if (code == 'MAX_ROULETTE_EXCEED') return this.maxRouletteExeeded;
     return uncatchedCode(code);
   }
 
@@ -152,6 +153,12 @@ You can see what you reported in the Settings menu > My Report History menu.''';
 （最大サイズ：10Mb）''';
     return '''The photo is too large.
 (Maximum size: 10Mb)''';
+  }
+
+  String get maxRouletteExeeded {
+    if (language == 'ko') return '신청가능한 최대 랜덤채팅 갯수를 초과했습니다. 진행중인 랜덤채팅이 있다면, 종료하시고 재시도 해보세요.';
+    else if (language == 'ja') return '利用可能なランダムチャットアプリケーションの最大数を超えました。 ランダムチャットが進行中の場合は、それを終了して再試行してください。';
+    return 'You have exceeded the maximum number of available chat roulette applications. If you have a chat roulette in progress, quit it and retry.';
   }
 
   String uncatchedCode(String code) {
