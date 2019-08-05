@@ -1,4 +1,9 @@
-"MESSAGE_ARRIVAL" = "New Message";
-"JOIN_ROOM" = "New visitor in the chat";
-"LEAVE_ROOM" = "Someone has left the chat";
+"MESSAGE_ARRIVAL" = "Message from %1$@";
+"MESSAGE_ARRIVAL_BODY" = "%1$@ - %2$@";
+"JOIN_ROOM" = "%1$@ has been entered the chat";
+"JOIN_ROOM_BODY" = "%1$@";
+"LEAVE_ROOM" = "%1$@ has left the chat";
+"LEAVE_ROOM_BODY" = "%1$@";
 "MESSAGE_PICTURE" = "(Picture)";
+"ROULETTE_MATCHED" = "Chat roulette has been matched.";
+"ROULETTE_MATCHED_BODY" = "Matched with %1$@";

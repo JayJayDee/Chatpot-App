@@ -1,4 +1,9 @@
-"MESSAGE_ARRIVAL" = "新しいメッセージ";
-"JOIN_ROOM" = "誰かがチャットに参加しました";
-"LEAVE_ROOM" = "誰かがチャットを離れました";
+"MESSAGE_ARRIVAL" = "%3$@さん";
+"MESSAGE_ARRIVAL_BODY" = "%1$@ - %2$@";
+"JOIN_ROOM" = "%3$@さんがチャットに参加しました。";
+"JOIN_ROOM_BODY" = "%1$@";
+"LEAVE_ROOM" = "%3$@さんはチャットを終了しました。";
+"LEAVE_ROOM_BODY" = "%1$@";
 "MESSAGE_PICTURE" = "(写真)";
+"ROULETTE_MATCHED" = "ランダムチャットが一致しました。";
+"ROULETTE_MATCHED_BODY" = "%3$@さんと一致しました。";
