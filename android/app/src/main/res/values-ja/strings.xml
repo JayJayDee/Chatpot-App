@@ -1,6 +1,21 @@
+<!--
 <resources>
   <string name="MESSAGE_ARRIVAL">新しいメッセージ</string>
   <string name="JOIN_ROOM">誰かがチャットに参加しました</string>
   <string name="LEAVE_ROOM">誰かがチャットを離れました</string>
   <string name="MESSAGE_PICTURE">(写真)</string>
+</resources>
+-->
+<resources>
+  <string name="MESSAGE_ARRIVAL">Message from %1$s</string>
+  <string name="MESSAGE_ARRIVAL_BODY">%1$s - %2$s</string>
+  <string name="ROULETTE_MESSAGE_ARRIVAL">Message from %1$s</string>
+  <string name="ROULETTE_MESSAGE_ARRIVAL_BODY">%1$s</string>
+  <string name="JOIN_ROOM">%1$s has been entered the chat</string>
+  <string name="JOIN_ROOM_BODY">%1$s</string>
+  <string name="LEAVE_ROOM">%1$s has left the chat</string>
+  <string name="LEAVE_ROOM_BODY">%1$s</string>
+  <string name="MESSAGE_PICTURE">(Picture)</string>
+  <string name="ROULETTE_MATCHED">Chat roulette has been matched.</string>
+  <string name="ROULETTE_MATCHED_BODY">Matched with %1$s</string>
 </resources>

@@ -1,5 +1,7 @@
 "MESSAGE_ARRIVAL" = "Message from %1$@";
 "MESSAGE_ARRIVAL_BODY" = "%1$@ - %2$@";
+"ROULETTE_MESSAGE_ARRIVAL" = "Message from %1$@";
+"ROULETTE_MESSAGE_ARRIVAL" = "%1$@";
 "JOIN_ROOM" = "%1$@ has been entered the chat";
 "JOIN_ROOM_BODY" = "%1$@";
 "LEAVE_ROOM" = "%1$@ has left the chat";

@@ -1,6 +1,13 @@
 <resources>
-  <string name="MESSAGE_ARRIVAL">New message</string>
-  <string name="JOIN_ROOM">New visitor in the chat</string>
-  <string name="LEAVE_ROOM">Someone has left the chat</string>
+  <string name="MESSAGE_ARRIVAL">Message from %1$s</string>
+  <string name="MESSAGE_ARRIVAL_BODY">%1$s - %2$s</string>
+  <string name="ROULETTE_MESSAGE_ARRIVAL">Message from %1$s</string>
+  <string name="ROULETTE_MESSAGE_ARRIVAL_BODY">%1$s</string>
+  <string name="JOIN_ROOM">%1$s has been entered the chat</string>
+  <string name="JOIN_ROOM_BODY">%1$s</string>
+  <string name="LEAVE_ROOM">%1$s has left the chat</string>
+  <string name="LEAVE_ROOM_BODY">%1$s</string>
   <string name="MESSAGE_PICTURE">(Picture)</string>
+  <string name="ROULETTE_MATCHED">Chat roulette has been matched.</string>
+  <string name="ROULETTE_MATCHED_BODY">Matched with %1$s</string>
 </resources>

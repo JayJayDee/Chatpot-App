@@ -1,5 +1,7 @@
 "MESSAGE_ARRIVAL" = "%2$@님의 메시지";
 "MESSAGE_ARRIVAL_BODY" = "%1$@ - %2$@";
+"ROULETTE_MESSAGE_ARRIVAL" = "%2$@님의 메시지";
+"ROULETTE_MESSAGE_ARRIVAL" = "%1$@";
 "JOIN_ROOM" = "%2$@님이 채팅에 참여하였습니다.";
 "JOIN_ROOM_BODY" = "%1$@";
 "LEAVE_ROOM" = "%2$@님이 채팅에서 나갔습니다.";
