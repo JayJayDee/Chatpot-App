@@ -1,6 +1,13 @@
 <resources>
-  <string name="MESSAGE_ARRIVAL">새로운 메시지</string>
-  <string name="JOIN_ROOM">누군가가 채팅에 참여했습니다</string>
-  <string name="LEAVE_ROOM">누군가가 채팅에서 떠났습니다</string>
+  <string name="MESSAGE_ARRIVAL">%2$s님</string>
+  <string name="MESSAGE_ARRIVAL_BODY">%1$s - %2$s</string>
+  <string name="ROULETTE_MESSAGE_ARRIVAL">%2$s님</string>
+  <string name="ROULETTE_MESSAGE_ARRIVAL_BODY">%1$s</string>
+  <string name="JOIN_ROOM">%2$s님이 채팅에 참여했습니다.</string>
+  <string name="JOIN_ROOM_BODY">%1$s</string>
+  <string name="LEAVE_ROOM">%2$s님이 채팅에서 떠났습니다.</string>
+  <string name="LEAVE_ROOM_BODY">%1$s</string>
   <string name="MESSAGE_PICTURE">(사진)</string>
+  <string name="ROULETTE_MATCHED">랜덤채팅이 매칭되었습니다.</string>
+  <string name="ROULETTE_MATCHED_BODY">상대: %2$s님</string>
 </resources>
