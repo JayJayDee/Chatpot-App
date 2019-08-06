@@ -1,7 +1,7 @@
 <resources>
-  <string name="MESSAGE_ARRIVAL">Message from %1$s</string>
+  <string name="MESSAGE_ARRIVAL">From %1$s</string>
   <string name="MESSAGE_ARRIVAL_BODY">%1$s - %2$s</string>
-  <string name="ROULETTE_MESSAGE_ARRIVAL">Message from %1$s</string>
+  <string name="ROULETTE_MESSAGE_ARRIVAL">From %1$s</string>
   <string name="ROULETTE_MESSAGE_ARRIVAL_BODY">%1$s</string>
   <string name="JOIN_ROOM">%1$s has been entered the chat</string>
   <string name="JOIN_ROOM_BODY">%1$s</string>
