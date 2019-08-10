@@ -12,6 +12,14 @@ import 'package:chatpot_app/entities/message.dart';
 
 typedef BackgroundActionCallback (BackgroundAction action);
 
+enum PushType {
+  MESSAGE, NOTIFICATION
+}
+
+enum NotificationType {
+  RouletteMatched
+}
+
 class PushService {
   FirebaseMessaging _messaging;
   AppState _state;
@@ -110,4 +118,9 @@ class PushService {
     Message msg = Message.fromJson(payloadMap);
     return msg;
   } 
+}
+
+PushType _parsePushType(String expr) {
+  if (expr == 'NOTIFICATION') return PushType.NOTIFICATION;
+  return PushType.MESSAGE;
 }

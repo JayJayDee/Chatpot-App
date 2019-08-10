@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:chatpot_app/apis/api_errors.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,7 +17,7 @@ class NewRouletteScene extends StatefulWidget {
   State createState() => _NewRouletteSceneState();
 }
 
-class _NewRouletteSceneState extends State<NewRouletteScene> {
+class _NewRouletteSceneState extends State<NewRouletteScene> with WidgetsBindingObserver {
 
   bool _loading;
   List<RouletteStatus> _statuses;
@@ -30,6 +31,22 @@ class _NewRouletteSceneState extends State<NewRouletteScene> {
   void initState() {
     super.initState();
     _requestStatuses();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    var func = () async {
+      if (state == AppLifecycleState.resumed) {
+        _requestStatuses();
+      }
+    };
+    func();
   }
 
   void _requestStatuses() async {
