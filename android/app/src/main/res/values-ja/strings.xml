@@ -3,10 +3,10 @@
   <string name="MESSAGE_ARRIVAL_BODY">%1$s - %2$s</string>
   <string name="ROULETTE_MESSAGE_ARRIVAL">%3$s</string>
   <string name="ROULETTE_MESSAGE_ARRIVAL_BODY">%1$s</string>
-  <string name="JOIN_ROOM">%3$sさんがチャットに参加しました。</string>
-  <string name="JOIN_ROOM_BODY">%1$s</string>
-  <string name="LEAVE_ROOM">%3$sさんはチャットから離れました。</string>
-  <string name="LEAVE_ROOM_BODY">%1$s</string>
+  <string name="JOIN_ROOM">誰かがチャットに参加しました。</string>
+  <string name="JOIN_ROOM_BODY">%1$s - %4$sさん</string>
+  <string name="LEAVE_ROOM">誰かがチャットから退出しました。</string>
+  <string name="LEAVE_ROOM_BODY">%1$s - %4$sさん</string>
   <string name="MESSAGE_PICTURE">(写真)</string>
   <string name="ROULETTE_MATCHED">ランダムチャットが開始されました。</string>
   <string name="ROULETTE_MATCHED_BODY">%3$sさんと</string>
