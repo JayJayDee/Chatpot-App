@@ -2,10 +2,10 @@
 "MESSAGE_ARRIVAL_BODY" = "%1$@ - %2$@";
 "ROULETTE_MESSAGE_ARRIVAL" = "%2$@님의 메시지";
 "ROULETTE_MESSAGE_ARRIVAL" = "%1$@";
-"JOIN_ROOM" = "%2$@님이 채팅에 참여하였습니다.";
-"JOIN_ROOM_BODY" = "%1$@";
-"LEAVE_ROOM" = "%2$@님이 채팅에서 나갔습니다.";
-"LEAVE_ROOM_BODY" = "%1$@";
+"JOIN_ROOM" = "누군가가 채팅방에 참여했습니다.";
+"JOIN_ROOM_BODY" = "%1$@ - %3$@님";
+"LEAVE_ROOM" = "누군가가 채팅방에서 나갔습니다.";
+"LEAVE_ROOM_BODY" = "%1$@ - %3$@님";
 "MESSAGE_PICTURE" = "(사진)";
 "ROULETTE_MATCHED" = "랜덤채팅이 매칭되었습니다.";
 "ROULETTE_MATCHED_BODY" = "%2$@님과 매칭 완료.";
