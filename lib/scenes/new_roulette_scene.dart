@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:chatpot_app/apis/api_errors.dart';
+import 'package:chatpot_app/entities/notification.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -60,6 +61,9 @@ class _NewRouletteSceneState extends State<NewRouletteScene> with WidgetsBinding
       } else if (state == AppLifecycleState.paused) {
         print("$tag PAUSED");
         pushService().unsetPushListener(tag);
+      } else if (state == AppLifecycleState.inactive) {
+        print("$tag INACTIVATED");
+        pushService().unsetPushListener(tag);
       }
     };
     func();
@@ -69,14 +73,20 @@ class _NewRouletteSceneState extends State<NewRouletteScene> with WidgetsBinding
     print("$tag PUSH_RECEIVED");
     print(push);
     final state = ScopedModel.of<AppState>(context);
+    if (push.pushType == PushType.NOTIFICATION) {
+      PushNotification noti = push.getContent();
 
-    if (this.mounted) {
-      showToast(locales().roulettechat.matchedToastMessage,
-        duration: Duration(milliseconds: 1000),
-        position: ToastPosition(align: Alignment.bottomCenter)
-      );
-      _requestStatuses();
-      state.fetchMyRooms();
+      if (noti.notificationType == PushNotificationType.CHAT_ROULLETE_MATCHED) {
+
+        if (this.mounted) {
+          showToast(locales().roulettechat.matchedToastMessage,
+            duration: Duration(milliseconds: 1000),
+            position: ToastPosition(align: Alignment.bottomCenter)
+          );
+          _requestStatuses();
+          state.fetchMyRooms();
+        }
+      }
     }
   }
 

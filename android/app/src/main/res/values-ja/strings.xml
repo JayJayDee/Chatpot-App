@@ -10,4 +10,6 @@
   <string name="MESSAGE_PICTURE">(写真)</string>
   <string name="ROULETTE_MATCHED">ランダムチャットが開始されました。</string>
   <string name="ROULETTE_MATCHED_BODY">%3$sさんと</string>
+  <string name="ROULETTE_DESTROYED">チャットルーレットは終了しました。</string>
+  <string name="ROULETTE_DESTROYED_BODY">%3$sさんはチャットから離れました。</string>
 </resources>

@@ -9,3 +9,5 @@
 "MESSAGE_PICTURE" = "(사진)";
 "ROULETTE_MATCHED" = "랜덤채팅이 매칭되었습니다.";
 "ROULETTE_MATCHED_BODY" = "%2$@님과 매칭 완료.";
+"ROULETTE_DESTROYED" = "랜덤채팅이 종료되었습니다.";
+"ROULETTE_DESTROYED_BODY" = "%2$@님이 채팅방을 떠났습니다.";

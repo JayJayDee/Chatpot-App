@@ -9,3 +9,5 @@
 "MESSAGE_PICTURE" = "(写真)";
 "ROULETTE_MATCHED" = "ランダムチャットが一致しました。";
 "ROULETTE_MATCHED_BODY" = "%3$@さんと一致しました。";
+"ROULETTE_DESTROYED" = "チャットルーレットは終了しました。";
+"ROULETTE_DESTROYED_BODY" = "%3$@さんはチャットから離れました。";

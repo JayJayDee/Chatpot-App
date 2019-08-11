@@ -9,3 +9,5 @@
 "MESSAGE_PICTURE" = "(Picture)";
 "ROULETTE_MATCHED" = "Chat roulette has been matched.";
 "ROULETTE_MATCHED_BODY" = "Matched with %1$@";
+"ROULETTE_DESTROYED" = "Chat roulette has been terminated.";
+"ROULETTE_DESTROYED_BODY" = "%1$@ has been left the chat.";
