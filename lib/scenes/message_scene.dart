@@ -69,14 +69,22 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     return null;
   }
 
-  void _onPushReceived(Push push) async {
+  void _onPushReceived(Push push, BuildContext ctx) async {
+    final state = ScopedModel.of<AppState>(ctx);
+
     if (push.pushType == PushType.NOTIFICATION) {
       PushNotification noti = push.getContent();
 
       if (noti.notificationType == PushNotificationType.CHAT_ROULETTE_DESTROYED) {
         RouletteDestroyedNotification destroyed = noti.getContent();
+        print("$tag DESTROY_ROOM_TOKEN = ${destroyed.roomToken}");
+
         if (destroyed.roomToken == room.roomToken) {
-          Navigator.of(context).pop();
+          MyRoom room = state.queryMyRoom(destroyed.roomToken);
+
+          if (room != null && room.shown == true) {
+            Navigator.of(context).pop();
+          }
         }
       }
     }
@@ -261,15 +269,17 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     _scrollController.addListener(_onScrollEventArrival);
     _onSceneInitial(context);
 
-    pushService().setPushListener(tag, _onPushReceived);
+    pushService().setPushListener(tag, (p) => _onPushReceived(p, context));
   }
 
   @override
   void dispose() {
+    print('MESSAGE_SCENE_DISPOSE');
     _onScenePaused(context);
     WidgetsBinding.instance.removeObserver(this);
     _scrollController.removeListener(_onScrollEventArrival);
-    pushService().unsetPushListener(tag);
+    pushService().unsetPushListener(tag); 
+    print('MESSAGE_SCENE_DISPOSE_COMPLETED');
     super.dispose();
   }
 
@@ -278,7 +288,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     var func = () async {
       if (state == AppLifecycleState.resumed) {
         _onSceneResumed(context);
-        pushService().setPushListener(tag, _onPushReceived);
+        pushService().setPushListener(tag, (p) => _onPushReceived(p, context));
       }
     };
     func();

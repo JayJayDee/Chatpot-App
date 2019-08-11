@@ -42,7 +42,7 @@ class PushService {
 
   void unsetPushListener(String key) {
     _pushListeners.remove(key);
-    print("$tag UNREGISTERED_LISTENER");
+    print("$tag UNREGISTERED_LISTENER, LENGTH = ${_pushListeners.length}");
   }
 
   void attach() {
