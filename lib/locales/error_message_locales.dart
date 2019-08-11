@@ -27,6 +27,7 @@ class ErrorMessageLocales {
     else if (code == 'MEMBER_BLOCKED') return this.memberBlocked(message);
     else if (code == 'SIZE_TOO_LARGE') return this.tooLargeUpload;
     else if (code == 'MAX_ROULETTE_EXCEED') return this.maxRouletteExeeded;
+    else if (code == 'ROOM_NOT_FOUND') return this.roomNotFound;
     return uncatchedCode(code);
   }
 
@@ -159,6 +160,12 @@ You can see what you reported in the Settings menu > My Report History menu.''';
     if (language == 'ko') return '신청가능한 최대 랜덤채팅 갯수를 초과했습니다. 진행중인 랜덤채팅이 있다면, 종료하시고 재시도 해보세요.';
     else if (language == 'ja') return '利用可能なランダムチャットアプリケーションの最大数を超えました。 ランダムチャットが進行中の場合は、それを終了して再試行してください。';
     return 'You have exceeded the maximum number of available chat roulette applications. If you have a chat roulette in progress, quit it and retry.';
+  }
+
+  String get roomNotFound {
+    if (language == 'ko') return '채팅방을 찾을 수 없습니다. 채팅방이 삭제되었을 수 있습니다.';
+    else if (language == 'ja') return 'チャットルームが見つかりません。 チャットルームが削除された可能性があります。';
+    return 'No chat room found. Maybe the chat room have been deleted.';
   }
 
   String uncatchedCode(String code) {

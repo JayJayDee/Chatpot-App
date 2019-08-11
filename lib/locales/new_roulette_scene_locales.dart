@@ -92,4 +92,10 @@ class NewRouletteSceneLocales {
     else if (language == 'ja') return '入場';
     return 'Enter';
   }
+
+  String get matchedToastMessage {
+    if (language == 'ko') return '랜덤채팅이 매칭되었습니다!';
+    else if (language == 'ja') return 'ランダムチャットが一致しました。';
+    return 'The chat roulette has been matched!';
+  }
 }

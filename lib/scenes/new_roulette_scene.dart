@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:chatpot_app/apis/api_errors.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,13 +12,16 @@ import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
 import 'package:chatpot_app/scenes/message_scene.dart';
+import 'package:chatpot_app/entities/push.dart';
+
+final tag = 'NEW_ROULETTE_SCENE';
 
 class NewRouletteScene extends StatefulWidget {
   @override
   State createState() => _NewRouletteSceneState();
 }
 
-class _NewRouletteSceneState extends State<NewRouletteScene> {
+class _NewRouletteSceneState extends State<NewRouletteScene> with WidgetsBindingObserver {
 
   bool _loading;
   List<RouletteStatus> _statuses;
@@ -30,6 +35,49 @@ class _NewRouletteSceneState extends State<NewRouletteScene> {
   void initState() {
     super.initState();
     _requestStatuses();
+    
+    print("$tag INIT_STATE");
+    pushService().setPushListener(tag, _onPushReceived);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    pushService().unsetPushListener(tag);
+    print("$tag DISPOSE");
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    var func = () async {
+      if (state == AppLifecycleState.resumed) {
+        _requestStatuses();
+
+        print("$tag RESUMED");
+        pushService().setPushListener(tag, _onPushReceived);
+
+      } else if (state == AppLifecycleState.paused) {
+        print("$tag PAUSED");
+        pushService().unsetPushListener(tag);
+      }
+    };
+    func();
+  }
+
+  void _onPushReceived(Push push) async {
+    print("$tag PUSH_RECEIVED");
+    print(push);
+    final state = ScopedModel.of<AppState>(context);
+
+    if (this.mounted) {
+      showToast(locales().roulettechat.matchedToastMessage,
+        duration: Duration(milliseconds: 1000),
+        position: ToastPosition(align: Alignment.bottomCenter)
+      );
+      _requestStatuses();
+      state.fetchMyRooms();
+    }
   }
 
   void _requestStatuses() async {
