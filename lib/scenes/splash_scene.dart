@@ -68,7 +68,7 @@ class SplashScene extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(left: 15, right: 15),
+                    margin: EdgeInsets.only(left: 60, right: 60),
                     child: Image(
                       image: styles().logoImageWithTypo
                     )
