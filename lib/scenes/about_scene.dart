@@ -47,7 +47,7 @@ class AboutScene extends StatelessWidget {
         child: ListView(
           children: [
             Container(
-              margin: EdgeInsets.only(left: 15, top: 30, right: 15),
+              margin: EdgeInsets.only(left: 50, top: 30, right: 50),
               child: Image(
                 image: styles().logoImageWithTypo
               ),

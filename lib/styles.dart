@@ -65,8 +65,8 @@ AppStyle _darkTheme() {
     logoImageWithTypo: const AssetImage('assets/chatpot-logo-with-typo-medium-white.png'),
 
     appBackground: const Color(0xff000000),
-    mainBackground: const Color(0xff283b42),
-    splashBackground: const Color(0xff283b42),
+    mainBackground: const Color(0xff111d2d),
+    splashBackground: const Color(0xff111d2d),
     link: const Color(0xff6cb1ff),
     cardActionTextStyle: const TextStyle(fontSize: 15.0),
     primaryFontColor: const Color(0xffd1dddb),
@@ -74,31 +74,32 @@ AppStyle _darkTheme() {
     thirdFontColor: const Color(0xff547d8c),
     inputFieldDevidier: const Color(0xFFCCCCCC),
     listViewRowBackground: const Color(0xff1d6a96),
-    listViewRowBackgroundMoreDark: Color(0xff113d56),
-    listRowHeaderBackground: const Color(0xff473b42),
+    listViewRowBackgroundMoreDark: Color(0xff17335e),
+    //listRowHeaderBackground: const Color(0xff473b42),
+    listRowHeaderBackground: const Color(0xff0c3461),
     listRowDivider: const Color(0xff473b42),
     
-    tabBarBackground: const Color(0xff1d6a96),
+    tabBarBackground: const Color(0xff094aa1),
     tabBarActive: const Color(0xffd1dddb),
     tabBarInactive: const Color(0xff85b8cb),
     
-    navigationBarBackground: const Color(0xff1d6a96),
+    navigationBarBackground: const Color(0xff094aa1),
     
     sheetBackground: const Color(0xffd5d9dc),
 
-    messageBackgroundMine: const Color(0xff222222),
-    messageBackgroundOther: const Color(0xff473b42),
-    messageBackgroundNotification: const Color(0xff473b42),
+    messageBackgroundMine: const Color(0xff507cc5),
+    messageBackgroundOther: const Color(0xff0c3461),
+    messageBackgroundNotification: const Color(0xff24324a),
     
-    profileCardBackground: const Color(0xff1d6a96),
+    profileCardBackground: const Color(0xff273249),
 
     editTextFont: const Color(0xffd1dddb),
     editTextHint: const Color(0xff85b8cb),
     
     popupPrimaryFontColor: const Color(0xFF505050),
     popupSecondaryFontColor: const Color(0xFF929292),
-    innerDrawerBackground: const Color(0xff473b42),
-    editTextBackground: const Color(0xff283b42));
+    innerDrawerBackground: const Color(0xff273249),
+    editTextBackground: const Color(0xff111d2d));
   return style;
 }
 

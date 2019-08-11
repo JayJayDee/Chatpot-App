@@ -55,7 +55,7 @@ class AppState extends Model {
   List<Message> roomMessages({
     @required String roomToken
   }) {
-    MyRoom room = _queryMyRoom(roomToken);
+    MyRoom room = queryMyRoom(roomToken);
     if (room == null) return List();
     return room.messages.messages;
   }
@@ -328,7 +328,7 @@ class AppState extends Model {
   void resumeMyRoom({
     @required String roomToken
   }) {
-    MyRoom room = _queryMyRoom(roomToken);
+    MyRoom room = queryMyRoom(roomToken);
     if (room == null) return;
 
     room.shown = true;
@@ -339,7 +339,7 @@ class AppState extends Model {
   void pauseMyRoom({
     @required String roomToken
   }) {
-    MyRoom room = _queryMyRoom(roomToken);
+    MyRoom room = queryMyRoom(roomToken);
     if (room == null) return;
 
     room.shown = false;
@@ -360,7 +360,7 @@ class AppState extends Model {
   Future<void> fetchMoreMessages({
     @required String roomToken
   }) async {
-    MyRoom currentRoom = _queryMyRoom(roomToken);
+    MyRoom currentRoom = queryMyRoom(roomToken);
 
     if (currentRoom == null) return;
 
@@ -390,7 +390,7 @@ class AppState extends Model {
       size: 20
     );
 
-    MyRoom currentRoom = _queryMyRoom(roomToken);
+    MyRoom currentRoom = queryMyRoom(roomToken);
 
     if (currentRoom != null) {
       currentRoom.messages.clearOffset();
@@ -481,7 +481,7 @@ class AppState extends Model {
     _loading = true;
     notifyListeners();
 
-    MyRoom currentRoom = _queryMyRoom(roomToken);
+    MyRoom currentRoom = queryMyRoom(roomToken);
     if (currentRoom == null) return;
 
     try {
@@ -637,7 +637,7 @@ class AppState extends Model {
     notifyListeners();
   }
 
-  MyRoom _queryMyRoom(String roomToken) {
+  MyRoom queryMyRoom(String roomToken) {
     List<MyRoom> found = _myRooms.where((r) => r.roomToken == roomToken).toList();
     if (found.length == 0) return null;
     return found[0];
@@ -646,7 +646,7 @@ class AppState extends Model {
   Future<void> translateMessages({
     @required String roomToken
   }) async {
-    MyRoom currentRoom = _queryMyRoom(roomToken);
+    MyRoom currentRoom = queryMyRoom(roomToken);
     if (currentRoom == null) return;
 
     List<Message> translationTargets =
