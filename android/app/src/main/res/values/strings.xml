@@ -10,4 +10,6 @@
   <string name="MESSAGE_PICTURE">(Picture)</string>
   <string name="ROULETTE_MATCHED">Chat roulette has been matched.</string>
   <string name="ROULETTE_MATCHED_BODY">Matched with %1$s</string>
+  <string name="ROULETTE_DESTROYED">Chat roulette has been terminated.</string>
+  <string name="ROULETTE_DESTROYED_BODY">%1$s has been left the chat.</string>
 </resources>

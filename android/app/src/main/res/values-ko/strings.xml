@@ -10,4 +10,6 @@
   <string name="MESSAGE_PICTURE">(사진)</string>
   <string name="ROULETTE_MATCHED">랜덤채팅이 매칭되었습니다.</string>
   <string name="ROULETTE_MATCHED_BODY">%2$s님과 매칭됨</string>
+  <string name="ROULETTE_DESTROYED">랜덤채팅이 종료되었습니다.</string>
+  <string name="ROULETTE_DESTROYED_BODY">%2$s님이 채팅방을 떠났습니다.</string>
 </resources>
