@@ -11,6 +11,8 @@ import 'package:chatpot_app/entities/push.dart';
 typedef BackgroundActionCallback (BackgroundAction action);
 typedef PushListener (Push push);
 
+final tag = 'PUSH_LOG_SERVICE ';
+
 enum PushType {
   MESSAGE, NOTIFICATION
 }
@@ -33,19 +35,24 @@ class PushService {
     _pushListeners = Map();
   }
 
-  void setPushListener(String key, PushListener listener) =>
+  void setPushListener(String key, PushListener listener) {
     _pushListeners[key] = listener;
+    print("$tag REGISTERED_LISTENER");
+  }
 
-  void unsetPushListener(String key) =>
+  void unsetPushListener(String key) {
     _pushListeners.remove(key);
-
+    print("$tag UNREGISTERED_LISTENER");
+  }
 
   void attach() {
+    print("$tag ATTACH");
     _messaging.configure(
       onMessage: _onMessage,
       onResume: _onResume,
       onLaunch: _onLaunch
     );
+    print("$tag ATTACH_CONFIGURE");
     _firePushCallbacks();
   }
 
@@ -71,6 +78,8 @@ class PushService {
     Push push = _parsePush(message, PushOrigin.FOREGROUND);
 
     _backgroundPushQueue.addFirst(push);
+    print("$tag ADDED_ONE_MESSAGE_FOREGROUND");
+
     _firePushCallbacks();
   }
 
@@ -79,6 +88,8 @@ class PushService {
     Push push = _parsePush(message, PushOrigin.BACKGROUND);
 
     _backgroundPushQueue.addFirst(push);
+    print("$tag ADDED_ONE_MESSAGE_BACKGROUND");
+    _firePushCallbacks();
   }
 
   Future<dynamic> _onLaunch(Map<String, dynamic> message) async {
@@ -86,15 +97,25 @@ class PushService {
     Push push = _parsePush(message, PushOrigin.BACKGROUND);
 
     _backgroundPushQueue.addFirst(push);
+    print("$tag ADDED_ONE_MESSAGE_BACKGROUND");
+    _firePushCallbacks();
   }
 
   void _firePushCallbacks() {
-    if (_backgroundPushQueue.isEmpty == true) return;
+    print("$tag FIRE_PUSH_CALLBACKS");
+    if (_backgroundPushQueue.isEmpty == true) {
+      print("$tag FIRE_PUSH_CALLBACKS EMPTY");
+      return;
+    }
+
     Push push = _backgroundPushQueue.removeLast();
+    print("$tag FIRE_PUSH_CALLBACKS POP_ONE");
+
     _pushListeners.keys.forEach((k) {
       var listener = _pushListeners[k];
       Future.delayed(Duration.zero).then((v) => listener(push));
     });
+    print("$tag FIRE_PUSH_CALLBACKS CALLS_BACK ${_pushListeners.length}");
   }
 
   Push _parsePush(Map<String, dynamic> message, PushOrigin origin) {

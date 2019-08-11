@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/scenes/home_scene.dart';
 import 'package:chatpot_app/scenes/chats_scene.dart';
@@ -38,6 +39,7 @@ class _WidgetWrapper {
 }
 
 final listenerName = 'CONTAINER_SCENE';
+final tag = 'PUSH_LOG ';
 
 class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObserver, TabActor {
   Map<String, _WidgetWrapper> _widgetMap;
@@ -56,6 +58,8 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
+    print("$tag initstate");
+
     pushService().setPushListener(listenerName, _onPushArrival);
     pushService().attach();
   }
@@ -63,6 +67,9 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+
+    print("$tag dispose");
+
     pushService().unsetPushListener(listenerName);
     super.dispose();
   }
@@ -92,7 +99,7 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
         pushService().requestCallbackPushes();
 
       } else if (state == AppLifecycleState.paused) {
-        pushService().unsetPushListener(listenerName);
+        // pushService().unsetPushListener(listenerName);
       }
     };
     func();
@@ -110,6 +117,21 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
       }
       Message msg = push.getContent();
       state.addSingleMessageFromPush(msg: msg);
+    }
+
+  
+    if (push.pushOrigin == PushOrigin.FOREGROUND) {
+      if (push.pushType == PushType.NOTIFICATION) {
+        PushNotification noti = push.getContent();
+
+        if (noti.notificationType == PushNotificationType.CHAT_ROULLETE_MATCHED) {
+          showToast(locales().roulettechat.matchedToastMessage,
+            duration: Duration(milliseconds: 1000),
+            position: ToastPosition(align: Alignment.bottomCenter)
+          );
+          await state.fetchMyRooms();
+        }
+      }
     }
 
 
