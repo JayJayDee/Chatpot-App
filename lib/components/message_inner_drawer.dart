@@ -93,7 +93,9 @@ class _MessageInnerDrawerState extends State<MessageInnerDrawer> {
       if (err is ApiFailureError) {
         await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
         if (err.code == 'ROOM_NOT_FOUND') {
-          Navigator.of(context).pop();
+          if (this.mounted) {
+            Navigator.of(context).pop();
+          }
           await state.fetchMyRooms(refreshAll: true);
           await state.translateMyRooms();
         }

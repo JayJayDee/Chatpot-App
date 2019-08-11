@@ -129,7 +129,17 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
             duration: Duration(milliseconds: 1000),
             position: ToastPosition(align: Alignment.bottomCenter)
           );
-          await state.fetchMyRooms();
+          await state.fetchMyRooms(refreshAll: true);
+          await state.translateMyRooms();
+        }
+
+        if (noti.notificationType == PushNotificationType.CHAT_ROULETTE_DESTROYED) {
+          showToast(locales().roulettechat.destroyedToastMessage,
+            duration: Duration(milliseconds: 1000),
+            position: ToastPosition(align: Alignment.bottomCenter)
+          );
+          await state.fetchMyRooms(refreshAll: true);
+          await state.translateMyRooms();
         }
       }
     }
@@ -159,6 +169,10 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
           await Navigator.of(context).push(CupertinoPageRoute<bool>(
             builder: (BuildContext context) => NewRouletteScene()
           ));
+
+        } else if (noti.notificationType == PushNotificationType.CHAT_ROULETTE_DESTROYED) {
+          await state.fetchMyRooms(refreshAll: true);
+          await state.translateMyRooms();
         }
       }
     }

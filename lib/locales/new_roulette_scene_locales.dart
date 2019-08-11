@@ -98,4 +98,10 @@ class NewRouletteSceneLocales {
     else if (language == 'ja') return 'ランダムチャットが一致しました。';
     return 'The chat roulette has been matched!';
   }
+
+  String get destroyedToastMessage {
+    if (language == 'ko') return '랜덤채팅방에서 상대방이 나갔습니다.';
+    else if (language == 'ja') return '誰かがランダムチャットルームから退出しました。';
+    return 'Someone left from the chat roulette room.';
+  }
 }

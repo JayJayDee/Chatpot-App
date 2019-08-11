@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:io' show Platform;
+import 'package:chatpot_app/entities/notification.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -23,6 +24,7 @@ import 'package:chatpot_app/components/simple_alert_dialog.dart';
 import 'package:chatpot_app/components/member_detail_sheet.dart';
 import 'package:chatpot_app/components/message_inner_drawer.dart';
 import 'package:chatpot_app/storage/block_accessor.dart';
+import 'package:chatpot_app/entities/push.dart';
 
 typedef ImageClickCallback (String messageId);
 typedef ProfileClickCallback (String memberToken);
@@ -40,6 +42,8 @@ class MessageScene extends StatefulWidget {
   @override
   _MessageSceneState createState() => _MessageSceneState(room: room);
 }
+
+final tag = 'MESSAGE_SCENE';
 
 class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver {
 
@@ -63,6 +67,19 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     if (Platform.isAndroid) return SentPlatform.ANDROID;
     else if (Platform.isIOS) return SentPlatform.IOS;
     return null;
+  }
+
+  void _onPushReceived(Push push) async {
+    if (push.pushType == PushType.NOTIFICATION) {
+      PushNotification noti = push.getContent();
+
+      if (noti.notificationType == PushNotificationType.CHAT_ROULETTE_DESTROYED) {
+        RouletteDestroyedNotification destroyed = noti.getContent();
+        if (destroyed.roomToken == room.roomToken) {
+          Navigator.of(context).pop();
+        }
+      }
+    }
   }
 
   Future<void> _onImageSentClicked(BuildContext context) async {
@@ -243,6 +260,8 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     WidgetsBinding.instance.addObserver(this);
     _scrollController.addListener(_onScrollEventArrival);
     _onSceneInitial(context);
+
+    pushService().setPushListener(tag, _onPushReceived);
   }
 
   @override
@@ -250,6 +269,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     _onScenePaused(context);
     WidgetsBinding.instance.removeObserver(this);
     _scrollController.removeListener(_onScrollEventArrival);
+    pushService().unsetPushListener(tag);
     super.dispose();
   }
 
@@ -258,6 +278,7 @@ class _MessageSceneState extends State<MessageScene> with WidgetsBindingObserver
     var func = () async {
       if (state == AppLifecycleState.resumed) {
         _onSceneResumed(context);
+        pushService().setPushListener(tag, _onPushReceived);
       }
     };
     func();
