@@ -262,7 +262,9 @@ class AppState extends Model {
     notifyListeners();
   }
 
-  Future<void> fetchMyRooms() async {
+  Future<void> fetchMyRooms({
+    bool refreshAll
+  }) async {
     _loading = true;
     notifyListeners();
 
@@ -273,18 +275,25 @@ class AppState extends Model {
     List<MyRoom> resp = await roomApi().requestMyRooms(
       memberToken: _member.token
     );
-  
-    resp.forEach((myroom) {
-      List<MyRoom> foundInLocal = _myRooms.where((r) => r.roomToken == myroom.roomToken).toList();
-      if (foundInLocal.length == 0) {
-        _myRooms.add(myroom);
-      } else {
-        foundInLocal[0].title = myroom.title;
-        foundInLocal[0].owner = myroom.owner;
-        foundInLocal[0].numAttendee = myroom.numAttendee;
-        foundInLocal[0].maxAttendee = myroom.maxAttendee;
-      }
-    });
+
+    if (refreshAll == null ||
+          (refreshAll != null && refreshAll == false))  {
+      resp.forEach((myroom) {
+        List<MyRoom> foundInLocal = _myRooms.where((r) => r.roomToken == myroom.roomToken).toList();
+        if (foundInLocal.length == 0) {
+          _myRooms.add(myroom);
+        } else {
+          foundInLocal[0].title = myroom.title;
+          foundInLocal[0].owner = myroom.owner;
+          foundInLocal[0].numAttendee = myroom.numAttendee;
+          foundInLocal[0].maxAttendee = myroom.maxAttendee;
+        }
+      });
+    }
+
+    if (refreshAll != null && refreshAll == true) {
+      _myRooms = resp;
+    }
 
     _loading = false;
     notifyListeners();

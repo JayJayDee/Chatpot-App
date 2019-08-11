@@ -81,6 +81,8 @@ class _MessageInnerDrawerState extends State<MessageInnerDrawer> {
   }
 
   void _loadRoomDetails() async {
+    final state = ScopedModel.of<AppState>(context);
+
     setState(() => _loading = true);
     try {
       var roomDetail = await roomApi().requestRoomDetail(
@@ -90,11 +92,18 @@ class _MessageInnerDrawerState extends State<MessageInnerDrawer> {
     } catch (err) {
       if (err is ApiFailureError) {
         await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
+        if (err.code == 'ROOM_NOT_FOUND') {
+          Navigator.of(context).pop();
+          await state.fetchMyRooms(refreshAll: true);
+          await state.translateMyRooms();
+        }
       } else {
         throw err;
       }
     } finally {
-      setState(() => _loading = false);
+      if (this.mounted) {
+        setState(() => _loading = false);
+      }
     }
   }
 
