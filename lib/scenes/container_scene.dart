@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:chatpot_app/models/model_entities.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -9,10 +8,14 @@ import 'package:chatpot_app/scenes/chats_scene.dart';
 import 'package:chatpot_app/scenes/settings_scene.dart';
 import 'package:chatpot_app/scenes/tabbed_scene_interface.dart';
 import 'package:chatpot_app/scenes/message_scene.dart';
+import 'package:chatpot_app/scenes/new_roulette_scene.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/components/custom_tab_scaffold.dart';
 import 'package:chatpot_app/styles.dart';
+import 'package:chatpot_app/entities/push.dart';
+import 'package:chatpot_app/entities/message.dart';
+import 'package:chatpot_app/entities/notification.dart';
 
 class ContainerScene extends StatefulWidget {
   @override
@@ -34,6 +37,8 @@ class _WidgetWrapper {
   EventReceivable get receivable => _receivable;
 }
 
+final listenerName = 'CONTAINER_SCENE';
+
 class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObserver, TabActor {
   Map<String, _WidgetWrapper> _widgetMap;
   Map<String, bool> _initMap;
@@ -51,21 +56,14 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    final model = ScopedModel.of<AppState>(context);
-    pushService().attach(
-      state: model,
-      context: context,
-      callback: (BackgroundAction action) {
-        Future.delayed(Duration(milliseconds: 1)).then((value) {
-          _afterProcessAfterBackgroundMessage(context, action);
-        });
-      }
-    );
+    pushService().setPushListener(listenerName, _onPushArrival);
+    pushService().attach();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    pushService().unsetPushListener(listenerName);
     super.dispose();
   }
 
@@ -85,38 +83,65 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
 
     var func = () async {
       if (state == AppLifecycleState.resumed) {
+        print('RESUMED!');
+        pushService().setPushListener(listenerName, _onPushArrival);
+
         await model.fetchMyRooms();
         await model.translateMyRooms();
+
+        pushService().requestCallbackPushes();
+
+      } else if (state == AppLifecycleState.paused) {
+        pushService().unsetPushListener(listenerName);
       }
     };
     func();
   }
 
-  void _afterProcessAfterBackgroundMessage(BuildContext context, BackgroundAction action) async {
-    final model = ScopedModel.of<AppState>(context);
+  void _onPushArrival(Push push) async {
+    final state = ScopedModel.of<AppState>(context);
 
-    if (model.myRooms.length == 0) {
-      await model.fetchMyRooms();
-      await model.translateMyRooms();
+    // FOREGROUND / BACKGROUND COMMON 
+    if (push.pushType == PushType.MESSAGE) {
+      if (state.myRooms.length == 0) {
+        print('MY ROOM EMPTY!');
+        await state.fetchMyRooms();
+        await state.translateMyRooms();
+      }
+      Message msg = push.getContent();
+      state.addSingleMessageFromPush(msg: msg);
     }
 
-    if (action.type == BackgroundActionType.ROOM) {
-      String token = action.payload;
 
-      var rooms = model.myRooms.where((r) =>
-        r.roomToken == token).toList();
+    // BACKGROUND ONLY
+    if (push.pushOrigin == PushOrigin.BACKGROUND) {
+      if (push.pushType == PushType.MESSAGE) {
+        Message msg = push.getContent(); 
+        var rooms = state.myRooms.where((r) =>
+        r.roomToken == msg.to.token).toList();
 
-      if (rooms.length > 0) {
-        if (rooms[0].shown == false) {
+        if (rooms.length > 0) {
+          if (rooms[0].shown == false) {
+            await Navigator.of(context).push(CupertinoPageRoute<bool>(
+              builder: (BuildContext context) => MessageScene(
+                room: rooms[0]
+              )
+            ));
+          }
+        }
+      }
+
+      if (push.pushType == PushType.NOTIFICATION) {
+        PushNotification noti = push.getContent();
+        if (noti.notificationType == PushNotificationType.CHAT_ROULLETE_MATCHED) {
           await Navigator.of(context).push(CupertinoPageRoute<bool>(
-            builder: (BuildContext context) => MessageScene(
-              room: rooms[0]
-            )
+            builder: (BuildContext context) => NewRouletteScene()
           ));
         }
       }
     }
   }
+
 
   _WidgetWrapper _inflate(BuildContext context, int index) {
     String key = index.toString();

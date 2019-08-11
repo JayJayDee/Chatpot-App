@@ -2,15 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:collection';
 import 'dart:io' show Platform;
-import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/models/model_entities.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:chatpot_app/models/app_state.dart';
-import 'package:chatpot_app/entities/message.dart';
+import 'package:chatpot_app/entities/push.dart';
 
 typedef BackgroundActionCallback (BackgroundAction action);
+typedef PushListener (Push push);
 
 enum PushType {
   MESSAGE, NOTIFICATION
@@ -22,33 +21,36 @@ enum NotificationType {
 
 class PushService {
   FirebaseMessaging _messaging;
-  AppState _state;
-  BuildContext _context;
 
-  Queue<BackgroundAction> _backgroundQueue;
-  BackgroundActionCallback _callback;
+  Queue<Push> _backgroundPushQueue;
+  Map<String, PushListener> _pushListeners;
 
   PushService({
     @required FirebaseMessaging msg
   }) {
     _messaging = msg;
-    _backgroundQueue = Queue();
+    _backgroundPushQueue = Queue();
+    _pushListeners = Map();
   }
 
-  void attach({
-    @required AppState state,
-    @required BuildContext context,
-    @required BackgroundActionCallback callback
-  }) {
-    _state = state;
-    _context = context;
+  void setPushListener(String key, PushListener listener) =>
+    _pushListeners[key] = listener;
+
+  void unsetPushListener(String key) =>
+    _pushListeners.remove(key);
+
+
+  void attach() {
     _messaging.configure(
       onMessage: _onMessage,
       onResume: _onResume,
       onLaunch: _onLaunch
     );
-    _callback = callback;
-    _pushCallback();
+    _firePushCallbacks();
+  }
+
+  void requestCallbackPushes() {
+    _firePushCallbacks();
   }
 
   void requestNotification() {
@@ -66,42 +68,36 @@ class PushService {
   }
 
   Future<dynamic> _onMessage(Map<String, dynamic> message) async {
-    Message msg = _parseMessage(message);
-    _state.addSingleMessageFromPush(msg: msg);
+    Push push = _parsePush(message, PushOrigin.FOREGROUND);
+
+    _backgroundPushQueue.addFirst(push);
+    _firePushCallbacks();
   }
 
   Future<dynamic> _onResume(Map<String, dynamic> message) async {
     print('ON_RESUME FIRED');
-    Message msg = _parseMessage(message);
-    _onBackgroundMessage(msg);
+    Push push = _parsePush(message, PushOrigin.BACKGROUND);
+
+    _backgroundPushQueue.addFirst(push);
   }
 
   Future<dynamic> _onLaunch(Map<String, dynamic> message) async {
     print('ON_LAUNCH FIRED');
-    Message msg = _parseMessage(message);
-    _onBackgroundMessage(msg);
-  }
-  
-  void _onBackgroundMessage(Message message) async {
-    if (message.to.type == MessageTarget.ROOM) {
-      String roomToken = message.to.token;
-      var action = BackgroundAction(payload: roomToken, type: BackgroundActionType.ROOM);
-      _backgroundQueue.addFirst(action);
-      _pushCallback();
-    }
+    Push push = _parsePush(message, PushOrigin.BACKGROUND);
+
+    _backgroundPushQueue.addFirst(push);
   }
 
-  void _pushCallback() async {
-    if (_callback == null) {
-      return;
-    }
-    if (_backgroundQueue.isEmpty == true) {
-      return;
-    }
-    _callback(_backgroundQueue.removeLast());
+  void _firePushCallbacks() {
+    if (_backgroundPushQueue.isEmpty == true) return;
+    Push push = _backgroundPushQueue.removeLast();
+    _pushListeners.keys.forEach((k) {
+      var listener = _pushListeners[k];
+      Future.delayed(Duration.zero).then((v) => listener(push));
+    });
   }
 
-  Message _parseMessage(Map<String, dynamic> message) {
+  Push _parsePush(Map<String, dynamic> message, PushOrigin origin) {
     if (message.isEmpty) return null;
 
     Map<String, dynamic> source;
@@ -115,12 +111,8 @@ class PushService {
 
     String payload = source['payload'];
     Map<String, dynamic> payloadMap = jsonDecode(payload);
-    Message msg = Message.fromJson(payloadMap);
-    return msg;
-  } 
-}
 
-PushType _parsePushType(String expr) {
-  if (expr == 'NOTIFICATION') return PushType.NOTIFICATION;
-  return PushType.MESSAGE;
+    Push push = Push.fromJson(payloadMap, origin);
+    return push;
+  } 
 }
