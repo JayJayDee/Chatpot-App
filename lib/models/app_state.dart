@@ -21,6 +21,8 @@ class AppState extends Model {
   List<Room> _recentRooms;
   List<Room> _crowdedRooms;
   List<MyRoom> _myRooms;
+  List<RouletteStatus> _roulettes;
+
   List<String> _bannedTokens;
   StyleType _styleType;
   Member _member;
@@ -31,6 +33,7 @@ class AppState extends Model {
     _member = null;
     _loading = true;
     _myRooms = <MyRoom>[];
+    _roulettes = [];
 
     _recentRooms = <Room>[];
     _crowdedRooms = <Room>[];
@@ -43,6 +46,7 @@ class AppState extends Model {
   bool get loading => _loading;
   List<Room> get recentRooms => _recentRooms;
   List<Room> get crowdedRooms => _crowdedRooms;
+  List<RouletteStatus> get roulettes => _roulettes;
 
   MyRoom get currentRoom => _currentRoom;
   List<MyRoom> get myRooms => _myRooms;
@@ -262,6 +266,17 @@ class AppState extends Model {
     notifyListeners();
   }
 
+  Future<void> fetchMyRoulettes() async {
+    _loading = true;
+    notifyListeners();
+
+    _roulettes = await roomApi().requestRouletteStatuses(
+      memberToken: _member.token
+    );
+    _loading = false;
+    notifyListeners();
+  }
+
   Future<void> fetchMyRooms({
     bool refreshAll
   }) async {
@@ -273,6 +288,9 @@ class AppState extends Model {
         .map((b) => b.memberToken).toList();
 
     List<MyRoom> resp = await roomApi().requestMyRooms(
+      memberToken: _member.token
+    );
+    _roulettes = await roomApi().requestRouletteStatuses(
       memberToken: _member.token
     );
 

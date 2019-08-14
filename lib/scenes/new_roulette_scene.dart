@@ -25,11 +25,9 @@ class NewRouletteScene extends StatefulWidget {
 class _NewRouletteSceneState extends State<NewRouletteScene> with WidgetsBindingObserver {
 
   bool _loading;
-  List<RouletteStatus> _statuses;
 
   _NewRouletteSceneState() {
     _loading = false;
-    _statuses = [];
   }
 
   @override
@@ -95,7 +93,7 @@ class _NewRouletteSceneState extends State<NewRouletteScene> with WidgetsBinding
     setState(() => _loading = true);
 
     try {
-      _statuses = await roomApi().requestRouletteStatuses(memberToken: state.member.token);
+      await state.fetchMyRoulettes();
     } catch (err) {
       throw err;
     } finally {
@@ -174,6 +172,7 @@ class _NewRouletteSceneState extends State<NewRouletteScene> with WidgetsBinding
 
   @override
   Widget build(BuildContext context) {
+    final state = ScopedModel.of<AppState>(context, rebuildOnChange: true);
     List<Widget> widgets = [
       Container(
         margin: EdgeInsets.all(10),
@@ -184,13 +183,13 @@ class _NewRouletteSceneState extends State<NewRouletteScene> with WidgetsBinding
           )
         )
       ),
-      _statuses.length > 0 ? _buildHeader(title: locales().roulettechat.myRouletteChat) :
+      state.roulettes.length > 0 ? _buildHeader(title: locales().roulettechat.myRouletteChat) :
         Container(),
     ];
 
     widgets.addAll(_buildStatuses(
       loading: _loading,
-      statuses: _statuses,
+      context: context,
       cancelCallback: _onRouletteCancel,
       gotoCallback: _onGoToChatting
     ));
@@ -357,16 +356,18 @@ Widget _buildNewChatArea({
 typedef RouletteSelectCallback (RouletteStatus roulette);
 
 List<Widget> _buildStatuses({
+  @required BuildContext context,
   @required bool loading,
-  @required List<RouletteStatus> statuses,
   @required RouletteSelectCallback cancelCallback,
   @required RouletteSelectCallback gotoCallback
-}) =>
-  statuses.map((s) => _buildStatusWidget(
+}) {
+  final state = ScopedModel.of<AppState>(context, rebuildOnChange: true);
+  return state.roulettes.map((s) => _buildStatusWidget(
     loading: loading,
     status: s,
     cancelCallback: cancelCallback,
     gotoCallback: gotoCallback)).toList();
+}
 
 Widget _buildStatusWidget({
   @required bool loading,
