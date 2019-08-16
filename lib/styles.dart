@@ -24,7 +24,7 @@ AppStyle _lightTheme() {
     logoImageWithTypo: const AssetImage('assets/chatpot-logo-with-typo-medium.png'),
 
     appBackground: const Color(0xffd0d0d0),
-    mainBackground: const Color(0xfff0eff4),
+    mainBackground: const Color(0xffffffff),
     splashBackground: const Color(0xfff4f4f4),
     link: const Color(0xff007aff),
     cardActionTextStyle: const TextStyle(fontSize: 15.0),
@@ -32,23 +32,23 @@ AppStyle _lightTheme() {
     secondaryFontColor: const Color(0xFF929292),
     thirdFontColor: const Color(0xFFCCCCCC),
     inputFieldDevidier: const Color(0xFFCCCCCC),
-    listViewRowBackground: const Color(0xffffffff),
-    listViewRowBackgroundMoreDark: Color(0xffffffff),
-    listRowHeaderBackground: const Color(0xfff4f4f4),
+    listViewRowBackground: const Color(0xfff9f9f9),
+    listViewRowBackgroundMoreDark: Color(0xfff9f9f9),
+    listRowHeaderBackground: const Color(0xffffffff),
     listRowDivider: const Color(0xffa4a4a4),
 
-    tabBarBackground: const Color(0xfff6f6f6),
+    tabBarBackground: const Color(0xfff9f9f9),
     tabBarActive: const Color(0xff007aff),
     tabBarInactive: const Color(0xff8e8e93),
     
-    navigationBarBackground: const Color(0xfff6f6f6),
+    navigationBarBackground: const Color(0xfff9f9f9),
     
     sheetBackground: const Color(0xffd5d9dc),
     messageBackgroundMine: const Color(0xff007aff),
     messageBackgroundOther: const Color(0xffdddddd),
     messageBackgroundNotification: const Color(0xffdddddd),
     
-    profileCardBackground: const Color(0xffffffff),
+    profileCardBackground: const Color(0xffefefef),
     editTextFont: const Color(0xFF505050),
     editTextHint: const Color(0xFF929292),
     
