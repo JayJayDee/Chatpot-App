@@ -13,6 +13,16 @@ import 'package:chatpot_app/styles.dart';
 
 delaySec(int sec) => Future.delayed(Duration(milliseconds: sec * 1000));
 
+class AppStatusUnstableError {
+  String cause;
+
+  AppStatusUnstableError({
+    @required String cause
+  }) {
+    this.cause = cause;
+  }
+}
+
 enum AppInitState {
   LOGGED_IN, NEWCOMER
 }
@@ -87,6 +97,11 @@ class AppState extends Model {
       _loading = false;
       notifyListeners();
       return AppInitState.NEWCOMER;
+    }
+
+    var status = await statusApi().requestServiceStatus();
+    if (status.type != ServiceStatusType.GREEN) {
+      throw new AppStatusUnstableError(cause: status.cause);
     }
 
     var member = await memberApi().fetchMy(token);

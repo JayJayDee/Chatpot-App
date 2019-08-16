@@ -33,6 +33,11 @@ class SplashScene extends StatelessWidget {
           locales().error.messageFromErrorCode(err.code, message: err.msg));
         exit(0);
       }
+      if (err is AppStatusUnstableError) {
+        await showSimpleAlert(context, err.cause);
+        exit(0);
+      }
+      throw err;
     }
 
     // request grant access for push notification for iOS
