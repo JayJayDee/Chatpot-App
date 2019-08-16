@@ -1,3 +1,4 @@
+import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:meta/meta.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -10,6 +11,87 @@ import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/models/app_state.dart';
 
 typedef MyRoomCallback = Function(MyRoom);
+
+class MyRouletteWaitingRow extends StatelessWidget {
+  final RouletteStatus roulette;
+  final VoidCallback clickCallback;
+
+  MyRouletteWaitingRow({
+    @required this.roulette,
+    @required this.clickCallback
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 76,
+      child: CupertinoButton(
+        padding: EdgeInsets.zero,
+        onPressed: () => clickCallback(),
+        child: Row(
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              margin: EdgeInsets.only(left: 5),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Icon(
+                    this.roulette.regionType == RegionType.ALL ?
+                      Icons.accessibility_new : MdiIcons.earth,
+                    color: styles().secondaryFontColor,
+                    size: 40,
+                  ),
+                  SizedBox(
+                    width: 58,
+                    height: 58,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.0
+                    )
+                  )
+                ]
+              )
+            ),
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(left: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      locales().roulettechat.indicatorWaiting,
+                      style: TextStyle(
+                        color: styles().primaryFontColor,
+                        fontSize: 15
+                      )
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 1),
+                      child: Text(locales().message.messageReceiveTime(roulette.regDate),
+                        style: TextStyle(
+                          color: styles().secondaryFontColor,
+                          fontSize: 15
+                        )
+                      )
+                    )
+                  ]
+                )
+              )
+            ),
+            Container(
+              margin: EdgeInsets.only(right: 5),
+              child: Icon(MdiIcons.chevronRight,
+                color: styles().secondaryFontColor,
+              )
+            )
+          ]
+        )
+      )
+    );
+  }
+}
 
 @immutable
 class MyRoomRow extends StatelessWidget {

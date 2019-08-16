@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
@@ -103,27 +104,60 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
   Widget _buildMyRoomsView(BuildContext context) {
     final model = ScopedModel.of<AppState>(context, rebuildOnChange: true);
     List<MyRoom> myRooms = model.myRooms;
-    if (myRooms.length == 0 && model.loading == false) {
+    if (myRooms.length == 0 &&
+        model.loading == false &&
+        model.roulettes.length == 0) {
       return _buildEmptyRoomsView(context);
     }
 
     Map<RoomType, List<MyRoom>> groupped = groupBy(myRooms, (r) => r.type);
     List<Widget> widgets = List();
 
+    List<Widget> rouletteWidgets = List();
+
+    List<RouletteStatus> waitings =
+      model.roulettes.where((r) => r.matchStatus == RouletteMatchStatus.WAITING).toList();
+
+    if (model.roulettes.length > 0) {
+      rouletteWidgets.add(_buildRoomTypeHeaderLabel(RoomType.ROULETTE, model.roulettes.length));
+    }
+
+    if (waitings.length > 0) {
+      waitings.forEach((w) {
+        rouletteWidgets.add(MyRouletteWaitingRow(
+          roulette: w,
+          clickCallback: () {
+            Navigator.of(parentContext).push(CupertinoPageRoute<String>(
+              builder: (BuildContext context) => NewRouletteScene()
+            ));
+          }
+        ));
+      });
+    }
+
     groupped.forEach((RoomType rtype, List<MyRoom> rooms) {
-      if (rooms.length == 0) return;
+      if (rooms.length == 0) {
+        return;
+      }
+      if (rtype == RoomType.ROULETTE) {
+        rouletteWidgets.addAll(rooms.map((r) => MyRoomRow(
+          myRoom: r,
+          myRoomSelectCallback: (r) => _onMyRoomSelected(context, r)
+        )).toList());
+        return;
+      }
 
       widgets.add(_buildRoomTypeHeaderLabel(rtype, rooms.length));
 
       rooms.sort((var a, var b) {
         int aTime = 
-          a.lastMessage == null ? new DateTime.now().second :
+          a.lastMessage == null ? a.regDate.second :
             a.lastMessage.sentTime.second;
         int bTime =
-          b.lastMessage == null ? new DateTime.now().second :
+          b.lastMessage == null ? b.regDate.second :
             b.lastMessage.sentTime.second;
-        return aTime > bTime ? -1 :
-          aTime < bTime ? 1 : 0;
+        return aTime > bTime ? 1 :
+          aTime < bTime ? -1 : 0;
       });
 
       widgets.addAll(rooms.map((r) => MyRoomRow(
@@ -132,10 +166,14 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
       )).toList());
     });
 
+    List<Widget> allWidgets = [];
+    allWidgets.addAll(rouletteWidgets);
+    allWidgets.addAll(widgets);
+
     return ListView.builder(
       scrollDirection: Axis.vertical,
-      itemCount: widgets.length,
-      itemBuilder: (BuildContext context, int idx) => widgets[idx]
+      itemCount: allWidgets.length,
+      itemBuilder: (BuildContext context, int idx) => allWidgets[idx]
     );
   }
 

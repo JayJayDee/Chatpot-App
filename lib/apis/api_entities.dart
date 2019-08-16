@@ -341,3 +341,29 @@ class RouletteStatus {
     return resp;
   }
 }
+
+
+enum ServiceStatusType {
+  GREEN, RED
+}
+
+class ServiceStatus {
+  ServiceStatusType type;
+  String cause;
+
+  ServiceStatus();
+
+  factory ServiceStatus.fromJson(Map<String, dynamic> map) {
+    ServiceStatus status = ServiceStatus();
+    if (map['status'] == 'GREEN') {
+      status.type = ServiceStatusType.GREEN;
+    } else {
+      status.type = ServiceStatusType.RED;
+    }
+
+    if (map['cause'] != null) {
+      status.cause = map['cause'];
+    }
+    return status;
+  }
+}

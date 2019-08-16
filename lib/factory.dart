@@ -1,3 +1,4 @@
+import 'package:chatpot_app/apis/status_api.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:chatpot_app/storage/auth_accessor.dart';
 import 'package:chatpot_app/storage/pref_auth_accessor.dart';
@@ -41,6 +42,8 @@ void initFactory() {
   _instances['MemberRequester'] = _initMemberRequester();
   _instances['RoomRequester'] = _initRoomRequseter();
   _instances['MessageRequester'] = _initMessageRequester();
+  _instances['StatusRequester'] = _initStatusRequester();
+
   _instances['AuthApi'] = AuthApi(requester: _memberRequester());
   _instances['MemberApi'] = MemberApi(requester: _memberRequester());
   _instances['RoomApi'] = RoomApi(requester: _roomRequester());
@@ -51,6 +54,7 @@ void initFactory() {
   _instances['ActivationApi'] = ActivationApi(requester: _memberRequester());
   _instances['ReportApi'] = ReportApi(requester: _memberRequester());
   _instances['GachaApi'] = GachaApi(requester: _memberRequester());
+  _instances['StatusApi'] = StatusApi(requester: _statusRequester());
 }
 
 Requester _initMemberRequester() => DefaultRequester(
@@ -83,10 +87,17 @@ Requester _initTranslateRequester() => DefaultRequester(
   baseUrl: 'https://dev-translate.chatpot.chat'
 );
 
+Requester _initStatusRequester() => DefaultRequester(
+  crypter: authCrypter(),
+  accessor: authAccessor(),
+  baseUrl: 'http://status.chatpot.chat'
+);
+
 // internal factory uses.
 Requester _memberRequester() => _instances['MemberRequester'];
 Requester _roomRequester() => _instances['RoomRequester'];
 Requester _messageRequester() => _instances['MessageRequester'];
+Requester _statusRequester() => _instances['StatusRequester'];
 FirebaseMessaging _firebaseMessaging() => _instances['FirebaseMessaging'];
 
 // exports.
@@ -108,3 +119,4 @@ BlockAccessor blockAccessor() => _instances['BlockAccessor'];
 ReportApi reportApi() => _instances['ReportApi'];
 MiscAccessor miscAccessor() => _instances['MiscAccessor'];
 GachaApi gachaApi() => _instances['GachaApi'];
+StatusApi statusApi() => _instances['StatusApi'];
