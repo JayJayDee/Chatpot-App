@@ -1,3 +1,4 @@
+import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:meta/meta.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -10,6 +11,56 @@ import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/models/app_state.dart';
 
 typedef MyRoomCallback = Function(MyRoom);
+
+class MyRouletteWaitingRow extends StatelessWidget {
+  final RouletteStatus roulette;
+
+  MyRouletteWaitingRow({
+    @required this.roulette
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 76,
+      child: CupertinoButton(
+        padding: EdgeInsets.zero,
+        onPressed: () {},
+        child: Row(
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              margin: EdgeInsets.only(left: 5),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Icon(Icons.accessibility_new,
+                    color: styles().secondaryFontColor,
+                    size: 40,
+                  ),
+                  SizedBox(
+                    width: 58,
+                    height: 58,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.0
+                    )
+                  )
+                ]
+              )
+            ),
+            Expanded(
+              child: Container()
+            ),
+            Icon(MdiIcons.chevronRight,
+              color: styles().secondaryFontColor,
+            )
+          ]
+        )
+      )
+    );
+  }
+}
 
 @immutable
 class MyRoomRow extends StatelessWidget {

@@ -1,3 +1,4 @@
+import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:chatpot_app/entities/member.dart';
 import 'package:chatpot_app/entities/message.dart';
 
