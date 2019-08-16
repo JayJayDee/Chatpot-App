@@ -10,9 +10,9 @@ class NewRouletteSceneLocales {
   });
 
   String get title {
-    if (language == 'ko') return '새 랜덤 채팅';
-    else if (language == 'ja') return '新しいランダムチャット';
-    return 'New chat roulette';
+    if (language == 'ko') return '내 랜덤채팅';
+    else if (language == 'ja') return '私のランダムチャット';
+    return 'My chat roulettes';
   }
 
   String get previous {

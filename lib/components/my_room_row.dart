@@ -14,9 +14,11 @@ typedef MyRoomCallback = Function(MyRoom);
 
 class MyRouletteWaitingRow extends StatelessWidget {
   final RouletteStatus roulette;
+  final VoidCallback clickCallback;
 
   MyRouletteWaitingRow({
-    @required this.roulette
+    @required this.roulette,
+    @required this.clickCallback
   });
 
   @override
@@ -25,7 +27,7 @@ class MyRouletteWaitingRow extends StatelessWidget {
       height: 76,
       child: CupertinoButton(
         padding: EdgeInsets.zero,
-        onPressed: () {},
+        onPressed: () => clickCallback(),
         child: Row(
           children: [
             Container(
@@ -35,7 +37,9 @@ class MyRouletteWaitingRow extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Icon(Icons.accessibility_new,
+                  Icon(
+                    this.roulette.regionType == RegionType.ALL ?
+                      Icons.accessibility_new : MdiIcons.earth,
                     color: styles().secondaryFontColor,
                     size: 40,
                   ),
@@ -50,10 +54,37 @@ class MyRouletteWaitingRow extends StatelessWidget {
               )
             ),
             Expanded(
-              child: Container()
+              child: Container(
+                margin: EdgeInsets.only(left: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      locales().roulettechat.indicatorWaiting,
+                      style: TextStyle(
+                        color: styles().primaryFontColor,
+                        fontSize: 15
+                      )
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 1),
+                      child: Text(locales().message.messageReceiveTime(roulette.regDate),
+                        style: TextStyle(
+                          color: styles().secondaryFontColor,
+                          fontSize: 15
+                        )
+                      )
+                    )
+                  ]
+                )
+              )
             ),
-            Icon(MdiIcons.chevronRight,
-              color: styles().secondaryFontColor,
+            Container(
+              margin: EdgeInsets.only(right: 5),
+              child: Icon(MdiIcons.chevronRight,
+                color: styles().secondaryFontColor,
+              )
             )
           ]
         )

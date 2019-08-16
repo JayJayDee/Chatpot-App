@@ -88,7 +88,9 @@ class _MessageInnerDrawerState extends State<MessageInnerDrawer> {
       var roomDetail = await roomApi().requestRoomDetail(
         roomToken: room.roomToken
       );
-      setState(() => _roomDetail = roomDetail);
+      if (mounted) {
+        setState(() => _roomDetail = roomDetail);
+      }
     } catch (err) {
       if (err is ApiFailureError) {
         await showSimpleAlert(context, locales().error.messageFromErrorCode(err.code));
