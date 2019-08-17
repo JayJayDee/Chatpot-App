@@ -27,6 +27,7 @@ import 'package:chatpot_app/locales/block_history_scene_locales.dart';
 import 'package:chatpot_app/locales/image_send_confirm_scene_locales.dart';
 import 'package:chatpot_app/locales/setting_theme_scene_locales.dart';
 import 'package:chatpot_app/locales/new_roulette_scene_locales.dart';
+import 'package:chatpot_app/locales/welcome_oobe_dialog_locales.dart';
 
 class RootLocaleConverter {
   String _language;
@@ -56,6 +57,7 @@ class RootLocaleConverter {
   SettingThemeSceneLocales _settingThemeScene;
   ProfileEditSceneLocales _profileEditScene;
   NewRouletteSceneLocales _newRouletteSceneLocales;
+  WelcomeOobeDialogLocales _welcomeOobeDialogLocales;
 
   HomeSceneLocales get home {
     if (_home == null) {
@@ -237,6 +239,13 @@ class RootLocaleConverter {
       _profileEditScene = ProfileEditSceneLocales(root: this, language: _language);
     }
     return _profileEditScene;
+  }
+
+  WelcomeOobeDialogLocales get welcomeOobeDialog {
+    if (_welcomeOobeDialogLocales == null) {
+      _welcomeOobeDialogLocales = WelcomeOobeDialogLocales(root: this, language: _language);
+    }
+    return _welcomeOobeDialogLocales;
   }
 
   String get langauge => _language;
