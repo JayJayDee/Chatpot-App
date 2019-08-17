@@ -22,6 +22,7 @@ void setStyleType(StyleType type) {
 AppStyle _lightTheme() {
   AppStyle style = AppStyle(
     logoImageWithTypo: const AssetImage('assets/chatpot-logo-with-typo-medium.png'),
+    logoImageOnly: const AssetImage('assets/chatpot-logo-only-800.png'),
 
     appBackground: const Color(0xffd0d0d0),
     mainBackground: const Color(0xffffffff),
@@ -63,6 +64,7 @@ AppStyle _lightTheme() {
 AppStyle _darkTheme() {
   AppStyle style = AppStyle(
     logoImageWithTypo: const AssetImage('assets/chatpot-logo-with-typo-medium-white.png'),
+    logoImageOnly: const AssetImage('assets/chatpot-logo-only-800.png'),
 
     appBackground: const Color(0xff000000),
     mainBackground: const Color(0xff111d2d),
@@ -106,6 +108,7 @@ AppStyle _darkTheme() {
 class AppStyle {
   AppStyle({
     @required this.logoImageWithTypo,
+    @required this.logoImageOnly,
     @required this.appBackground,
     @required this.mainBackground,
     @required this.splashBackground,
@@ -136,6 +139,7 @@ class AppStyle {
     @required this.editTextBackground });
 
   final AssetImage logoImageWithTypo;
+  final AssetImage logoImageOnly;
   final Color appBackground;
   final Color mainBackground;
   final Color splashBackground;

@@ -13,6 +13,7 @@ import 'package:chatpot_app/scenes/new_roulette_scene.dart';
 import 'package:chatpot_app/models/app_state.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/components/custom_tab_scaffold.dart';
+import 'package:chatpot_app/components/welcome_oobe_dialog.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/entities/push.dart';
 import 'package:chatpot_app/entities/message.dart';
@@ -62,6 +63,10 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
 
     pushService().setPushListener(listenerName, _onPushArrival);
     pushService().attach();
+
+    Future.delayed(Duration(seconds: 1)).then((v) {
+      showWelcomeOobeDialog(context);
+    });
   }
 
   @override
