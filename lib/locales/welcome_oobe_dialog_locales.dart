@@ -16,8 +16,16 @@ class WelcomeOobeDialogLocales {
   }
 
   String get page1ItsYou {
-    if (language == 'ko') return '다음은 당신입니다.';
-    else if (language == 'ja') return 'Chatpotへようこそ！';
-    return 'Welcome to the Chatpot!';
+    if (language == 'ko') return '''당신만을 위해 만든
+아바타예요!''';
+    else if (language == 'ja') return 'これはあなたのためだけに作ったアバターです！';
+    return '''This is avatar that we made,
+just for you!''';
+  }
+
+  String get nextButton {
+    if (language == 'ko') return '네, 시작합시다!';
+    else if (language == 'ja') return 'さあ、始めましょう！';
+    return 'Okay, Let\'s start!';
   }
 }
