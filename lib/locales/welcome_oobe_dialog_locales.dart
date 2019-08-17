@@ -16,11 +16,27 @@ class WelcomeOobeDialogLocales {
   }
 
   String get page1ItsYou {
-    if (language == 'ko') return '''당신만을 위해 만든
+    if (language == 'ko') return '''안녕하세요!
+다음은 당신만을 위해 만든
 아바타예요!''';
-    else if (language == 'ja') return 'これはあなたのためだけに作ったアバターです！';
-    return '''This is avatar that we made,
-just for you!''';
+    else if (language == 'ja') return '''こんにちは、
+これは私たちが作ったアバターです。
+貴方のために！''';
+    return '''Hello!
+Following is an avatar that we made,
+Just for you!''';
+  }
+
+  String get page1ItsYouPrefix {
+    if (language == 'ko') return '그리고 지금부터, 당신의 이름은';
+    else if (language == 'ja') return 'そしてこれから、あなたの名前は:';
+    return 'And from now on, your name is:';
+  }
+
+  String get page1ItsYouPostfix {
+    if (language == 'ko') return '입니다.';
+    else if (language == 'ja') return 'です。';
+    return '';
   }
 
   String get nextButton {

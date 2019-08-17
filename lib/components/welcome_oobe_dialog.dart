@@ -62,7 +62,18 @@ Widget _buildPage1(BuildContext context) {
         )
       ),
       Container(
-        margin: EdgeInsets.only(top: 30),
+        margin: EdgeInsets.only(top: 25),
+        padding: EdgeInsets.only(left: 10, right: 10),
+        child: Text(locales().welcomeOobeDialog.page1ItsYou,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: styles().primaryFontColor,
+            fontSize: 17
+          )
+        )
+      ),
+      Container(
+        margin: EdgeInsets.only(top: 10),
         width: 140,
         height: 140,
         child: ClipRRect(
@@ -74,8 +85,8 @@ Widget _buildPage1(BuildContext context) {
         )
       ),
       Container(
-        margin: EdgeInsets.only(top: 5),
-        child: Text(locales().getNick(state.member.nick),
+        margin: EdgeInsets.only(top: 25),
+        child: Text(locales().welcomeOobeDialog.page1ItsYouPrefix,
           style: TextStyle(
             color: styles().primaryFontColor,
             fontSize: 17
@@ -83,16 +94,25 @@ Widget _buildPage1(BuildContext context) {
         )
       ),
       Container(
-        margin: EdgeInsets.only(top: 30),
-        padding: EdgeInsets.only(left: 10, right: 10),
-        child: Text(locales().welcomeOobeDialog.page1ItsYou,
-          textAlign: TextAlign.center,
+        margin: EdgeInsets.only(top: 5),
+        child: Text(locales().getNick(state.member.nick),
           style: TextStyle(
             color: styles().primaryFontColor,
-            fontSize: 17
+            fontSize: 17,
+            fontWeight: FontWeight.bold
           )
         )
-      )
+      ),
+      locales().welcomeOobeDialog.page1ItsYouPostfix == '' ?
+        Container() :
+        Container(
+          child: Text(locales().welcomeOobeDialog.page1ItsYouPostfix,
+            style: TextStyle(
+              color: styles().primaryFontColor,
+              fontSize: 17
+            )
+          ) 
+        )
     ]
   );
 }
