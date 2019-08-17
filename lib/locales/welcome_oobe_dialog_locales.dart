@@ -44,4 +44,16 @@ Just for you!''';
     else if (language == 'ja') return 'さあ、始めましょう！';
     return 'Okay, Let\'s start!';
   }
+
+  String get page2Desc1 {
+    if (language == 'ko') return '''이름과 아바타를 번경할 수 있습니다. 설정 > 프로필 변경 버튼을 클릭하세요.''';
+    else if (language == 'ja') return '[設定]> [プロフィールの編集]メニューで名前またはアバターを変更できます。';
+    return '''You can change your name or avatar at Settings > Edit profile menu.''';
+  }
+
+  String get page3Desc1 {
+    if (language == 'ko') return '''화면이 너무 밝으신가요? 어두운 화면 모드를 사용해 보세요!''';
+    else if (language == 'ja') return '画面が明るすぎますか？ ダークスクリーンモードをお試しください！';
+    return '''Is your screen too bright? Try dark screen mode!''';
+  }
 }
