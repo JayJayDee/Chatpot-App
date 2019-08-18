@@ -227,9 +227,11 @@ class AppState extends Model {
     _loading = true;
     notifyListeners();
 
-    authAccessor().setToken(null);
-    authAccessor().setPassword(null);
-    authAccessor().setSessionKey(null);
+    await authAccessor().setToken(null);
+    await authAccessor().setPassword(null);
+    await authAccessor().setSessionKey(null);
+    await miscAccessor().clearFirstTime();
+    
     blockAccessor().clearAll();
 
     _member = null;

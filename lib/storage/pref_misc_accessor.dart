@@ -25,12 +25,22 @@ String _toString(StyleType type) {
 
 const STYLE_TYPE_KEY = 'STYLE_TYPE';
 
+const FIRST_KEY = 'FIRST_TIME';
+
 class PrefMiscAccessor extends MiscAccessor {
   Future<bool> isFirstTime() async {
+    var prefs = await _getPrefs();
+    String first = prefs.getString(FIRST_KEY);
+    if (first == null) return true;
     return false;
   }
   Future<void> setNotFirstTime() async {
-    
+  var prefs = await _getPrefs();
+    await prefs.setString(FIRST_KEY, 'FIRST_TIME');
+  }
+  Future<void> clearFirstTime() async {
+    var prefs = await _getPrefs();
+    await prefs.remove(FIRST_KEY);
   }
 
   Future<StyleType> getSavedStyleType() async {
