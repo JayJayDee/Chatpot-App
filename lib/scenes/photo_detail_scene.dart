@@ -1,15 +1,13 @@
-import 'dart:io';
-import 'package:path/path.dart' as p;
+import 'dart:async';
+import 'dart:typed_data';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:dio/dio.dart';
 import 'package:image_picker_saver/image_picker_saver.dart';
 import 'package:meta/meta.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:chatpot_app/entities/message.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
@@ -37,19 +35,44 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
   bool _loading;
   bool _imageDownloading;
 
+  int _allBytes;
+  int _downloadedBytes;
+
   _PhotoDetailSceneState({
     @required Message message
   }) {
     _message = message;
     _loading = false;
     _imageDownloading = false;
+    _allBytes = 0;
+    _downloadedBytes = 0;
   }
 
   void _onImageDownloadClicked(BuildContext context, String imageUrl) async {
-    setState(() => _loading = true);
+    setState(() {
+      _loading = true;
+      _imageDownloading = true;
+      _allBytes = 0;
+      _downloadedBytes = 0;
+    });
+
+    await Future.delayed(Duration(seconds: 1));
+    var dio = Dio();
 
     try {
-      
+      var resp = await dio.get(imageUrl,
+        options: Options(responseType: ResponseType.bytes),
+        onReceiveProgress: (received, total) {
+          setState(() {
+            _allBytes = total;
+            _downloadedBytes = received;
+          });
+        }
+      );
+
+      ImagePickerSaver.saveFile(
+          fileData: Uint8List.fromList(resp.data));
+
       showToast(locales().photoDetail.downloadSuccess, 
         duration: Duration(milliseconds: 1000),
         position: ToastPosition(align: Alignment.bottomCenter)
@@ -57,7 +80,10 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
     } catch (err) {
       showSimpleAlert(context, locales().photoDetail.failedToDownload(err.toString()));
     } finally {
-      setState(() => _loading = false);
+      setState(() {
+        _loading = false;
+        _imageDownloading = false;
+      });
     }
   }
 
@@ -81,7 +107,9 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
               color: styles().link,
             )
           ),
-          onPressed: () {},
+          onPressed: _loading == true ? null : () {
+            _onImageDownloadClicked(context, _message.getImageContent().imageUrl);
+          },
         ),
         transitionBetweenRoutes: true
       ),
@@ -89,8 +117,20 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
         child: Stack(
           alignment: Alignment.topCenter,
           children: [
-            Container(
-              child: _buildImagePage(context, _message),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                _buildImagePage(context, _message),
+
+                _imageDownloading == true ? 
+                  Positioned(
+                    child: _buildImageDownloadIndicator(context,
+                      downloaded: _downloadedBytes,
+                      imageSize: _allBytes
+                    )
+                  ) : 
+                  Container()
+              ]
             ),
             Positioned(
               child: Column(
@@ -179,6 +219,47 @@ Widget _buildImagePage(BuildContext context, Message message) {
       imageProvider: CachedNetworkImageProvider(
         message.getImageContent().imageUrl
       )
+    )
+  );
+}
+
+Widget _buildImageDownloadIndicator(BuildContext context, {
+  @required int imageSize,
+  @required int downloaded
+}) {
+  double progress = 0;
+  if (imageSize != 0 && downloaded != 0) {
+    progress = downloaded / imageSize;
+  }
+  int intProg = (progress * 100.0).round();
+
+  return Container(
+    width: 90,
+    height: 90,
+    padding: EdgeInsets.all(10),
+    decoration: BoxDecoration(
+      color: styles().mainBackground,
+      borderRadius: BorderRadius.circular(10)
+    ),
+    child: Stack(
+      alignment: Alignment.center,
+      children: [
+        Text("$intProg%",
+          style: TextStyle(
+            color: styles().primaryFontColor,
+            fontSize: 15
+          )
+        ),
+        SizedBox(
+          width: 80,
+          height: 80,
+          child: CircularProgressIndicator(
+            strokeWidth: 3.0,
+            value: progress,
+            valueColor: AlwaysStoppedAnimation<Color>(styles().link)
+          )
+        )
+      ]
     )
   );
 }
