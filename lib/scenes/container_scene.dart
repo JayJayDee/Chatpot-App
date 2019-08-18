@@ -64,8 +64,8 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
     pushService().setPushListener(listenerName, _onPushArrival);
     pushService().attach();
 
-    Future.delayed(Duration(seconds: 1)).then((v) {
-      showWelcomeOobeDialog(context);
+    Future.delayed(Duration(milliseconds: 500)).then((v) {
+      _onFirstWelcomeOobe();
     });
   }
 
@@ -108,6 +108,14 @@ class _ContainerSceneState extends State<ContainerScene> with WidgetsBindingObse
       }
     };
     func();
+  }
+
+  void _onFirstWelcomeOobe() async {
+    bool isFirst = await miscAccessor().isFirstTime();
+    if (isFirst == true) {
+      await miscAccessor().setNotFirstTime();
+      showWelcomeOobeDialog(context);
+    }
   }
 
   void _onPushArrival(Push push) async {
