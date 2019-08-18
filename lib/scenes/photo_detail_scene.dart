@@ -3,6 +3,8 @@ import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:dio/dio.dart';
+import 'package:image_picker_saver/image_picker_saver.dart';
 import 'package:meta/meta.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -33,23 +35,21 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
 
   Message _message;
   bool _loading;
+  bool _imageDownloading;
 
   _PhotoDetailSceneState({
     @required Message message
   }) {
     _message = message;
     _loading = false;
+    _imageDownloading = false;
   }
 
   void _onImageDownloadClicked(BuildContext context, String imageUrl) async {
     setState(() => _loading = true);
 
     try {
-      var downloadDir = await getApplicationDocumentsDirectory();
-      File file = await DefaultCacheManager().getSingleFile(imageUrl);
-      String ext = p.extension(file.path);
-      await file.copy("${downloadDir.path}/${DateTime.now().toUtc().toIso8601String()}$ext");
-
+      
       showToast(locales().photoDetail.downloadSuccess, 
         duration: Duration(milliseconds: 1000),
         position: ToastPosition(align: Alignment.bottomCenter)
@@ -73,6 +73,15 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
           style: TextStyle(
             color: styles().primaryFontColor
           )
+        ),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.all(0),
+          child: Text('Save',
+            style: TextStyle(
+              color: styles().link,
+            )
+          ),
+          onPressed: () {},
         ),
         transitionBetweenRoutes: true
       ),
