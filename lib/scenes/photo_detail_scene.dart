@@ -56,7 +56,6 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
       _downloadedBytes = 0;
     });
 
-    await Future.delayed(Duration(seconds: 1));
     var dio = Dio();
 
     try {
@@ -73,10 +72,8 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
       ImagePickerSaver.saveFile(
           fileData: Uint8List.fromList(resp.data));
 
-      showToast(locales().photoDetail.downloadSuccess, 
-        duration: Duration(milliseconds: 1000),
-        position: ToastPosition(align: Alignment.bottomCenter)
-      );
+      showSimpleAlert(context, locales().photoDetail.downloadSuccess,
+        title: locales().successTitle);
     } catch (err) {
       showSimpleAlert(context, locales().photoDetail.failedToDownload(err.toString()));
     } finally {
@@ -102,7 +99,7 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
         ),
         trailing: CupertinoButton(
           padding: EdgeInsets.all(0),
-          child: Text('Save',
+          child: Text(locales().photoDetail.btnDownload,
             style: TextStyle(
               color: styles().link,
             )
