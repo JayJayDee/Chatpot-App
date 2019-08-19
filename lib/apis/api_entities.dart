@@ -350,6 +350,7 @@ enum ServiceStatusType {
 class ServiceStatus {
   ServiceStatusType type;
   String cause;
+  String minimumVersion;
 
   ServiceStatus();
 
@@ -364,6 +365,11 @@ class ServiceStatus {
     if (map['cause'] != null) {
       status.cause = map['cause'];
     }
+
+    if (map['minimum_version'] != null) {
+      status.minimumVersion = map['minimum_version'];
+    }
+
     return status;
   }
 }
