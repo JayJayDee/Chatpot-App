@@ -29,4 +29,6 @@ abstract class TranslationCacheAccessor {
   Future<List<Translated>> getCachedRoomTitleTranslations({
     @required List<String> keys
   });
+
+  Future<void> clearTranslationCaches();
 }

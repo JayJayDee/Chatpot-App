@@ -45,6 +45,14 @@ class SqliteTranslationCacheAccessor extends TranslationCacheAccessor {
     return database;
   }
 
+  Future<void> clearTranslationCaches() async {
+    String clearQuery = """
+      DELETE FROM translation_cache_$dbVersion
+    """;
+    var db = await _getDb();
+    await db.rawDelete(clearQuery);
+  }
+
   Future<void> cacheRoomTitleTranslations({
     @required List<Translated> translated
   }) async {
