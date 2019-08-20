@@ -151,6 +151,7 @@ class _MessageInnerDrawerState extends State<MessageInnerDrawer> {
     ];
 
     widgets.addAll(_buildMembersRow(
+      context: context,
       memberSelectCallback: memberSelectCallback,
       roomDetail: _roomDetail
     ));
@@ -183,10 +184,13 @@ Widget _buildLine() =>
   );
 
 List<Widget> _buildMembersRow({
+  @required BuildContext context,
   @required MemberSelectCallback memberSelectCallback,
   @required RoomDetail roomDetail
 }) {
   if (roomDetail == null) return List();
+  final state = ScopedModel.of<AppState>(context);
+
   return roomDetail.members.map((m) => 
     Container(
       padding: EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
@@ -209,7 +213,9 @@ List<Widget> _buildMembersRow({
             )
           ]
         ),
-        onPressed: () => memberSelectCallback(m.token)
+        onPressed: 
+          state.member.token == m.token ? null :
+            () => memberSelectCallback(m.token)
       )
     )
   ).toList();

@@ -8,7 +8,6 @@ import 'package:image_picker_saver/image_picker_saver.dart';
 import 'package:meta/meta.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:chatpot_app/entities/message.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
@@ -115,7 +114,8 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
             color: styles().primaryFontColor
           )
         ),
-        trailing: CupertinoButton(
+        trailing: _imageDownloading == true ? CupertinoActivityIndicator() :
+          CupertinoButton(
           padding: EdgeInsets.all(0),
           child: Text(locales().photoDetail.btnDownload,
             style: TextStyle(
