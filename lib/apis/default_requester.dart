@@ -179,7 +179,7 @@ class DefaultRequester implements Requester {
           password: password
         );
 
-        String reauthUrl = 'https://dev-auth.chatpot.chat/auth/reauth';
+        String reauthUrl = 'https://auth.chatpot.chat/auth/reauth';
         String wholeUrl = _buildWholeUrl(reauthUrl, qs: {
           'session_key': oldSessionKey,
           'refresh_key': refreshKey

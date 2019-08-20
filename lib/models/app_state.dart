@@ -236,6 +236,7 @@ class AppState extends Model {
     await authAccessor().setPassword(null);
     await authAccessor().setSessionKey(null);
     await miscAccessor().clearFirstTime();
+    await translationCacheAccessor().clearTranslationCaches();
     
     blockAccessor().clearAll();
 

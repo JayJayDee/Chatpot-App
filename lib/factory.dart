@@ -60,31 +60,31 @@ void initFactory() {
 Requester _initMemberRequester() => DefaultRequester(
   crypter: authCrypter(),
   accessor: authAccessor(),
-  baseUrl: 'https://dev-auth.chatpot.chat'
+  baseUrl: 'https://auth.chatpot.chat'
 );
 
 Requester _initRoomRequseter() => DefaultRequester(
   crypter: authCrypter(),
   accessor: authAccessor(),
-  baseUrl: 'https://dev-room.chatpot.chat'
+  baseUrl: 'https://room.chatpot.chat'
 );
 
 Requester _initMessageRequester() => DefaultRequester(
   crypter: authCrypter(),
   accessor: authAccessor(),
-  baseUrl: 'https://dev-message.chatpot.chat'
+  baseUrl: 'https://message.chatpot.chat'
 );
 
 Requester _initAssetRequester() => DefaultRequester(
   crypter: authCrypter(),
   accessor: authAccessor(),
-  baseUrl: 'https://dev-asset.chatpot.chat'
+  baseUrl: 'https://asset.chatpot.chat'
 );
 
 Requester _initTranslateRequester() => DefaultRequester(
   crypter: authCrypter(),
   accessor: authAccessor(),
-  baseUrl: 'https://dev-translate.chatpot.chat'
+  baseUrl: 'https://translate.chatpot.chat'
 );
 
 Requester _initStatusRequester() => DefaultRequester(

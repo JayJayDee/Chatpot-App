@@ -28,6 +28,7 @@ class ErrorMessageLocales {
     else if (code == 'SIZE_TOO_LARGE') return this.tooLargeUpload;
     else if (code == 'MAX_ROULETTE_EXCEED') return this.maxRouletteExeeded;
     else if (code == 'ROOM_NOT_FOUND') return this.roomNotFound;
+    else if (code == 'NOT_ACTIVATED_MEMBER_GACHA') return this.notActivatedGachaError;
     return uncatchedCode(code);
   }
 
@@ -80,6 +81,15 @@ Please check your email and password.''';
     if (language == 'ko') return '기존 비밀번호가 일치하지 않습니다.';
     else if (language == 'ja') return '以前のパスワードが一致しません。';
     return 'Previous passwords do not match.';
+  }
+
+  String get notActivatedGachaError {
+    if (language == 'ko') return '''주사위를 사용하기 위해서는 이메일 인증이 필요합니다.
+이메일 인증 후 다시 시도해주세요.''';
+    else if (language == 'ja') return '''サイコロを使用するには、メールの確認が必要です。
+メールを確認してからもう一度お試しください。''';
+    return '''Sorry, an email verification is required to use the dice.
+Please try again after verifying your email.''';
   }
 
   String get networkError {
