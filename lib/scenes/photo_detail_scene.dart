@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:chatpot_app/entities/message.dart';
 import 'package:chatpot_app/styles.dart';
 import 'package:chatpot_app/factory.dart';
 import 'package:chatpot_app/components/simple_alert_dialog.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class PhotoDetailScene extends StatefulWidget {
 
@@ -48,7 +50,23 @@ class _PhotoDetailSceneState extends State<PhotoDetailScene> {
     _downloadedBytes = 0;
   }
 
-  void _onImageDownloadClicked(BuildContext context, String imageUrl) async {
+  Future<void> _onImageDownloadClicked(BuildContext context, String imageUrl) async {
+    if (Platform.isIOS) {
+      await PermissionHandler().requestPermissions([PermissionGroup.photos]);
+      PermissionStatus permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.photos);
+      if (permission != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    if (Platform.isAndroid) {
+      await PermissionHandler().requestPermissions([PermissionGroup.storage]);
+      PermissionStatus permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.storage);
+      if (permission != PermissionStatus.granted) {
+        return;
+      }
+    }
+
     setState(() {
       _loading = true;
       _imageDownloading = true;
