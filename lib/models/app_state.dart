@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:meta/meta.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:chatpot_app/entities/member.dart';
@@ -102,6 +103,10 @@ class AppState extends Model {
     var status = await statusApi().requestServiceStatus();
     if (status.type != ServiceStatusType.GREEN) {
       throw new AppStatusUnstableError(cause: status.cause);
+    }
+    if (status.minimumVersion != null) {
+      calculateVersion(status.minimumVersion);
+      calculateVersion('dev-1.0.3+18');
     }
 
     var member = await memberApi().fetchMy(token);
@@ -802,4 +807,24 @@ class AppState extends Model {
       notifyListeners();
     }
   }
+}
+
+int calculateVersion(String versionExpr) {
+  int versionAmount = 0;
+  List<String> splited = versionExpr.split('+');
+  String target;
+
+  if (splited.length == 1) {
+    target = splited[0];
+  } else {
+    target = splited[0].split('-')[1];
+  }
+
+  List<String> digits = target.split('.');
+  int idx = digits.length - 1;
+  for (String digit in digits) {
+    versionAmount += int.parse(digit) * pow(30, idx);
+    idx--;
+  }
+  return versionAmount;
 }

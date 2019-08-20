@@ -42,6 +42,7 @@ dependencies:
   flutter_cache_manager: ^1.1.1
   package_info: ^0.4.0+5
   image_picker_saver: ^0.0.1
+  permission_handler: ^2.0.0
 
 dev_dependencies:
   flutter_test:
