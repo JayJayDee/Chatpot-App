@@ -19,6 +19,12 @@ String sentPlatformExpression(SentPlatform platform) {
   return '';
 }
 
+SentPlatform _parseSentPlatform(String expr) {
+  if (expr == 'ANDROID') return SentPlatform.ANDROID;
+  else if (expr == 'IOS') return SentPlatform.IOS;
+  return SentPlatform.WEB;
+}
+
 class Message {
   String messageId;
   String translated;
@@ -27,12 +33,13 @@ class Message {
   MessageTo to;
   DateTime sentTime;
   dynamic content;
+  SentPlatform platform;
 
   bool _isSending;
 
   AttchedImageStatus _attachedImageStatus;
   int _imageUploadProgress;
-
+  
   Message() {
     _isSending = false;
     _attachedImageStatus = null;
@@ -51,6 +58,10 @@ class Message {
     message.to = MessageTo.fromJson(map['to']);
     message.sentTime = DateTime.fromMillisecondsSinceEpoch(map['sent_time']);
     message.content = map['content'];
+
+    if (map['platform'] != null) {
+      message.platform = _parseSentPlatform(map['platform']);
+    }
     return message;
   }
 

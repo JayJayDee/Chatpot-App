@@ -154,7 +154,7 @@ Widget _buildPage3(BuildContext context, {
   return ListView(
     children: [
       Container(
-        padding: EdgeInsets.only(top: 10, left: 15, right: 15, bottom: 10),
+        padding: EdgeInsets.only(top: 5, left: 15, right: 15, bottom: 5),
         alignment: Alignment.center,
         child: Text(locales().welcomeOobeDialog.page3Desc1,
           textAlign: TextAlign.center,
@@ -167,7 +167,7 @@ Widget _buildPage3(BuildContext context, {
       Container(
         padding: EdgeInsets.all(20),
         child: Image(
-          image: AssetImage('assets/oobe_hint_02.png')
+          image: AssetImage('assets/oobe_dark_mode_hint.png')
         )
       ),
       Container(

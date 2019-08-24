@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,15 @@ class HomeScene extends StatelessWidget implements EventReceivable {
   }
 
   void _onNewChatClicked(BuildContext context) async {
+    if (Platform.isIOS == true) {
+      String roomToken = await Navigator.of(parentContext).push(CupertinoPageRoute<String>(
+        builder: (BuildContext context) => NewChatScene()
+      ));
+      if (roomToken == null) return;
+      _showMessageScene(context, roomToken);
+      return;
+    }
+
     var type = await showChatTypeChooseDialog(context);
     if (type == null) return;
 

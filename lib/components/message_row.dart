@@ -1,3 +1,4 @@
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -240,11 +241,23 @@ class _OtherMessageRow extends StatelessWidget {
               children: <Widget>[
                 Container(
                   margin: EdgeInsets.only(bottom: 5),
-                  child: Text(locales().getNick(message.from.nick),
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: styles().secondaryFontColor
-                    ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(locales().getNick(message.from.nick),
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: styles().secondaryFontColor
+                        )
+                      ),
+
+                      message.platform == null ?
+                        Container() :
+                        Container(
+                          margin: EdgeInsets.only(left: 3),
+                          child: _getPlatformIcon(message.platform)
+                        )
+                    ]
                   )
                 ),
                 contentWidget,
@@ -388,5 +401,24 @@ Widget _getTextContentWidget(Message message, bool isMine, TextClickCallback cal
     onPressed: callback != null ?
       () => callback(message.getTextContent()) :
       () => {}
+  );
+}
+
+Icon _getPlatformIcon(SentPlatform platform) {
+  if (platform == null) return null;
+  if (platform == SentPlatform.ANDROID) {
+    return Icon(MdiIcons.android,
+      size: 14,
+      color: styles().secondaryFontColor,
+    );
+  } else if (platform == SentPlatform.IOS) {
+    return Icon(MdiIcons.apple,
+      size: 15,
+      color: styles().secondaryFontColor,
+    );
+  }
+  return Icon(MdiIcons.monitor,
+    size: 15,
+    color: styles().secondaryFontColor,
   );
 }

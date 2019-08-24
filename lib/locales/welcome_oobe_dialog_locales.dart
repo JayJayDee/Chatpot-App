@@ -52,8 +52,11 @@ Just for you!''';
   }
 
   String get page3Desc1 {
-    if (language == 'ko') return '''화면이 너무 밝으신가요? 어두운 화면 모드를 사용해 보세요!''';
-    else if (language == 'ja') return '画面が明るすぎますか？ ダークスクリーンモードをお試しください！';
-    return '''Is your screen too bright? Try dark screen mode!''';
+    if (language == 'ko') return '''화면이 너무 밝으신가요? 어두운 화면 모드를 사용해 보세요!
+세팅 메뉴 > 어두운 화면 모드 항목에서 찾아보실 수 있습니다.''';
+    else if (language == 'ja') return '''画面が明るすぎますか？ ダークスクリーンモードをお試しください！
+これは、[設定]メニュ > [ダークモード]で確認できます。''';
+    return '''Is your screen too bright? Try dark screen mode!
+This can be found in the Settings menu > Dark mode.''';
   }
 }
