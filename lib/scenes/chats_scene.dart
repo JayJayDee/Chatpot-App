@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 import 'package:chatpot_app/apis/api_entities.dart';
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
@@ -27,7 +28,29 @@ class ChatsScene extends StatelessWidget implements EventReceivable {
     @required this.actor
   });
 
+  void _showMessageScene(BuildContext context, String roomToken) async {
+    final model = ScopedModel.of<AppState>(context);
+    List<MyRoom> rooms = model.myRooms.where((r) => r.roomToken == roomToken).toList();
+
+    if (rooms.length > 0) {
+      await Navigator.of(parentContext).push(CupertinoPageRoute<bool>(
+        builder: (BuildContext context) => MessageScene(
+          room: rooms[0]
+        )
+      ));
+    }
+  }
+
   Future<void> _onNewChatClicked(BuildContext context) async {
+    if (Platform.isIOS == true) {
+      String roomToken = await Navigator.of(parentContext).push(CupertinoPageRoute<String>(
+        builder: (BuildContext context) => NewChatScene()
+      ));
+      if (roomToken == null) return;
+      _showMessageScene(context, roomToken);
+      return;
+    }
+
     var type = await showChatTypeChooseDialog(context);
     if (type == null) return;
 
