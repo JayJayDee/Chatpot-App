@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 import 'package:meta/meta.dart';
 import 'package:package_info/package_info.dart';
 import 'package:flutter/cupertino.dart';
@@ -163,8 +164,12 @@ class _SettingsSceneState extends State<SettingsScene> {
         _buildMenuItem(locales().setting.signin, () => _onSigninClicked(context)),
       ];
     } else {
+      bool editBtnShow = false;
+      if (Platform.isAndroid == true) {
+        editBtnShow = true;
+      }
       elems = <Widget> [
-        buildProfileCard(context, editButton: true, editCallback: _onEditProfileClicked),
+        buildProfileCard(context, editButton: editBtnShow, editCallback: _onEditProfileClicked),
         _buildMenuItem(locales().setting.signout, () => _onSignoutClicked(context)),
       ];
     }
